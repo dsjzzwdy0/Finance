@@ -31,4 +31,9 @@ public class Possion
 		}
 		return x;
 	}
+	
+	public static void getPossionData()
+	{
+		return;
+	}
 }
