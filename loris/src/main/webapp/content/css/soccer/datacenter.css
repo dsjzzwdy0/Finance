@@ -1,0 +1,449 @@
+@CHARSET "UTF-8";
+
+.container_wrapper {
+    width: 98%;
+}
+.container_wrapper .gridTable td
+{
+	inline-height: 19px;
+}
+
+.container_wrapper .gridTable
+{
+	min-width: 1100px;
+}
+
+.container_wrapper .gridTable td
+{
+	inline-height: 29px;
+	min-height: 25px;
+}
+
+.container_wrapper .condition
+{
+	height: 40px;
+	text-align: left;
+	margin: 15px 0 10px 0;
+}
+
+.container_wrapper .gridTable th
+{
+	height: 30px;
+	border: 1px solid #ddd;
+	line-height: 30px;
+	vertical-align: middle;
+}
+
+.container_wrapper input
+{
+	vertical-align: middle;
+}
+
+.container_wrapper .gridTable label
+{
+	vertical-align: middle;
+	font-size: 12px;
+	margin-left: 3px;
+}
+
+.container_wrapper .gridTable td
+{
+	height: 35px;
+	border: 1px solid #ddd;
+	text-align: center;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden; 
+}
+
+.container_wrapper .gridTable .baseinfo
+{
+	width: 50px;
+}
+
+.container_wrapper .gridTable .matchname
+{
+	width: 160px;
+}
+
+.container_wrapper .checkbox-position label::before
+{
+	vertical-align:middle;
+	line-height: 40px;
+	margin-top: 3px;
+}
+
+.container_wrapper .gridTable .description
+{
+	width: 220px;
+	min-width: 160px;
+}
+
+.container_wrapper .gridTable .association
+{
+	margin: 0px auto;	
+	width: 60px;
+	height: 30px;
+	line-height: 30px;
+	vertical-align: middle;
+}
+
+.container_wrapper .gridTable td .oddsvalue {
+	width: 48px;
+    display: inline-block;
+    padding-right: 5px;
+    padding-left: 2px;
+}
+
+.container_wrapper .gridTable td .handicap {
+    display: inline-block;
+    padding-right: 2px;
+    padding-left: 2px;
+    width: 48px;
+    overflow: hidden;
+    text-align: center;
+    vertical-align: bottom;
+}
+
+.container_wrapper .gridTable td a.analysis {
+    display: inline-block;
+    /*float: left;*/
+    overflow: hidden;
+    padding-right: 5px;
+}
+
+.container_wrapper .gridTable td .vsclass {
+    display: inline-block;
+    /*float: left;*/
+    width: 15px;
+    overflow: hidden;
+    padding: 0px;
+    margin: 0 2px 0 2px;
+    inline-height: 15px;
+}
+.container_wrapper .gridTable td a.teamInfo {
+    display: inline-block;
+    /*float: left;*/
+    width: 66px;
+    overflow: hidden;
+    padding: 0px;
+    inline-height: 15px;
+    color: #1453ba;
+}
+
+.container_wrapper .gridTable td a.leagueInfo {
+    display: inline-block;
+    width: 46px;
+    overflow: hidden;
+    padding: 0px;
+    inline-height: 15px;
+    color: #1453ba;
+}
+
+.container_wrapper .gridTable td .team {
+	height: 30px;
+	line-height: 30px;
+}
+
+.container_wrapper .gridTable td a.left {
+    text-align: right;
+}
+
+.container_wrapper .gridTable td a.right {
+    text-align: left;
+}
+
+.container_wrapper .gridTable .varvalue
+{
+	display: inline-block;
+	width: 40px;
+}
+
+.container_wrapper .gridTable .th-inner {
+    height: 28px;
+    padding: 1px;
+}
+.container_wrapper #sortBtn .sortElement
+{
+    background: #EBF6FF;
+    width: 224px;
+    position: absolute;
+    top: 25px;
+    left: 0px;
+    z-index: 401;
+    height: 190px;
+    padding: 20px 10px 0 10px;
+    display: none;
+}
+
+.container_wrapper #sortBtn:hover .sortElement
+{
+	display: block;
+}
+.container_wrapper #txtDate
+{
+	display: inline-block;
+	width: 100px;
+}
+
+.top-plnav {
+    height: 30px;
+    line-height: 30px;
+    margin-top: 5px;
+    border-bottom: 2px solid #c70010;
+    border-top: 1px solid #e5e5e5;
+    border-left: 1px solid #e5e5e5;
+	box-sizing: content-box;
+}
+
+.top-plnav li {
+    text-align: center;
+    line-height: 30px;
+}
+
+.top-plnav li {
+    width: 140.4px;
+    float: left;
+    text-align: center;
+    border-right: 1px solid #e5e5e5;
+}
+
+.top-plnav li a:hover, .top-plnav li a.cur {
+    background: #A70300;
+    border: 1px solid #A70300;
+    color: #fff;
+    border-bottom: none;
+    text-decoration: none;
+}
+.top-plnav li a {
+    display: block;
+    color: #404040;
+}
+.pl-chosse-cont {
+    height: 46px;
+    line-height: 24px;
+    padding: 10px 0 10px 30px;
+    border: solid #e5e5e5;
+        border-top-width: medium;
+        border-right-width: medium;
+        border-bottom-width: medium;
+        border-left-width: medium;
+    border-width: 0 1px 0 1px;
+    background: url(../../images/plbg.png) no-repeat 10px 23px;
+    color: #252525;
+}
+
+.pl-topbtn-cur {
+    width: 48px;
+    height: 26px;
+    background: #c70010;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.pl-chosse-cont {
+    line-height: 24px;
+    color: #252525;
+}
+
+.pl-wind-ss, .pl-wind-gs {
+    position: absolute;
+    top: -1px;
+    left: 0;
+    z-index: 1;
+}
+
+.pl-topbtn {
+    width: 48px;
+    height: 26px;
+    background: #c70010;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+.pl-wind-b {
+    width: 90px;
+    height: 24px;
+    border: 1px solid #e5e5e5;
+    position: relative;
+    border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    float: left;
+    background: url(../../images/plbg.png) no-repeat 0px -91px;
+    margin-left: 10px;
+    text-indent: 12px;
+    cursor: pointer;
+    text-align: left;
+}
+.sx_form_a fieldset label input {
+    margin: 4px 4px 4px 15px;
+    width: 13px;
+    height: 13px;
+    vertical-align: -3px;
+    *vertical-align: 1px;
+    color: #000;
+}
+
+.sx_form_c .toolbar
+{
+	float: left;
+}
+
+.pl-wind-b1 {
+    width: 90px;
+    height: 32px;
+    color: #f00;
+    line-height: 26px;
+    float: left;
+    background: url(../../images/plbg.png) no-repeat 0px -230px;
+    text-indent: 16px;
+    cursor: pointer;
+}
+.pl-wind-b {
+
+    text-indent: 12px;
+    cursor: pointer;
+
+}
+.pl-wind-cont {
+    width: 360px;
+    height: auto;
+    padding: 10px;
+    margin-top: 31px;
+    border: 1px solid #e68c93;
+    margin-top: -1px;
+    background: #fafafa;
+    border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+}
+.pl-wind-b ul.ssxz-ul {
+    width: 100%;
+}
+.div-select ul, .pl-wind-b ul {
+    position: absolute;
+    width: 360px;
+	height: auto;
+    min-height:105px;
+    display: block;
+    left: 0;
+    top: 24px;
+    background: #fafafa;
+	padding: 10px;
+	border: 1px solid #e68c93;
+	margin-top: -1px;
+	background: #fafafa;
+	border-radius: 2px;
+	-webkit-border-radius: 2px;
+}
+.pl-wind-b ul.ssxz-ul li {
+    width: 100%;
+    height: 28px;
+    border: none;
+    background: none;
+    display: block;
+}
+.pl-wind-cont label {
+    width: 33%;
+    height: 20px;
+    display: inline-block;
+    padding: 0;
+    float: left;
+    margin: 6px 0;
+}
+.pl-wind-cont li form::after {
+    display: block;
+    content: '';
+    line-height: 0;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+.pl-wind-cont input {
+    vertical-align: -2px;
+}
+.pl-wind-cont label em {
+
+    width: 54px;
+    height: 22px;
+    display: inline-block;
+    color: #fff;
+    line-height: 22px;
+    margin-right: 3px;
+    text-indent: 0;
+    text-align: center;
+    vertical-align: -7px;
+    overflow: hidden;
+    margin-left:2px;
+}
+.pl-wind-cont .leaguelist
+{
+	width: 100%;
+	height: 23px;
+}
+.div-select li, .pl-wind-b li {
+    height: 24px;
+    width: 90px;
+    background: #fff;
+    border: solid #e5e5e5;
+    border-width: 1px 1px 0 1px;
+}
+.pl-wind-btn input {
+    width: 50px;
+    height: 22px;
+    background: url(../../images/plbg.png) no-repeat -173px -94px;
+    border: 0;
+    font-size: 12px;
+    margin: 0 10px;
+    cursor: pointer;
+    color: #f00;
+}
+.sx_form_b
+{
+	margin-top: 15px;
+	text-align: center;
+}
+
+.sel_list
+{
+    margin-left: 10px;
+	float: left;
+	height: 24px;
+}
+
+.check_same_league
+{
+	float: left;
+	margin-left: 15px;
+}
+
+.container_wrapper .gridTable .association_red
+{
+	background: url(../../images/soccer/circle-1.png) no-repeat;
+}
+
+.container_wrapper .gridTable .association_thin
+{
+	background: url(../../images/soccer/circle-2.png) no-repeat;
+}
+
+.container_wrapper .gridTable .association_cyan
+{
+	color: white;
+	background: url(../../images/soccer/circle-3.png) no-repeat;
+}
+
+.container_wrapper .gridTable .association_blue
+{
+	color: white;
+	background: url(../../images/soccer/circle-4.png) no-repeat;
+}
+
+.container_wrapper .gridTable .association_orange
+{
+	color: white;
+	background: url(../../images/soccer/circle-5.png) no-repeat;
+}

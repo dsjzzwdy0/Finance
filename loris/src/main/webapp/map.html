@@ -1,0 +1,533 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link rel="stylesheet" href="content/scripts/leaflet/leaflet.css" />
+<script src="content/scripts/leaflet/leaflet.js"></script>
+<style type="text/css">
+#map {
+	height: 500px;
+}
+
+.amap-indoor-map .label-canvas {
+	position: absolute;
+	top: 0;
+	left: 0
+}
+
+.amap-indoor-map .highlight-image-con * {
+	pointer-events: none
+}
+
+.amap-indoormap-floorbar-control {
+	position: absolute;
+	margin: auto 0;
+	bottom: 165px;
+	right: 12px;
+	width: 35px;
+	text-align: center;
+	line-height: 1.3em;
+	overflow: hidden;
+	padding: 0 2px
+}
+
+.amap-indoormap-floorbar-control .panel-box {
+	background-color: rgba(255, 255, 255, .9);
+	border-radius: 3px;
+	border: 1px solid #ccc
+}
+
+.amap-indoormap-floorbar-control .select-dock {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	box-sizing: border-box;
+	height: 30px;
+	border: solid #4196ff;
+	border-width: 0 2px;
+	border-radius: 2px;
+	pointer-events: none;
+	background: linear-gradient(to bottom, #f6f8f9 0, #e5ebee 50%, #d7dee3 51%, #f5f7f9
+		100%)
+}
+
+.amap-indoor-map .transition {
+	transition: opacity .2s
+}
+
+,
+.amap-indoormap-floorbar-control .transition {
+	transition: top .2s, margin-top .2s
+}
+
+.amap-indoormap-floorbar-control .select-dock:after,
+	.amap-indoormap-floorbar-control .select-dock:before {
+	content: "";
+	position: absolute;
+	width: 0;
+	height: 0;
+	left: 0;
+	top: 10px;
+	border: solid transparent;
+	border-width: 4px;
+	border-left-color: #4196ff
+}
+
+.amap-indoormap-floorbar-control .select-dock:after {
+	right: 0;
+	left: auto;
+	border-left-color: transparent;
+	border-right-color: #4196ff
+}
+
+.amap-indoormap-floorbar-control.is-mobile {
+	width: 37px
+}
+
+.amap-indoormap-floorbar-control.is-mobile .floor-btn {
+	height: 35px;
+	line-height: 35px
+}
+
+.amap-indoormap-floorbar-control.is-mobile .select-dock {
+	height: 35px;
+	top: 36px
+}
+
+.amap-indoormap-floorbar-control.is-mobile .select-dock:after,
+	.amap-indoormap-floorbar-control.is-mobile .select-dock:before {
+	top: 13px
+}
+
+.amap-indoormap-floorbar-control.is-mobile .floor-list-box {
+	height: 105px
+}
+
+.amap-indoormap-floorbar-control .floor-list-item .floor-btn {
+	color: #555;
+	font-family: "Times New Roman", sans-serif, "Microsoft Yahei";
+	font-size: 16px
+}
+
+.amap-indoormap-floorbar-control .floor-list-item.selected .floor-btn {
+	color: #000
+}
+
+.amap-indoormap-floorbar-control .floor-btn {
+	height: 28px;
+	line-height: 28px;
+	overflow: hidden;
+	cursor: pointer;
+	position: relative;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none
+}
+
+.amap-indoormap-floorbar-control .floor-btn:hover {
+	background-color: rgba(221, 221, 221, .4)
+}
+
+.amap-indoormap-floorbar-control .floor-minus,
+	.amap-indoormap-floorbar-control .floor-plus {
+	position: relative;
+	text-indent: -1000em
+}
+
+.amap-indoormap-floorbar-control .floor-minus:after,
+	.amap-indoormap-floorbar-control .floor-plus:after {
+	content: "";
+	position: absolute;
+	margin: auto;
+	top: 9px;
+	left: 0;
+	right: 0;
+	width: 0;
+	height: 0;
+	border: solid transparent;
+	border-width: 10px 8px;
+	border-top-color: #777
+}
+
+.amap-indoormap-floorbar-control .floor-minus.disabled,
+	.amap-indoormap-floorbar-control .floor-plus.disabled {
+	opacity: .3
+}
+
+.amap-indoormap-floorbar-control .floor-plus:after {
+	border-bottom-color: #777;
+	border-top-color: transparent;
+	top: -3px
+}
+
+.amap-indoormap-floorbar-control .floor-list-box {
+	max-height: 153px;
+	position: relative;
+	overflow-y: hidden
+}
+
+.amap-indoormap-floorbar-control .floor-list {
+	margin: 0;
+	padding: 0;
+	list-style: none
+}
+
+.amap-indoormap-floorbar-control .floor-list-item {
+	position: relative
+}
+
+.amap-indoormap-floorbar-control .floor-btn.disabled,
+	.amap-indoormap-floorbar-control .floor-btn.disabled *,
+	.amap-indoormap-floorbar-control.with-indrm-loader * {
+	-webkit-pointer-events: none !important;
+	pointer-events: none !important
+}
+
+.amap-indoormap-floorbar-control .with-indrm-loader .floor-nonas {
+	opacity: .5
+}
+
+.amap-indoor-map-moverf-marker {
+	color: #555;
+	background-color: #FFFEEF;
+	border: 1px solid #7E7E7E;
+	padding: 3px 6px;
+	font-size: 12px;
+	white-space: nowrap;
+	display: inline-block;
+	position: absolute;
+	top: 1em;
+	left: 1.2em
+}
+
+.amap-indoormap-floorbar-control .amap-indrm-loader {
+	-moz-animation: amap-indrm-loader 1250ms infinite linear;
+	-webkit-animation: amap-indrm-loader 1250ms infinite linear;
+	animation: amap-indrm-loader 1250ms infinite linear;
+	border: 2px solid #91A3D8;
+	border-right-color: transparent;
+	box-sizing: border-box;
+	display: inline-block;
+	overflow: hidden;
+	text-indent: -9999px;
+	width: 13px;
+	height: 13px;
+	border-radius: 7px;
+	position: absolute;
+	margin: auto;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0
+}
+
+@
+-moz-keyframes amap-indrm-loader { 0% {
+	-moz-transform: rotate(0deg);
+	transform: rotate(0deg)
+}
+
+100%
+{
+-moz-transform
+:rotate(360deg)
+;
+
+  
+transform
+:rotate(360deg)
+
+ 
+}
+}
+@
+-webkit-keyframes amap-indrm-loader { 0% {
+	-webkit-transform: rotate(0deg);
+	transform: rotate(0deg)
+}
+
+100%
+{
+-webkit-transform
+:rotate(360deg)
+;
+
+  
+transform
+:rotate(360deg)
+
+ 
+}
+}
+@
+keyframes amap-indrm-loader { 0% {
+	-moz-transform: rotate(0deg);
+	-ms-transform: rotate(0deg);
+	-webkit-transform: rotate(0deg);
+	transform: rotate(0deg)
+}
+100%
+{
+-moz-transform
+:rotate(360deg)
+;
+
+  
+-ms-transform
+:rotate(360deg)
+;
+
+  
+-webkit-transform
+:rotate(360deg)
+;
+
+  
+transform
+:rotate(360deg)
+
+ 
+}
+}
+</style>
+</head>
+
+<body>
+	<div id="map"></div>
+
+	<div id="layerbox" class="layerbox usel"
+		style="left: 1384px; top: 15px;">
+		<div class="tooldragbar tooldragup"></div>
+		<div class="tooldragbar tooldragdown"></div>
+		<div class="tooldragbar tooldragleft"></div>
+		<div class="tooldragbar tooldragright"></div>
+		<div id="layerbox_item">
+			<div class="show-list">
+				<a class="layer_item satellite item " data-type="satellite"
+					href="javascript:void(0)"> <span class="icon"> <i
+						class="iconfont icon-satellite"></i>
+				</span> <span class="name">卫星</span>
+				</a> <a class="layer_item wumai item " data-type="wumai"
+					href="javascript:void(0)"> <span class="icon"> <i
+						class="iconfont icon-wumai"></i>
+				</span> <span class="name">空气</span>
+				</a> <a class="layer_item traffic item " data-type="traffic"
+					href="javascript:void(0)"> <span class="icon"> <i
+						class="iconfont icon-traffic"></i>
+				</span> <span class="name">路况</span>
+				</a> <a class="tool_item ranging item " data-type="ranging"
+					href="javascript:void(0)"> <span class="icon"> <i
+						class="iconfont icon-ranging"></i>
+				</span> <span class="name">测距</span>
+				</a> <a class="layer_item subway item " data-type="subway"
+					href="javascript:void(0)"> <span class="icon"> <i
+						class="iconfont icon-subway"></i>
+				</span> <span class="name">地铁</span>
+				</a> <a class="tool_item fullscreen item notfull" data-type="fullscreen"
+					href="javascript:void(0)"> <span class="icon"> <i
+						class="iconfont icon-fullscreen"></i>
+				</span> <span class="name">全屏</span>
+				</a>
+			</div>
+			<div class="hide-list clearfix">
+				<a class="layer_item smog item " data-type="smog"
+					href="javascript:void(0)" target="_blank"> <span class="icon-c"><span
+						class="icon"></span></span><span class="name">空气</span>
+				</a> <a class="tool_item ranging item " data-type="ranging"
+					href="javascript:void(0)" target="_blank"> <span class="icon-c"><span
+						class="icon"></span></span><span class="name">测距</span>
+				</a> <a class="layer_item subway item " data-type="subway"
+					href="javascript:void(0)" target="_blank"> <span class="icon-c"><span
+						class="icon"></span></span><span class="name">地铁</span>
+				</a> <a class="tool_item faves item " data-type="faves"
+					href="javascript:void(0)" target="_blank"> <span class="icon-c"><span
+						class="icon"></span></span><span class="name">收藏</span>
+				</a>
+			</div>
+			<div class="roadnet usel" id="roadnet">
+				<div class="raod_item">
+					<span class="roadnet_select_icon icon checked"></span> <span
+						class="name">路网</span>
+				</div>
+			</div>
+			<div class="boxpanel traffic_panel zdeps-2">
+				<div class="panel_header">
+					<ul class="panel_tab">
+						<li class="traffic_item active" id="traffic_current"
+							type="current">实时</li>
+						<li class="traffic_item" id="traffic_forecast" type="forecast">预测</li>
+					</ul>
+					<div class="traffic_tag">
+						<span>畅通</span>
+						<ul class="traffic_level">
+							<li class="level_1"></li>
+							<li class="level_2"></li>
+							<li class="level_3"></li>
+							<li class="level_4"></li>
+						</ul>
+						<span>拥堵</span>
+					</div>
+				</div>
+				<div class="panel_body"></div>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		//获取切片数据的URL，x,y是切片的坐标，z是缩放级别 
+		var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', osm = L
+				.tileLayer(
+						osmUrl,
+						{
+							maxZoom : 17,
+							attribution : 'Li &copy; <a href="#">LiOpen</a> contributors'
+						});
+		//创建map对象,设置地图中心和缩放级别
+		var map = L.map('map');
+		map.setView([ 50.5, 30.51 ], 8);
+		map.addLayer(osm);
+
+		//创建marker,添加标注，添加弹出气泡
+		var marker = new L.Marker(new L.latLng(50.5, 30.51));
+		marker.bindPopup('这个是infowindow对象');//创建infowindow
+		map.addLayer(marker);
+
+		//添加圆形，添加弹出气泡
+		var circle = L.circle([ 50.1, 30 ], 500, {
+			color : 'red',
+			fillColor : '#f03',
+			fillOpacity : 0.5
+		}).addTo(map);
+		circle.bindPopup("I am a circle.").openPopup();
+
+		//添加多边形，添加弹出气泡
+		var polygon = L.polygon(
+				[ [ 51.509, 32 ], [ 51.503, 32.5 ], [ 51.69, 32.6 ] ]).addTo(
+				map);
+		polygon.bindPopup("I am a polygon.");
+
+		//处理事件	
+		var popup = L.popup().setLatLng([ 51.5, 30 ]).setContent(
+				"I am a popup.").openOn(map);
+
+		var popup2 = L.popup();
+		function onMapClick(e) {
+			popup2.setLatLng(e.latlng).setContent(
+					"You clicked the map at " + e.latlng.toString())
+					.openOn(map);
+		}
+		map.on('click', onMapClick);
+
+		//自定义图标
+		var greenIcon = L.icon({
+			iconUrl : 'leaf-green.png',
+			shadowUrl : 'leaf-shadow.png',
+
+			iconSize : [ 38, 95 ], // 图标大小
+			shadowSize : [ 50, 64 ], // 阴影大小
+			iconAnchor : [ 22, 94 ], // 图标上的一点为标记的位置
+			shadowAnchor : [ 4, 62 ], // 阴影上的一点为标记的位置
+			popupAnchor : [ -3, -76 ]
+		// 点击图标后气泡弹出的位置
+		});
+		L.marker([ 51.5, 30.9 ], {
+			icon : greenIcon
+		}).addTo(map).bindPopup("I am a green leaf.");
+		//图标共有部分
+		var LeafIcon = L.Icon.extend({
+			options : {
+				shadowUrl : 'leaf-shadow.png',
+				iconSize : [ 38, 95 ],
+				shadowSize : [ 50, 64 ],
+				iconAnchor : [ 22, 94 ],
+				shadowAnchor : [ 4, 62 ],
+				popupAnchor : [ -3, -76 ]
+			}
+		});
+		var redIcon = new LeafIcon({
+			iconUrl : 'leaf-red.png'
+		}), orangeIcon = new LeafIcon({
+			iconUrl : 'leaf-orange.png'
+		});
+		/*大小写原因
+		 L.icon = function (options) {
+		 return new L.Icon(options);
+		 };*/
+		L.marker([ 51.3, 30.7 ], {
+			icon : redIcon
+		}).addTo(map).bindPopup("I am a red leaf.");
+		L.marker([ 51.1, 30.5 ], {
+			icon : orangeIcon
+		}).addTo(map).bindPopup("I am an orange leaf.");
+
+		//geojson例子
+		//例1、折线
+		var myLines = [ {
+			"type" : "LineString",
+			"coordinates" : [ [ -100, 40 ], [ -105, 45 ], [ -110, 55 ] ]
+		}, {
+			"type" : "LineString",
+			"coordinates" : [ [ -105, 40 ], [ -110, 45 ], [ -115, 55 ] ]
+		} ];
+
+		var myStyle = {
+			"color" : "#ff7800",
+			"weight" : 5,
+			"opacity" : 0.65
+		};
+
+		L.geoJson(myLines, {
+			style : myStyle
+		}).addTo(map);
+
+		//例2、多边形
+		var states = [
+				{
+					"type" : "Feature",
+					"properties" : {
+						"party" : "Republican"
+					},
+					"geometry" : {
+						"type" : "Polygon",
+						"coordinates" : [ [ [ -104.05, 48.99 ],
+								[ -97.22, 48.98 ], [ -96.58, 45.94 ],
+								[ -104.03, 45.94 ], [ -104.05, 48.99 ] ] ]
+					}
+				},
+				{
+					"type" : "Feature",
+					"properties" : {
+						"party" : "Democrat"
+					},
+					"geometry" : {
+						"type" : "Polygon",
+						"coordinates" : [ [ [ -109.05, 41.00 ],
+								[ -102.06, 40.99 ], [ -102.03, 36.99 ],
+								[ -109.04, 36.99 ], [ -109.05, 41.00 ] ] ]
+					}
+				} ];
+
+		L.geoJson(states, {
+			style : function(feature) {
+				switch (feature.properties.party) {
+				case 'Republican':
+					return {
+						color : "#ff0000"
+					};
+				case 'Democrat':
+					return {
+						color : "#0000ff"
+					};
+				}
+			}
+		}).addTo(map);
+	</script>
+
+
+</body>
+</html>

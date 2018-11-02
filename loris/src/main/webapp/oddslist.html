@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta content="text/html" charset="UTF-8">
+	<title>详细信息</title>
+	<link rel="Shortcut Icon" href="./content/images/favicon_a.ico">
+	
+	<link rel="stylesheet" type="text/css" href="content/scripts/bootstrap/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="content/scripts/bootstrap/bootstrap-table.css">
+	<link rel="stylesheet" type="text/css" href="content/scripts/plugins/layui/css/layui.css">	
+	<script type="text/javascript" src="content/scripts/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="content/scripts/bootstrap/bootstrap.min.js"></script>
+	<script type="text/javascript" src="content/scripts/bootstrap/bootstrap-table.js"></script>	
+	<script type="text/javascript" src="content/scripts/bootstrap/locale/bootstrap-table-zh-CN.js"></script>
+	<script type="text/javascript" src="content/scripts/layer/layer.js"></script>
+	
+<style type="text/css">
+.header
+{
+	width: 80%;
+	height: 60px;
+	margin:auto;
+}
+.wrapper
+{
+	width: 90%;
+	height: 100%;
+	margin: auto;
+}
+
+.table th,table td
+{
+	text-align: center;
+	border-color: #ccc;
+}
+
+
+.table tbody tr:nth-child(odd)
+{
+	background: #eee;
+}
+
+.table tbody tr:nth-child(even)
+{
+	background: #fff;
+}
+
+.table-hover > tbody > tr:hover
+{
+  	background-color: #05f5f5;
+}
+
+</style>
+
+</head>
+<body>
+<div class="header">
+</div>
+<div class="wrapper">
+	<table class="table table-hover table-striped" id="cusTable" data-pagination="true"
+		data-show-refresh="true" data-show-toggle="true"
+		data-showColumns="true">
+	</table>
+</div>
+
+<div class="footer">
+</div>
+
+<script type="text/javascript">
+
+function request(name)
+{
+     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+     var r = window.location.search.substr(1).match(reg);
+     if(r != null)
+    	 return unescape(r[2]); 
+     return null;
+}
+
+Date.prototype.pattern = function(fmt) {           
+    var o = {           
+	    "M+" : this.getMonth()+1, //月份           
+	    "d+" : this.getDate(), //日           
+	    "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时           
+	    "H+" : this.getHours(), //小时           
+	    "m+" : this.getMinutes(), //分           
+	    "s+" : this.getSeconds(), //秒           
+	    "q+" : Math.floor((this.getMonth()+3)/3), //季度           
+	    "S" : this.getMilliseconds() //毫秒           
+    };           
+    var week = {           
+	    "0" : "/u65e5",           
+	    "1" : "/u4e00",           
+	    "2" : "/u4e8c",           
+	    "3" : "/u4e09",           
+	    "4" : "/u56db",           
+	    "5" : "/u4e94",           
+	    "6" : "/u516d"          
+    };           
+    if(/(y+)/.test(fmt)){           
+        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));           
+    }           
+    if(/(E+)/.test(fmt)){           
+        fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "/u661f/u671f" : "/u5468") : "")+week[this.getDay()+""]);           
+    }           
+    for(var k in o){           
+        if(new RegExp("("+ k +")").test(fmt)){           
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));           
+        }           
+    }           
+    return fmt;           
+}
+
+var mid = request('mid');
+
+
+function initTable() 
+{
+	if(mid == null)
+	{
+		layer.msg("没有比赛场次编号");
+		return;
+	}
+	//先销毁表格  
+	$('#cusTable').bootstrapTable('destroy');
+	$("#cusTable").bootstrapTable({ 
+		method: "get",                        	//使用get请求到服务器获取数据 
+		url: "soccerdata/oddsop",             	//获取数据的Servlet地址 
+		striped: true,                        	//表格显示条纹 
+		pagination: true,                   	//启动分页 
+		pageSize: 500,                       	//每页显示的记录数 
+		pageNumber:1,                       	//当前第几页 
+		pageList: [500],       					//记录数可选列表 
+		search: true,                         	//是否启用查询 
+		showColumns: true,                    	//显示下拉框勾选要显示的列 
+		showRefresh: true,                    	//显示刷新按钮 
+		sidePagination: "server",             	//表示服务端请求 
+		//设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder 
+		//设置为limit可以获取limit, offset, search, sort, order 
+		queryParamsType : "undefined", 
+		queryParams: function queryParams(params) { //设置查询参数 
+			var param = { 
+		    	pageNumber: params.pageNumber, 
+		     	pageSize: params.pageSize,
+		     	mid: mid,
+		     	orderNum : $("#orderNum").val() 
+		    }; 
+		    return param;     
+		},
+		/*
+		rowStyle: function (row, index) {
+            var style = "";
+            var result = row.result;
+            switch(result)
+            {
+            case 3:
+            	style = "success";
+            	break;
+            case 1:
+            	style = "info";
+            	break;
+            case 0:
+            	style = "warning";
+            	break;
+            default:
+            	style = "active";
+            	break;
+            }
+            //style='danger';             
+            return { classes: style }
+        },*/
+		columns: [
+		{
+			field: 'operate',
+			title: '序号',
+			formatter: function (value, row, index) {  
+                return index + 1;  
+            }  
+     	},
+     	{
+        	field: 'gid',
+        	title: '公司编号'
+    	}, 
+    	{
+        	field: 'firsttime',
+       		title: '初赔时间'
+     	},
+     	{
+        	field: 'firstwinodds',
+       		title: '初胜赔率'
+     	},
+     	{
+        	field: 'firstdrawodds',
+       		title: '初平赔率'
+     	},
+     	{
+        	field: 'firstloseodds',
+       		title: '初负赔率'
+     	},
+     	{
+        	field: 'lasttime',
+       		title: '最新时间',
+       		formatter: formatDateStr
+     	},
+     	{
+        	field: 'winodds',
+       		title: '胜赔率'
+     	},
+     	{
+        	field: 'drawodds',
+       		title: '平赔率'
+     	},
+     	{
+        	field: 'loseodds',
+       		title: '负赔率'
+     	},
+     	{
+        	field: 'hkelly',
+       		title: '凯利胜'
+     	},
+     	{
+        	field: 'dkelly',
+       		title: '凯利平'
+     	},
+     	{
+        	field: 'ckelly',
+       		title: '凯利负'
+     	},
+     	{
+        	field: 'hprob',
+       		title: '胜比率'
+     	},
+     	{
+        	field: 'dprob',
+       		title: '胜比率'
+     	},
+     	{
+        	field: 'cprob',
+       		title: '胜比率'
+     	},
+     	{
+        	field: 'lossratio',
+       		title: '返还率'
+     	}],
+		onLoadSuccess: function(){ //加载成功时执行 
+		    layer.msg("加载成功");
+			//$("#cusTable").TabStyle();
+		}, 
+		onLoadError: function(){ //加载失败时执行 
+			layer.msg("加载数据失败", {time : 1500, icon : 2}); 
+		} 
+	});	
+}
+
+function operateFormatter(value, row, index) {//赋予的参数
+    return computeDelta(row.avgprobwin, row.avgwinodds);
+	/*return [
+         '<a class="btn " href="#">档案</a>',
+         '<a class="btn btn-default" href="#">记录</a>',
+         '<a class="btn " href="#">准入</a>'
+     ].join('');*/
+}
+
+function formatDateStr(value, row, index){
+	var date = new Date(value);
+	return date.pattern("yyyy-MM-dd hh:mm:ss");
+}
+
+function operateFormatterWin(value, row, index) {//赋予的参数
+    return computeDelta(row.avgprobwin, row.avgwinodds);
+}
+
+function operateFormatterDraw(value, row, index) {//赋予的参数
+    return computeDelta(row.avgprobdraw, row.avgdrawodds);
+}
+
+function operateFormatterLose(value, row, index) {//赋予的参数
+    return computeDelta(row.avgproblose, row.avgloseodds);
+}
+
+function computeDelta(prob, odds)
+{
+	return (100.0 / prob - odds).toFixed(2);
+}
+
+$(document).ready(function() {
+	//调用函数，初始化表格  
+	initTable();
+	//当点击查询按钮的时候执行  
+	$("#search").bind("click", initTable);
+});
+</script>
+</body>
+</html>

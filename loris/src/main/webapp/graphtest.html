@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <meta content="text/html" charset="utf-8" /> 
+  <title>图模型</title> 
+  <script type="text/javascript" src="content/scripts/jquery/jquery.min.js"></script> 
+  <script type="text/javascript" src="content/scripts/echarts/dist/echarts.js"></script> 
+  <script type="text/javascript" src="content/scripts/echarts/theme/vintage.js"></script> 
+  <script type="text/javascript" src="content/scripts/echarts/dist/extension/dataTool.js"></script> 
+  <script type="text/javascript" src="content/scripts/echarts/lib/dat.gui.min.js"></script>
+  <style type="text/css">
+html, body {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+}
+
+.headerPanel {
+	height: 120px;
+}
+
+.wrapper {
+	width: 90%;
+	height: 800px;
+	margin: auto;
+}
+
+#main {
+	height: 100%;
+}
+</style> 
+</head> 
+<body> 
+	<div class="headerPanel"></div> 
+  	<div class="wrapper"> 
+   		<div id="main"></div> 
+  	</div>
+  
+<script type="text/javascript">
+var gexf = dataTool.gexf;
+var chart = echarts.init(document.getElementById('main'), 'vintage', {});
+
+var url1 = "content/data/test.gexf";
+var url = "soccerdata/matchcor";
+$.get(url1, function (xml) {
+        var graph = gexf.parse(xml);
+        var categories = [];
+        for (var i = 0; i < 9; i++) {
+            categories[i] = {
+                name: '类目' + i
+            };
+        }
+        graph.nodes.forEach(function (node) {
+            delete node.itemStyle;
+            node.value = node.symbolSize;
+            node.label = {
+                normal: {
+                    show: node.symbolSize > 30
+                },
+                emphasis: {
+                    show: true
+                }
+            };
+            //node.category = node.attributes['modularity_class'];
+        });
+        graph.links.forEach(function (link) {
+            delete link.lineStyle;
+        });
+        var option = {
+            aria: {
+                show: true,
+                description: 'Les Miserables 的关系主要分为六个区域，这张图描述了他们之间的相互关联。'
+            },
+            tooltip: {},
+            legend: [{
+                // selectedMode: 'single',
+                data: categories.map(function (a) {
+                    return a.name;
+                })
+            }],
+            animationDurationUpdate: 1500,
+            animationEasingUpdate: 'quinticInOut',
+            series: [{
+                name: 'Les Miserables',
+                type: 'graph',
+                layout: 'none',
+                data: graph.nodes,
+                links: graph.links,
+                categories: categories,
+                roam: true,
+                draggable: true,
+                itemStyle: {
+                    normal: {
+                        borderColor: '#fff',
+                        borderWidth: 2,
+                        shadowBlur: 10,
+                        shadowColor: 'rgba(0, 0, 0, 0.3)'
+                    }
+                },
+                focusNodeAdjacency: true,
+                // edgeSymbol: ['none', 'arrow'],
+                // scaleLimit: {
+                //     min: 1.5,
+                //     max: 2
+                // },
+                label: {
+                    normal: {
+                        position: 'right',
+                        formatter: '{b}'
+                    }
+                },
+                lineStyle: {
+                    normal: {
+                        color: 'source',
+                        curveness: 0.3
+                    },
+                    emphasis: {
+                        width: 10
+                    }
+                }
+            }]
+        };
+
+        chart.setOption(option);
+
+        var config = {
+            layout: 'none',
+            focusNodeAdjacency: true,
+            manualFocusNodeAdjacency: function () {
+                    chart.dispatchAction({
+                        type: 'focusNodeAdjacency',
+                        seriesName: 'Les Miserables',
+                        dataIndex: 2
+                    });
+                },
+                manualUnfocusNodeAdjacency: function () {
+                    chart.dispatchAction({
+                        type: 'unfocusNodeAdjacency',
+                        seriesName: 'Les Miserables'
+                    });
+                },
+                'circular.rotateLabel': false
+        };
+
+        chart.on('click', function (params) {
+            console.log(params, params.data);
+        });
+
+
+        var gui = new dat.GUI();
+        gui.add(config, 'layout', ['none', 'circular'])
+            .onChange(function (value) {
+                chart.setOption({
+                    series: [{
+                        name: 'Les Miserables',
+                        layout: value
+                    }]
+                });
+            });
+        gui.add(config, 'focusNodeAdjacency').onChange(
+            function (value) {
+                chart.setOption({
+                    series: [{
+                        name: 'Les Miserables',
+                        focusNodeAdjacency: value
+                    }]
+                });
+            });
+        gui.add(config, 'manualFocusNodeAdjacency');
+        gui.add(config, 'manualUnfocusNodeAdjacency');
+        gui.add(config, 'circular.rotateLabel').onChange(
+            function (value) {
+                chart.setOption({
+                    series: [{
+                        name: 'Les Miserables',
+                        circular: {
+                            rotateLabel: !!value
+                        }
+                    }]
+                });
+            });
+    });		
+</script>  
+ </body>
+</html>

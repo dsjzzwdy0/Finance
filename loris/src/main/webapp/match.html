@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta content="text/html" charset="UTF-8">
+	<title>详细信息</title>
+	<link rel="Shortcut Icon" href="./content/images/favicon_a.ico">
+	
+	<link rel="stylesheet" type="text/css" href="content/scripts/bootstrap/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="content/scripts/bootstrap/bootstrap-table.css">
+	<link rel="stylesheet" type="text/css" href="content/scripts/plugins/layui/css/layui.css">	
+	<script type="text/javascript" src="content/scripts/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="content/scripts/bootstrap/bootstrap.min.js"></script>
+	<script type="text/javascript" src="content/scripts/bootstrap/bootstrap-table.js"></script>	
+	<script type="text/javascript" src="content/scripts/bootstrap/locale/bootstrap-table-zh-CN.js"></script>
+	<script type="text/javascript" src="content/scripts/layer/layer.js"></script>
+	
+<style type="text/css">
+.header
+{
+	width: 80%;
+	height: 60px;
+	margin:auto;
+}
+.wrapper
+{
+	width: 90%;
+	height: 100%;
+	margin: auto;
+}
+
+.table th,table td
+{
+	text-align: center;
+	border-color: #ccc;
+}
+
+/*
+.table tbody tr:nth-child(odd)
+{
+	background: #eee;
+}
+
+.table tbody tr:nth-child(even)
+{
+	background: #fff;
+}*/
+
+.table-hover > tbody > tr:hover
+{
+  	background-color: #05f5f5;
+}
+
+</style>
+
+</head>
+<body>
+<div class="header">
+</div>
+<div class="wrapper">
+	<table class="table table-hover table-striped" id="cusTable" data-pagination="true"
+		data-show-refresh="true" data-show-toggle="true"
+		data-showColumns="true">
+	</table>
+</div>
+
+<div class="footer">
+</div>
+
+<script type="text/javascript">
+function initTable() 
+{
+	//先销毁表格  
+	$('#cusTable').bootstrapTable('destroy');
+	$("#cusTable").bootstrapTable({ 
+		method: "get", //使用get请求到服务器获取数据 
+		url: "soccerdata/detail?lids=top5", //获取数据的Servlet地址 
+		striped: true, //表格显示条纹 
+		pagination: true, //启动分页 
+		pageSize: 20, //每页显示的记录数 
+		pageNumber:1, //当前第几页 
+		pageList: [20, 50, 100, 200], //记录数可选列表 
+		search: false, //是否启用查询 
+		showColumns: true, //显示下拉框勾选要显示的列 
+		showRefresh: true, //显示刷新按钮 
+		sidePagination: "server", //表示服务端请求 
+		//设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder 
+		//设置为limit可以获取limit, offset, search, sort, order 
+		queryParamsType : "undefined", 
+		queryParams: function queryParams(params) { //设置查询参数 
+			var param = { 
+		    	pageNumber: params.pageNumber, 
+		     	pageSize: params.pageSize,
+		     	orderNum : $("#orderNum").val() 
+		    }; 
+		    return param;     
+		},
+		rowStyle: function (row, index) {
+            var style = "";
+            var result = row.result;
+            switch(result)
+            {
+            case 3:
+            	style = "success";
+            	break;
+            case 1:
+            	style = "info";
+            	break;
+            case 0:
+            	style = "warning";
+            	break;
+            default:
+            	style = "active";
+            	break;
+            }
+            //style='danger';             
+            return { classes: style }
+        },
+		columns: [
+		{
+        	field: 'mid',
+         	title: '比赛编号',
+         	formatter: formatterMid
+     	},
+     	{
+        	field: 'total',
+        	title: '总数'
+    	}, 
+    	{
+        	field: 'avgwinodds',
+       		title: '胜赔率'
+     	},
+     	{
+        	field: 'avgdrawodds',
+       		title: '平赔率'
+     	},
+     	{
+        	field: 'avgloseodds',
+       		title: '负赔率'
+     	},
+     	{
+        	field: 'avgprobwin',
+       		title: '胜率'
+     	},
+     	{
+        	field: 'avgprobdraw',
+       		title: '平率'
+     	},
+     	{
+        	field: 'avgproblose',
+       		title: '负率'
+     	},
+     	{
+        	field: 'avgkellywin',
+       		title: '凯利胜'
+     	},
+     	{
+        	field: 'avgkellydraw',
+       		title: '凯利平'
+     	},
+     	{
+        	field: 'avgkellylose',
+       		title: '凯利负'
+     	},
+     	{
+        	field: 'operate',
+       		title: '胜差额',
+       		formatter: operateFormatterWin
+     	},
+     	{
+        	field: 'operate',
+       		title: '平差额',
+       		formatter: operateFormatterDraw
+     	},
+     	{
+        	field: 'operate',
+       		title: '负差额',
+       		formatter: operateFormatterLose
+     	},
+     	{
+        	field: 'score',
+       		title: '比分'
+     	},
+     	{
+        	field: 'result',
+       		title: '结果'
+     	},
+     	
+    	{
+        	field: 'operate',
+        	title: '操作',
+         	formatter: operateFormatter //自定义方法，添加操作按钮
+    	}],
+		onLoadSuccess: function(){ //加载成功时执行 
+		    layer.msg("加载成功");
+			//$("#cusTable").TabStyle();
+		}, 
+		onLoadError: function(){ //加载失败时执行 
+			layer.msg("加载数据失败", {time : 1500, icon : 2}); 
+		} 
+	});	
+}
+
+
+function formatterMid(value, row, index){
+	return '<a href="oddslist.html?mid=' + value + '">' + value + '</a>';
+}
+
+function operateFormatter(value, row, index) {//赋予的参数
+    return computeDelta(row.avgprobwin, row.avgwinodds);
+	/*return [
+         '<a class="btn " href="#">档案</a>',
+         '<a class="btn btn-default" href="#">记录</a>',
+         '<a class="btn " href="#">准入</a>'
+     ].join('');*/
+}
+
+function operateFormatterWin(value, row, index) {//赋予的参数
+    return computeDelta(row.avgprobwin, row.avgwinodds);
+}
+
+function operateFormatterDraw(value, row, index) {//赋予的参数
+    return computeDelta(row.avgprobdraw, row.avgdrawodds);
+}
+
+function operateFormatterLose(value, row, index) {//赋予的参数
+    return computeDelta(row.avgproblose, row.avgloseodds);
+}
+
+function computeDelta(prob, odds)
+{
+	return (100.0 / prob - odds).toFixed(2);
+}
+
+$(document).ready(function() {
+	//调用函数，初始化表格  
+	initTable();
+	//当点击查询按钮的时候执行  
+	$("#search").bind("click", initTable);
+});
+</script>
+</body>
+</html>

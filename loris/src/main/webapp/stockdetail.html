@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta content="text/html" charset="UTF-8">
+	<title>Insert title here</title>
+	<link rel="stylesheet" type="text/css" href="content/scripts/bootstrap/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="content/scripts/bootstrap/bootstrap-table.css">
+	<link rel="stylesheet" type="text/css" href="content/check/css/basic.css">
+	<link rel="stylesheet" type="text/css" href="content/scripts/plugins/layui/css/layui.css">	
+	<script type="text/javascript" src="content/scripts/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="content/scripts/bootstrap/bootstrap.min.js"></script>
+	<script type="text/javascript" src="content/scripts/bootstrap/bootstrap-table.js"></script>
+	<script type="text/javascript" src="content/scripts/layer/layer.js"></script>
+</head>
+<body>
+	<table class="table table-hover" id="cusTable" data-pagination="true"
+		data-show-refresh="true" data-show-toggle="true"
+		data-showColumns="true">
+		<thead>
+			<tr>
+				<th data-field="date" data-sortable="true">日期</th>
+				<th data-field="time">成交时间</th>
+				<th data-field="price" data-sortable="true">成交价格</th>
+				<th data-field="variation">变动数</th>
+				<th data-field="volume">成交手数</th>
+				<th data-field="amount">成交金额</th>
+				<th data-field="typeName">买卖盘</th>
+				<!-- 在此省略表格列的代码，代码和上面差不多 -->
+				<th class="col-xs-2" data-field="type"
+					data-formatter="actionFormatter" data-events="actionEvents">Action</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+
+	<script type="text/javascript">
+
+		function initTable() 
+		{
+			//先销毁表格  
+			$('#cusTable').bootstrapTable('destroy');
+			$("#cusTable").bootstrapTable({ 
+				method: "get", //使用get请求到服务器获取数据 
+				url: "stock/detail?symbol=sh600011&day=2018-01-29", //获取数据的Servlet地址 
+				striped: true, //表格显示条纹 
+				pagination: true, //启动分页 
+				pageSize: 100, //每页显示的记录数 
+				pageNumber:1, //当前第几页 
+				pageList: [100, 150, 200, 300, 400], //记录数可选列表 
+				search: false, //是否启用查询 
+				showColumns: true, //显示下拉框勾选要显示的列 
+				showRefresh: true, //显示刷新按钮 
+				sidePagination: "server", //表示服务端请求 
+				//设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder 
+				//设置为limit可以获取limit, offset, search, sort, order 
+				queryParamsType : "undefined", 
+				queryParams: function queryParams(params) { //设置查询参数 
+					var param = { 
+				    	pageNumber: params.pageNumber, 
+				     	pageSize: params.pageSize, 
+				     	orderNum : $("#orderNum").val() 
+				    }; 
+				    return param;     
+				}, 
+				onLoadSuccess: function(){ //加载成功时执行 
+				    layer.msg("加载成功");
+					//$("#cusTable").TabStyle();
+				}, 
+				onLoadError: function(){ //加载失败时执行 
+					layer.msg("加载数据失败", {time : 1500, icon : 2}); 
+				} 
+			});
+			
+		}
+
+		$(document).ready(function() {
+			//调用函数，初始化表格  
+			initTable();
+			//当点击查询按钮的时候执行  
+			$("#search").bind("click", initTable);
+		});
+	</script>
+</body>
+</html>

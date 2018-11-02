@@ -1,0 +1,394 @@
+create table SOCCER_LEAGUE(
+	id int not null auto_increment,
+	LID varchar(10),
+	TYPE varchar(10),
+	NAME varchar(10),
+	COUNTRY varchar(20),
+	CONTINENT varchar(20),
+	INTRODUCTION longtext,
+	PRIMARY KEY  (`id`)
+)
+
+create table SOCCER_SEASON(
+	id int not null auto_increment,
+	lid varchar(10),
+	season varchar(10),
+	PRIMARY KEY  (`id`)
+)
+
+create table SOCCER_ROUND(
+	id int not null auto_increment,
+	lid varchar(10),
+	season varchar(10),
+	name varchar(10),
+	rid varchar(10),
+	PRIMARY KEY  (`id`)
+)
+
+create table SOCCER_TEAM(
+	id int not null auto_increment,
+	tid varchar(10),
+	name varchar(20),
+	lid varchar(10),
+	season varchar(10),
+	PRIMARY KEY  (`id`)
+)
+
+
+create table SOCCER_TEAM_INFO(
+	id int not null auto_increment,
+	tid varchar(10),
+	name varchar(20),
+	ename varchar(30),
+	lid varchar(10),
+	country varchar(20),
+	city varchar(20),
+	foundtime varchar(12),
+	mainpage varchar(50),
+	coach varchar(20),
+	introduction longtext,
+	PRIMARY KEY  (`id`)
+)
+
+create table SOCCER_MATCH(
+	id int not null auto_increment,
+	mid varchar(10),
+	lid varchar(10),
+	round varchar(10),
+	hteam varchar(10),
+	cteam varchar(10),
+	season varchar(10),
+	matchtime varchar(20),
+	score varchar(8),
+	halfscore varchar(8),
+	handicap varchar(20),
+	ended tinyint(1),
+	PRIMARY KEY  (`id`)
+)
+
+create table SOCCER_GAMING_COMPANY(
+	id int not null auto_increment,
+	gid varchar(10),
+	name varchar(30),
+	ename varchar(30),
+	mainflag tinyint,
+	country varchar(20),
+	source varchar(10),
+	introduction longtext,
+	mainpage varchar(50),
+	PRIMARY KEY (`id`)
+)
+
+create table SOCCER_ODDS(
+	id int not null auto_increment,
+	idx varchar(4),
+	mid varchar(10),
+	gid varchar(10),
+	oddstype varchar(5),
+	type varchar(12),
+	result varchar(5),
+	firsttime varchar(20),
+	firstwinodds varchar(10),
+	firstdrawodds varchar(10),
+	firstloseodds varchar(10),
+	lasttime varchar(16),
+	winodds varchar(10),
+	drawodds varchar(10),
+	loseodds varchar(10),
+	hprob varchar(10),
+	dprob varchar(10),
+	cprob varchar(10),
+	hkelly varchar(10),
+	dkelly varchar(10),
+	ckelly varchar(10),
+	lossratio varchar(10),
+	PRIMARY KEY (`id`)
+);
+
+create table SOCCER_AVG_ODDS(
+	id int not null auto_increment,
+	mid varchar(10),
+	total int,
+	  avgfirstwinodds   float,
+	  avgfirstdrawodds  float,
+	  avgfirstloseodds  float,
+	  minfirstwinodds   float,
+	  maxfirstwinodds   float,
+	  minfirstdrawodds  float,
+	  maxfirstdrawodds  float,
+	  minfirstloseodds  float,
+	  maxfirstloseodds  float,
+	  varfirstwinodds   float,
+	  varfirstdrawodds  float,
+	  varfirstloseodds  float,
+	  lasttime           long,
+	  avgwinodds        float,
+	  avgdrawodds       float,
+	  avgloseodds       float,
+	  minwinodds        float,
+	  maxwinodds        float,
+	  mindrawodds       float,
+	  maxdrawodds       float,
+	  minloseodds       float,
+	  maxloseodds       float,
+	  varwinodds        float,
+	  vardrawodds       float,
+	  varloseodds       float,
+	  avgprobwin        float,
+	  avgprobdraw       float,
+	  avgproblose       float,
+	  minprobwin        float,
+	  maxprobwin        float,
+	  minprobdraw       float,
+	  maxprobdraw       float,
+	  minproblose       float,
+	  maxproblose       float,
+	  varprobwin        float,
+	  varprobdraw       float,
+	  varproblose       float,
+	  avgkellywin       float,
+	  avgkellydraw      float,
+	  avgkellylose      float,
+	  minkellywin       float,
+	  maxkellywin       float,
+	  minkellydraw      float,
+	  maxkellydraw      float,
+	  minkellylose      float,
+	  maxkellylose      float,
+	  varkellywin       float,
+	  varkellydraw      float,
+	  varkellylose      float,
+	  lossratio         float,
+	  minratio          float,
+	  maxratio          float,
+	  varratio          float,
+	  updated tinyint(1),
+		INDEX index_mid(mid),
+		PRIMARY KEY (`id`)
+)
+
+create table SOCCER_MATCH_RESULT(
+	id int not null auto_increment,
+	mid varchar(10),
+	halfgoals varchar(10),
+	halfscore varchar(10),
+	goals varchar(10),
+	score varchar(10),
+	PRIMARY KEY (`id`)
+)
+
+create table SOCCER_WEB_ODDS_CONTENT(
+	ID int NOT NULL auto_increment,	
+	LID varchar(10),	
+	SEASON varchar(10),
+	ROUND varchar(5),
+	RACETYPE varchar(8),
+	MID varchar(10), 
+	URL varchar(100),	 
+	TYPE varchar(5), 
+	ODDSTYPE varchar(5),
+	CREATETIME char(20), 
+	CONTENT longtext,
+	COMPLETE tinyint(1),
+	INDEX index_symbol(LID),
+	INDEX index_mid(MID),
+	INDEX index_createtime(CREATETIME),
+	INDEX index_url(URL),
+	PRIMARY KEY  (`id`)
+)
+
+create table SOCCER_WEB_MATCH_CONTENT(
+	ID int NOT NULL auto_increment,	
+	LID varchar(10), 
+	ROUND varchar(5),
+	SEASON varchar(10),
+	RACETYPE varchar(8), 
+	URL varchar(100),	 
+	TYPE varchar(5), 
+	CREATETIME char(20), 
+	CONTENT longtext,
+	COMPLETE tinyint(1),
+	INDEX index_symbol(LID),
+	INDEX index_createtime(CREATETIME),
+	INDEX index_url(URL),
+	PRIMARY KEY  (`id`)
+)
+
+create table soccer_rank
+(
+	ID int NOT NULL auto_increment,
+	LID varchar(10),
+	LEAGUENAME varchar(30),
+	SEASON varchar(10),
+	ROUND varchar(10),
+	TYPE varchar(2),
+	TID varchar(10),
+	NAME varchar(20),
+	RANK int,
+	GAMENUM int,
+	WINNUM int,
+	DRAWNUM int,
+	SCORE int,
+	GOAL int,
+	LOSEGOAL int,
+	index INDEX_LID(LID),
+	index INDEX_SEASON(SEASON),
+	index INDEX_ROUND(ROUND),
+	primary key  (`id`)
+)
+
+create table SOCCER_WEB_LEAGUE_CONTENT(
+	ID int NOT NULL auto_increment,	
+	LID varchar(10),  
+	URL varchar(100),	
+	SEASON varchar(10), 
+	TYPE varchar(5), 
+	CREATETIME char(20), 
+	CONTENT longtext,
+	COMPLETE tinyint(1),
+	INDEX index_symbol(LID),
+	INDEX index_createtime(CREATETIME),
+	PRIMARY KEY  (`id`)
+)
+
+create table SOCCER_WEB_ISSUE_CONTENT(
+	ID int NOT NULL auto_increment,	
+	ISSUE varchar(15),  
+	URL varchar(100),	 
+	TYPE varchar(5), 
+	CREATETIME varchar(20), 
+	LOADTIME varchar(20),
+	ENCODING varchar(10),
+	METHOD varchar(5),
+	HTTPSTATUS smallint,
+	CONTENT longtext,
+	COMPLETED tinyint(1),
+	INDEX index_symbol(ISSUE),
+	INDEX index_createtime(CREATETIME),
+	PRIMARY KEY  (`id`)
+)
+
+create table SOCCER_MATCH_CALENDAR(
+	ID varchar(30) not null,
+	DATE varchar(20),
+	BDISSUE varchar(16),
+	BD int,
+	JCISSUE varchar(16),
+	JC int,
+	ZC varchar(16),
+	UPDATETIME varchar(20),
+	INDEX index_DATE(DATE),
+	PRIMARY KEY  (`ID`)
+)
+
+create table SOCCER_ISSUE_MATCH(
+	id int NOT NULL auto_increment,
+	mid varchar(10),
+	oldid varchar(10),
+	ordinary varchar(5),
+	issue varchar(18),
+	lid varchar(10),
+	leaguename varchar(20),
+	closetime varchar(20),
+	matchtime varchar(20),
+	hometid varchar(10),
+	homename varchar(20),
+	homerank int,
+	homelid varchar(10),
+	homeleague varchar(20),
+	clienttid varchar(10),
+	clientname varchar(20),
+	clientrank int,
+	clientlid varchar(10),
+	clientleague varchar(20),
+	point varchar(8),
+	winodds varchar(5),
+	drawodds varchar(5),
+	loseodds varchar(5),
+	isopen tinyint,
+	rate varchar(8),
+	ratewinodds varchar(5),
+	ratedrawodds varchar(5),
+	rateloseodds varchar(5),
+	rateopen tinyint,
+	closed tinyint,
+	INDEX index_mid(mid),
+	INDEX index_issue(issue),
+	PRIMARY KEY  (`id`)
+),
+
+create table SOCCER_ISSUE_MATCH_14(
+	id int NOT NULL auto_increment,
+	mid varchar(10),
+	oldid varchar(10),
+	ordinary varchar(5),
+	issue varchar(18),
+	lid varchar(10),
+	leaguename varchar(20),
+	leaguetype varchar(2),
+	kjendtime varchar(20),
+	matchtime varchar(20),
+	hometid varchar(10),
+	homename varchar(20),
+	homerank int,
+	clienttid varchar(10),
+	clientname varchar(20),
+	clientrank int,
+	winodds varchar(5),
+	drawodds varchar(5),
+	loseodds varchar(5),
+	isopen tinyint,
+	yprate varchar(8),
+	ypwinodds varchar(5),
+	yploseodds varchar(5),
+	lotteryname varchar(5),
+	zuizongbifen varchar(50),
+	result varchar(50),
+	resultdes varchar(100),
+	closed tinyint,
+	INDEX index_mid(mid),
+	INDEX index_issue(issue),
+	PRIMARY KEY  (`id`)
+)
+
+create table soccer_issue_bd(
+	id int NOT NULL auto_increment,
+	issue varchar(15),
+	ordinary int,
+	mid varchar(10),
+	lid varchar(5),
+	leaguename varchar(12),
+	matchtime varchar(20),
+	homeid varchar(10),
+	homename varchar(20),
+	homerank varchar(5),
+	guestid varchar(10),
+	guestname varchar(20),
+	guestrank varchar(5),
+	endtime varchar(20),
+	rangqiu int,
+	winoddds varchar(10),
+	drawodds varchar(10),
+	loseodds varchar(10),
+	closed tinyint,
+	INDEX index_issue(issue),
+	INDEX index_lid(lid),
+	PRIMARY KEY  (`id`)
+)
+
+
+ALTER table soccer_web_match_content ADD INDEX url_index(url)
+
+
+CREATE 
+ALGORITHM=UNDEFINED 
+DEFINER=`root`@`localhost` 
+SQL SECURITY DEFINER 
+VIEW `NewView`AS 
+select `m`.`id` AS `id`,`m`.`mid` AS `mid`,`m`.`lid` AS `lid`,`m`.`season` AS `season`,`m`.`round` AS `round`,`m`.`hteam` AS `hteam`,`m`.`cteam` AS `cteam`,`m`.`matchtime` AS `matchtime`,`m`.`score` AS `score`,`m`.`halfscore` AS `halfscore`,`m`.`handicap` AS `handicap`,`m`.`ended` AS `ended`,`t`.`name` AS `homename`,`p`.`name` AS `clientname`,`q`.`avgwinodds` AS `winodds`,`q`.`avgdrawodds` AS `drawodds`,`q`.`avgloseodds` AS `loseodds`,`l`.`NAME` AS `leaguename`,`l`.`COUNTRY` AS `country`,`l`.`TYPE` AS `leaguetype`,`l`.`CONTINENT` AS `continent` 
+from ((((`soccer_match` `m` 
+join `soccer_team_info` `t` on(((`m`.`hteam` = `t`.`tid`) and ('' = '')))) 
+join `soccer_team_info` `p` on((`m`.`cteam` = `p`.`tid`))) 
+join `soccer_odds_stat` `q` on((`m`.`mid` = `q`.`mid`))) 
+join `soccer_league` `l` on((`m`.`lid` = `l`.`LID`))) ;
+

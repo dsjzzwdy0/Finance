@@ -1,0 +1,8 @@
+﻿* {
+    padding: 0px;
+    margin: 0px;
+    font-size: 14px;
+}
+.sidebar-menu .treeview-menu>li>a{
+    font-size:14px !important;
+}
