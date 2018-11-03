@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  			
+<webpagesettings>
+	<webpages>
+		<datapath>d:/index/data/</datapath>
+		
+		<!-- Soccer -->
+		<page type="league" classname="com.loris.soccer.web.downloader.zgzcw.page.LeagueWebPage">
+			<encoding>utf-8</encoding>
+			<host protocol="http" port="80" method="get">saishi.zgzcw.com</host>
+			<storage enable="true" basedir="d:/index/data"></storage>
+		</page>
+		<page type="center" classname="com.loris.soccer.web.downloader.zgzcw.page.ZgzcwCenterPage">
+			<encoding>utf-8</encoding>
+			<host protocol="http" port="80" method="get">saishi.zgzcw.com</host>
+			<storage enable="true" basedir="d:/index/data"></storage>
+		</page>
+		<page type="calendar" classname="com.loris.soccer.web.downloader.zgzcw.page.LotteryCalendarWebPage">
+			<encoding>utf-8</encoding>
+			<host protocol="http" port="80" method="get">cp.zgzcw.com</host>
+			<storage enable="true" basedir="d:/index/data"></storage>
+		</page>
+		<page type="lottery" classname="com.loris.soccer.web.downloader.zgzcw.page.LotteryWebPage">
+			<encoding>utf-8</encoding>
+			<host protocol="http" port="80" method="get">cp.zgzcw.com</host>
+			<storage enable="true" basedir="d:/index/data"></storage>
+		</page>
+		<page type="history" classname="com.loris.soccer.web.downloader.zgzcw.page.MatchHistoryWebPage">
+			<encoding>utf-8</encoding>
+			<host protocol="http" port="80" method="get">fenxi.zgzcw.com</host>
+			<storage enable="true" basedir="d:/index/data"></storage>
+		</page>
+		<page type="match" classname="com.loris.soccer.web.downloader.zgzcw.page.MatchWebPage">
+			<encoding>utf-8</encoding>
+			<host protocol="http" port="80" method="get">saishi.zgzcw.com</host>
+			<storage enable="true" basedir="d:/index/data"></storage>
+		</page>
+		<page type="op" classname="com.loris.soccer.web.downloader.zgzcw.page.OddsOpWebPage">
+			<encoding>utf-8</encoding>
+			<host protocol="http" port="80" method="get">fenxi.zgzcw.com</host>
+		</page>
+		<page type="opzhishu" classname="com.loris.soccer.web.downloader.zgzcw.page.OddsOpZhishuWebPage">
+			<encoding>utf-8</encoding>
+			<host protocol="http" port="80" method="get">fenxi.zgzcw.com</host>
+		</page>
+		<page type="yp" classname="com.loris.soccer.web.downloader.zgzcw.page.OddsYpWebPage">
+			<encoding>utf-8</encoding>
+			<host protocol="http" port="80" method="get">fenxi.zgzcw.com</host>
+		</page>
+		<page type="ypzhishu" classname="com.loris.soccer.web.downloader.zgzcw.page.OddsYpZhishuWebPage">
+			<encoding>utf-8</encoding>
+			<host protocol="http" port="80" method="get">fenxi.zgzcw.com</host>
+		</page>
+		<page type="rank" classname="com.loris.soccer.web.downloader.zgzcw.page.RankWebPage">
+			<encoding>utf-8</encoding>
+			<host protocol="http" port="80" method="get">saishi.zgzcw.com</host>
+		</page>
+		<page type="rndcup" classname="com.loris.soccer.web.downloader.zgzcw.page.RoundCupWebPage">
+			<encoding>utf-8</encoding>
+			<host protocol="http" port="80" method="get">saishi.zgzcw.com</host>
+		</page>
+		<page type="rndleague" classname="com.loris.soccer.web.downloader.zgzcw.page.RoundLeagueWebPage">
+			<encoding>utf-8</encoding>
+			<host protocol="http" port="80" method="get">saishi.zgzcw.com</host>
+		</page>
+		<page type="season" classname="com.loris.soccer.web.downloader.zgzcw.page.SeasonWebPage">
+			<encoding>utf-8</encoding>
+			<host protocol="http" port="80" method="get">saishi.zgzcw.com</host>
+		</page>
+		<page type="team" classname="com.loris.soccer.web.downloader.zgzcw.page.TeamWebPage">
+			<encoding>utf-8</encoding>
+			<host protocol="http" port="80" method="get">saishi.zgzcw.com</host>
+		</page>
+		<page type="okooo" classname="com.loris.soccer.web.downloader.okooo.page.OkoooWebPage">
+			<encoding>utf-8</encoding>
+			<host protocol="http" port="80" method="get">www.okooo.com</host>
+		</page>
+		
+		<!-- Stock -->
+		<page type="daily" classname="com.loris.stock.web.page.StockDailyWebPage">
+			<encoding>utf-8</encoding>
+			<host protocol="http" port="80" method="get"></host>
+		</page>
+		<page type="detail" classname="com.loris.stock.web.page.StockDetailWebPage">
+			<encoding>utf-8</encoding>
+			<host protocol="http" port="80" method="get"></host>
+		</page>
+	</webpages>
+	<downloaders>
+		<!-- 
+	    <category name="股票数据下载" id="1">
+		    <webpagesetting id="gpdate" encoding="GBK">
+		        <name>股票日交易数据</name>
+		        <interval>2500</interval>
+		        <clazz>com.loris.stock.web.downloader.sina.loader.StockDailyDownloader</clazz>
+		        <description>从sina网站上下载股票日交易和每只股票详细记录信息</description>
+		    </webpagesetting>
+		    
+		    <webpagesetting id="gpxx" encoding="GBK">
+		        <name>股票详细数据</name>
+		        <interval>2500</interval>
+		        <clazz>com.loris.stock.web.downloader.sina.loader.StockDetailWebPageDownloader</clazz>
+		        <description>从sina网站上下载股票交易详细记录信息</description>
+		    </webpagesetting>
+		    
+		    <webpagesetting id="gprx" encoding="GBK">
+		        <name>股票日线数据</name>
+		        <interval>2500</interval>
+		        <clazz>com.loris.stock.web.downloader.sina.loader.StockDailyWebPageDownloader</clazz>
+		        <description>从sina网站上下载股票日交易记录信息</description>
+		    </webpagesetting>
+	    </category>
+	     -->
+	    <category name="足彩数据下载" id="2">
+	    	<webpagesetting id="issue" encoding="UTF-8">
+		        <name>当日足彩数据</name>
+		        <interval>4500</interval>
+		        <clazz>com.loris.soccer.web.downloader.zgzcw.loader.IssueMatchDownloader</clazz>
+		        <description>从中国足彩网上下载当天北单、竞彩足球的欧、亚盘数据</description>
+		    </webpagesetting>
+		    
+	        <webpagesetting id="jcdata" encoding="UTF-8">
+		        <name>当日足彩详情</name>
+		        <interval>4500</interval>
+		        <clazz>com.loris.soccer.web.downloader.zgzcw.loader.MatchDataDownloader</clazz>
+		        <description>从中国足彩网上下载当天足彩的欧赔、亚盘及详细数据和球队历史比赛数据</description>
+		    </webpagesetting>
+		    
+	        <webpagesetting id="okjcdata" encoding="UTF-8">
+		        <name>澳客亚盘数据</name>
+		        <interval>5500</interval>
+		        <clazz>com.loris.soccer.web.downloader.okooo.loader.OkoooDailyDownloader</clazz>
+		        <description>从澳客网上下载当天竞彩、北单足球亚盘动态数据</description>
+		    </webpagesetting>
+		    
+	        <webpagesetting id="zcround" encoding="UTF-8">
+		        <name>比赛结果数据</name>
+		        <interval>4500</interval>
+		        <clazz>com.loris.soccer.web.downloader.zgzcw.loader.RoundMatchDownloader</clazz>
+		        <description>从中国足彩网上下载指定时间段内各轮次比赛数据及比赛结果</description>
+		    </webpagesetting>
+		    
+	        <webpagesetting id="zcseason" encoding="UTF-8">
+		        <name>比赛赛季数据</name>
+		        <interval>4500</interval>
+		        <clazz>com.loris.soccer.web.downloader.zgzcw.loader.SeasonDownloader</clazz>
+		        <description>从中国足彩网上下载各联赛最新的比赛赛季和各赛季包含的比赛轮次数据</description>
+		    </webpagesetting>
+		    
+		    <webpagesetting id="zcrank" encoding="UTF-8">
+		        <name>球队排名数据</name>
+		        <interval>4500</interval>
+		        <clazz>com.loris.soccer.web.downloader.zgzcw.loader.RankDownloader</clazz>
+		        <description>从中国足彩网上下载各球队的排名数据</description>
+		    </webpagesetting>
+	    </category>
+    </downloaders>
+</webpagesettings>
+   

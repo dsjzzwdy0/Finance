@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+<head>
+   	<meta content="text/html" charset="utf-8">
+   	<link rel="Shortcut Icon" href="content/images/favicon_a.ico">
+   	<title>图模型</title>        
+   	<script type="text/javascript" src="content/scripts/jquery/jquery.min.js"></script>
+   	<script type="text/javascript" src="content/scripts/layer/layer.js"></script>
+   	<script type="text/javascript" src="content/scripts/echarts/dist/echarts.min.js"></script>
+   	<script type="text/javascript" src="content/scripts/echarts/theme/shine.js"></script>
+
+   	     
+<style type="text/css">
+@font-face 
+{ 
+  font-family: FontAwesome; /*这里是说明调用来的字体名字*/ 
+  src: url('content/css/fonts/fontawesome-webfont.ttf'); /*这里是字体文件路径*/ 
+} 
+
+.headerPanel {
+	width: 80%;
+	height: 160px;
+	background: white;
+	margin: auto;
+}
+
+.headerPanel .checkPanel
+{
+	width: 100%;
+	margin-top: 10px;
+}
+
+.headerPanel .buttonPanel
+{
+	float: right;
+	margin-top: 10px;
+}
+
+.headerPanel .selectPanel
+{
+	float: left;
+	margin-top: 10px;
+}
+
+.selectPanel .selectElement
+{
+	float: left;
+}
+
+.selectPanel .combobox
+{
+	width: 80px;
+	height: 25px;
+	margin-left: 10px;
+	padding-left: 4px;
+}
+
+.selectPanel label
+{
+	height: 25px;
+	margin-left: 7px;
+	padding-left: 4px;
+}
+
+.dataWrapper 
+{
+	width: 100%;
+	height: 790px;
+	margin: 0;
+}
+
+.dataWrapper #main
+{
+	width: 90%;
+	height: 100%;
+	margin: auto;
+}
+
+#btnRefresh
+{
+	width: 100px;
+    height: 30px;
+}
+
+#btnUnchecked
+{
+	width: 130px;
+	height: 30px;
+}
+
+.btn
+{
+    font-size: 18px;
+    font-family: 微软雅黑;
+    letter-spacing: 8px;
+    padding-left: 12px;
+	border-radius: 5px;
+	border: 1px solid #2576A8;
+	background: -webkit-linear-gradient(top,#66B5E6,#2e88c0);
+	background: -moz-linear-gradient(top,#66B5E6,#2e88c0);
+	background: linear-gradient(top,#66B5E6,#2e88c0);
+	background: -ms-linear-gradient(top,#66B5E6,#2e88c0);
+	box-shadow: 0 1px 2px #8AC1E2 inset,0 -1px 0 #316F96 inset;
+	color: #fff;
+    text-shadow: 1px 1px 0.5px #22629B;
+}
+
+.btn:hover{
+   background: -webkit-linear-gradient(top,#8DC9EF,#4E9FD1);
+   background: -moz-linear-gradient(top,#8DC9EF,#4E9FD1);
+   background: linear-gradient(top,#8DC9EF,#4E9FD1);
+   background: -ms-linear-gradient(top,#8DC9EF,#4E9FD1);
+}
+
+.checkbox-custom {
+	position: relative;
+	padding: 0 0 0 25px;
+	margin-bottom: 7px;
+	margin-top: 0;
+	float: left;
+	width: 65px;
+	margin-left: 8px;
+}
+/*
+将初始的checkbox的样式改变
+*/
+.checkbox-custom input[type="checkbox"] {
+	opacity: 0; /*将初始的checkbox隐藏起来*/
+	position: absolute;
+	cursor: pointer;
+	z-index: 2;
+	margin: -6px 0 0 0;
+	top: 50%;
+	left: 3px;
+}
+/*
+设计新的checkbox，位置
+*/
+.checkbox-custom label:before {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 0;
+	margin-top: -9px;
+	width: 19px;
+	height: 18px;
+	display: inline-block;
+	border-radius: 2px;
+	border: 1px solid #bbb;
+	background: #fff;
+}
+/*
+点击初始的checkbox，将新的checkbox关联起来
+*/
+.checkbox-custom input[type="checkbox"]:checked+label:after 
+{
+	position: absolute;
+	display: inline-block;
+	font-family: 'FontAwesome';
+	content: '\F00C';
+	top: 50%;
+	left: 4px;
+	margin-top: -5px;
+	font-size: 11px;
+	line-height: 1;
+	width: 16px;
+	height: 16px;
+	color: #333;
+}
+
+.checkbox-custom label {
+	cursor: pointer;
+	line-height: 1.2;
+	font-weight: normal; /*改变了rememberme的字体*/
+	margin-bottom: 0;
+	text-align: left;
+}
+
+
+table{border-top:1pt solid #C1DAD7;border-left:1pt solid #C1DAD7;margin: 0 auto;}
+td, th{ padding:2px 5px; text-align:center;border-right:1pt solid #C1DAD7;border-bottom:1pt solid #C1DAD7;}
+thead tr{background:#EE8866;}
+tbody tr:nth-of-type(odd){ background:#F5FAFA;}    /* odd 标识奇数行，even标识偶数行 */
+tbody tr:hover{ background: #E0F0F0;}              /*鼠标悬停后表格背景颜色*/
+    
+</style>
+</head>
+<body>
+	<div class="headerPanel">
+		<table class="checkPanel">
+			<thead>
+				<tr>
+					<th>类型</th>
+					<th>赔率</th>
+					<th>赔率方差</th>
+					<th>赔率差</th>
+					<th>初赔率</th>
+					<th>初赔方差</th>
+					<th>初赔差</th>
+					<th>凯利值</th>
+					<th>凯利方差</th>
+					<th>凯利差</th>
+					<th>概率</th>
+					<th>概率方差</th>
+					<th>概率差</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>胜</td>
+					<td><input type="checkbox" id="avgwinodds" value="avgwinodds" checked/><label for="avgwinodds">胜赔</label></td>
+					<td><input type="checkbox" id="varwinodds" value="varwinodds" /><label for="varwinodds">胜方差</label></td>
+					<td><input type="checkbox" id="diffwinodds" value="diffwinodds" /><label for="diffwinodds">胜差</label></td>
+					<td><input type="checkbox" id="avgfirstwinodds" value="avgfirstwinodds"/><label for="avgfirstwinodds">初胜赔</label></td>
+					<td><input type="checkbox" id="varfirstwinodds" value="varfirstwinodds"/><label for="varfirstwinodds">初胜方差</label></td>
+					<td><input type="checkbox" id="difffirstwinodds" value="difffirstwinodds" /><label for="difffirstwinodds">胜差</label></td>
+					<td><input type="checkbox" id="avgkellywin" value="avgkellywin"/><label for="avgkellywin">凯利(胜)</label></td>
+					<td></td>
+					<td></td>
+					<td><input type="checkbox" id="avgprobwin" value="avgprobwin"/><label for="avgprobwin">概率(胜)</label></td>
+					<td><input type="checkbox" id="varprobwin" value="varprobwin"/><label for="varprobwin">概方差(胜)</label></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>平</td>
+					<td><input type="checkbox" id="avgdrawodds" value="avgdrawodds" checked/><label for="avgdrawodds">平赔</label></td>
+					<td><input type="checkbox" id="vardrawodds" value="vardrawodds" /><label for="vardrawodds">平方差</label></td>
+					<td><input type="checkbox" id="diffdrawodds" value="diffdrawodds"/><label for="diffdrawodds">平差</label></td>
+					<td><input type="checkbox" id="avgfirstdrawodds" value="avgfirstdrawodds"/><label for="avgfirstdrawodds">初平赔</label></td>
+					<td><input type="checkbox" id="varfirstdrawodds" value="varfirstdrawodds"/><label for="varfirstdrawodds">初平方差</label></td>
+					<td><input type="checkbox" id="difffirstdrawodds" value="difffirstdrawodds"/><label for="difffirstdrawodds">平差</label></td>
+					<td><input type="checkbox" id="avgkellydraw" value="avgkellydraw"/><label for="avgkellydraw">凯利(平)</label></td>
+					<td></td>
+					<td></td>
+					<td><input type="checkbox" id="avgprobdraw" value="avgprobdraw"/><label for="avgprobdraw">概率(平)</label></td>
+					<td><input type="checkbox" id="varprobdraw" value="varprobdraw"/><label for="varprobdraw">概方差(平)</label></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>负</td>
+					<td><input type="checkbox" id="avgloseodds" value="avgloseodds"/><label for="avgloseodds">负赔</label></td>
+					<td><input type="checkbox" id="varloseodds" value="varloseodds"/><label for="varloseodds">负方差</label></td>
+					<td><input type="checkbox" id="diffloseodds" value="diffloseodds"/><label for="diffloseodds">负差</label></td>
+					<td><input type="checkbox" id="avgfirstloseodds" value="avgfirstloseodds"/><label for="avgfirstloseodds">初负赔</label></td>
+					<td><input type="checkbox" id="varfirstloseodds" value="varfirstloseodds"/><label for="varfirstloseodds">初负方差</label></td>
+					<td><input type="checkbox" id="difffirstloseodds" value="difffirstloseodds"/><label for="difffirstloseodds">负差</label></td>
+					<td><input type="checkbox" id="avgkellylose" value="avgkellylose"/><label for="avgkellylose">凯利(负)</label></td>
+					<td></td>
+					<td></td>
+					<td><input type="checkbox" id="avgproblose" value="avgproblose"/><label for="avgproblose">概率(负)</label></td>
+					<td><input type="checkbox" id="varproblose" value="varproblose"/><label for="varproblose">概方差(负)</label></td>
+					<td></td>
+				</tr>
+			</tbody>
+		</table>
+		<div style="clear:both"></div>
+		<div class="selectPanel">
+			<div class="selectElement">
+				<label for="interval">数据间隔</label>
+				<select class="combobox" id="interval">
+				  	<option></option>
+				  	<option value="5.00">5.00</option>
+				  	<option value="2.00">2.00</option>
+				  	<option value="1.00">1.00</option>
+				  	<option value="0.50">0.50</option>
+				  	<option value="0.25">0.25</option>
+				  	<option value="0.20">0.20</option>
+				  	<option value="0.10">0.10</option>
+				  	<option value="0.08">0.08</option>
+				  	<option value="0.05">0.05</option>
+				  	<option value="0.02">0.20</option>
+				  	<option value="0.01">0.01</option>
+				  	<option value="0.005">0.005</option>
+				  	<option value="0.001">0.001</option>
+				</select>
+			</div>
+			<div class="selectElement">
+				<label for="interval">联赛类型</label>
+				<select class="combobox" id="lids">
+				  	<option></option>
+				  	<option value="all">全部</option>
+				  	<option value="top5" selected>五大联赛</option>
+				  	<option value="europe">欧洲联赛</option>
+				  	<option value="asian">亚洲联赛</option>				  	
+				</select>
+			</div>
+		</div>
+		<div class="buttonPanel">
+			<input type="button" value="去掉选择" class="btn" id="btnUnchecked" />
+			<input type="button" value="刷新" class="btn" id="btnRefresh" />
+		</div>
+	</div>
+    <div class="dataWrapper">
+    	<div id="main"></div>
+    </div>
+
+
+<script type="text/javascript">
+
+var chart;
+
+$(document).ready(function(){
+	var $element = $("#main");   //document.getElementById('main')
+	chart = echarts.init($element[0], 'shine');
+	var params = 
+	{
+		lids: 'top5'
+	};
+	getData(params);	
+	$("#btnRefresh").click(function(){
+		refreshData();
+	});
+	
+	$("#btnUnchecked").click(function(){
+		$("input:checkbox").removeAttr("checked");
+	});
+});
+
+function refreshData()
+{
+	var str = "";
+	var interval = "1.0";
+	var lids = "top5";
+	var size = 0;
+	$('.checkPanel').find(':checkbox').each(function(){
+		if ($(this).is(":checked"))
+		{
+			str = $(this).val();
+			size ++;
+		}
+	});
+	
+	if(size != 1)
+	{
+		layer.alert("您选了" + size + "个字段，请选择1个字段");
+		return;
+	}
+	
+	var options =$("#interval option:selected");
+	interval = options.val();
+	
+	options =$("#lids option:selected");
+	lids = options.val();
+	
+	var params = 
+	{
+		lids: lids,
+		field: str,
+		interval: interval
+	};
+	getData(params);
+}
+
+function getData(params)
+{
+	chart.showLoading();
+	try
+	{
+		$.ajax({ 
+			url: "soccerdata/oddscount",
+			data: params,
+			context: document.body, 
+			success: function(json){
+				layer.msg("下载数据成功", {time: 2000}) 
+				initGraph(json);
+			},
+		});
+	}
+	catch(err)
+	{
+	}
+	chart.hideLoading();
+}
+
+function initGraph(json)
+{
+	var name = json.data.header;
+	var data = json.data.list;
+	
+	var len = data.length;
+	var data1 = [];
+	var data2 = [];
+	var data3 = [];
+	
+	for(var i = 0; i < len; i ++)
+	{
+		var rec = data[i];
+		data1[i] = rec[0];
+		data2[i] = rec[1];
+		data3[i] = rec[2];
+	}
+	
+	var option = {
+	    tooltip : {
+	        trigger: 'axis',
+	        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+	            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+	        }
+	    },
+	    legend: {
+	        data:['胜','平','负']
+	    },
+	    toolbox: {
+	        show : true,
+	        orient: 'vertical',
+	        x: 'right',
+	        y: 'center',
+	        feature : {
+	            mark : {show: true},
+	            dataView : {show: true, readOnly: false},
+	            magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+	            restore : {show: true},
+	            saveAsImage : {show: true}
+	        }
+	    },
+	    calculable : true,
+	    xAxis : [
+	        {
+	            type : 'category',
+	            data : name
+	        }
+	    ],
+	    yAxis : [
+	        {
+	            type : 'value'
+	        }
+	    ],
+	    series : [
+	        {
+	            name:'胜',
+	            type:'bar',
+	            data: data1
+	        },
+	        {
+	            name:'平',
+	            type:'bar',
+	            //stack: '广告',
+	            data:data2
+	        },
+	        {
+	            name:'负',
+	            type:'bar',
+	            //stack: '广告',
+	            data:data3
+	        }
+	        
+	    ]
+	};	
+    chart.setOption(option);
+
+    /*
+    chart.on('click', function (params) {
+        //console.log(params.data);
+    });*/
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+.clearfix:after{content:".";display:block;height:0;clear:both;overflow:hidden; visibility:hidden;}
+.clearfix{*zoom:1;}/* Hides from IE-mac */
+/*layout*/
+.clear{clear: both; width: 0px; height: 0px; font-size: 0px; overflow: hidden;}
+.float_l{float: left;}
+.float_r{float: right;}
+undefined.hide{display: none}
+/*Á¨¨‰∫RÁßçlogo*/
+.indexLogo_box{float: left;min-width: 233px;margin-right: 4px;}
+.indexLogo_img{width: 92px;float: left; overflow: hidden;}
+.indexLogo_txt{float: left;font-size: 18px;margin-top: 31px;color: #333;margin-left: 5px;line-height: 22px}
+/*ÂØºË∆™*/
+undefined.search_box_wrap { width: 1000px;height: 84px; margin: auto; font-family: "Microsoft Yahei"; }
+.search_box {float: left;margin-top: 25px; }
+.searchbox_logo{margin-top: 25px;height: 34px}
+.search_text { border: 1px solid #167DCC; border-radius: 3px 0 0 3px; display: inline-block; height: 32px; width: 430px; float: left; text-align: left;}
+.search_text .s_txt { border:0 none;*background: #fff; width: 410px; outline: none; height: 20px; color: #333;font-size: 14px;font-family: "Microsoft Yahei"; text-indent: 2px; line-height: 16px; margin-top: 6px;*margin-top: 8px; margin-left: 10px; padding: 0; }
+.search_btn { border: 1px solid #167DCC;text-align: left; background: #167DCC url(/image/header/navicon.png); color: #FFF; float: left; display: inline-block; width: 95px; height: 32px; margin: 0; padding: 0; font-size: 16px; border-radius: 0 3px 3px 0; cursor: pointer; background-position: 14px -131px;background-repeat: no-repeat; text-indent: 34px;line-height: 31px;}
+.search_btn:hover{color: #FFF}
+undefined.header_mainNav_inner { width: 1000px; margin: auto; }
+.selectLottory_nav { float: left; width: 224px; height: 40px; text-align: center; line-height: 42px; background: #167DCC; position: relative; }
+.selectLottory_nav a { color: #fff; font-size: 14px;}
+.subShow_nav { float: left; height: 40px; line-height: 40px; padding-left: 10px; position: relative; }
+.subShow_nav span {color: #333; font-size: 14px; cursor: pointer;display: inline-block;line-height: 20px; margin-top: 5px}
+.subShow_nav a {display: inline-block;padding:6px 10px;color: #333;}
+undefined.subShow_nav span.check01{background: #167DCC; border-radius: 5px;}
+.subShow_nav span.check01 a{color:#FFF}
+undefined
+/*
+.navlist_box:hover .tc_xiala{display: block;}
+*/
+
+undefined.lottoryKinds { background: #EBF6FF; width: 204px; position: absolute; top: 42px; left: 0px; z-index:301; height: 180px;padding: 20px 10px 0 10px;display: none}
+.lottoryKinds_item { text-align: left; margin-bottom: 16px; }
+.caizhong_t { float: left; line-height: 22px;*margin-top: 1px; }
+
+undefined.caizhong_t a { font-size: 14px; color: #136eb4; }
+.caizhong_content { width: 115px; float: left; line-height: 26px; margin-left: 18px; margin-top: 2px; }
+undefined.caizhong_content a { width: 54px; display: inline-block; font-size: 12px; color: #333; font-weight: normal; }
+.nav_userinfo { height: 0px; line-height: 40px; float: right; position: relative;}
+.nav_userinfo img { width: 32px; height: 32px; border-radius: 16px;vertical-align: middle;}
+.name_owf { display: inline-block; max-width: 116px;margin-right: 10px; height: 26px; line-height: 26px; overflow: hidden; font-size: 14px;vertical-align: middle; *vertical-align: 0;}
+.tc_xiala { width: 88px;padding: 5px 0;line-height: 27px; text-align: left; background: #fff; position: absolute; border: 1px solid #dfdfdf;border-radius: 4px; top: 44px;left: 0px;text-indent: 15px; z-index: 301;display: none}
+.tc_xiala a { color: #333; display: block; font-size: 14px; font-weight: normal;}
+undefined.header_mainNav2 .subShow_nav .tc_xiala a{padding: 0;display: block;}
+.tc_xiala a:hover {color: #167dcc;background-color:#ecf6ff;text-decoration: none}
+.chooselottoryBtn{display: block;position: relative;}
+.chooselottoryBtn:hover{background:#136Eb4 }
+.chooselottoryBtn .icon_down_lg{position: absolute;right: 17px;top: 12px;*top:2px;display:inline-block;}
+.navIcon { display: inline-block; background: url(/image/header/navicon.png) no-repeat; }
+.navIcon.icon_jingcai { height: 28px; width: 28px; background-position: 0 -169px; vertical-align: -9px;*vertical-align: middle; margin-right: 5px; }
+undefined.navIcon.icon_danchang { height: 28px; width: 28px; background-position: 0 -254px; vertical-align: -9px;*vertical-align: middle; margin-right: 5px; }
+.navIcon.icon_zucai { height: 28px; width: 28px; background-position: 0 -297px; vertical-align: -9px;*vertical-align: middle; margin-right: 5px; }
+undefined.caizhong_t em{*vertical-align: middle;margin-right: 5px;}
+.navIcon.icon_jiantou {height:17px;width:17px;background-position: -42px -211px; position: absolute; left: 36px; top: -17px; }
+undefined.navIcon.icon_triangle { height: 8px; width: 11px; background-position: 0 -40px; margin-left: 5px;vertical-align: middle; *vertical-align: 5px;	transition: transform 0.5s;
+	-moz-transition:-moz-transform 0.5s; /* Firefox 4 */
+	-webkit-transition: -webkit-transform 0.5s; /* Safari and Chrome */
+	-o-transition: -o-transform 0.5s; /* Opera */}
+.navIcon.icon_down_sm { height: 10px; width: 10px; background-position: 0 -19px; margin-left: 3px }
+undefined.navIcon.icon_down_lg { height: 16px; width: 16px; background-position: 0 -82px; margin-left: 5px; vertical-align: -3px }
+.selectLottory_nav:hover{background:#136Eb4}
+.selectLottory_nav:hover .navIcon.icon_down_lg { height: 16px; width: 16px; background-position: 0 -109px; margin-left: 5px; }
+undefined
+.nav_logreg a { display: inline-block;height: 28px;line-height: 28px;width: 88px;text-align: center;
+ border-radius: 4px; border: 1px solid #d8e2eb; background: #ebf6ff; color: #136Eb4 }
+.nav_logreg a:hover { background: #d8edfe;}
+.tc_xiala.top_short{top: 20px;}
+.Newheader_box{width: 100%;background: #f5f5f5;font-size: 12px;position: relative;z-index: 400;}
+.Newheader_content{width: 1000px;margin:auto;padding: 6px 0;line-height: 10px;text-align: left;}
+.Newheader_content span{padding:8px 12px;*display: inline-block;*padding:0 12px; color: #666;cursor: pointer;}
+.Newheader_content a{color: #666;}
+undefined.Newheader_content .navlist_box{border-right: 1px solid #999;}
+.Newheader_content .tc_xiala a{font-size: 12px;text-indent: 20px}
+
+undefined.header_mainNav2 a{text-decoration: none}
+undefined.header_mainNav2 a:hover{text-decoration: none}
+.header_mainNav2 { background: #167DCC; font-family: "Microsoft Yahei";margin-bottom: 10px;}
+.header_mainNav2 .subShow_nav span{color: #fff;margin-top: 0;padding: 0px;line-height: 26px;}
+undefined.header_mainNav2 .subShow_nav a { color: #fff;padding:7px 10px;display: inline-block;}
+.header_mainNav2 .nav_logreg a { background: #136eb4; border: none; color: #FFF }
+.header_mainNav2 .nav_logreg a:hover{background-color: #ecf6ff;color: #136eb4;}
+.userinfo_gn a#s_username_top{color: #333}
+.header_mainNav2 .userinfo_gn a#s_username_top{color: #fff}
+.header_mainNav2 .selectLottory_nav{line-height: 40px;width: 226px;}
+.header_mainNav2 .subShow_nav .tc_xiala a { color: #333 }
+.header_mainNav2 .subShow_nav .tc_xiala a:hover {color: #167dcc;}
+.header_mainNav2 .navIcon.icon_triangle{height:12px;width:11px;background-position: -42px -114px; }
+undefined.header_mainNav2 .lottoryKinds {top: 40px;border:1px solid #d8e2eb;border-top: none;}
+.header_mainNav2 .chooselottoryBtn .icon_down_lg{display:inline-block;}
+.header_mainNav2 .name_owf{color: #fff}
+.navlist_box{position: relative;display:block;float: left;color: #fff;}
+.userinfo_gn{cursor: pointer;width: 185px;text-align: right;line-height: 37px;}
+.userAction{left: auto;right: 0;width: 122px;text-indent: 15px;text-align: left;}
+.userAction .navIcon.icon_jiantou{left: 52px}
+.navUserIcon{display: inline-block;background: url(/image/header/navuser.png?v=20161220) no-repeat;vertical-align: -3px;*vertical-align: 0px; margin-right: 7px;}
+.navUserIcon.icon_mystore{height:16px;width:16px;background-position: 0 -29px}
+.navUserIcon.icon_storeyue{height:16px;width:16px;background-position: 0 -58px;}
+.navUserIcon.icon_touzhujl{height:16px;width:16px;background-position: 0 -85px;}
+.navUserIcon.icon_zhanneimeg{height:16px;width:16px;background-position: 0 0;}
+.navUserIcon.icon_mysetting{height:16px;width:16px;background-position: 0 -111px;}
+.navUserIcon.icon_quit{height:16px;width:16px;background-position: 0 -137px;}
+.navUserIcon.icon_wallet{height:16px;width:16px;background-position: 0 -164px;}
+.userAction a:hover .navUserIcon.icon_mystore{height:16px;width:16px;background-position: -24px -29px}
+.userAction a:hover .navUserIcon.icon_storeyue{height:16px;width:16px;background-position: -24px -58px;}
+.userAction a:hover .navUserIcon.icon_touzhujl{height:16px;width:16px;background-position: -24px -85px;}
+.userAction a:hover .navUserIcon.icon_zhanneimeg{height:16px;width:16px;background-position: -24px 0;}
+.userAction a:hover .navUserIcon.icon_mysetting{height:16px;width:16px;background-position: -24px -111px;}
+.userAction a:hover .navUserIcon.icon_quit{height:16px;width:16px;background-position: -24px -137px;}
+.userAction a:hover .navUserIcon.icon_wallet{height:16px;width:16px;background-position: -24px -164px;}
+undefined/*.userinfo_img{position: relative;}*/
+.userinfo_img img{display: inline-block;}
+.msg_numdot{background: #f13b32;font-size: 12px; border-radius:10px;color: #fff;position: absolute;top: -2px;right:12px;line-height: 12px; padding: 2px 5px;text-indent: 0; text-align: center;}
+.msg_num{background: #f13b32;font-size: 12px; border-radius:10px;color: #fff;position: absolute;top: 6px;left: 95px;line-height: 12px; padding: 2px 5px;text-indent: 0; text-align: center;}
+.pore{position: relative;}
+/*.subShow_nav .navlist_box:hover span{background: #167DCC;border-radius: 5px;}*/
+undefined.header_mainNav2 .subShow_nav .navlist_box span.check01{background: #136eb4;border-radius: 0;}
+/*.header_mainNav2 .subShow_nav .navlist_box:hover span{background: #136eb4;border-radius: 0;}*/
+undefined/*.nav_userinfo .check .navIcon.icon_triangle{background-position: 0 -40px}*/
+undefined.Newheader_content .navlist_box:hover .tc_xiala{display: block;}
+.selectLottory_nav:hover .lottoryKinds{display: block;}
+undefined.header_mainNav2{position: relative;z-index: 305;}
+.userinfo_gn:hover .navIcon.icon_triangle{
+	transform:rotate(180deg);
+	-moz-transform:rotate(180deg); /* Firefox 4 */
+	-webkit-transform:rotate(180deg); /* Safari and Chrome */
+	-o-transform:rotate(180deg); /* Opera */
+	transition: transform 0.5s;
+	-moz-transition:-moz-transform 0.5s; /* Firefox 4 */
+	-webkit-transition: -webkit-transform 0.5s; /* Safari and Chrome */
+	-o-transition: -o-transform 0.5s; /* Opera */}
+undefined/*ÊêSÁ¥¢*/
+/*.search_text .s_txt{color: #333;font-size: 14px;text-indent: 2px}*/
+.search_text .s_txt.focus{color: #999}
+/*Á®Ê∆∑Âç°Á0!*/
+undefined/*È¶È°µÈæÊ}•Ê¨ÂÅSÈ¢SË0≤*/
+.lottoryKinds a:hover{color:#ff0303;}
+.Newheader_content a:hover{color: #1c70b2}
+.Newheader_content .navlist_box:hover span{color:#1c70b2}
+.bdrn{border-right: none!important;}
+/*ÁÆ¨Á0∆ÂØºË∆™*/
+undefined
+/*Á"ªÂΩ"ÂºπÂ!∫Ê° */
+/*Â§¥Èí®Á"ªÂΩ"Â±*/
+undefined/*Ê∞Á"ªÂΩ"*/
+#login_bg { width: 380px; font-family:"Microsoft yahei"; border: 1px solid #fdfdfd; }
+undefined.toploginbox { border-bottom: 1px solid #ddd; background: #FFF;}
+undefined
+undefined
+/*layer*/
+.dialog_layer { position: absolute; top: 0; left: 0; z-index: 999; text-align: left;  -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px;box-shadow: none; background-color: #fff; }
+
+/*Á®Ê∆∑ËÆ§ËØÅ*/
+undefined	.userinfo_gn #s_username_top{position: relative;}
+undefined
+/*ËÆ§ËØÅÂºπÂ±*/
+undefined
+
+undefined
+undefined
+undefined
+undefined::-ms-clear, ::-ms-reveal{display: none;}
+
+
+
+/*‰ª‹Ë¥π*/
+undefined/*ËÆæÁΩÆ‰ª‹Ë¥π Ëµ~Ëµè*/
+undefined/*È¨0Âç"*/
+undefined/*
+.wager_analyze_txt{font-size :13px;background: #f3f3f3;padding: 10px 15px;outline:none; border-radius: 6px; height :86px;overflow:auto; position :relative;}
+.wager_analyze_txt:before{content:"";display:inline-block; border-width:10px 10px 10px 10px;border-style:solid;
+	border-color:transparent transparent #f3f3f3 transparent; position :absolute;top:-19px;left:40px
+}*/
+undefined
+undefined/*È¨0Âç"ÁªÊùx*/
+/*ÊªÂùÊR0ÈÆ*/
+undefined
+/*ÊπÊ°∆ËØ¶Êí&*/
+undefined/*È¨0Âç"ËØ¶Êí&*/
+undefined/*Á"ªÂΩ"ÂºπÂ±È™RËØÅÁ†Å*/
+undefined/*Ê~ÅÈ™R Ê†∑ÂºèÂ ≤Á™ÅË¶ Â "*/
+undefined
+/*ÂΩ©Â∫Ê`"ËØ0ÔºRÁßªÂ!∫Â}ª*/
+undefined
+undefined
+
+undefined
+undefined
+undefined
+
+undefined/*Á"æÂ∫¶ÂπøÂ`*/
+undefined
+undefined
+/*Êèê‰∫§ÂΩ©Â∫ÂπøÂ`‰Ωç*/
+undefined

@@ -1,0 +1,334 @@
+create table STOCK_WEB_CAPITAL_CONTENT(
+	ID int NOT NULL auto_increment,	
+	SYMBOL varchar(10),
+	URL varchar(150),	 
+	TYPE varchar(5),
+	CREATETIME varchar(20), 
+	LOADTIME varchar(20),
+	ENCODING varchar(10),
+	METHOD varchar(5),
+	HTTPSTATUS smallint,
+	COMPLETED tinyint(1),
+	CONTENT longtext,
+	INDEX index_symbol(SYMBOL),
+	INDEX index_createtime(CREATETIME),
+	PRIMARY KEY  (`id`)
+)
+
+create table STOCK_WEB_INFO_CONTENT(
+	ID int NOT NULL auto_increment,	
+	SYMBOL varchar(10),  
+	URL varchar(100), 
+	TYPE varchar(5), 
+	CREATETIME char(20), 
+	CONTENT longtext,
+	COMPLETE tinyint(1),
+	INDEX index_symbol(SYMBOL),
+	INDEX index_createtime(CREATETIME),
+	PRIMARY KEY  (`id`)
+)
+
+create table stock_capital_flow(
+	id int not null auto_increment,
+	symbol varchar(10),
+	day varchar(10),
+	b100 double,
+	s100 double,
+	b200 double,
+	s200 double,
+	b300 double,
+	s300 double,
+	b400 double,
+	s400 double,
+	b500 double,
+	s500 double,
+	b600 double,
+	s600 double,
+	b700 double,
+	s700 double,
+	b800 double,
+	s800 double,
+	b900 double,
+	s900 double,
+	b1000 double,
+	s1000 double,
+	b2000 double,
+	s2000 double,
+	b3000 double,
+	s3000 double,
+	b4000 double,
+	s4000 double,
+	b5000 double,
+	s5000 double,
+	bmax double,
+	smax double,
+	INDEX index_symbol (SYMBOL),
+	INDEX index_day (DAY),
+	PRIMARY KEY  (`id`)
+)
+
+create table stock_capital_month
+(
+	id int not null auto_increment,
+	symbol varchar(10),
+	year int,
+	month int,
+	total double,
+	amount double,
+	totalsell double,
+	amountsell double,
+	totalbuy double,
+	amountbuy double,
+	totaldiff double,
+	amountdiff double,
+	totalsmall double,
+	amountsmall double,
+	totalsellsmall double,
+	amountsellsmall double,
+	totalbuysmall double,
+	amountbuysmall double,
+	totaldiffsmall double,
+	amountdiffsmall double,
+	totalmidlle double,
+	amountmidlle double,
+	totalsellmidlle double,
+	amountsellmidlle double,
+	totalbuymidlle double,
+	amountbuymidlle double,
+	totaldiffmidlle double,
+	amountdiffmidlle double,
+	totalbig double,
+	amountbig double,
+	totalsellbig double,
+	amountsellbig double,
+	totalbuybig double,
+	amountbuybig double,
+	totaldiffbig double,
+	amountdiffbig double,
+	index index_symbol(symbol),
+	index index_year(year),
+	index index_month(month),
+	PRIMARY KEY  (`id`)
+)
+
+create table stock_capital_flow(
+	id int not null auto_increment,
+	symbol varchar(10),
+	day varchar(10),
+	total double,
+	totalsell double,
+	totalbuy double,
+	totaldiff double,
+	small double,      #0~100返
+	smallsell double,
+	smallbuy double,
+	smalldiff double,
+	s200 double,       #100~200返
+	s200sell double,
+	s200buy double,
+	s200diff double,
+	middle double,     #200~300返
+	middlesell double,
+	middlebuy double,
+	middlediff double,
+	m500 double,       #300~500返
+	m500sell double,
+	m500buy double,
+	m500diff double,
+	big double,        #500~1000返
+	bigsell double,
+	bigbuy double,
+	bigdiff double,
+	b1000 double,      #1000參貧返
+	b1000sell double,
+	b1000buy double,
+	b1000diff double,
+	INDEX index_symbol (SYMBOL),
+	INDEX index_day (DAY),
+	PRIMARY KEY  (`id`)
+)
+
+create table STOCK_NAME(
+	ID int not null auto_increment,
+	SYMBOL varchar(10),
+	NAME varchar(10),
+	CODE varchar(6),
+	EXCHANGE varchar(2),
+	INDEX index_symbol(SYMBOL),
+	PRIMARY KEY  (`id`)
+)
+
+create table LORIS_PAGE_SETTING(
+  ID varchar(40) default "1",
+  NAME varchar(20),
+  WID varchar(20),
+  CLASSNAME varchar(100),
+  CATEGORY varchar(20),
+  DESCRIPTION varchar(200),
+  ENCODING varchar(10),
+  `INTERVAL` int,
+  `ENABLE` tinyint(1),
+  DAYS varchar(200),
+  `START` varchar(20),
+  `END` varchar(20),
+  DAYSECTION tinyint(1),
+  FLAG tinyint(1),
+  CREATETIME varchar(20),
+  PREPAREDTIME varchar(20),
+  STOPTIME varchar(20),
+  FINISHTIME varchar(20),
+  DOWNTIME varchar(20),
+  STATUS int,
+  CURINDEX int,
+  TOTAL int,
+  index index_NAME(NAME),
+  index index_CATEGORY(CATEGORY),
+  PRIMARY KEY  (`id`)
+)
+
+create table STOCK_TRADE_DATE(
+  ID varchar(10) not null default "1",
+	DATE varchar(10),
+	YEAR int,
+	MONTH int,
+	DAY int,
+	WEEK int,
+	FLAG tinyint,
+	index INDEX_DATE(DATE),
+	index INDEX_YEAR(YEAR),
+	index INDEX_MONTH(MONTH),
+	PRIMARY KEY (`ID`)
+)
+
+create table STOCK_WEB_DAILY_CONTENT (
+	id int not null auto_increment,
+	URL varchar(150),	 
+	TYPE varchar(5),
+	ORDINARY int,
+	PAGENUM int,
+	TOTAL int,
+	CREATETIME varchar(20), 
+	LOADTIME varchar(20),
+	ENCODING varchar(10),
+	METHOD varchar(5),
+	HTTPSTATUS smallint,
+	COMPLETED tinyint(1),
+	CONTENT longtext,
+	INDEX index_createtime(CREATETIME),
+	PRIMARY KEY  (`id`)
+)
+
+create table STOCK_DAILY_RECORD(
+	id int not null auto_increment,
+	SYMBOL varchar(8),
+	DAY varchar(20),
+	CODE varchar(6),
+	NAME varchar(10),
+	TRADE double,
+	PRICECHANGE double,
+	CHANGEPERCENT double,
+	BUY double,
+	SELL double,
+	SETTLEMENT double,
+	OPEN double,
+	HIGH double,
+	LOW double,
+	VOLUME int,
+	AMOUNT int,
+	TICKTIME varchar(15),
+	PER double,
+	PER_D double,
+	NTA double,
+	PB double,
+	NMC double,
+	MKTCAP double,
+	TURNOVERRATIO double,
+	INDEX index_symbol (SYMBOL),
+	INDEX index_day (DAY),
+	PRIMARY KEY  (`id`)
+)
+
+CREATE TABLE STOCK_DAILY (
+	DAY CHAR(10), 
+	SYMBOL CHAR(8), 
+	CODE CHAR(6), 
+	NAME CHAR(10), 
+	TRADE FLOAT, 
+	PRICECHANGE FLOAT, 
+	CHANGEPERCENT FLOAT, 
+	BUY FLOAT, 
+	SELL FLOAT, 
+	SETTLEMENT FLOAT, 
+	OPEN DOUBLE, 
+	HIGH DOUBLE, 
+	LOW DOUBLE, 
+	VOLUME INT, 
+	AMOUNT INT, 
+	TICKTIME CHAR(8), 
+	PER FLOAT, 
+	PER_D FLOAT, 
+	NTA DOUBLE, 
+	PB FLOAT, 
+	MKTCAP DOUBLE, 
+	NMC DOUBLE, 
+	TURNOVERRATIO DOUBLE
+);
+
+create table STOCK_BASIC_INFO (
+	ID int NOT NULL auto_increment,	
+	SYMBOL varchar(10),
+	NAME varchar(50),
+	ENAME varchar(100),
+	FOUNDTIME varchar(12),
+	EXCHANGE varchar(5),
+	INDUSTRY varchar(50),
+	CAPITAL int,
+	TELPHONE varchar(15),
+	FAX varchar(15),
+	EMAIL varchar(50),
+	REPRESENTATIVE varchar(15),
+	SECRETARY varchar(15),
+	SECTELPHONE varchar(15),
+	SECFAX varchar(15),
+	SECEMAIL varchar(50),
+	MAINPAGE varchar(50),
+	INFOPAGE varchar(50),
+	REGADDR varchar(100),
+	WORKADDR varchar(100),
+	IPOPRICE varchar(10),
+	IPOTIME varchar(12),
+	UNDERWRITER varchar(200),
+	REFREE varchar(50),
+	PLATE longtext,
+	SCOPEBUSI longtext,
+	INTRODUCTION longtext,
+	INDEX index_symbol (SYMBOL),
+	PRIMARY KEY  (`id`)
+);
+
+CREATE 
+ALGORITHM=UNDEFINED 
+DEFINER=`root`@`localhost` 
+SQL SECURITY DEFINER 
+VIEW `NewView`AS 
+select `stock_capital_flow`.`id` AS `id`,`stock_capital_flow`.`symbol` AS `symbol`,`stock_capital_flow`.`day` AS `day`,`stock_name`.`NAME` AS `NAME`,
+	(((((`stock_capital_flow`.`b100` + `stock_capital_flow`.`s100`) + `stock_capital_flow`.`b200`) + `stock_capital_flow`.`s200`) 
+	+ `stock_capital_flow`.`b300`) + `stock_capital_flow`.`s300`) AS `smalltotal`,
+	(((((`stock_capital_flow`.`b100` - `stock_capital_flow`.`s100`) + `stock_capital_flow`.`b200`) - `stock_capital_flow`.`s200`) 
+	+ `stock_capital_flow`.`b300`) - `stock_capital_flow`.`s300`) AS `smalldiff`,
+	(((((`stock_capital_flow`.`b400` + `stock_capital_flow`.`s400`) + `stock_capital_flow`.`b500`) + `stock_capital_flow`.`s500`) 
+	+ `stock_capital_flow`.`b600`) + `stock_capital_flow`.`s600`) AS `middletotal`,
+	(((((`stock_capital_flow`.`b400` - `stock_capital_flow`.`s400`) + `stock_capital_flow`.`b500`) - `stock_capital_flow`.`s500`) 
+	+ `stock_capital_flow`.`b600`) - `stock_capital_flow`.`s600`) AS `middlediff`,
+	(((((((((((((`stock_capital_flow`.`b700` + `stock_capital_flow`.`s700`) + `stock_capital_flow`.`b800`) + `stock_capital_flow`.`s800`) 
+	+ `stock_capital_flow`.`b900`) + `stock_capital_flow`.`s900`) + `stock_capital_flow`.`b1000`) + `stock_capital_flow`.`s1000`) 
+	+ `stock_capital_flow`.`b2000`) + `stock_capital_flow`.`s2000`) + `stock_capital_flow`.`b3000`) + `stock_capital_flow`.`s3000`) 
+	+ `stock_capital_flow`.`b4000`) + `stock_capital_flow`.`s4000`) AS `bigtotal`,
+	(((((((((((((`stock_capital_flow`.`b700` - `stock_capital_flow`.`s700`) + `stock_capital_flow`.`b800`) - `stock_capital_flow`.`s800`) 
+	+ `stock_capital_flow`.`b900`) - `stock_capital_flow`.`s900`) + `stock_capital_flow`.`b1000`) - `stock_capital_flow`.`s1000`) 
+	+ `stock_capital_flow`.`b2000`) - `stock_capital_flow`.`s2000`) + `stock_capital_flow`.`b3000`) - `stock_capital_flow`.`s3000`) 
+	+ `stock_capital_flow`.`b4000`) - `stock_capital_flow`.`s4000`) AS `bigdiff`,
+	(((`stock_capital_flow`.`b5000` + `stock_capital_flow`.`s5000`) + `stock_capital_flow`.`bmax`) + `stock_capital_flow`.`smax`) AS `supertotal`,
+	(((`stock_capital_flow`.`b5000` - `stock_capital_flow`.`s5000`) + `stock_capital_flow`.`bmax`) - `stock_capital_flow`.`smax`) AS `superdiff` 
+	from (`stock_capital_flow` join `stock_name`) where (`stock_capital_flow`.`symbol` = `stock_name`.`SYMBOL`) ;
+

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" href="content/scripts/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="content/css/download/calendar.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="content/scripts/calendar/simple-calendar.css">
+
+    <title>日期管理</title>
+    
+<style type="text/css">
+#calendar{
+	width: 100%
+}
+.clearfix{
+	margin-bottom: 50px !important;
+}
+
+.main-toolbox
+{
+	text-align: right;
+}
+</style>
+</head>
+
+<body>
+	<header>
+    	<div class="inner">
+        	<h1>数据管理</h1>
+        	<h2>可用的日期管理页面</h2>
+        	<a href="downlist.html" class="button"><small>下载</small>列表页面</a>
+      	</div>
+    </header>
+
+    <div id="content-wrapper">
+  		<div class="inner clearfix">
+      		<div id = 'calendar'>
+            </div>
+    	</div>
+    	
+    	<div class="inner clearfix">
+    		<div class="main-toolbox">
+    			<button id="btnStart" type="submit" class="btn btn-success">设&nbsp;&nbsp;置</button>
+    			<button id="btnRefresh" type="submit" class="btn btn-warning">刷&nbsp;&nbsp;新</button>
+    		</div>    		
+    	</div>
+	</div>
+	
+<script type="text/javascript" src="content/scripts/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="content/scripts/layer/layer.js"></script>
+<script type="text/javascript" src="content/scripts/calendar/simple-calendar.js"></script>
+<script>
+
+$(document).ready(function () {
+	
+	function updateCalendar(year, month)
+	{
+		layer.msg('已经改变了:' + year + "-" + month);
+		updatePage(year, month);
+	}
+	
+	//初始化日历控件选项
+	var options = 
+	{
+		onChange: updateCalendar
+	}	
+	var myCalendar = new SimpleCalendar('#calendar', options);
+
+	//更新日历控件数据
+	function updatePage(year, month)
+	{
+		$.ajax({
+			url: "stockdata/tradedates",
+			type: "get",
+			data: {year: year, month: month},
+			dataType: "json",
+			success: function(json)
+			{
+				layer.msg('初始化数据成功')
+				var dates = json.data.list;
+				myCalendar.updateDays(dates);
+			},
+			error: function(){
+				layer.msg("下载数据错误");
+			}
+		})
+	};
+	
+	//初始化
+	var year = myCalendar.getSelectedYear();
+	var month = myCalendar.getSelectedMonth();
+	updatePage(year, month);
+	
+	
+	$("#btnStart").click(function(){
+		var p = myCalendar.getDaysStatus();
+		if(p == null || p == undefined)
+			return;
+		
+		var params = JSON.stringify(p);
+		$.ajax({
+			url: "stockdata/updatedates",
+			type: "get",
+			data: {queryStr: params},
+			dataType: "json",
+			success: function(json){
+				layer.msg('更新数据成功');
+			},
+			error: function(json)
+			{
+				layer.msg('出现错误，请检查');
+			}
+		});
+	});
+	
+	$('#btnRefresh').click(function(){
+		var year = 2018;
+		var currentmonth = 2;
+		var day = 16;
+		var lunar = new LunarHelp(year, currentmonth, day).getLunarDayNum();
+		
+		layer.msg('阳历: ' + year + '-' + currentmonth + '-' + day + ' 农历: ' + lunar.year + '-' + lunar.month + '-' + lunar.day);
+	});
+});
+
+</script>
+</body>
+</html>

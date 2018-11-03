@@ -1,0 +1,118 @@
+.globalHead_cbInner
+{
+	width: 998px;
+	height: 30px;
+	margin: 0 auto;
+	overflow: hidden;
+	background-color: #f2f2f2;
+	border: 1px solid #eaeade;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	padding: 0px;
+}
+.globalHead_cbInner font
+{
+	color: #DC0000;
+	font-weight: bold;
+	margin: 0 2px;
+}
+.globalHead_cbInner a { color: #0068AE; }
+.globalHead_cbInner span
+{
+	font-family: "Arial";
+	line-height: 16px;
+}
+.globalHead_cbInner span.cbLeft { float: left; }
+.globalHead_cbInner span.cbRight { float: right; }
+.date001
+{
+	width: 998px;
+	height: 30px;
+	line-height: 30px;
+}
+.date001 li
+{
+	width: 998px;
+	height: 30px;
+	line-height: 30px;
+	overflow: hidden;
+	float: left;
+	color: #ff0000;
+}
+.date001 li a
+{
+	color: #ff0000;
+	cursor: default;
+}
+.topnotice
+{
+	width: 988px;
+	height: 30px;
+	margin: 0 auto 0 auto;
+	background-color: #f8f8f8;
+	border: 1px solid #bacff1;
+	padding: 5px;
+}
+.topnotice span
+{
+	width: 950px;
+	float: left;
+	height: 30px;
+	line-height: 30px;
+	overflow: hidden;
+	text-align: center;
+	color: #ff0000;
+	text-indent: 12px;
+}
+.topnotice em
+{
+	width: 30px;
+	float: right;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	font-size: 30px;
+	font-family: Arial;
+	color: #bbb;
+	cursor: pointer;
+}
+.topnotice em:hover
+{
+	background-color: #ddd;
+	color: #666
+}
+/*国庆图*/
+.gqing
+{
+	width: 100%;
+	background: #d9382a;
+	position: relative
+}
+.gqing img
+{
+	display: block;
+	margin: auto;
+}
+.gqing a
+{
+	display: block;
+	position: absolute;
+	right: 10px;
+	top: 10px;
+	cursor: pointer;
+	background: url(/style/img/close.png) no-repeat 0 0;
+	width: 20px;
+	height: 20px;
+}
+.gqing a:hover
+{
+	display: block;
+	position: absolute;
+	right: 10px;
+	top: 10px;
+	cursor: pointer;
+	background: url(/style/img/close.png) no-repeat 0 -24px;
+	width: 20px;
+	height: 20px;
+}

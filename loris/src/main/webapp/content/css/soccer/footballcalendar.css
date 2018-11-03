@@ -1,0 +1,271 @@
+@charset "utf-8";
+/* CSS Document */
+body{ background:#fff; font-size:12px; font-family:"宋体";}
+em,i,b,strong,u{ font-style:normal; font-weight:normal; text-decoration:none;}
+
+#cs2011_login{background-color: white}
+
+#cs2011_longermenu div.infolist{width:488px;}
+.wapper{ width:950px; margin:0 auto;}
+.cal_tit{ /*background:url(bg1.jpg) repeat-x; */height:40px; line-height:40px; border-bottom:2px solid #a70300; width:948px; margin:0 auto; font-size:14px; font-weight:bold; color:#111111; margin-bottom:6px; overflow:hidden;}
+.cal_tit span{ display:inline-block;}
+.s_1{ float:left; margin-left:10px; height:25px; padding-top:5px; font-size:16px;}
+.s_2{ background:#fff; width:58px; height:28px; line-height:28px; float:left; margin-left:140px; text-align:center; margin-top:12px; cursor:pointer; border:1px solid #cecece; border-radius:5px;}
+.s_3{ background:url(../../images/bg4.jpg) no-repeat; width:52px; height:22px; float:left; margin-left:16px; margin-top:15px;}
+.s_3 a{ display:inline-block; width:26px; height:22px; cursor:pointer;}
+.s_4{ font-size:12px; font-weight:normal; height:30px; float:left; margin:5px 0 0 21px;}
+
+.s_5,.s_6,.s_7{width:260px; height:29px; float:left; margin-top:12px;}
+.s_5 em,.s_6 em,.s_7 em{ display:inline-block; font-weight:bold; width:58px; height:29px; line-height:29px; text-align:center; cursor: pointer; border:1px solid #cecece;border-radius:5px; background:#fff; margin-left:10px;}
+.s_5 em.cur,.s_6 em.cur,.s_7 em.cur{ width:58px; height:29px; color:#fff; background:#a70300;border-radius:5px;}
+
+
+
+.cal_main{ width:950px; margin:0 auto;}
+.cal_main_left{ width:213px; float:left;}
+.calender{ background:url(../../images/bg6.jpg) no-repeat; width:213px; height:auto;padding-bottom: 1px; box-shadow:0px 3px 2px #f0f0f0;-moz-box-shadow:0px 3px 2px #f0f0f0;-webkit-box-shadow:0px 3px 2px #f0f0f0;}
+.calender h1{ text-align: center; font-size:12px; color:#6e3500; line-height:32px; height:32px;font-weight: normal;}
+.calender h1 span.leftaward{ float:left; margin-left:13px; background:url(../../images/bg5.jpg) no-repeat; width:12px; height:12px; margin-top:10px; cursor:pointer;}
+.calender h1 span.rightaward{ float:right; margin-right:13px; background:url(../../images/bg5.jpg) no-repeat -12px 0; width:12px; height:12px; margin-top:10px; cursor:pointer;}
+.calender h1{ margin-bottom:19px;}
+.calender ul{ padding:0px 1px;}
+.calender ul li{ width:30px; height:30px; float: left; color:#3f3625; text-align:center; font-family:Arial; font-weight:bold; line-height:30px; cursor:pointer;}
+.calender ul li.off{ color:#b5b2ad;}
+.calender ul li.cur{ background:#ddd; color:#000;}
+.calender ul li.on{ background:#eee; color:#797979; height: 29px;}
+.calender ul li.on2{color:#E72645;}
+.calender ul li.hover{ background:url(../../images/bg7.jpg) no-repeat; color:red;}
+
+.sh_main{position: relative;width:950px;margin:0 auto}
+.main_body{}
+.cal_main_right{ width:722px; float:right;}
+.tab1{ border:1px solid #e1e1e1;}
+.tab1 td{ border-right:1px solid #e1e1e1;}
+.tab1 td.nonrbor{ border-right:0;}
+.tab1 td.td_1{ background:url(bg9.jpg) repeat-x; height:28px; line-height:28px; text-align:center; color:#797979; font-weight:bold; border-bottom:1px solid #e1e1e1; font-size:12px;}
+.tab1 td.td_2{ background:#fefefe; height:22px; line-height:22px; text-align:left; padding-left:9px; color:#f36d01; font-weight:bold; font-size:18px; font-family:Arial; border-bottom:1px solid #e9dbb2;}
+.tab1 td.td_3{ background:#fff0c3; font-size:12px; color:#f36d01; text-align:left; padding-left:6px; height:18px; line-height:18px;}
+.tab1 td.td_4{ background:#fafafa; line-height:20px; color:#2962a8; text-align:left; padding:4px 6px; border-bottom:1px solid #e1e1e1;}
+.tab1 td.td_4 span{ width:90px; overflow:hidden; white-space:nowrap; display:inline-block;}
+
+span.td_2{ background:#f5f5f5; height:22px; line-height:22px; text-align:center;  color:#797979;   font-family:Arial; border-bottom:1px solid #e1e1e1; display:inline-block; width:102px;}
+span.td_3{ font-size:12px; color:#f36d01; text-align:left; padding-left:6px; height:18px; line-height:18px; display:inline-block; width:96px;}
+span.td_4{ line-height:20px; color:#2962a8; text-align:left; padding:4px 6px; border-bottom:1px solid #e1e1e1; width:90px; overflow:hidden; white-space:nowrap; display:inline-block;}
+
+.tab1 td.td_2_on{ background:#ffde7b; color:#6e3500; height:22px; line-height:22px; text-align:left; padding-left:9px; font-weight:bold; font-size:18px; font-family:Arial; border-bottom:1px solid #e9dbb2;}
+.tab1 td.td_4_on{ background:#ffde7b; line-height:20px; color:#6e3500; text-align:left; padding:4px 6px; border-bottom:1px solid #e1e1e1;}
+.tab1 td.td_4_on span{ width:90px; overflow:hidden; white-space:nowrap; display:inline-block;}
+
+.tab1 td.td_2_off{ background:#fefefe; height:22px; line-height:22px; text-align:left; padding-left:9px; color:#999; font-weight:bold; font-size:18px; font-family:Arial; border-bottom:1px solid #e9dbb2;}
+.tab1 td.td_3_off{ background:#ebe9e5; font-size:12px; color:#666; text-align:left; padding-left:6px; height:18px; line-height:18px;}
+.tab1 td.td_4_off{ background:#f9f9f9; line-height:20px; color:#999; text-align:left; padding:4px 6px; border-bottom:1px solid #e1e1e1;}
+.tab1 td.td_4_off span{ width:90px; overflow:hidden; white-space:nowrap; display:inline-block;}
+
+.main2{ background:#fdfdfd; width:948px; margin:0 auto; border:1px solid #e1e1e1; margin-top:10px; margin-bottom:10px;}
+.t_1{ position:relative; height:30px; line-height:30px; padding-left:154px; margin-bottom:10px;}
+.s_8{ display:inline-block; background:url(bg10.jpg) no-repeat; width:87px; height:28px; position:absolute; top:-6px; left:20px;}
+.t_1 label{ color:#2962a8; font-size:12px; display:inline-block; margin-right:15px; margin-top:4px;}
+.t_1 label input{ vertical-align:-3px;}
+
+.sA{width: 59px;background: url(sA.jpg) no-repeat;border:none;height:20px;cursor: pointer}
+.sF{width: 59px;background: url(sF.jpg) no-repeat;border:none;height:20px;cursor: pointer}
+
+
+.t_2{ text-align:left; padding-left:15px; margin-bottom:10px;}
+.t_2 label{ width:80px; height:26px; background:#f3f3f3; border:1px solid #d5d5d5; color:#000; font-size:12px; margin:5px 10px; display:inline-block; line-height:26px; text-align:left; padding-left:8px; cursor:pointer;}
+.t_2 label input{ vertical-align:-2px; margin-right:5px;}
+
+.t_3{ padding:0px 18px; margin-bottom:10px;}
+.t_31{ border-top:1px dashed #e1e1e1; padding:2px 10px;}
+.s_9{ font-size:14px; font-weight:bold; color:#797979; float:left; width:100px; text-align:left;line-height: 25px;}
+/* .s_10{ float:left;} */
+.s_10 label{ color:#333; display:inline-block;  margin:5px 20px 5px 0;}
+.s_10 label.spe{ color:#2962a8;}
+.s_10 label.spe_2{ width:130px;}
+.s_10 label input{ margin-right:4px; vertical-align:-2px;}
+.sel_1{ background:url(bg11.jpg) no-repeat 0 0; width:63px; height:20px; line-height:20px; text-align:left; border:0; display: inline-block; cursor:pointer; padding-left:6px;}
+.sel_2{ background:url(bg11.jpg) no-repeat -69px 0; width:63px; height:20px; line-height:20px; text-align:left; border:0; display: inline-block; cursor:pointer; padding-left:6px;}
+
+.input_01{ background:url(bg12.jpg) no-repeat; width:48px; height:20px; margin-left:20px; border:0; cursor:pointer; vertical-align:-5px\9;}
+
+.dot_1{ position:absolute; background:url(bg13.png) no-repeat; width:95px; height:21px;left:46%;margin-top: -10px; cursor:pointer; border:0px solid #000;}
+.dot_2{ position:absolute; background:url(bg14.png) no-repeat; width:95px; height:21px;left:46%;margin-top:-10px; cursor:pointer; border:0px solid #000;}
+
+.main3{ width:950px; margin:0 auto;}
+.tab2{ border:1px solid #cecece; background: url(bg15.jpg) repeat-x; height:46px;}
+.tab2 td{ border-right:1px solid #cecece; text-align:center; color:#000;}
+.tab2 td.nonbor{ border-right:0;}
+.tab2 td i{ font-weight:normal;}
+
+.tab3{ border:1px solid #cecece; background:#fffdf6; border-top:0;}
+.tab3 caption{ height:30px; line-height:30px; padding-left:10px; text-align:left; color:#3f3625; border-left:1px solid #cecece; border-right:1px solid #cecece; background:#fff;}
+.tab3 td{ background:#fff; height:30px; line-height:30px; color:#333; border-top:1px solid #cecece; border-right:1px solid #cecece; text-align:center;}
+.tab3 td.td_5{ background:#4d8bbc; color:#fff;}
+
+a.a1,a.a1:visited{ color:#115294; text-decoration:none;}
+a.a1:hover{ color:#ba0000; text-decoration:underline;}
+
+.font1{ font-weight:bold; color:#f20000;}
+.font2{ color:#6e3500;}
+a.a2{ background:url(bg16.jpg) no-repeat; display:inline-block; width:16px; height:16px;}
+a.a3{ background:url(bg17.jpg) no-repeat; display:inline-block; width:18px; height:17px;}
+a.a4{ background:url(bg18.jpg) no-repeat; display:inline-block; width:19px; height:18px;}
+a.lose,a.lose:visited{color:#B5B2AD;text-decoration: none}
+a.lose:hover{color:#B5B2AD;text-decoration: none}
+.tab4{}
+.tab4 td{ text-align:center;}
+.tab4 td p{ display:block;}
+.tab4 .s_11{ width:102px; height:89px; background:#fff; border:1px solid #e1e1e1; border-right:0; text-align:center; line-height:24px; color:#797979; padding-top:20px;}
+.tab4 .s_11 i{ font-size:14px;}
+
+.font3{ font-weight:bold; font-size:16px;}
+.tab3 td.home_c{padding-right: 10px;text-align: right}
+.tab3 td.guest_c{padding-left: 10px;text-align: left}
+
+.tab4 .s_12{ width:102px; height:105px; background:#fff; border:1px solid #e1e1e1; border-top:0px; border-right:0; text-align:center; line-height:20px; color:#2962a8; padding-top:15px; font-size:12px;}
+.tab4 td.on .s_11{height:89px; background:#eee; text-align:center; line-height:24px; color:#797979; padding-top:20px;}
+.tab4 td.on .s_12{background:#eee;border:1px solid #e1e1e1; border-top:0px; border-right:0;text-align:center; line-height:20px; color:#2962a8;}
+.tab1 td.on .td_4{background:#eee; line-height:20px; color:#2962a8; text-align:left; padding:4px 6px; border-bottom:1px solid #e1e1e1;width:90px; overflow:hidden; white-space:nowrap; display:inline-block;}
+.tab1 td.on .td_2{background:#eee; color:#6e3500; height:22px; line-height:22px; text-align:center; font-weight:bold;  border-bottom:1px solid #e1e1e1; display:inline-block; width:102px;}
+.tab1 td.on .td_3{background:#eee; font-size:12px; color:#f36d01; text-align:left; padding-left:6px; height:18px; line-height:18px; display:inline-block; width:96px;}
+
+.tab1 td.off .td_4{background:#f9f9f9; line-height:20px; color:#999; text-align:left; padding:4px 6px; border-bottom:1px solid #e1e1e1;width:90px; overflow:hidden; white-space:nowrap; display:inline-block; display:inline-block;}
+.tab1 td.off .td_3{background:#f9f9f9; font-size:12px; color:#999; text-align:left; padding-left:6px; height:18px; line-height:18px; display:inline-block; width:96px;}
+.tab1 td.off .td_2{ background:#f5f5f5; height:22px; line-height:22px; text-align:left; padding-left:9px; color:#999;   font-family:Arial; border-bottom:1px solid #e1e1e1; display:inline-block; width:93px;}
+
+.status_mask{position:absolute;top:-5px;left:0;z-index:20;width:100%;height:100%;background:#fff;display: none}
+.statusBox{display:none;width:278px;height:90px;background:url(/images/statusloding.gif) no-repeat 50%;position: absolute;top:30px;left:50%;margin-left:-139px;z-index: 22;}
+/*liansai color*/
+
+#tabInfos .g_a3 { background: #CC6600; color:#fff }/*--A3冠军--*/
+#tabInfos .g_dysqs { background: #009900; color:#fff }/*--东亚四强赛--*/
+#tabInfos .g_sjb{ background:#084000; color:#FFE100;  }/*--世界杯--*/
+
+#tabInfos .g_sjb s{ background:url(http://public.zgzcw.com/shared/worldcuplogo.png?2014060) no-repeat; }/*--世界杯--*/
+#tabInfos .g_jlbsjb { background: #CC9900; color:#fff }/*--世界俱乐部冠军杯--*/
+#tabInfos .g_sjbyx { background: #660000; color:#fff }/*--世界杯预选赛--*/
+#tabInfos .g_sqs { background: #339999; color:#fff }/*--世界青年足球锦标赛--*/
+#tabInfos .g_zj { background: #990000; color:#fff }/*--中国甲级联赛--*/
+#tabInfos .g_zlb { background: #C94F1B; color:#fff }/*--中联杯--*/
+#tabInfos .g_zc { background: #660000; color:#fff }/*--中国超级联赛--*/
+#tabInfos .g_dc { background: #006699; color:#fff }/*--丹麦超级联赛--*/
+#tabInfos .g_wj { background: #CCC700; color:#fff }/*--乌克兰甲级联赛--*/
+#tabInfos .g_ygb { background: #336699; color:#fff }/*--亚洲冠军联赛--*/
+#tabInfos .g_yzb { background: #990000; color:#fff }/*--亚洲锦标赛--*/
+#tabInfos .g_yzb { background: #37BE5A; color:#fff }/*--亚洲锦标赛预选赛--*/
+#tabInfos .g_ygb { background: #00A653; color:#fff }/*--南美解放者杯--*/
+#tabInfos .g_ec { background: #6666FF; color:#fff }/*--俄罗斯超级联赛--*/
+#tabInfos .g_adlycjls { background: #FF7000; color:#fff }/*--澳大利亚超级联赛--*/
+#tabInfos .g_bly { background: #4B5553; color:#fff }/*--保利亚甲级联赛--*/
+#tabInfos .g_kj { background: #663300; color:#fff }/*--克罗地亚甲级联赛--*/
+#tabInfos .g_xyl { background: #3A571C; color:#fff }/*--匈牙利甲级联赛--*/
+#tabInfos .g_yys { background: #0E6C00; color:#fff }/*--杯赛--*/
+#tabInfos .g_hpb { background: #663366; color:#fff }/*--和平杯--*/
+#tabInfos .g_ttb { background: #996633; color:#fff }/*--图图杯--*/
+#tabInfos .g_sj { background: #25155F; color:#fff }/*--塞尔维亚甲级联赛--*/
+#tabInfos .g_adlb { background: #c0c0c0; color:#fff }/*--奥地利杯联赛--*/
+#tabInfos .g_mxj { background: #5985D3; color:#fff }/*--摩西甲--*/
+#tabInfos .g_ay { background: #CC6699; color:#fff }/*--奥地利乙级联赛--*/
+#tabInfos .g_aj { background: #663366; color:#fff }/*--奥地利甲级联赛--*/
+#tabInfos .g_nsjb { background: #FF60AF; color:#fff }/*--女世界杯--*/
+#tabInfos .g_wesc { background: #006366; color:#fff }/*--威尔士超--*/
+#tabInfos .g_bj { background: #009900; color:#fff }/*--巴西甲级联赛--*/
+#tabInfos .g_bxb { background: #006633; color:#fff }/*--巴西杯--*/
+#tabInfos .g_xlj { background: #0066CC; color:#fff }/*--希腊甲级联赛--*/
+#tabInfos .g_dy { background: #AFA0DB; color:#fff }/*德国乙级联赛*/
+#tabInfos .g_db { background: #AAAA00; color:#fff }/*德北*/
+#tabInfos .g_dn { background: #009099; color:#fff }/*德南*/
+#tabInfos .g_dgb { background: #669966; color:#fff }/*德国杯*/
+#tabInfos .g_dj { background: #0B0BFF; color:#fff }/*德国甲级联赛*/
+#tabInfos .g_dlb { background: #006600; color:#fff }/*德联杯*/
+#tabInfos .g_yba { background: #33CCCC; color:#fff }/*意丙A*/
+#tabInfos .g_ybb { background: #57BBFF; color:#fff }/*意丙B*/
+#tabInfos .g_yy { background: #AC00DB; color:#fff }/*意大利乙级联赛*/
+#tabInfos .g_ydlb { background: #3E3E5B; color:#fff }/*意大利杯*/
+#tabInfos .g_ydlcjb { background: #3C3CFF; color:#fff }/*意大利超级杯*/
+#tabInfos .g_yj { background: #EA8F2B; color:#fff }/*意大利甲级联赛*/
+#tabInfos .g_xc { background: #81c0c0; color:#fff }/*意大利甲级联赛*/
+#tabInfos .g_nj { background: #D3A55F; color:#fff }/*挪威甲级联赛*/
+#tabInfos .g_nc { background: #006699; color:#fff }/*挪威超级联赛*/
+#tabInfos .g_jkj { background: #A97A1B; color:#fff }/*捷克甲级联赛*/
+#tabInfos .g_sfk { background: #E3004A; color:#fff }/*斯伐克甲级联赛*/
+#tabInfos .g_sj { background: #6DA5A5; color:#fff }/*斯甲*/
+#tabInfos .g_rbj { background: #336666; color:#fff }/*日本职业联赛*/
+#tabInfos .g_rbyjls { background: #22C126; color:#fff }/*日本乙级联赛*/
+#tabInfos .g_rlb { background: #08855C; color:#fff }/*日本联赛杯*/
+#tabInfos .g_rbthb { background: #003306; color:#fff }/*日本天皇杯*/
+#tabInfos .g_rbthb { background: #009900; color:#fff }/*日本超级杯*/
+#tabInfos .g_zj { background: #AABDD8; color:#fff }/*智利甲级联赛*/
+#tabInfos .g_ogb { background: #666633; color:#fff }/*欧洲冠军联赛*/
+#tabInfos .g_ozb { background: #CC9933; color:#fff }/*欧洲杯*/
+#tabInfos .g_lj { background: #d7c684; color:#fff }/*罗甲联赛*/
+#tabInfos .g_by { background: #8A4835; color:#fff }/*比利时乙级联赛*/
+#tabInfos .g_blsb { background: #CC9900; color:#fff }/*比利时杯*/
+#tabInfos .g_bij { background: #CC6666; color:#fff }/*比利时甲级联赛*/
+#tabInfos .g_fy { background: #FF6600; color:#fff }/*法国乙级联赛*/
+#tabInfos .g_fgb { background: #602D82; color:#fff }/*法国杯*/
+#tabInfos .g_fgcjb { background: #128FCD; color:#fff }/*法国超级杯*/
+#tabInfos .g_fj { background: #993333; color:#fff }/*法国甲级联赛*/
+#tabInfos .g_flb { background: #6877CA; color:#fff }/*法国联赛杯*/
+#tabInfos .g_fl { background: #67b695; color:#fff }/*芬兰联赛杯*/
+#tabInfos .g_blj { background: #0084DB; color:#fff }/*波兰甲级联赛*/
+#tabInfos .g_hwb { background: #513888; color:#fff }/*海湾杯*/
+#tabInfos .g_aij { background: #9EEEEE; color:#fff }/*爱尔兰甲级联赛*/
+#tabInfos .g_ac { background: #3399CC; color:#fff }/*爱尔兰超级联赛*/
+#tabInfos .g_rdj { background: #16A570; color:#fff }/*瑞典甲级联赛*/
+#tabInfos .g_rdc { background: #996666; color:#fff }/*瑞典超级联赛*/
+#tabInfos .g_rdb { background: #004488; color:#fff }/*瑞典杯*/
+#tabInfos .g_rsj { background: #998080; color:#fff }/*瑞士甲级联赛*/
+#tabInfos .g_rsc { background: #666666; color:#fff }/*瑞士超级联赛*/
+#tabInfos .g_hjlsb { background: #A68E5E; color:#fff }/*皇家联赛杯*/
+#tabInfos .g_lny { background: #CCA800; color:#fff }/*罗尼亚*/
+#tabInfos .g_mzb { background: #FF3366; color:#fff }/*美洲杯*/
+#tabInfos .g_mz { background: #6600FF; color:#fff }/*美国职业大联盟*/
+#tabInfos .g_mjb { background: #770088; color:#fff }/*中北美金杯赛*/
+#tabInfos .g_lhb { background: #BD4FEC; color:#fff }/*老虎杯*/
+#tabInfos .g_lhh { background: #333399; color:#fff }/*联合会*/
+#tabInfos .g_lmb { background: #660000; color:#fff }/*欧洲联盟杯--欧罗巴联赛*/
+#tabInfos .g_ozcjb { background: #8EAD12; color:#fff }/*欧洲超级杯*/
+#tabInfos .g_fc { background: #666699; color:#fff }/*芬兰超级联赛*/
+#tabInfos .g_sj { background: #996666; color:#fff }/*苏格兰甲级联赛*/
+#tabInfos .g_slb { background: #666699; color:#fff }/*苏格兰联赛杯*/
+#tabInfos .g_sc { background: #339966; color:#fff }/*苏格兰超级联赛*/
+#tabInfos .g_szzb { background: #41BE76; color:#fff }/*苏格兰足总杯*/
+#tabInfos .g_yingy { background: #6D5923; color:#fff }/*英格兰乙级联赛*/
+#tabInfos .g_yg { background: #0000CC; color:#fff }/*英格兰冠军联赛*/
+#tabInfos .g_yj { background: #999933; color:#fff }/*英格兰甲级联赛*/
+#tabInfos .g_ylb { background: #464611; color:#fff }/*英格兰联赛杯*/
+#tabInfos .g_yglsqdb { background: #DCB352; color:#fff }/*英格兰社区盾杯*/
+#tabInfos .g_yglzzb { background: #003366; color:#fff }/*英格兰足总杯*/
+#tabInfos .g_yc { background: #FF0033; color:#fff }/*英格兰超级联赛*/
+#tabInfos .g_yf { background: #009973; color:#fff }/*英非*/
+#tabInfos .g_hy { background: #5B1D85; color:#fff }/*荷兰乙级联赛*/
+#tabInfos .g_hlb { background: #CC9999; color:#fff }/*荷兰杯*/
+#tabInfos .g_hcjb { background: #FF2F73; color:#fff }/*荷兰超级杯*/
+#tabInfos .g_hj { background: #666600; color:#fff }/*荷兰甲级联赛*/
+#tabInfos .g_py { background: #003366; color:#fff }/*葡萄牙乙级联赛*/
+#tabInfos .g_pc { background: #A2BC25; color:#fff }/*葡萄牙超级联赛*/
+#tabInfos .g_ptylsb { background: #CB194C; color:#fff }/*葡萄牙联赛杯*/
+#tabInfos .g_ptyb { background: #009966; color:#fff }/*葡萄牙杯*/
+#tabInfos .g_ptycjb { background: #009966; color:#fff }/*葡萄牙超级杯*/
+#tabInfos .g_xy { background: #DB00DB; color:#fff }/*西班牙乙级联赛*/
+#tabInfos .g_xbyb { background: #009393; color:#fff }/*西班牙杯*/
+#tabInfos .g_xbyb { background: #33BBCC; color:#fff }/*西班牙超级杯*/
+#tabInfos .g_xbyb { background: #98CCFF; color:#fff }/*西班牙国王杯*/
+#tabInfos .g_xj { background: #17FF8B; color:#fff }/*西班牙甲级联赛*/
+#tabInfos .g_zxb { background: #006600; color:#fff }/*足协杯*/
+#tabInfos .g_zzb { background: #9999CC; color:#fff }/*足总杯*/
+#tabInfos .g_aj { background: #3399CC; color:#fff }/*阿根廷甲级联赛*/
+#tabInfos .g_qno { background: #996666; color:#fff }/*青年欧*/
+#tabInfos .g_fzb { background: #666666; color:#fff }/*非洲国家杯*/
+#tabInfos .g_u20 { background: #3A5500; color:#fff }/*世界U20锦标赛*/
+#tabInfos .g_uzu20 { background: #3A794E; color:#fff }/*欧洲U21锦标赛*/
+#tabInfos .g_hk { background: #339933; color:#fff }/*韩国职业联赛*/
+#tabInfos .g_gjs { background: #003333; color:#fff }/*国际赛*/
+#tabInfos .g_gjzllhhb { background: #3A7500; color:#fff }/*国际足联联合会杯*/
+#tabInfos .g_jlbyys { background: #00A8A8; color:#fff }/*俱乐部友谊赛*/
+#tabInfos .g_lj { background: #CCA800; color:#fff }/*罗甲*/
+#tabInfos .g_tc { background: #FFCC66; color:#fff }/*土超*/
+#tabInfos .g_obl { background: #8C8CFF; color:#fff }/*欧罗巴*/
+#tabInfos .g_jfzb { background: #a414c1; color:#fff }/*解放者杯*/
+#tabInfos .g_qt { background: #336699; color:#fff }/*其它*/
