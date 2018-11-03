@@ -235,7 +235,11 @@ public interface NumberUtil
 		}
 		catch(Exception e)
 		{
+<<<<<<< HEAD
 			return Double.NaN;
+=======
+			return 0.0;
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 		}
 	}
 	

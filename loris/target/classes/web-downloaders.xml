@@ -87,7 +87,10 @@
 		</page>
 	</webpages>
 	<downloaders>
+<<<<<<< HEAD
 		<!-- 
+=======
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 	    <category name="股票数据下载" id="1">
 		    <webpagesetting id="gpdate" encoding="GBK">
 		        <name>股票日交易数据</name>
@@ -110,7 +113,11 @@
 		        <description>从sina网站上下载股票日交易记录信息</description>
 		    </webpagesetting>
 	    </category>
+<<<<<<< HEAD
 	     -->
+=======
+	    
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 	    <category name="足彩数据下载" id="2">
 	    	<webpagesetting id="issue" encoding="UTF-8">
 		        <name>当日足彩数据</name>

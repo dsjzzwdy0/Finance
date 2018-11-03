@@ -5,11 +5,14 @@
 	version="3.0">
 
 	<display-name>Archetype Created Web Application</display-name>
+<<<<<<< HEAD
 	
 	<error-page>
 		<error-code>404</error-code>
 　　		<location>/error.jsp</location> 
 	</error-page>
+=======
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 
 	<!-- Spring和mybatis的配置文件 -->
 	<context-param>

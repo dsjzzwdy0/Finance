@@ -32,6 +32,13 @@ import com.datumbox.examples.Classification;
 import com.loris.learning.Equilateral;
 import com.loris.learning.FilesPath;
 import com.loris.learning.IncomePrediction;
+<<<<<<< HEAD
+=======
+import com.loris.learning.Simplex;
+import com.loris.learning.ant.AntCreator;
+import com.loris.learning.graph.Graph;
+import com.loris.learning.graph.Node;
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 
 /**
  * Unit test for simple App.
@@ -54,7 +61,15 @@ public class LearningApp
 			
 			//testHmmMethod();
 			
+<<<<<<< HEAD
 			testDatumBox();
+=======
+			//testDatumBox();
+			
+			//testAntAlgorithm();
+			
+			testSimplex();
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 		}
 		catch (Exception e)
 		{
@@ -62,6 +77,54 @@ public class LearningApp
 		}
 	}
 	
+<<<<<<< HEAD
+=======
+	public static void testSimplex()
+	{
+		try
+		{
+			Simplex.test1();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	
+	/**
+	 * 测试蚁群算法
+	 * @throws Exception
+	 */
+	public static void testAntAlgorithm() throws Exception
+	{
+		int nodeSize = 5;
+		Node node;
+		Graph graph = new Graph();
+		for(int i = 0; i < nodeSize; i ++)
+		{
+			node = new Node();
+			node.setIndex(i);
+			node.setName("" + i);
+			graph.addNode(node);
+		}
+		
+		float[][] distances =  {{0.f, 7.0f, 6.0f, 10.0f, 13.0f}, 
+				{7.0f, 0.0f, 7.0f, 10.0f, 10.0f},
+				{6.0f, 7.0f, 0.0f, 5.0f, 9.0f},
+				{10.0f, 10.0f, 5.0f, 0.0f, 6.0f},
+				{13.0f, 10.0f, 9.0f, 6.0f, 0.0f}};
+		graph.setDistances(distances);
+		
+		AntCreator creator = new AntCreator(3, nodeSize, 20, 1.f, 5.f, 0.5f);
+		creator.setGraph(graph);
+		creator.init();
+		creator.solve();
+	}
+	
+	
+	
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 	public static void testDatumBox() throws Exception
 	{
 		//Clustering.main(null);

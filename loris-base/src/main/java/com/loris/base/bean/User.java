@@ -1,5 +1,6 @@
 package com.loris.base.bean;
 
+<<<<<<< HEAD
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.loris.base.bean.entity.UUIDEntity;
 
@@ -14,6 +15,20 @@ public class User extends UUIDEntity
 	private String password;
 	private String email;
 	private String usertype;
+=======
+import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.enums.IdType;
+
+@TableName("sys_user")
+public class User
+{
+	@TableId(type=IdType.INPUT)
+	private String id;
+	private String realname;
+	private String username;
+	
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 	
 	public String getId()
 	{
@@ -39,6 +54,7 @@ public class User extends UUIDEntity
 	{
 		this.username = username;
 	}
+<<<<<<< HEAD
 	public String getPassword()
 	{
 		return password;
@@ -69,4 +85,7 @@ public class User extends UUIDEntity
 		return "User [id=" + id + ", realname=" + realname + ", username=" + username + ", password=" + password
 				+ ", email=" + email + "]";
 	}
+=======
+
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 }

@@ -5,6 +5,7 @@
 	<div align="center">
 		<div class="footerbox" style="margin-top: 30px;">
 			<div class="aboutlink">
+<<<<<<< HEAD
 				<a href="about" target="_blank" rel="nofollow" style="color: #8c8c8c;">关于东彩</a>
 				<a href="corporation" target="_blank" rel="nofollow"	style="color: #8c8c8c;">商务合作</a>
 				<a href="service" target="_blank" rel="nofollow" style="color: #8c8c8c;">客户服务</a> 
@@ -15,6 +16,18 @@
 				<a href="contact" target="_blank" rel="nofollow" style="color: #8c8c8c;">联系我们</a> 
 				<a href="links" target="_blank" rel="nofollow" style="color: #8c8c8c;">友情链接</a> 
 				<a class="noborder_r" href="speedtest.html" target="_blank" rel="nofollow" style="color: #8c8c8c;">测试网速</a>
+=======
+				<a href="http://www.okooo.com/about/us/" target="_blank" rel="nofollow" style="color: #8c8c8c;">关于澳客</a>
+				<a href="http://www.okooo.com/about/co/" target="_blank" rel="nofollow"	style="color: #8c8c8c;">商务合作</a>
+				<a href="http://www.okooo.com/about/service/" target="_blank" rel="nofollow" style="color: #8c8c8c;">客户服务</a> 
+				<a href="http://www.okooo.com/about/security/" target="_blank" rel="nofollow" style="color: #8c8c8c;">安全承诺</a>
+				<a href="http://www.okooo.com/about/hr/" target="_blank" rel="nofollow" style="color: #8c8c8c;">加入澳客</a>
+				<a href="http://www.okooo.com/about/declare/" target="_blank" rel="nofollow" style="color: #8c8c8c;">法律声明</a>
+				<a href="http://www.okooo.com/about/sitemap/" target="_blank" rel="nofollow" style="color: #8c8c8c;">网站地图</a> 
+				<a href="http://www.okooo.com/about/contact/" target="_blank" rel="nofollow" style="color: #8c8c8c;">联系我们</a> 
+				<a href="http://www.okooo.com/about/links/" target="_blank" rel="nofollow" style="color: #8c8c8c;">友情链接</a> 
+				<a class="noborder_r" href="http://www.okooo.com/speedtest.html" target="_blank" rel="nofollow" style="color: #8c8c8c;">测试网速</a>
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 			</div>
 			<div class="copyright">
 				<p>

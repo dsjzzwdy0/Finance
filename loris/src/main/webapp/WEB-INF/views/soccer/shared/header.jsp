@@ -30,6 +30,7 @@
 			<div class="navlist_box">
 				<span><a href="../download/admin">数据下载</a></span>
 			</div>
+<<<<<<< HEAD
 			
 			<c:if test="${not empty user}">
 				<div class="navlist_box bdrn">
@@ -41,6 +42,14 @@
 					<span><a href="../user/login">登录</a></span>
 				</div>
 			</c:if>
+=======
+			<div class="navlist_box bdrn">
+				<span><a href="login.html">登录</a></span>
+			</div>
+			<div class="navlist_box bdrn">
+				<span><a href="register.html">注册</a></span>
+			</div>
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 		</div>
 	</div>
 </div>
@@ -48,7 +57,11 @@
 	<a href="#">
 		<div class="indexLogo_box">
 			<div class="indexLogo_img">
+<<<<<<< HEAD
 				<img src="../content/images/soccer4.png" alt="东方足彩网"
+=======
+				<img src="../content/images/logo4.png" alt="小松鼠网站"
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 					class="searchbox_logo float_l">
 			</div>
 		</div>
@@ -101,7 +114,10 @@
 			</div>
 		</div>
 		<div class="subShow_nav">
+<<<<<<< HEAD
 			<!-- 
+=======
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 			<div class="navlist_box">
 				<span class="<c:if test="${type==''}">check01</c:if>"><a href="sfc">竞彩足球</a></span>
 			</div>
@@ -111,7 +127,10 @@
 			<div class="navlist_box" slide="a">
 				<span><a href="zhucai.html">胜负彩</a></span>
 			</div>
+<<<<<<< HEAD
 			 -->
+=======
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 			<div class="navlist_box" slide="a">
 				<span class="<c:if test="${type=='analysis'}">check01</c:if>"><a href="#">分析中心<em class="navIcon icon_triangle"></em></a></span>
 				<div class="tc_xiala">
@@ -133,19 +152,29 @@
 			<div class="navlist_box" slide="a">
 				<span> <a href="sszx">赛事中心</a></span>
 			</div>
+<<<<<<< HEAD
 			<!-- 
+=======
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 			<div class="navlist_box" slide="a">
 				<span> <a href="kaijiang.html">开奖结果</a></span>
 			</div>
 			<div class="navlist_box" slide="a">
 				<span> <a href="result.html" target="_blank">比分直播</a></span>
 			</div>
+<<<<<<< HEAD
 			 -->
+=======
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 			<div class="navlist_box" slide="a">
 				<span class="<c:if test="${type=='setting'}">check01</c:if>"><a href="settings" target="_blank">用户设置</a></span>
 			</div>
 			<div class="navlist_box" slide="a">
+<<<<<<< HEAD
 				<span><a href="computeodds" target="_blank">计算工具</a></span>
+=======
+				<span><a href="help.html" target="_blank">玩法规则</a></span>
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 			</div>
 		</div>
 	</div>

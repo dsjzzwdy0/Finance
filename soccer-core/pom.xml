@@ -7,7 +7,11 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
+<<<<<<< HEAD
 	<name>soccer-core</name>
+=======
+	<name>mybatis-plus</name>
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 	<url>http://maven.apache.org</url>
 
 	<properties>

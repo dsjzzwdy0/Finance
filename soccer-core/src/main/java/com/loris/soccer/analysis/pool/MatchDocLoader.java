@@ -95,9 +95,15 @@ public class MatchDocLoader
 	 * @return 赔率公司配置
 	 */
 	public static CorpSetting getDefaultCorpSetting()
+<<<<<<< HEAD
 	{		
 		SoccerManager manager = getSoccerManager();
 		/*
+=======
+	{
+		SoccerManager manager = getSoccerManager();
+
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 		List<UserCorporate> corps = manager.getUserCoporates(true);
 		CorpSetting configure = new CorpSetting();
 		configure.setName(CORP_ODDS_DEFAULT);
@@ -105,8 +111,12 @@ public class MatchDocLoader
 		{
 			configure.addUserCorporate(userCorporate);
 		}
+<<<<<<< HEAD
 		return configure;*/
 		return manager.getDefaultCorpSetting();
+=======
+		return configure;
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 	}
 	
 	/**
@@ -232,6 +242,7 @@ public class MatchDocLoader
 			if(ypsource.equalsIgnoreCase(SoccerConstants.DATA_SOURCE_OKOOO))
 			{
 				List<OkoooYp> yps = soccerManager.getOkoooYpList(mid, ypcorp.getGid());
+<<<<<<< HEAD
 				for (OkoooYp okoooYp : yps)
 				{
 					okoooYp.setFirstwinodds(okoooYp.getFirstwinodds() - 1.0f);
@@ -239,6 +250,8 @@ public class MatchDocLoader
 					okoooYp.setWinodds(okoooYp.getWinodds() - 1.0f);
 					okoooYp.setLoseodds(okoooYp.getLoseodds() - 1.0f);
 				}
+=======
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 				element.addYpList(yps);
 			}
 			else

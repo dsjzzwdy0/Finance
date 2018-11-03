@@ -32,8 +32,14 @@ src:url(data:application/vnd.ms-fontobject;base64,9C0AANgsAAABAAIAAAAAAAIABgMAAA
     height: 18px;
     position: absolute;
     top: 6px;
+<<<<<<< HEAD
     right: 0px;
     cursor: default;
+=======
+    right: 5px;
+    cursor: default;
+    z-index: 2;
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
     color: #ffff00;
 }
 .gridTable th .sorting-action.sorting-up .sa-up {

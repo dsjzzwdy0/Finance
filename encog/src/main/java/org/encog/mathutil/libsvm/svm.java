@@ -384,7 +384,11 @@ class Solver {
 	int[] active_set;
 	double[] G_bar;		// gradient, if we treat free variables as 0
 	int l;
+<<<<<<< HEAD
 	boolean unshrink;	// XXX
+=======
+	boolean unshrink;	// shrink flag
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 	
 	static final double INF = java.lang.Double.POSITIVE_INFINITY;
 
@@ -1994,7 +1998,12 @@ public class svm {
 			model.nr_class = 2;
 			model.label = null;
 			model.nSV = null;
+<<<<<<< HEAD
 			model.probA = null; model.probB = null;
+=======
+			model.probA = null; 
+			model.probB = null;
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 			model.sv_coef = new double[1][];
 
 			if(param.probability == 1 &&
@@ -2360,12 +2369,20 @@ public class svm {
 			double[] sv_coef = model.sv_coef[0];
 			double sum = 0;
 			for(i=0;i<model.l;i++)
+<<<<<<< HEAD
 				sum += sv_coef[i] * Kernel.k_function(x,model.SV[i],model.param);
+=======
+				sum += sv_coef[i] * Kernel.k_function(x, model.SV[i], model.param);
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 			sum -= model.rho[0];
 			dec_values[0] = sum;
 
 			if(model.param.svm_type == svm_parameter.ONE_CLASS)
+<<<<<<< HEAD
 				return (sum>0)?1:-1;
+=======
+				return (sum>0) ? 1 : -1;
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 			else
 				return sum;
 		}
@@ -2376,12 +2393,20 @@ public class svm {
 		
 			double[] kvalue = new double[l];
 			for(i=0;i<l;i++)
+<<<<<<< HEAD
 				kvalue[i] = Kernel.k_function(x,model.SV[i],model.param);
+=======
+				kvalue[i] = Kernel.k_function(x, model.SV[i], model.param);
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 
 			int[] start = new int[nr_class];
 			start[0] = 0;
 			for(i=1;i<nr_class;i++)
+<<<<<<< HEAD
 				start[i] = start[i-1]+model.nSV[i-1];
+=======
+				start[i] = start[i-1] + model.nSV[i-1];
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 
 			int[] vote = new int[nr_class];
 			for(i=0;i<nr_class;i++)

@@ -1,15 +1,19 @@
 package com.loris.lottery.controller;
 
+<<<<<<< HEAD
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+=======
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+<<<<<<< HEAD
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -174,5 +178,27 @@ public class UserController extends BaseController
 	{
 		List<User> users = basicManager.getUserList();
 		return Rest.okData(users);
+=======
+
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.loris.base.bean.User;
+import com.loris.base.repository.service.UserService;
+import com.loris.lottery.annotation.ArchivesLog;
+
+@Controller
+@RequestMapping("/user")
+public class UserController
+{
+	@Autowired
+	private UserService userService;
+	
+	@ResponseBody
+	@RequestMapping("/list")
+	@ArchivesLog(operationName="Test")
+	public Object list()
+	{
+		EntityWrapper<User> ew = new EntityWrapper<>();
+		return userService.selectList(ew);
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 	}
 }

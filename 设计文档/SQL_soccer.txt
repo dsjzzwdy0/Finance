@@ -214,6 +214,7 @@ create table SOCCER_WEB_MATCH_CONTENT(
 	PRIMARY KEY  (`id`)
 )
 
+<<<<<<< HEAD
 create table SOCCER_WEB_ROUND_CONTENT(
 	ID int NOT NULL auto_increment,	
 	LID varchar(10), 
@@ -231,6 +232,8 @@ create table SOCCER_WEB_ROUND_CONTENT(
 	PRIMARY KEY  (`id`)
 )
 
+=======
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 create table soccer_rank
 (
 	ID int NOT NULL auto_increment,
@@ -334,6 +337,7 @@ create table SOCCER_ISSUE_MATCH(
 	PRIMARY KEY  (`id`)
 ),
 
+<<<<<<< HEAD
 create table SOCCER_ODDS_OP(
 	id int not null auto_increment,
 	mid varchar(10),
@@ -388,6 +392,8 @@ create table SOCCER_ODDS_YP(
 	INDEX index_gname(gname)
 );
 
+=======
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 create table SOCCER_ISSUE_MATCH_14(
 	id int NOT NULL auto_increment,
 	mid varchar(10),
@@ -448,6 +454,7 @@ create table soccer_issue_bd(
 )
 
 
+<<<<<<< HEAD
 CREATE TABLE `soccer_web_yp_zhishu` (
 `ID`  int(11) NOT NULL AUTO_INCREMENT ,
 `MID`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
@@ -486,6 +493,8 @@ INDEX `index_createtime` (`CREATETIME`) USING BTREE ,
 INDEX `index_url` (`URL`) USING BTREE 
 )
 
+=======
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 ALTER table soccer_web_match_content ADD INDEX url_index(url)
 
 

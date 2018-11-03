@@ -109,11 +109,16 @@ public class BasicManager
 	public User getUser(String name)
 	{
 		EntityWrapper<User> ew = new EntityWrapper<>();
+<<<<<<< HEAD
 		ew.eq("username", name);
+=======
+		ew.eq("name", name);
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 		return userService.selectOne(ew);
 	}
 	
 	/**
+<<<<<<< HEAD
 	 * 注册用户或更新用户信息
 	 * @param user
 	 * @return
@@ -132,6 +137,8 @@ public class BasicManager
 	}
 	
 	/**
+=======
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 	 * 通过用户ID值称获得用户信息
 	 * @param userid 用户ID值
 	 * @return 用户
@@ -150,6 +157,7 @@ public class BasicManager
 	{
 		return logService.insert(log);
 	}
+<<<<<<< HEAD
 	
 	/**
 	 * 用户列表
@@ -160,4 +168,6 @@ public class BasicManager
 		EntityWrapper<User> ew = new EntityWrapper<>();
 		return userService.selectList(ew);
 	}
+=======
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 }
