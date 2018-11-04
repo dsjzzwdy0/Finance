@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans
+			http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+			http://www.springframework.org/schema/context
+			http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<!-- 引入dbconfig.properties属性文件 -->
+	<context:property-placeholder location="classpath:jdbc.properties" />
+
+	<!-- 组件扫描 -->
+	<context:component-scan base-package="com.loris.lottery, com.loris.stock" />
+
+	<!--配置数据源,这里可以换成C3P0,DBCP等等其他的链接方式 -->
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${driver}" />
+		<property name="url" value="${url}" />
+		<property name="username" value="${username}" />
+		<property name="password" value="${password}" />
+	</bean>
+
+	<bean id="sqlSessionFactory" class="com.baomidou.mybatisplus.spring.MybatisSqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mapperLocations">
+			<list>
+				<value>classpath*:com/loris/stock/repository/mapper/conf/*Mapper.xml</value>
+				<value>classpath*:com/loris/lottery/repository/mapper/conf/*Mapper.xml</value>
+			</list>
+		</property>
+		<property name="typeAliasesPackage" value="com.loris.lottery, com.loris.stock" />
+	</bean>
+
+	<!-- 自动注入 -->
+	<bean
+		class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor" />
+
+	<!-- 数据组件扫描 -->
+	<bean id="mapperScannerConofigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+		<property name="basePackage"
+			value="com.loris.lottery.repository.mapper, com.loris.stock.repository.mapper" />
+	</bean>
+</beans>
