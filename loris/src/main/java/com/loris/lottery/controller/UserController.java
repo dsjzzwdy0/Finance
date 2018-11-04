@@ -165,6 +165,17 @@ public class UserController extends BaseController
 	}
 	
 	/**
+	 * 修改用户密码页面
+	 * @return 下载页面视图
+	 */
+	@RequestMapping("/change")
+	public ModelAndView change()
+	{
+		ModelAndView view = new ModelAndView("changepwd.user");
+		return view;
+	}
+	
+	/**
 	 * 获得用户列表
 	 * @return
 	 */

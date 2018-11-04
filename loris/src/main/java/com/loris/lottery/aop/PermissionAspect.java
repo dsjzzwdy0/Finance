@@ -36,22 +36,18 @@ public class PermissionAspect extends BaseAspect
 	public void before(JoinPoint joinPoint) throws IOException
 	{
 		//目标类的class形式
-		String targetClass = joinPoint.getTarget().getClass().getName(); 
+		//String targetClass = joinPoint.getTarget().getClass().getName(); 
 		//目标方法 
-		String methodName = joinPoint.getSignature().getName();		
+		//String methodName = joinPoint.getSignature().getName();		
 		HttpServletRequest request = getHttpServletRequest();
 		
 		user = (User)request.getSession().getAttribute(WebConstants.CURRENT_USER);		
-		if(user != null)
-		{
-			System.out.println("User: " + user);
-		}
-		else
+		if(user == null)
 		{
 			HttpServletResponse response = getHttpServletResponse();
 			response.sendRedirect("../user/login?redirect=" + request.getRequestURI());
 		}
 		startTimeMillis = System.currentTimeMillis(); // 记录方法开始执行的时间		
-		System.out.println("Permission: " + targetClass + " " + methodName + " " + startTimeMillis);		
+		//System.out.println("Permission: " + targetClass + " " + methodName + " " + startTimeMillis);		
 	}
 }
