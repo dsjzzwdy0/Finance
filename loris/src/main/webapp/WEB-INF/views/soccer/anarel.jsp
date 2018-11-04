@@ -114,6 +114,11 @@ function createMatchOddsTable(conf)
 				soccerTable.options.rows = json.data.matches;
 				initLeaguePanel(json.data.matches);
 			}
+		},
+		complete: function(){
+			$('#gridTable tbody .relation').on('click', function(){
+				getRelatedMatch($(this));
+			});
 		}
 	}	
 	options.source = source;
@@ -121,6 +126,17 @@ function createMatchOddsTable(conf)
 	options.sorter = sorter;
 	table = new SoccerTable(options);
 	$('#gridTable').soccerTable(table);
+}
+
+function getRelatedMatch(element)
+{
+	var mid = $(element).attr('mid');
+	var gid = $(element).attr('gid');
+	var val = $(element).text();
+	
+	foreach()
+	
+	layer.msg(mid + ': ' + gid + ', ' + val);
 }
 
 function stateChange(state, source, conf)

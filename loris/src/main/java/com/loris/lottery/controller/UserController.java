@@ -54,7 +54,7 @@ public class UserController extends BaseController
 	public ModelAndView logout(HttpSession session)
 	{
 		ModelAndView view = new ModelAndView("login.user");
-		session.removeAttribute(WebConstants.CURRENT_USER);
+		logoutCurrentUser();
 		return view;
 	}
 	
@@ -94,7 +94,7 @@ public class UserController extends BaseController
 				    	contextRelative = true;
 				    }
 				    
-				    logger.info("FromURL: " + redirect);
+				    //logger.info("FromURL: " + redirect);
 					ModelAndView view = new ModelAndView(new RedirectView(redirect, contextRelative));
 					return view;
 				}
@@ -169,9 +169,53 @@ public class UserController extends BaseController
 	 * @return 下载页面视图
 	 */
 	@RequestMapping("/change")
-	public ModelAndView change()
+	public ModelAndView change(String user, String oldpassword, String password, String password1)
 	{
-		ModelAndView view = new ModelAndView("changepwd.user");
+		String error = "";
+		ModelAndView view = new ModelAndView();
+		User userBean = getCurrentUser();
+		if(userBean == null)
+		{
+			view.setViewName("login.user");
+		}
+		else if(StringUtils.isNotEmpty(user) && StringUtils.isNotEmpty(oldpassword) &&
+				StringUtils.isNotEmpty(password) && StringUtils.isNotEmpty(password1))
+		{
+			try
+			{
+				if(UserAuthenticate.verifyPassword(userBean, oldpassword))
+				{
+					User userBean1 = (User)userBean.clone();
+					userBean1.setPassword(password);
+					UserAuthenticate.encodePassword(userBean1);
+					
+					if(basicManager.addOrUpdateUser(userBean1))
+					{
+						userBean.setPassword(userBean1.getPassword());
+						view.setView(new RedirectView("../index.html", true));
+						return view;
+					}
+					error = "更新数据中密码时发生错误，请联系管理员";
+				}
+				else
+				{
+					error = "您输入的原密码不正确，请重新输入密码";
+				}
+			}
+			catch(Exception e)
+			{
+				error = "系统更新密码时发生错误"; 
+			}
+			view.setViewName("changepwd.user");
+			view.addObject("error", error);
+			view.addObject("user", userBean);
+		}
+		else
+		{
+			view.setViewName("changepwd.user");
+			view.addObject("user", userBean);
+		}
+		
 		return view;
 	}
 	

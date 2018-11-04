@@ -12,3 +12,12 @@
 <meta name="mobile-agent" content="format=xhtml;url=http://wap.okooo.com/">
 <link rel="Shortcut Icon" href="../content/images/loris_favicon_2.ico">
 <link rel="stylesheet" href="../content/css/login/login.css">
+<link rel="stylesheet" type="text/css" href="../content/fonts/css/font-awesome.min.css" />
+<script type="text/javascript" src="../content/scripts/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../content/scripts/layer/layer.js"></script>
+<style type="text/css">
+.layui-layer-content
+{
+	color: black;
+}
+</style>

@@ -68,7 +68,12 @@ body
 
 .gridTable tbody tr td
 {
-	overflow:hidden;
+	overflow: hidden;
+}
+
+.gridTable tbody tr td .relation
+{
+	cursor: pointer;
 }
 
 .gridTable:hover > tbody > tr:hover

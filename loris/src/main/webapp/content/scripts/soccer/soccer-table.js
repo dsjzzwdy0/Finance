@@ -621,18 +621,25 @@ function SoccerTableColumns()
 	function formatOpValueColumn(index, match, op, corp, first)
 	{
 		var relateClass = '';
+		var relateIndex = -1;
 		var doc = table.matchDoc;
 		var st = first ? 0 : 3;
 		var idx = MatchDoc.getOpMaxProbIndex(op, first);
 		if($.isNotNullOrEmpty(doc) && (idx == (st + index)))
 		{
 			//var r = doc.getMatchRelation(match, corp, first);
-			var relateIndex = doc.getMatchRelationIndex(match, corp, first);
-			var relateClass = relateIndex >= 0 ? Association.getRelationClass(relateIndex) : '';	
-		}
+			relateIndex = doc.getMatchRelationIndex(match, corp, first);
+			relateClass = relateIndex >= 0 ? Association.getRelationClass(relateIndex) : '';	
+		}		
+		if($.isNotNullOrEmpty(relateClass))
+		{
+			relateClass += ' relation';
+		}		
 		var vals = op.values;
-		var title = first ? '初盘时间 ' + op.firsttime : '即时盘时间 ' + op.time;
-		return '<div class="association ' + relateClass + '" title="' + title + '">' + formatValue(vals[st + index]) + '</div>'
+		var title = first ? '初盘时间 ' + op.firsttime + ' (' + vals[st + 0] + ',' + vals[st + 1] + ',' + vals[st + 2] + ')'
+				: '即时盘时间 ' + op.time + ' (' + vals[st + 0] + ',' + vals[st + 1] + ',' + vals[st + 2] + ')';
+		return '<div class="association ' + relateClass + '" title="' + title + '" index="' + relateIndex +
+			'" mid="' + match.mid + '" gid="' + op.gid + '" type="' + first + '">' + formatValue(vals[st + index]) + '</div>'
 	}		
 	/**
 	 * 格式化比赛的球队信息

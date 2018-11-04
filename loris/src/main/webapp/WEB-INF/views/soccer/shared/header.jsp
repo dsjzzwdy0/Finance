@@ -33,7 +33,7 @@
 			
 			<c:if test="${not empty user}">
 				<div class="navlist_box bdrn">
-					<span><em style="color: red">欢迎您,${user.username }</em>&nbsp;&nbsp;<a href="../user/logout">退出</a></span>
+					<span><em style="color: red">欢迎您,${user.username }</em>&nbsp;&nbsp;<a href="../user/change">更改密码</a>&nbsp;&nbsp;<a href="../user/logout">退出</a></span>
 				</div>
 			</c:if>
 			<c:if test="${empty user}">

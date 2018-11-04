@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotations.TableName;
 import com.loris.base.bean.entity.UUIDEntity;
 
 @TableName("sys_user")
-public class User extends UUIDEntity
+public class User extends UUIDEntity implements Cloneable
 {
 	/***/
 	private static final long serialVersionUID = 1L;
@@ -70,4 +70,9 @@ public class User extends UUIDEntity
 		return "User [id=" + id + ", realname=" + realname + ", username=" + username + ", password=" + password
 				+ ", email=" + email + "]";
 	}
+	
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }

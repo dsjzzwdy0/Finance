@@ -142,6 +142,19 @@ public class SoccerDataController
 	}
 	
 	/**
+	 * 获得某一场比赛的关联比赛
+	 * @param sid 欧赔配置方案
+	 * @param mid 比赛编号
+	 * @return 比赛的数据
+	 */
+	@ResponseBody
+	@RequestMapping("/getRelationMatches")
+	public Rest getRelationMatches(String sid, String mid)
+	{
+		return Rest.ok();
+	}
+	
+	/**
 	 * 计算比赛的欧赔赔率方差值
 	 * @param issue 日期
 	 * @return 数据列表
