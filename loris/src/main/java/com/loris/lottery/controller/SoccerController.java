@@ -19,13 +19,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
-<<<<<<< HEAD
 import com.loris.base.bean.User;
 import com.loris.base.util.DateUtil;
 import com.loris.lottery.util.WebConstants;
-=======
-import com.loris.base.util.DateUtil;
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 import com.loris.soccer.analysis.util.PerformanceUtil;
 import com.loris.soccer.bean.data.table.Logo;
 import com.loris.soccer.bean.data.table.league.League;
@@ -44,11 +40,7 @@ import com.loris.soccer.repository.SoccerManager;
 
 @Controller
 @RequestMapping("/soccer")
-<<<<<<< HEAD
 public class SoccerController extends BaseController
-=======
-public class SoccerController
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 {	
 	private static Logger logger = Logger.getLogger(SoccerManager.class);
 	
@@ -105,7 +97,6 @@ public class SoccerController
 	}
 	
 	/**
-<<<<<<< HEAD
 	 * 加入用户信息
 	 * @param view
 	 */
@@ -119,8 +110,6 @@ public class SoccerController
 	}
 	
 	/**
-=======
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 	 * 系统主页面
 	 * @return
 	 */
@@ -156,14 +145,10 @@ public class SoccerController
 		view.addObject("page", MATCH_PAGE_TYPES[index][0]);
 		view.addObject("title", MATCH_PAGE_TYPES[index][1]);
 		view.addObject("match", match);
-<<<<<<< HEAD
 		view.addObject("rank", rankElement);
 		
 		setUserObject(view);
 		
-=======
-		view.addObject("rank", rankElement);		
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 		return view;
 	}
 	
@@ -183,13 +168,9 @@ public class SoccerController
 		view.addObject("page", ANALYSIS_PAGE_TYPES[index][0]);
 		view.addObject("title", ANALYSIS_PAGE_TYPES[index][1]);
 		view.addObject("issues", getLatestIssues(10));		
-<<<<<<< HEAD
 		view.addObject("settings", settings);	
 
 		setUserObject(view);
-=======
-		view.addObject("settings", settings);		
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 		return view;
 	}
 	
@@ -236,13 +217,9 @@ public class SoccerController
 		view.addObject("title", LEAGUE_PAGE_TYPES[index][1]);
 		view.addObject("league", league);
 		view.addObject("round", round);
-<<<<<<< HEAD
 		view.addObject("settings", settings);
 
 		setUserObject(view);
-=======
-		view.addObject("settings", settings);	
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 		//view.addObject("rounds", rounds);
 		return view;
 	}
@@ -684,7 +661,6 @@ public class SoccerController
 	}
 	
 	/**
-<<<<<<< HEAD
 	 * 理论值的计算
 	 * @param homevalue
 	 * @param clientvalue
@@ -698,8 +674,6 @@ public class SoccerController
 	}
 	
 	/**
-=======
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 	 * 初始化比赛页面
 	 * @param mid 比赛编号
 	 * @param view 视图

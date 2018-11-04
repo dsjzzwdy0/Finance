@@ -23,10 +23,7 @@ import com.loris.base.bean.wrapper.PageWrapper;
 import com.loris.base.bean.wrapper.Rest;
 import com.loris.base.util.ArraysUtil;
 import com.loris.base.util.DateUtil;
-<<<<<<< HEAD
 import com.loris.base.util.NumberUtil;
-=======
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 import com.loris.soccer.analysis.data.MatchOpVariance;
 import com.loris.soccer.analysis.checker.CorpChecker;
 import com.loris.soccer.analysis.data.LeagueMatchDoc;
@@ -38,10 +35,7 @@ import com.loris.soccer.analysis.pool.MatchDocPool;
 import com.loris.soccer.analysis.pool.MatchOddsPool;
 import com.loris.soccer.analysis.util.IssueMatchUtil;
 import com.loris.soccer.analysis.util.MatchGraph;
-<<<<<<< HEAD
 import com.loris.soccer.analysis.util.PossionUtil;
-=======
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 import com.loris.soccer.bean.SoccerConstants;
 import com.loris.soccer.bean.data.table.lottery.Corporate;
 import com.loris.soccer.bean.data.table.lottery.JcMatch;
@@ -321,7 +315,6 @@ public class SoccerDataController
 	 */
 	@ResponseBody
 	@RequestMapping("/getMatchItems")
-<<<<<<< HEAD
 	public Rest getMatchItems(String issue, String type, String sid)
 	{
 		
@@ -334,30 +327,6 @@ public class SoccerDataController
 		if(dataVector == null)
 		{
 			String info = "There are not any JcMatchDatas in database of issue value '" + issue + "'. ";
-=======
-	public Rest getMatchItems(String issue, String type, String refresh)
-	{
-		String info;
-		boolean needToRefresh = false;
-		if(StringUtils.isEmpty(issue))
-		{
-			info = "The issue '" + issue + " is empty.";
-			logger.info(info);
-			return Rest.failure(info);
-		}
-		
-		//是否需要更新数据集
-		if(!StringUtils.isEmpty(refresh) && ("true".equalsIgnoreCase(refresh) ||
-				"1".equalsIgnoreCase(refresh)))
-		{
-			needToRefresh = true;
-		}
-		
-		MatchDoc dataVector = dataPools.getMatchDocsFromPool(issue, needToRefresh);
-		if(dataVector == null)
-		{
-			info = "There are not any JcMatchDatas in database of issue value '" + issue + "'. ";
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 			logger.info(info);
 			return Rest.failure(info);		
 		}
@@ -371,15 +340,11 @@ public class SoccerDataController
 		{
 			items = MatchDocLoader.getDefaultMatchSynthElement(dataVector);
 		}
-<<<<<<< HEAD
 		
 		Map<String, Object> map = new HashMap<>();
 		map.put("setting", setting);
 		map.put("matches", items);
 		return Rest.okData(map);
-=======
-		return Rest.okData(items);
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 	}
 	
 	/**
@@ -438,7 +403,6 @@ public class SoccerDataController
 			return Rest.failure("The CorpSetting '" + sid + "' is not set correctly.");
 		}
 		
-<<<<<<< HEAD
 		UserCorporate corporate = new UserCorporate();
 		corporate.setGid("-100");
 		corporate.setId("-100");
@@ -449,8 +413,6 @@ public class SoccerDataController
 		setting.addUserCorporate(corporate);
 	
 		
-=======
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 		List<MatchOdds> ops = MatchDocLoader.loadRoundMatchOdds(lid, season, round, setting);
 		List<MatchRankOddsElement> elements = new ArrayList<>();
 		
@@ -1045,7 +1007,6 @@ public class SoccerDataController
 	}
 	
 	/**
-<<<<<<< HEAD
 	 * 根据数据计算欧赔的值
 	 * @param homevalue
 	 * @param clientvalue
@@ -1081,8 +1042,6 @@ public class SoccerDataController
 	}
 	
 	/**
-=======
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 	 * 创建图谱数据
 	 * 
 	 * @return 图

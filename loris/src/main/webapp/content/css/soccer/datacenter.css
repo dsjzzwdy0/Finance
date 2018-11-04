@@ -3,7 +3,6 @@
 .container_wrapper {
     width: 98%;
 }
-<<<<<<< HEAD
 
 .main_wrapper .gridTable th
 {
@@ -13,8 +12,6 @@
 	white-space: nowrap;
 }
 
-=======
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 .container_wrapper .gridTable td
 {
 	inline-height: 19px;
@@ -40,15 +37,9 @@
 
 .container_wrapper .gridTable th
 {
-<<<<<<< HEAD
 	height: 25px;
 	border: 1px solid #ddd;
 	line-height: 25px;
-=======
-	height: 30px;
-	border: 1px solid #ddd;
-	line-height: 30px;
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 	vertical-align: middle;
 }
 

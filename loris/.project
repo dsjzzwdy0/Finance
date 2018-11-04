@@ -6,17 +6,10 @@
 		<project>mybatis-plus</project>
 		<project>stock-core</project>
 		<project>loris-base</project>
-<<<<<<< HEAD
 		<project>loris-learning</project>
 		<project>htmlunit</project>
 		<project>encog</project>
 		<project>soccer-core</project>
-=======
-		<project>soccer-core</project>
-		<project>loris-learning</project>
-		<project>htmlunit</project>
-		<project>encog</project>
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 	</projects>
 	<buildSpec>
 		<buildCommand>

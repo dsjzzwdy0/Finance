@@ -1,13 +1,9 @@
 package com.loris.lottery.aop;
 
-<<<<<<< HEAD
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-=======
-import javax.servlet.http.HttpServletRequest;
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 
 import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
@@ -49,11 +45,7 @@ public class BaseAspect
 	 * @date 2016年11月23日 下午5:10
 	 * @param joinPoint
 	 */
-<<<<<<< HEAD
 	public void before(JoinPoint joinPoint) throws IOException
-=======
-	public void before(JoinPoint joinPoint)
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 	{
 		// System.out.println("被拦截方法调用之后调用此方法，输出此语句");
 		//request = getHttpServletRequest();
@@ -114,7 +106,6 @@ public class BaseAspect
 	{
 		return ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
 	}
-<<<<<<< HEAD
 	
 	/**
 	 * @Description: 获取Response
@@ -127,8 +118,6 @@ public class BaseAspect
 	{
 		return ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getResponse();
 	}
-=======
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 
 
 	public long getStartTimeMillis()

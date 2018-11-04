@@ -13,11 +13,7 @@ function formatOpValueColumn(doc, match, op, corp, first)
 {
 	var st = first ? 0 : 3;
 	var idx = getOpMaxProbIndex(op, first);
-<<<<<<< HEAD
 	//var r = doc.getMatchRelation(match, corp, first);
-=======
-	var r = doc.getMatchRelation(match, corp, first);
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 	var relateIndex = doc.getMatchRelationIndex(match, corp, first);
 	var relateClass = relateIndex >= 0 ? getRelationClass(relateIndex) : '';
 	

@@ -313,7 +313,6 @@ SetPageValue = function(page)
 	}
 }
 
-<<<<<<< HEAD
 function formatDuring(mss) {
 	var days = parseInt(mss / (1000 * 60 * 60 * 24));
 	var hours = parseInt((mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -334,8 +333,6 @@ function getTimeInfo(left, interval)
 	return '';
 }
 
-=======
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 //设置当前状态信息
 SetCurrentStatus= function(page)
 {
@@ -371,10 +368,7 @@ SetCurrentStatus= function(page)
 		break;
 	case 2:
 		statusInfo = '正在下载数据';
-<<<<<<< HEAD
 		info += getTimeInfo(left, page.interval);
-=======
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 		break;
 	case 3:
 		statusInfo = '已经停止数据下载'

@@ -29,11 +29,7 @@ import com.loris.soccer.analysis.data.MatchDoc;
 import com.loris.soccer.analysis.data.MatchOdds;
 import com.loris.soccer.analysis.pool.MatchDocLoader;
 import com.loris.soccer.analysis.pool.MatchOddsPool;
-<<<<<<< HEAD
 import com.loris.soccer.analysis.util.PossionUtil;
-=======
-import com.loris.soccer.analysis.util.HandicapUtil;
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 import com.loris.soccer.analysis.util.LeagueDataUtil;
 import com.loris.soccer.analysis.util.OddsUtil;
 import com.loris.soccer.analysis.util.TeamHistoryCalculator;
@@ -246,11 +242,7 @@ public class SoccerApp
 		
 		double lamda1 = 1.71;
 		double lamda2 = 2.14;
-<<<<<<< HEAD
 		double[] prob = PossionUtil.computeOddsProb(lamda1, lamda2);
-=======
-		double[] prob = HandicapUtil.computeOddsProb(lamda1, lamda2);
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 		logger.info(Arrays.toString(prob));
 	}
 	

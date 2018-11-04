@@ -7,11 +7,7 @@
 
 <div class="minibars">
 	<span class="location">当前位置：</span>
-<<<<<<< HEAD
 	<a href="http://www.zgzcw.com/">东方足彩网</a>
-=======
-	<a href="http://www.zgzcw.com/">中国足彩网</a>
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 	<span class="dotline">&gt;</span>
 	<a ref="http://saishi.zgzcw.com/soccer">赛事中心</a> 
 	<span class="dotline">&gt;</span>

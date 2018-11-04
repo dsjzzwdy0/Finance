@@ -23,11 +23,7 @@
 					title="欧赔数据关联分析" class="<c:if test="${page=='anarel'}">cur</c:if>">关联分析
 				</a>
 			</li>
-<<<<<<< HEAD
 			<li class="n_2"><a href="<c:if test="${page=='anaoy'}">javascript:void(0);</c:if><c:if test="${page!='anaoy'}">analysis?type=anaoy<c:if test="${not empty lid}">&lid=${lid}</c:if></c:if>" title="战绩情况对比" class="<c:if test="${page=='anaoy'}">cur</c:if>">战绩情况对比</a></li>
-=======
-			<li class="n_2"><a href="<c:if test="${page=='anaoy'}">javascript:void(0);</c:if><c:if test="${page!='anaoy'}">analysis?type=anaoy<c:if test="${not empty lid}">&lid=${lid}</c:if></c:if>" title="欧亚对比" class="<c:if test="${page=='anaoy'}">cur</c:if>">欧亚对比</a></li>
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 			<li class="n_3"><a href="<c:if test="${page=='anaop'}">javascript:void(0);</c:if><c:if test="${page!='anaop'}">analysis?type=anaop<c:if test="${not empty lid}">&lid=${lid}</c:if></c:if>" title="欧赔对比" class="<c:if test="${page=='anaop'}">cur</c:if>">欧赔对比</a></li>
 			<li class="n_4"><a href="<c:if test="${page=='anayp'}">javascript:void(0);</c:if><c:if test="${page!='anayp'}">analysis?type=anayp<c:if test="${not empty lid}">&lid=${lid}</c:if></c:if>" title="亚盘对比" class="<c:if test="${page=='anayp'}">cur</c:if>">亚盘对比</a></li>
 			<li class="n_5"><a href="<c:if test="${page=='anafc'}">javascript:void(0);</c:if><c:if test="${page!='anafc'}">analysis?type=anafc<c:if test="${not empty lid}">&lid=${lid}</c:if></c:if>" title="欧赔方差分析" class="<c:if test="${page=='anafc'}">cur</c:if>">方差分析</a></li>
@@ -81,11 +77,7 @@
 		</div>
 		
 		<div id="newToolbar" class="newToolBar" style="display: none; float: right; margin-right: 10px;">
-<<<<<<< HEAD
 			<label for="sameLeague" class="check_same_league"><input class="sel_list" id="sameLeague" style="margin-right: 4px;" type="checkbox" checked="true" />同联赛内比较</label>
-=======
-			<label for="sameLeague" class="check_same_league"><input id="sameLeague" style="margin-right: 4px;" type="checkbox" checked="true" />同联赛内比较</label>
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 			<select id="oddsType" class="sel_list" style="width:70px;">
 				<option value="start" selected>初盘</option>
 				<option value="now">即时</option>
@@ -96,13 +88,8 @@
 			</select>
 			<select id="threshold" class="sel_list" title="关联差值间隔" style="width: 70px; margin-right: 15px;" data-style="btn-warning">
 				<option value="0.01">0.01</option>
-<<<<<<< HEAD
 				<option value="0.02" selected>0.02</option>
 				<option value="0.03">0.03</option>
-=======
-				<option value="0.02">0.02</option>
-				<option value="0.03" selected>0.03</option>
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 				<option value="0.04">0.04</option>
 				<option value="0.05">0.05</option>
 				<option value="0.08">0.08</option>
@@ -112,7 +99,6 @@
 			<input type="button" class="pl-topbtn" id="btnReUnion" value="重 置"/>		
 		</div>
 	</div>
-<<<<<<< HEAD
 </div>
 <script type="text/javascript">
 var stateListeners = new StateListeners();
@@ -265,6 +251,3 @@ $(function(){
     })
 })
 </script>
-=======
-</div>
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855

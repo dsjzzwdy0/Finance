@@ -1055,7 +1055,6 @@ $.isNullOrEmpty = function (obj) {
         return false;
     }
 }
-<<<<<<< HEAD
 $.isNotNullOrEmpty = function (obj) {
 	return !$.isNullOrEmpty(obj);
 }
@@ -1070,12 +1069,6 @@ $.checkNumber = function(theObj){
 String.prototype.trim = function(){
 	return this.replace(/(^\s+)|(\s+$)/g,'');
 }
-=======
-$.isNotNullOrEmpty = function(obj)
-{
-	return !$.isNullOrEmpty(obj);
-}
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 $.arrayClone = function (data) {
     return $.map(data, function (obj) {
         return $.extend(true, {}, obj);

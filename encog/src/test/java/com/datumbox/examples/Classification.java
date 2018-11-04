@@ -64,10 +64,6 @@ public class Classification {
         Dataframe data;
         try (Reader fileReader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(filePath)),
         		"UTF-8"))) {
-<<<<<<< HEAD
-        	
-=======
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
             LinkedHashMap<String, TypeInference.DataType> headerDataTypes = new LinkedHashMap<>();
             headerDataTypes.put("age", TypeInference.DataType.NUMERICAL);
             //headerDataTypes.put("workclass", TypeInference.DataType.CATEGORICAL);

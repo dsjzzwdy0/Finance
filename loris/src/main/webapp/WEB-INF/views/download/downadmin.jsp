@@ -169,11 +169,6 @@
 }
 </style>
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 <div class="container-wrapper">
 	<div class="minibars">
 		<div class="nav-bar">

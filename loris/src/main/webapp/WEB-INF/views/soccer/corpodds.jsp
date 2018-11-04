@@ -1,9 +1,4 @@
-<<<<<<< HEAD
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
-=======
-<%@ page language="java" contentType="text/html; charset=utf-8"
-    pageEncoding="utf-8"%>
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <link rel="stylesheet" type="text/css" href="../content/css/soccer/bfyc.css" />
 <style type="text/css">

@@ -54,13 +54,9 @@ public class WebPage extends SimpleWebPage
 	@TableField(exist=false)
 	protected Map<String, String> headers;
 	
-<<<<<<< HEAD
 	/** The priority value, if the priority is bigger, then the web page will be downloaded first.  */
 	@TableField(exist=false)
 	protected int priority = 0;
-	
-=======
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 	/** check if there are more header parameter. */
 	@TableField(exist=false)
 	protected boolean hasMoreHeader = false;
@@ -130,8 +126,7 @@ public class WebPage extends SimpleWebPage
 	{
 		this.param = param;
 	}
-	
-<<<<<<< HEAD
+
 	public int getPriority()
 	{
 		return priority;
@@ -142,8 +137,6 @@ public class WebPage extends SimpleWebPage
 		this.priority = priority;
 	}
 
-=======
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 	//请求数据示例
 	public Map<String, String> getParams()
 	{

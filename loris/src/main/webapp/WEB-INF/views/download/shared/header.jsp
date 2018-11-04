@@ -23,10 +23,7 @@
 						<a href="http://www.500.com/" target="_blank">500彩票网</a>
 					</div>
 				</div>
-<<<<<<< HEAD
 				<!-- 
-=======
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 				<div class="navlist_box ">
 					<span>股票网站<em class="navIcon icon_down_sm"></em></span>
 					<div class="tc_xiala top_short">
@@ -39,10 +36,7 @@
 						<a href="http://www.szse.cn/">深交所官网</a>					
 					</div>
 				</div>
-<<<<<<< HEAD
 				 -->
-=======
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 				<div class="navlist_box bdrn">
 					<span><a href="login.html">登录</a></span>
 				</div>
@@ -98,11 +92,7 @@
 					</div>
 				</div>
 				</c:forEach>
-<<<<<<< HEAD
 				<!-- 
-=======
-				
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 				<div class="navlist_box" slide="a">
 					<span><a href="#">下载配置<em class="navIcon icon_triangle"></em></a></span>
 					<div class="tc_xiala">
@@ -111,11 +101,7 @@
 						<a href="../soccer/usercorp" target="_blank">博彩公司设置</a>
 					</div>
 				</div>
-<<<<<<< HEAD
 				 -->
-=======
-				
->>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 				<!-- 
 				<div class="navlist_box" slide="a">
 					<span><a href="#">股票数据下载<em class="navIcon icon_triangle"></em></a></span>
