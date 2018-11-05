@@ -235,7 +235,7 @@ public interface NumberUtil
 		}
 		catch(Exception e)
 		{
-			return 0.0;
+			return Double.NaN;
 		}
 	}
 	

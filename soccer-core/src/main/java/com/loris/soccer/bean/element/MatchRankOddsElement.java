@@ -1,7 +1,7 @@
 package com.loris.soccer.bean.element;
 
 import com.loris.soccer.analysis.data.MatchOdds;
-import com.loris.soccer.analysis.util.HandicapUtil;
+import com.loris.soccer.analysis.util.PossionUtil;
 import com.loris.soccer.analysis.util.OddsUtil;
 import com.loris.soccer.bean.data.view.RankInfo;
 
@@ -47,8 +47,8 @@ public class MatchRankOddsElement extends MatchOddsElement
 		double homeavg = homeRankInfo.getGoal() * 1.0 / homeRankInfo.getGamenum();
 		double clientavg = clientRankInfo.getGoal() * 1.0 / clientRankInfo.getGamenum();
 		
-		double[] probs = HandicapUtil.computeOddsProb(homeavg, clientavg);
-		
+		double[] probs = PossionUtil.computeOddsProb(homeavg, clientavg);
+
 		OddsElement element1 = OddsUtil.createOpItem(probs);
 		this.addOpItem(element1);
 	}

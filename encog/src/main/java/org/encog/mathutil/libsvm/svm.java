@@ -1994,8 +1994,8 @@ public class svm {
 			model.nr_class = 2;
 			model.label = null;
 			model.nSV = null;
-			model.probA = null; 
-			model.probB = null;
+			model.probA = null; model.probB = null;
+
 			model.sv_coef = new double[1][];
 
 			if(param.probability == 1 &&
@@ -2361,12 +2361,12 @@ public class svm {
 			double[] sv_coef = model.sv_coef[0];
 			double sum = 0;
 			for(i=0;i<model.l;i++)
-				sum += sv_coef[i] * Kernel.k_function(x, model.SV[i], model.param);
+				sum += sv_coef[i] * Kernel.k_function(x,model.SV[i],model.param);
 			sum -= model.rho[0];
 			dec_values[0] = sum;
 
 			if(model.param.svm_type == svm_parameter.ONE_CLASS)
-				return (sum>0) ? 1 : -1;
+				return (sum>0)?1:-1;
 			else
 				return sum;
 		}
@@ -2377,11 +2377,12 @@ public class svm {
 		
 			double[] kvalue = new double[l];
 			for(i=0;i<l;i++)
-				kvalue[i] = Kernel.k_function(x, model.SV[i], model.param);
+				kvalue[i] = Kernel.k_function(x,model.SV[i],model.param);
 
 			int[] start = new int[nr_class];
 			start[0] = 0;
 			for(i=1;i<nr_class;i++)
+				start[i] = start[i-1]+model.nSV[i-1];
 				start[i] = start[i-1] + model.nSV[i-1];
 
 			int[] vote = new int[nr_class];

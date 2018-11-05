@@ -169,8 +169,6 @@
 }
 </style>
 
-
-
 <div class="container-wrapper">
 	<div class="minibars">
 		<div class="nav-bar">

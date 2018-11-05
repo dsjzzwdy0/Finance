@@ -1,17 +1,19 @@
 package com.loris.base.bean;
 
-import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
-import com.baomidou.mybatisplus.enums.IdType;
+import com.loris.base.bean.entity.UUIDEntity;
 
 @TableName("sys_user")
-public class User
+public class User extends UUIDEntity implements Cloneable
 {
-	@TableId(type=IdType.INPUT)
-	private String id;
+	/***/
+	private static final long serialVersionUID = 1L;
+
 	private String realname;
 	private String username;
-	
+	private String password;
+	private String email;
+	private String usertype;
 	
 	public String getId()
 	{
@@ -37,5 +39,40 @@ public class User
 	{
 		this.username = username;
 	}
-
+	
+	public String getPassword()
+	{
+		return password;
+	}
+	public void setPassword(String password)
+	{
+		this.password = password;
+	}
+	public String getEmail()
+	{
+		return email;
+	}
+	public void setEmail(String email)
+	{
+		this.email = email;
+	}
+	public String getUsertype()
+	{
+		return usertype;
+	}
+	public void setUsertype(String usertype)
+	{
+		this.usertype = usertype;
+	}
+	@Override
+	public String toString()
+	{
+		return "User [id=" + id + ", realname=" + realname + ", username=" + username + ", password=" + password
+				+ ", email=" + email + "]";
+	}
+	
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }

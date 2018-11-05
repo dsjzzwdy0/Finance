@@ -19,7 +19,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+import com.loris.base.bean.User;
 import com.loris.base.util.DateUtil;
+import com.loris.lottery.util.WebConstants;
 import com.loris.soccer.analysis.util.PerformanceUtil;
 import com.loris.soccer.bean.data.table.Logo;
 import com.loris.soccer.bean.data.table.league.League;
@@ -38,7 +40,7 @@ import com.loris.soccer.repository.SoccerManager;
 
 @Controller
 @RequestMapping("/soccer")
-public class SoccerController
+public class SoccerController extends BaseController
 {	
 	private static Logger logger = Logger.getLogger(SoccerManager.class);
 	
@@ -95,6 +97,19 @@ public class SoccerController
 	}
 	
 	/**
+	 * 加入用户信息
+	 * @param view
+	 */
+	protected void setUserObject(ModelAndView view)
+	{
+		User user = (User)request.getSession().getAttribute(WebConstants.CURRENT_USER);
+		if(user != null)
+		{
+			view.addObject("user", user);
+		}
+	}
+	
+	/**
 	 * 系统主页面
 	 * @return
 	 */
@@ -130,7 +145,10 @@ public class SoccerController
 		view.addObject("page", MATCH_PAGE_TYPES[index][0]);
 		view.addObject("title", MATCH_PAGE_TYPES[index][1]);
 		view.addObject("match", match);
-		view.addObject("rank", rankElement);		
+		view.addObject("rank", rankElement);
+		
+		setUserObject(view);
+		
 		return view;
 	}
 	
@@ -150,7 +168,9 @@ public class SoccerController
 		view.addObject("page", ANALYSIS_PAGE_TYPES[index][0]);
 		view.addObject("title", ANALYSIS_PAGE_TYPES[index][1]);
 		view.addObject("issues", getLatestIssues(10));		
-		view.addObject("settings", settings);		
+		view.addObject("settings", settings);	
+
+		setUserObject(view);
 		return view;
 	}
 	
@@ -197,7 +217,9 @@ public class SoccerController
 		view.addObject("title", LEAGUE_PAGE_TYPES[index][1]);
 		view.addObject("league", league);
 		view.addObject("round", round);
-		view.addObject("settings", settings);	
+		view.addObject("settings", settings);
+
+		setUserObject(view);
 		//view.addObject("rounds", rounds);
 		return view;
 	}
@@ -635,6 +657,19 @@ public class SoccerController
 	public ModelAndView getSfcPage()
 	{
 		ModelAndView view = new ModelAndView("soccer/sfc_y");
+		return view;
+	}
+	
+	/**
+	 * 理论值的计算
+	 * @param homevalue
+	 * @param clientvalue
+	 * @return
+	 */
+	@RequestMapping("/computeodds")
+	public ModelAndView computeOdds()
+	{
+		ModelAndView view = new ModelAndView("computeodds.soccer");
 		return view;
 	}
 	

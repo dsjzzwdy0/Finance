@@ -109,8 +109,26 @@ public class BasicManager
 	public User getUser(String name)
 	{
 		EntityWrapper<User> ew = new EntityWrapper<>();
-		ew.eq("name", name);
+		ew.eq("username", name);
 		return userService.selectOne(ew);
+	}
+	
+	/**
+	 * 注册用户或更新用户信息
+	 * @param user
+	 * @return
+	 */
+	public boolean addOrUpdateUser(User user)
+	{
+		if(StringUtils.isEmpty(user.getId()))
+		{
+			user.create();
+			return userService.insert(user);
+		}
+		else
+		{
+			return userService.updateById(user);
+		}
 	}
 	
 	/**
@@ -131,5 +149,15 @@ public class BasicManager
 	public boolean addLog(Log log)
 	{
 		return logService.insert(log);
+	}
+	
+	/**
+	 * 用户列表
+	 * @return 用户列表
+	 */
+	public List<User> getUserList()
+	{
+		EntityWrapper<User> ew = new EntityWrapper<>();
+		return userService.selectList(ew);
 	}
 }

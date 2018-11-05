@@ -1055,9 +1055,19 @@ $.isNullOrEmpty = function (obj) {
         return false;
     }
 }
-$.isNotNullOrEmpty = function(obj)
-{
+$.isNotNullOrEmpty = function (obj) {
 	return !$.isNullOrEmpty(obj);
+}
+//验证字符串是否是数字
+$.checkNumber = function(theObj){
+  var reg = /^[0-9]+.?[0-9]*$/;
+  if (reg.test(theObj)) {
+    return true;
+  }
+  return false;
+}
+String.prototype.trim = function(){
+	return this.replace(/(^\s+)|(\s+$)/g,'');
 }
 $.arrayClone = function (data) {
     return $.map(data, function (obj) {

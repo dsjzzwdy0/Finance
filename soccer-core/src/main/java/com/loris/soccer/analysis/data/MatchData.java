@@ -7,13 +7,11 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.loris.soccer.analysis.util.OddsUtil;
 import com.loris.soccer.analysis.util.PerformanceUtil;
 import com.loris.soccer.bean.data.table.league.Match;
 import com.loris.soccer.bean.data.table.odds.Op;
 import com.loris.soccer.bean.data.table.odds.Yp;
 import com.loris.soccer.bean.element.MatchSynthElement;
-import com.loris.soccer.bean.element.OddsElement;
 import com.loris.soccer.bean.item.IssueMatch;
 import com.loris.soccer.bean.item.PerformItem;
 import com.loris.soccer.bean.type.MatchTeamType;
@@ -75,21 +73,25 @@ public class MatchData extends IssueMatch
 	 */
 	public MatchSynthElement createIssueMatchSynthElement()
 	{
-		MatchSynthElement item = new MatchSynthElement(this);		
+		MatchOdds odds = new MatchOdds(this);	
 		
 		//添加OP记录数据
 		for (Op op : opList)
 		{
-			OddsElement opItem = OddsUtil.createOpItem(op, 0);
-			item.addOpItem(opItem);
+			//OddsElement opItem = OddsUtil.createOpItem(op, 0);
+			//odds.addOpItem(opItem);
+			odds.addOp(op);
 		}
 		
 		for (Yp yp : ypList)
 		{
-			OddsElement ypItem = OddsUtil.createYpItem(yp, 0);
-			item.addYpItem(ypItem);
+			odds.addYp(yp);
+			//OddsElement ypItem = OddsUtil.createYpItem(yp, 0);
+			//odds.addYpItem(ypItem);
 		}
 		
+
+		MatchSynthElement item = new MatchSynthElement(odds);	
 		//战绩数据
 		try
 		{

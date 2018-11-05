@@ -87,6 +87,7 @@
 		</page>
 	</webpages>
 	<downloaders>
+		<!-- 
 	    <category name="股票数据下载" id="1">
 		    <webpagesetting id="gpdate" encoding="GBK">
 		        <name>股票日交易数据</name>
@@ -109,7 +110,7 @@
 		        <description>从sina网站上下载股票日交易记录信息</description>
 		    </webpagesetting>
 	    </category>
-	    
+	     -->
 	    <category name="足彩数据下载" id="2">
 	    	<webpagesetting id="issue" encoding="UTF-8">
 		        <name>当日足彩数据</name>

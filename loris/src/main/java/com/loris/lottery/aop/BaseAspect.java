@@ -1,6 +1,9 @@
 package com.loris.lottery.aop;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
@@ -42,7 +45,7 @@ public class BaseAspect
 	 * @date 2016年11月23日 下午5:10
 	 * @param joinPoint
 	 */
-	public void before(JoinPoint joinPoint)
+	public void before(JoinPoint joinPoint) throws IOException
 	{
 		// System.out.println("被拦截方法调用之后调用此方法，输出此语句");
 		//request = getHttpServletRequest();
@@ -102,6 +105,18 @@ public class BaseAspect
 	public HttpServletRequest getHttpServletRequest()
 	{
 		return ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+	}
+	
+	/**
+	 * @Description: 获取Response
+	 * @author fei.lei
+	 * @date 2016年11月23日 下午5:10
+	 * @param
+	 * @return HttpServletRequest
+	 */
+	public HttpServletResponse getHttpServletResponse()
+	{
+		return ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getResponse();
 	}
 
 

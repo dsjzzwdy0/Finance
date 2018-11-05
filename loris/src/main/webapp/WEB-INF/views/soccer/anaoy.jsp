@@ -3,11 +3,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page import="com.loris.soccer.analysis.util.IssueMatchUtil" %>
 <%@page import="com.baomidou.mybatisplus.toolkit.StringUtils" %>
-
-<link rel="stylesheet" type="text/css" href="../content/css/soccer/datacenter.css" />
 <%
     String issue = request.getParameter("issue");
 	String type = request.getParameter("type");
+	String sid = request.getParameter("sid");
 	
 	if(StringUtils.isEmpty(issue))
 	{
@@ -15,10 +14,17 @@
 	}
 	if(StringUtils.isEmpty(type))
 	{
-		type = "jc";
+		type = "bd";
+	}
+	if(StringUtils.isEmpty(sid))
+	{
+		sid = "dbf4bb31-4024-4c2c-a7d7-73e0049d45c2";
 	}
 %>
 
+<link rel="stylesheet" type="text/css" href="../content/css/soccer/datacenter.css" />
+<link rel="stylesheet" type="text/css" href="../content/scripts/soccer/soccer-table.css" />
+<script type="text/javascript" src="../content/scripts/soccer/soccer-table.js"></script>
 
 <div id="content" class="container_wrapper">
 	<%@include file="./analysis/anatoolbar.jsp"%>
@@ -32,359 +38,149 @@
 </div>
 
 <script type="text/javascript">
-var sourceOkooo = "okooo";
-var sourceZgzcw = "zgzcw";
 var url = "../soccerdata/getMatchItems";
+
+//系统参数
 var issue = "<%=issue%>";
 var type = "<%=type%>";
-var refresh = false;
+var sid = "<%=sid%>"
 
-function updateData(request) 
+//基础数据
+var table = null;
+
+var options = { 
+	refresh: false,	
+	sorter: null,
+	relator: null,
+	rows: null,
+	results: null,
+	columns: null,
+	setting: null,
+	first: true,
+	filter: null,
+	clear: function()
+	{
+		this.columns = null;
+		this.rows = null;
+		this.setting = null;
+	},
+	postshow: function()
+	{
+		var total = 0;
+		var shownum = 0;
+		if($.isNotNullOrEmpty(this.rows))
+		{
+			total = this.rows.length;
+		}
+		if($.isNotNullOrEmpty(this.results))
+		{
+			shownum = this.results.length;
+		}
+		$('#matchNumAll').text(total);
+		$('#matchNumHide').text(total - shownum);
+	}
+};
+
+//用于获得配置数据
+function createMatchOddsTable(conf)
 {
-	$.ajax({
+	sid = conf.sid;
+	issue = conf.issue;
+	type = conf.type;
+	var relator = new Relator(conf.threshold, conf.sameLeague, false);
+	var sorter = new MatchOddsFieldSorter('ordinary', true);
+	var source = {
 		type: "GET",
 		url: url,
 		contentType : "application/json;charset=utf-8",
 		dataType : "json",
 		data : {
-			"issue" : issue,
-			"type" : type,
-			"refresh" : refresh,
+			"sid": sid,
+			"issue": issue,
+			"type": type,
 		},
 		jsonp:'callback',
-        success : function (msg)
-        {			
-			request.success({
-                row : msg.data
-            });
-            $('#gridTable').bootstrapTable('load', msg.data);
-        },
-		error:function(){
-			layer.msg("错误");
+		success: null,
+		error: null,
+		presuccess: function(json, soccerTable)
+		{
+			if ($.isNotNullOrEmpty(json.data.setting)) {
+				var corpSetting = new CorpSetting(json.data.setting);
+				soccerTable.options.setting = corpSetting;
+				soccerTable.options.columns = new SoccerTableColumns().createPerformColumns(corpSetting);
+			}
+			if ($.isNotNullOrEmpty(json.data.matches)) {
+				soccerTable.options.rows = json.data.matches;
+				initLeaguePanel(json.data.matches);
+			}
 		}
-    });
+	}	
+	options.source = source;
+	options.relator = relator;
+	options.sorter = sorter;
+	table = new SoccerTable(options);
+	$('#gridTable').soccerTable(table);
 }
 
-function initTable() 
+function stateChange(state, source, conf)
 {
-	//先销毁表格  
-	$('#gridTable').bootstrapTable('destroy');
-	$("#gridTable").bootstrapTable({ 
-		ajax: updateData,
-		striped: false, //表格显示条纹 
-		pagination: false, //启动分页 
-		search: false, //是否启用查询 
-		showColumns: false, //显示下拉框勾选要显示的列 
-		showRefresh: false, //显示刷新按钮 
-		sidePagination: "server", //表示服务端请求 
-		//toolbar: "#toolbar",
-		//设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder 
-		//设置为limit可以获取limit, offset, search, sort, order 
-		queryParamsType : "undefined",
-		columns: [
-			[{
-				field: 'ordinary',
-				title: '序号',
-				rowspan: 2,
-				valign: 'middle',
-				formatter: function(value, row, index)
-				{
-					return value;
-				}
-			},
-			{
-				field: "leaguename",
-				title: "比赛",
-				rowspan: 2,
-				valign: 'middle',
-				formatter: function(value, row, index)
-				{
-					return value;
-				}
-			},
-			{
-	        	field: 'homename',
-	         	title: '球队',
-	         	rowspan: 2,
-	         	valign: 'middle',
-	         	formatter: function(value, row, index)
-	         	{
-	         		var str = '<div class="team"><a class="teamInfo left" tid="' + row.homeid 
-	         		str	+= '" href="#" onclick="showTeamInfo(this, ' + row.homeid + ')" title="'; 
-	         		str	+= row.homename + '">';
-	         		str += $.isNullOrEmpty(row.homerank) ? '' : '[' + row.homerank + ']';
-	         		str += row.homename 
-	         		str	+= '</a> <div class="vsclass" > vs </div> <a class="teamInfo right" tid="' 
-	         		str += row.clientid +'" href="#" onclick="showTeamInfo(this, ' + row.homeid + ')" title="';
-	         		str	+= row.clientname + '">' + row.clientname; 
-	         		str += $.isNullOrEmpty(row.clientrank) ? '' : '[' + row.clientrank + ']';
-	         		str += '</a></div>';
-	         		return str;
-	         	},
-	     	},
-	     	{
-	        	field: 'matchtime',
-	        	title: '比赛时间',
-	        	valign: 'middle',
-	        	valign: 'middle',
-	        	rowspan: 2,
-	        	formatter: function(value, row, index)
-				{
-	        		var t = formatDate(value, 'hh:mm');	        		
-					return '<div class="teamInfo" title="' + value + '">' + t + "</div>";
-				}
-	    	},
-	     	{
-	        	title: '欧赔数据',
-	        	colspan: 3,
-	        	valign: 'middle',
-	    	},
-	     	{
-	        	title: '亚盘数据',
-	        	colspan: 3,
-	        	valign: 'middle',
-	    	},
-	    	{
-				field: "homePerf",
-				title: "主队战绩",
-				rowspan: 2,
-				valign: 'middle',
-				formatter: function(value, row, index)
-				{
-					
-					return '<div class="oddsvalue" title="' + performInfo(value) + '">' +
-						($.isNullOrEmpty(value) ? '' : value.score) + "</div>";
-				}
-			},
-	    	{
-				field: "clientPerf",
-				title: "客队战绩",
-				rowspan: 2,
-				valign: 'middle',
-				formatter: function(value, row, index)
-				{					
-					return '<div class="oddsvalue" title="' + performInfo(value) + '">' +
-						($.isNullOrEmpty(value) ? '' : value.score + "</div>");
-				}
-			},
-			{
-				field: "lastMatch",
-				title: "最近交战",
-				rowspan: 2,
-				valign: 'middle',
-				formatter: function(value, row, index)
-				{					
-					return '<div class="oddsvalue" title="' + matchInfo(row) + '">' +
-						($.isNullOrEmpty(value) ? '无' : formatDate(value.matchtime, 'yy-MM-dd'))
-						+ "</div>";
-				}
-			},
-	    	{
-	        	field: 'mid',
-	        	title: '详细信息',
-	        	valign: 'middle',
-	        	rowspan: 2,
-	        	formatter: function(value, row, index) {
-	        		var mid = value;
-			    	var html = '<a class="analysis" href="bjop?mid=' + mid + '" target="blank">欧</a>';
-			    	html += '<a class="analysis" href="ypdb?mid=' + mid + '" target="blank">亚</a>';
-			    	html += '<a class="analysis" href="bfyc?mid=' + mid + '" target="blank">析</a>';
-	        		return html;
-				},
-	    	}
-	    	],
-    		[{
-	        	field: 'opItems',
-	        	title: '平均欧赔',
-	        	valign: 'middle',
-	        	formatter: function(value, row, index) {
-			    	var gid = "0";
-			    	return formatOpValues(value.items, gid, sourceZgzcw);
-				},
-	    	},
-	     	{
-	        	field: 'opItems',
-	        	title: '澳门',
-	        	valign: 'middle',
-	        	formatter: function(value, row, index) {
-			    	var gid = "80";
-			    	return formatOpValues(value.items, gid, sourceZgzcw);
-				},
-	    	},
-	     	{
-	        	field: 'opItems',
-	        	title: '威廉希尔',
-	        	valign: 'middle',
-	        	formatter: function(value, row, index) {
-			    	var gid = "115";
-			    	return formatOpValues(value.items, gid, sourceZgzcw);
-				},
-	    	},
-	     	{
-	        	field: 'ypItems',
-	        	title: '澳门',
-	        	valign: 'middle',
-	        	formatter: function(value, row, index) {
-			    	var gid = "1";
-			    	return formatYpValues(value.items, gid, sourceZgzcw);
-				},
-	    	},
-	     	{
-	        	field: 'ypItems',
-	        	title: 'Interwetten',
-	        	valign: 'middle',
-	        	formatter: function(value, row, index) {
-			    	var gid = "43";
-			    	return formatYpValues(value.items, gid, sourceOkooo);
-				},
-	    	},
-	     	{
-	        	field: 'ypItems',
-	        	title: '金宝博(188bet)',
-	        	valign: 'middle',
-	        	formatter: function(value, row, index) {
-			    	var gid = "322";
-			    	return formatYpValues(value.items, gid, sourceOkooo);
-				},
-	    	}]
-     	],
-		onLoadSuccess: function(){ //加载成功时执行 
-		    layer.msg("加载成功");
-			//$("#cusTable").TabStyle();
-		    
-		}, 
-		onLoadError: function(){ //加载失败时执行 
-			layer.msg("加载数据失败", {time : 1500, icon : 2}); 
-		} 
+	options.first = conf.first;
+	if($.isNotNullOrEmpty(options.relator))
+	{
+		options.relator.threshold = conf.threshold;
+		options.relator.sameLeague = conf.sameLeague;
+	}
+	var sourceId = $(source).attr('id');
+	if(sourceId == 'settingSel' ||
+			sourceId == 'typeSel' ||
+			sourceId == 'issueSel')
+	{
+		options.clear();
+		createMatchOddsTable(conf);
+	}
+	else
+	{		
+		var filter = options.filter;
+		if($.isNullOrEmpty(filter))
+		{
+			filter = new FieldFilter('lid', [], true);
+			options.filter = filter;
+		}
+		filter.clear();
+		if($.isNotNullOrEmpty(conf.lids))
+		{
+			filter.setValues(conf.lids);
+		}		
+		table.update();
+	}
+}
+
+$(document).ready(function() {
+	showNewToolBar();
+	showSettingSel();
+	
+	if($.isNotNullOrEmpty(sid))
+	{
+		$('#settingSel').val(sid);
+	}
+	if($.isNotNullOrEmpty(issue))
+	{
+		$('#issueSel').val(issue);
+	}
+
+	var conf = getConfValue();
+	createMatchOddsTable(conf);	
+	stateListeners.add(stateChange);
+	
+	$('#btnRefresh').on('click', function(){
+		$('#gridTable').soccerTable('destroy');
 	});
-}
 
-function formatOpValues(opitems, gid, source)
-{
-	var len = opitems.length;
-	for(var i = 0; i < len; i ++)
-	{
-		var op = opitems[i];
-		if(op.gid == gid && op.source == source)
-		{
-			if($.isNullOrEmpty(op.values))
-			{
-				return '无';
-			}
-			var html = '<div class="oddsvalue">' + op.values[0].toFixed(2) + '</div>';
-			html += '<div class="oddsvalue">' + op.values[1].toFixed(2) + '</div>';
-			html += '<div class="oddsvalue">' + op.values[2].toFixed(2) + '</div>';
-			return html;
-		}
-	}
-	return '无';
-}
-
-function formatYpValues(ypitems, gid, source)
-{
-	var len = ypitems.length;
-	for(var i = 0; i < len; i ++)
-	{
-		var yp = ypitems[i];
-		if(yp.gid == gid && yp.source == source)
-		{
-			if($.isNullOrEmpty(yp.values))
-			{
-				return '无';
-			}
-			
-			var html = '';
-			if(source == sourceZgzcw)
-			{
-				html = '<div class="oddsvalue" title="来源：' + source + '">' + yp.values[0].toFixed(2) + '</div>';
-				html += '<div class="handicap" title="' + yp.handicap + '">' + getHandicapName(yp.values[1]) + '</div>';
-				html += '<div class="oddsvalue" title="来源：' + source + '">' + yp.values[2].toFixed(2) + '</div>';
-			}
-			else
-			{
-				html = '<div class="oddsvalue" title="来源：' + source + '">' + (yp.values[0] - 1.0).toFixed(2) + '</div>';
-				html += '<div class="handicap" title="' + yp.handicap + '">' + getHandicapName(yp.values[1]) + '</div>';
-				html += '<div class="oddsvalue" title="来源：' + source + '">' + (yp.values[2] - 1.0).toFixed(2) + '</div>';
-			}			
-			return html;
-		}
-	}
-	return '无';
-}
-
-function matchInfo(row)
-{
-	var match = row;
-	var lastMatch = row.lastMatch;	
-	if($.isNullOrEmpty(lastMatch))
-	{
-		return '无';
-	}
-	
-	var info = (match.homeid == lastMatch.homeid) ? match.homename : match.clientname;
-	info += " vs " + ((match.homeid == lastMatch.homeid) ? match.clientname : match.homename);
-	info += " 比分 " + lastMatch.score;
-	return info;
-}
-
-function performInfo(perform)
-{
-	if($.isNullOrEmpty(perform))
-	{
-		return '无战绩记录';
-	}
-	var info = '最近' + perform.gamenum + '场,胜' + perform.winnum + '场,平' + perform.drawnum +
-		'场,负' + perform.losenum + '场,进' + perform.goal + '球, 失' + perform.losegoal + '球';
-	return info;
-}
-
-function btnRefresh()
-{
-	refresh = true;
-	$("#gridTable").bootstrapTable('refresh', {});
-	refresh = false;
-}
-
-function showTeamInfo(element, tid)
-{
-	layer.msg(element.innerText + ": " + tid);
-	/*dialogOpen({
-		width: "500px",
-		height: "300px",
-		url: "bjop?mid=" + tid
-	});*/
-	//$(this).webuiPopover('destroy').webuiPopover(settings);   
-}
-
-//页面初始化
-$(document).ready(function()
-{
-	$("#txtDate").val(issue);
-	$("#txtDate").datepicker({format: "yyyy-mm-dd"});
-	
-	//当点击查询按钮的时候执行  
-	$("#btnSearch").bind("click", function(){
-		issue = $("#txtDate").val();
-		var opt = {
-		    url: url,
-		    query:{
-		    	issue: issue,
-		        refresh: false
-			}
-		};			
-		$("#gridTable").bootstrapTable('refresh', opt);
-	});	
-	$("#btnRefresh").bind("click", btnRefresh);
-
-	$(document).on('click','.game_select',function(){
-		$(this).children('.pl-wind-ss').show();
-		$(this).find('ul').show();
-	}).on('mouseleave','.game_select',function(){
-		$(this).children('.pl-wind-ss').hide();
-		$(this).find('ul').hide();
-	})
-	//调用函数，初始化表格  
-	initTable();
-	//downloadData();	
+	$('#hideChosen').on('click', function(){
+		//layer.msg('Recovery');
+		sorter.asc = !sorter.asc;
+		table.options.sorter = sorter;
+		$('#gridTable').soccerTable(table);
+	});
 });
 </script>

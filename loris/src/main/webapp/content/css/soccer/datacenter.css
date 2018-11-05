@@ -3,6 +3,15 @@
 .container_wrapper {
     width: 98%;
 }
+
+.main_wrapper .gridTable th
+{
+	background-color: #008B8B;
+	font-weight: 700;
+	color: #fff;
+	white-space: nowrap;
+}
+
 .container_wrapper .gridTable td
 {
 	inline-height: 19px;
@@ -28,9 +37,9 @@
 
 .container_wrapper .gridTable th
 {
-	height: 30px;
+	height: 25px;
 	border: 1px solid #ddd;
-	line-height: 30px;
+	line-height: 25px;
 	vertical-align: middle;
 }
 

@@ -14,7 +14,6 @@
     	<put-attribute name="body" value="/WEB-INF/views/soccer/{1}.jsp" />
     </definition>
     
-    
     <definition name="download.tiles.definition">
     	<put-attribute name="meta" value="/WEB-INF/views/download/shared/basic.jsp" />
     	<put-attribute name="header" value="/WEB-INF/views/download/shared/header.jsp" />
@@ -24,5 +23,16 @@
     <definition name="*.down" extends="download.tiles.definition" 
     	template="/WEB-INF/views/download/shared/layout.jsp">
     	<put-attribute name="body" value="/WEB-INF/views/download/{1}.jsp" />
+    </definition>
+    
+    <definition name="user.tiles.definition">
+    	<put-attribute name="meta" value="/WEB-INF/views/user/shared/basic.jsp" />
+    	<put-attribute name="header" value="/WEB-INF/views/user/shared/header.jsp" />
+    	<put-attribute name="footer" value="/WEB-INF/views/user/shared/footer.jsp" />
+    </definition>
+    
+    <definition name="*.user" extends="user.tiles.definition" 
+    	template="/WEB-INF/views/user/shared/layout.jsp">
+    	<put-attribute name="body" value="/WEB-INF/views/user/{1}.jsp" />
     </definition>
 </tiles-definitions>

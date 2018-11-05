@@ -23,7 +23,7 @@
 					title="欧赔数据关联分析" class="<c:if test="${page=='anarel'}">cur</c:if>">关联分析
 				</a>
 			</li>
-			<li class="n_2"><a href="<c:if test="${page=='anaoy'}">javascript:void(0);</c:if><c:if test="${page!='anaoy'}">analysis?type=anaoy<c:if test="${not empty lid}">&lid=${lid}</c:if></c:if>" title="欧亚对比" class="<c:if test="${page=='anaoy'}">cur</c:if>">欧亚对比</a></li>
+			<li class="n_2"><a href="<c:if test="${page=='anaoy'}">javascript:void(0);</c:if><c:if test="${page!='anaoy'}">analysis?type=anaoy<c:if test="${not empty lid}">&lid=${lid}</c:if></c:if>" title="战绩情况对比" class="<c:if test="${page=='anaoy'}">cur</c:if>">战绩情况对比</a></li>
 			<li class="n_3"><a href="<c:if test="${page=='anaop'}">javascript:void(0);</c:if><c:if test="${page!='anaop'}">analysis?type=anaop<c:if test="${not empty lid}">&lid=${lid}</c:if></c:if>" title="欧赔对比" class="<c:if test="${page=='anaop'}">cur</c:if>">欧赔对比</a></li>
 			<li class="n_4"><a href="<c:if test="${page=='anayp'}">javascript:void(0);</c:if><c:if test="${page!='anayp'}">analysis?type=anayp<c:if test="${not empty lid}">&lid=${lid}</c:if></c:if>" title="亚盘对比" class="<c:if test="${page=='anayp'}">cur</c:if>">亚盘对比</a></li>
 			<li class="n_5"><a href="<c:if test="${page=='anafc'}">javascript:void(0);</c:if><c:if test="${page!='anafc'}">analysis?type=anafc<c:if test="${not empty lid}">&lid=${lid}</c:if></c:if>" title="欧赔方差分析" class="<c:if test="${page=='anafc'}">cur</c:if>">方差分析</a></li>
@@ -77,7 +77,7 @@
 		</div>
 		
 		<div id="newToolbar" class="newToolBar" style="display: none; float: right; margin-right: 10px;">
-			<label for="sameLeague" class="check_same_league"><input id="sameLeague" style="margin-right: 4px;" type="checkbox" checked="true" />同联赛内比较</label>
+			<label for="sameLeague" class="check_same_league"><input class="sel_list" id="sameLeague" style="margin-right: 4px;" type="checkbox" checked="true" />同联赛内比较</label>
 			<select id="oddsType" class="sel_list" style="width:70px;">
 				<option value="start" selected>初盘</option>
 				<option value="now">即时</option>
@@ -88,8 +88,8 @@
 			</select>
 			<select id="threshold" class="sel_list" title="关联差值间隔" style="width: 70px; margin-right: 15px;" data-style="btn-warning">
 				<option value="0.01">0.01</option>
-				<option value="0.02">0.02</option>
-				<option value="0.03" selected>0.03</option>
+				<option value="0.02" selected>0.02</option>
+				<option value="0.03">0.03</option>
 				<option value="0.04">0.04</option>
 				<option value="0.05">0.05</option>
 				<option value="0.08">0.08</option>
@@ -100,3 +100,154 @@
 		</div>
 	</div>
 </div>
+<script type="text/javascript">
+var stateListeners = new StateListeners();
+function showNewToolBar()
+{
+	$('.top-chosse #newToolbar').show();
+}
+
+function showSettingSel()
+{
+	$('.top-chosse #settingSel').show();
+}
+
+/**
+ * 初始化联赛控制面板
+ * @param matches
+ * @returns
+ */
+function initLeaguePanel(matches)
+{
+	var leagueRecs = [];
+	
+	function LeagueRec(lid, name)
+	{
+		this.lid = lid;
+		this.name = name;
+		this.num = 1;
+		
+		this.addNum = function(){ this.num ++; }
+	}
+	
+	function addLeagueRec(lid, name)
+	{
+		var len = leagueRecs.length;
+		for(var i = 0; i < len; i ++)
+		{
+			var l = leagueRecs[i];
+			if(l.lid == lid)
+			{
+				l.addNum();
+				return true;
+			}
+		}
+		var l = new LeagueRec(lid, name);
+		leagueRecs.push(l);
+		return true;
+	}
+	
+	var len = matches.length;
+	for(var i = 0; i < len; i ++)
+	{
+		var m = matches[i];
+		addLeagueRec(m.lid, m.leaguename);
+	}
+	
+	len = leagueRecs.length;
+	var html = [];
+	for(var i = 0; i < len; i ++)
+	{
+		var rec = leagueRecs[i];
+		html.push('<label><input name="CheckboxGroup1" value="' + rec.lid + '" type="checkbox" checked>');
+		html.push('<em class="echao" style="background-color: rgb(102, 153, 0)">' + rec.name + '</em>[' + rec.num + ']');
+		html.push('</label>');		
+	}
+	
+	$('.game_select #leagueList').html(html.join(''));
+}
+
+
+//获得页面的配置信息
+function getConfValue()
+{
+	var matchtype = $('#typeSel').val();
+	var oddstype = $('#oddsType').val();
+	var issue = $('#issueSel').val();
+	var sid = $('#settingSel').val();
+	var sort = $('#sort').val();
+	var threshold = Number($('#threshold').val());
+	var sameleague = $('#sameLeague').prop('checked');
+	var showOrdinary = $('#showOrdinary').prop('checked');
+	
+	if($.isNullOrEmpty(threshold))
+	{
+		threshold = 0.02;
+	}
+	
+	//过滤的数据
+	var oLeagueList = $('#leagueList input');
+	var lids = [];
+	oLeagueList.each(function(){
+		if(!$(this).prop("checked"))
+	    {
+	      	lids.push($(this).val());
+	    }
+	});
+	return {
+		//field: field,
+		//gid: gid, 
+		//index: index,
+		type: matchtype,
+		issue: issue,
+		sid: sid,
+		first: oddstype == 'now' ? false : true,
+		sort: "desc" == sort ? false : true,
+		threshold: threshold,
+		sameLeague: sameleague,
+		showOrdinary: showOrdinary,
+		lids: lids
+	};
+}
+
+//选择的数据
+$(function(){
+	$(document).on('click','.game_select',function(){
+		$(this).children('.pl-wind-ss').show();
+		$(this).find('ul').show();
+	}).on('mouseleave','.game_select',function(){
+		$(this).children('.pl-wind-ss').hide();
+		$(this).find('ul').hide();
+	});
+	
+	$('.top-chosse .sel_list').on('change', function(){
+		//layer.msg('State has changed.' + $(this).attr('id'));
+		var conf = getConfValue();
+		stateListeners.notify('change', this, conf);
+	});
+	
+	$('#leagueList').on("click", "input", function(){
+		var conf = getConfValue();
+		stateListeners.notify('change', this, conf);
+	});
+	$(".sx_form_b input").on("click", function(){
+        var oMatchList = $("#leagueList input");
+        switch($(this).val()){
+            case "全选":
+                oMatchList.prop("checked", true);
+                break;
+            case "反选":
+                oMatchList.each(function(){
+                    $(this).prop("checked") ?  $(this).prop("checked", false) : $(this).prop("checked", true);
+                })
+                break;
+            case "全不选":
+                oMatchList.prop("checked", false);
+                break;
+            default: ;
+        };
+        var conf = getConfValue();
+		stateListeners.notify('change', this, conf);
+    })
+})
+</script>

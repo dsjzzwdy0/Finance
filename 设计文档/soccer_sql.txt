@@ -250,4 +250,17 @@ create table SOCCER_ISSUE_MATCH_14(
 )
 
 
+<<<<<<< HEAD
 ALTER table soccer_web_match_content ADD INDEX url_index(url)
+
+create table soccer_odds_min_max
+(
+	id int NOT NULL auto_increment,
+	field varchar(20),
+	minvalue varchar(5),
+	`maxvalue` varchar(5),
+	PRIMARY KEY  (`id`)
+)
+=======
+ALTER table soccer_web_match_content ADD INDEX url_index(url)
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855

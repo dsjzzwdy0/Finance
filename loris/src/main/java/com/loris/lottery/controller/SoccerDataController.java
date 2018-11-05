@@ -23,6 +23,7 @@ import com.loris.base.bean.wrapper.PageWrapper;
 import com.loris.base.bean.wrapper.Rest;
 import com.loris.base.util.ArraysUtil;
 import com.loris.base.util.DateUtil;
+import com.loris.base.util.NumberUtil;
 import com.loris.soccer.analysis.data.MatchOpVariance;
 import com.loris.soccer.analysis.checker.CorpChecker;
 import com.loris.soccer.analysis.data.LeagueMatchDoc;
@@ -34,6 +35,7 @@ import com.loris.soccer.analysis.pool.MatchDocPool;
 import com.loris.soccer.analysis.pool.MatchOddsPool;
 import com.loris.soccer.analysis.util.IssueMatchUtil;
 import com.loris.soccer.analysis.util.MatchGraph;
+import com.loris.soccer.analysis.util.PossionUtil;
 import com.loris.soccer.bean.SoccerConstants;
 import com.loris.soccer.bean.data.table.lottery.Corporate;
 import com.loris.soccer.bean.data.table.lottery.JcMatch;
@@ -137,6 +139,19 @@ public class SoccerDataController
 		{
 			return Rest.failure("Error when compute the MatchOddsVariance.");
 		}
+	}
+	
+	/**
+	 * 获得某一场比赛的关联比赛
+	 * @param sid 欧赔配置方案
+	 * @param mid 比赛编号
+	 * @return 比赛的数据
+	 */
+	@ResponseBody
+	@RequestMapping("/getRelationMatches")
+	public Rest getRelationMatches(String sid, String mid)
+	{
+		return Rest.ok();
 	}
 	
 	/**
@@ -313,28 +328,18 @@ public class SoccerDataController
 	 */
 	@ResponseBody
 	@RequestMapping("/getMatchItems")
-	public Rest getMatchItems(String issue, String type, String refresh)
+	public Rest getMatchItems(String issue, String type, String sid)
 	{
-		String info;
-		boolean needToRefresh = false;
+		
+		CorpSetting setting = soccerManager.getCorpSetting(sid);
 		if(StringUtils.isEmpty(issue))
 		{
-			info = "The issue '" + issue + " is empty.";
-			logger.info(info);
-			return Rest.failure(info);
-		}
-		
-		//是否需要更新数据集
-		if(!StringUtils.isEmpty(refresh) && ("true".equalsIgnoreCase(refresh) ||
-				"1".equalsIgnoreCase(refresh)))
-		{
-			needToRefresh = true;
-		}
-		
-		MatchDoc dataVector = dataPools.getMatchDocsFromPool(issue, needToRefresh);
+			issue = IssueMatchUtil.getCurrentIssue();
+		}		
+		MatchDoc dataVector = MatchDocLoader.getMatchDoc(issue, setting);
 		if(dataVector == null)
 		{
-			info = "There are not any JcMatchDatas in database of issue value '" + issue + "'. ";
+			String info = "There are not any JcMatchDatas in database of issue value '" + issue + "'. ";
 			logger.info(info);
 			return Rest.failure(info);		
 		}
@@ -348,7 +353,11 @@ public class SoccerDataController
 		{
 			items = MatchDocLoader.getDefaultMatchSynthElement(dataVector);
 		}
-		return Rest.okData(items);
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("setting", setting);
+		map.put("matches", items);
+		return Rest.okData(map);
 	}
 	
 	/**
@@ -406,6 +415,16 @@ public class SoccerDataController
 		{
 			return Rest.failure("The CorpSetting '" + sid + "' is not set correctly.");
 		}
+		
+		UserCorporate corporate = new UserCorporate();
+		corporate.setGid("-100");
+		corporate.setId("-100");
+		corporate.setIsmain(true);
+		corporate.setName("理论计算值");
+		corporate.setType(SoccerConstants.ODDS_TYPE_OP);
+		corporate.setUserid("anonymous");
+		setting.addUserCorporate(corporate);
+	
 		
 		List<MatchOdds> ops = MatchDocLoader.loadRoundMatchOdds(lid, season, round, setting);
 		List<MatchRankOddsElement> elements = new ArrayList<>();
@@ -998,6 +1017,41 @@ public class SoccerDataController
 	public Rest getJcMatchBasicOddsData(String issue)
 	{
 		return Rest.ok();
+	}
+	
+	/**
+	 * 根据数据计算欧赔的值
+	 * @param homevalue
+	 * @param clientvalue
+	 * @param lossratio
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/computeOdds")
+	public Rest computeOddsValue(String homevalue, String clientvalue, String lossratio)
+	{
+		double home = NumberUtil.parseDouble(homevalue);
+		double client = NumberUtil.parseDouble(clientvalue);
+		double loss = NumberUtil.parseDouble(lossratio);
+		
+		if(home <= 0.3 || home > 10 || client < 0.3 || client > 10)
+		{
+			return Rest.failure("您输入的数据不合要求");
+		}
+		
+		if(loss > 1.0 || loss < 0.6)
+		{
+			loss = 0.89;
+		}
+		
+		int k = 7;
+		double[][] goals = PossionUtil.computeProb(home, client, k);
+		double[] p = PossionUtil.computeOddsProb(goals, k);
+		Map<String, Object> datas = new HashMap<>();
+		datas.put("goals", goals);
+		datas.put("prob", p);
+		
+		return Rest.okData(datas);
 	}
 	
 	/**

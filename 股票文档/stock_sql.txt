@@ -1,0 +1,205 @@
+create table STOCK_WEB_CONTENT(
+	ID int NOT NULL auto_increment,	
+	SYMBOL varchar(10),  
+	URL varchar(100), 
+	TYPE varchar(5), 
+	CREATETIME char(20), 
+	CONTENT longtext,
+	COMPLETE tinyint(1),
+	INDEX index_symbol(SYMBOL),
+	INDEX index_createtime(CREATETIME),
+	PRIMARY KEY  (`id`)
+)
+
+create table STOCK_WEB_INFO_CONTENT(
+	ID int NOT NULL auto_increment,	
+	SYMBOL varchar(10),  
+	URL varchar(100), 
+	TYPE varchar(5), 
+	CREATETIME char(20), 
+	CONTENT longtext,
+	COMPLETE tinyint(1),
+	INDEX index_symbol(SYMBOL),
+	INDEX index_createtime(CREATETIME),
+	PRIMARY KEY  (`id`)
+)
+
+create table stock_capital_flow2(
+	id int not null auto_increment,
+	symbol varchar(10),
+	day varchar(10),
+	b100 double,
+	s100 double,
+	b200 double,
+	s200 double,
+	b300 double,
+	s300 double,
+	b400 double,
+	s400 double,
+	b500 double,
+	s500 double,
+	b600 double,
+	s600 double,
+	b700 double,
+	s700 double,
+	b800 double,
+	s800 double,
+	b900 double,
+	s900 double,
+	b1000 double,
+	s1000 double,
+	b2000 double,
+	s2000 double,
+	b3000 double,
+	s3000 double,
+	b4000 double,
+	s4000 double,
+	b5000 double,
+	s5000 double,
+	bmax double,
+	smax double,
+	INDEX index_symbol (SYMBOL),
+	INDEX index_day (DAY),
+	PRIMARY KEY  (`id`)
+)
+
+create table stock_capital_flow(
+	id int not null auto_increment,
+	symbol varchar(10),
+	day varchar(10),
+	total double,
+	totalsell double,
+	totalbuy double,
+	totaldiff double,
+	small double,      #0~100返
+	smallsell double,
+	smallbuy double,
+	smalldiff double,
+	s200 double,       #100~200返
+	s200sell double,
+	s200buy double,
+	s200diff double,
+	middle double,     #200~300返
+	middlesell double,
+	middlebuy double,
+	middlediff double,
+	m500 double,       #300~500返
+	m500sell double,
+	m500buy double,
+	m500diff double,
+	big double,        #500~1000返
+	bigsell double,
+	bigbuy double,
+	bigdiff double,
+	b1000 double,      #1000參貧返
+	b1000sell double,
+	b1000buy double,
+	b1000diff double,
+	INDEX index_symbol (SYMBOL),
+	INDEX index_day (DAY),
+	PRIMARY KEY  (`id`)
+)
+
+create table STOCK_NAME(
+	SYMBOL varchar(10),
+	NAME varchar(10),
+	CODE varchar(6),
+	EXCHANGE varchar(2)
+)
+
+create table STOCK_DAILY_CONTENT (
+	id int not null auto_increment,
+	CREATETIME varchar(20),
+	URL varchar(150),
+	TYPE varchar (5),
+	CONTENT longtext,
+	PRIMARY KEY  (`id`)
+)
+
+create table STOCK_DAILY_RECORD(
+	id int not null auto_increment,
+	SYMBOL varchar(8),
+	DAY varchar(20),
+	CODE varchar(6),
+	NAME varchar(10),
+	TRADE double,
+	PRICECHANGE double,
+	CHANGEPERCENT double,
+	BUY double,
+	SELL double,
+	SETTLEMENT double,
+	OPEN double,
+	HIGH double,
+	LOW double,
+	VOLUME int,
+	AMOUNT int,
+	TICKTIME varchar(15),
+	PER double,
+	PER_D double,
+	NTA double,
+	PB double,
+	NMC double,
+	MKTCAP double,
+	TURNOVERRATIO double,
+	INDEX index_symbol (SYMBOL),
+	INDEX index_day (DAY),
+	PRIMARY KEY  (`id`)
+)
+
+CREATE TABLE STOCK_DAILY (
+	DAY CHAR(10), 
+	SYMBOL CHAR(8), 
+	CODE CHAR(6), 
+	NAME CHAR(10), 
+	TRADE FLOAT, 
+	PRICECHANGE FLOAT, 
+	CHANGEPERCENT FLOAT, 
+	BUY FLOAT, 
+	SELL FLOAT, 
+	SETTLEMENT FLOAT, 
+	OPEN DOUBLE, 
+	HIGH DOUBLE, 
+	LOW DOUBLE, 
+	VOLUME INT, 
+	AMOUNT INT, 
+	TICKTIME CHAR(8), 
+	PER FLOAT, 
+	PER_D FLOAT, 
+	NTA DOUBLE, 
+	PB FLOAT, 
+	MKTCAP DOUBLE, 
+	NMC DOUBLE, 
+	TURNOVERRATIO DOUBLE
+);
+
+create table STOCK_BASIC_INFO (
+	ID int NOT NULL auto_increment,	
+	SYMBOL varchar(10),
+	NAME varchar(50),
+	ENAME varchar(100),
+	FOUNDTIME varchar(12),
+	EXCHANGE varchar(5),
+	INDUSTRY varchar(50),
+	CAPITAL int,
+	TELPHONE varchar(15),
+	FAX varchar(15),
+	EMAIL varchar(50),
+	REPRESENTATIVE varchar(15),
+	SECRETARY varchar(15),
+	SECTELPHONE varchar(15),
+	SECFAX varchar(15),
+	SECEMAIL varchar(50),
+	MAINPAGE varchar(50),
+	INFOPAGE varchar(50),
+	REGADDR varchar(100),
+	WORKADDR varchar(100),
+	IPOPRICE varchar(10),
+	IPOTIME varchar(12),
+	UNDERWRITER varchar(200),
+	REFREE varchar(50),
+	PLATE longtext,
+	SCOPEBUSI longtext,
+	INTRODUCTION longtext,
+	INDEX index_symbol (SYMBOL),
+	PRIMARY KEY  (`id`)
+);

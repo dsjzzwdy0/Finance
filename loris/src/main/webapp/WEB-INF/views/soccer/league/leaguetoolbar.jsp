@@ -19,6 +19,7 @@
 			<li class="n_1"><a href="javascript:void(0);" <c:if test="${page!='leaguerel'}">onclick="openPage('leaguerel');"</c:if> title="欧赔数据关联分析" <c:if test="${page=='leaguerel'}">class="cur"</c:if>>关联分析</a></li>
 			<li class="n_2"><a href="javascript:void(0);" <c:if test="${page!='leagueoy'}">onclick="openPage('leagueoy');"</c:if> title="欧亚数据对比分析" <c:if test="${page=='leagueoy'}">class="cur"</c:if>>欧亚对比</a></li>
 			<li class="n_3"><a href="javascript:void(0);" <c:if test="${page!='leaguefirst'}">onclick="openPage('leaguefirst');"</c:if> title="初盘开盘分析" <c:if test="${page=='leaguefirst'}">class="cur"</c:if>>开盘分析</a></li>
+			<li class="n_3"><a href="javascript:void(0);" <c:if test="${page!='leagueop'}">onclick="openPage('leagueop');"</c:if> title="初盘开盘分析" <c:if test="${page=='leagueop'}">class="cur"</c:if>>欧盘分析</a></li>
 			<li class="n_4"><a href="<c:if test="${page=='anayp'}">javascript:void(0);</c:if><c:if test="${page!='anayp'}">analysis?type=anayp<c:if test="${not empty lid}">&lid=${lid}</c:if></c:if>" title="亚盘对比" class="<c:if test="${page=='anayp'}">cur</c:if>">亚盘对比</a></li>
 			<li class="n_5"><a href="<c:if test="${page=='anafc'}">javascript:void(0);</c:if><c:if test="${page!='anafc'}">analysis?type=anafc<c:if test="${not empty lid}">&lid=${lid}</c:if></c:if>" title="欧赔方差分析" class="<c:if test="${page=='anafc'}">cur</c:if>">方差分析</a></li>
 			<li class="n_6"><a href="<c:if test="${page=='anazj'}">javascript:void(0);</c:if><c:if test="${page!='anazj'}">analysis?type=anazj<c:if test="${not empty lid}">&lid=${lid}</c:if></c:if>" title="战绩对比分析" class="<c:if test="${page=='anazj'}">cur</c:if>">战绩分析</a></li>
@@ -37,19 +38,21 @@
 		</select>
 		
 		<div id="newToolbar" class="newToolBar" style="display: none; float: right; margin-right: 10px;">
-			<label for="sameLeague" class="check_same_league"><input id="sameLeague" style="margin-right: 4px;" type="checkbox" checked="true" />同联赛内比较</label>
+			<label for="sameLeague" class="check_same_league" style="display: none;">
+				<input id="sameLeague" class="sel_list" style="margin-right: 4px;" type="checkbox" checked="true" />同联赛内比较
+			</label>
 			<select id="oddsType" class="sel_list" style="width:70px;">
 				<option value="start" selected>初盘</option>
 				<option value="now">即时</option>
 			</select>
-			<select id="sort" class="sel_list" style="width: 70px;">
+			<select id="sort" class="sel_list" style="display: none; width: 70px;">
 				<option value="asc" selected>升序</option>
 				<option value="desc">降序</option>
 			</select>
 			<select id="threshold" class="sel_list" title="关联差值间隔" style="width: 70px; margin-right: 15px;" data-style="btn-warning">
 				<option value="0.01">0.01</option>
-				<option value="0.02">0.02</option>
-				<option value="0.03" selected>0.03</option>
+				<option value="0.02" selected>0.02</option>
+				<option value="0.03">0.03</option>
 				<option value="0.04">0.04</option>
 				<option value="0.05">0.05</option>
 				<option value="0.08">0.08</option>
@@ -60,3 +63,56 @@
 		</div>
 	</div>
 </div>
+<script type="text/javascript">
+
+var stateListeners = new StateListeners();
+function showNewToolBar()
+{
+	$('.top-chosse #newToolbar').show();
+}
+
+function showSettingSel()
+{
+	$('.top-chosse #settingSel').show();
+}
+
+
+function openPage(type)
+{
+	var destUrl = 'analeague?type=' + type+ '&lid=' + lid + '&season=' + season + '&rid=' + round;
+	window.open(destUrl);
+}
+
+//获得页面的配置信息
+function getConfValue()
+{
+	var type = $('#oddsType').val();
+	var sid = $('#settingSel').val();
+
+	var sort = $('#sort').val();
+	var threshold = Number($('#threshold').val());
+	var sameleague = $('#sameLeague').prop('checked');
+	var showOrdinary = $('#showOrdinary').prop('checked');
+	
+	if($.isNullOrEmpty(threshold))
+	{
+		threshold = 0.02;
+	}	
+	return {
+		sid: sid,
+		first: type == 'now' ? false : true,
+		sort: "desc" == sort ? false : true,
+		threshold: threshold,
+		sameLeague: sameleague,
+		showOrdinary: showOrdinary 
+	};
+}
+
+$().ready(function(){
+	$('.top-chosse .sel_list').on('change', function(){
+		//layer.msg('State has changed.' + $(this).attr('id'));
+		var conf = getConfValue();
+		stateListeners.notify('change', this, conf);
+	})
+});
+</script>

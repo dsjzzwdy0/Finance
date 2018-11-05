@@ -6,8 +6,7 @@
 	<artifactId>soccer-core</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
-
-	<name>mybatis-plus</name>
+	<name>soccer-core</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>

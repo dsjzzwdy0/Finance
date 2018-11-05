@@ -313,6 +313,26 @@ SetPageValue = function(page)
 	}
 }
 
+function formatDuring(mss) {
+	var days = parseInt(mss / (1000 * 60 * 60 * 24));
+	var hours = parseInt((mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+	var minutes = parseInt((mss % (1000 * 60 * 60)) / (1000 * 60));
+	var seconds = (mss % (1000 * 60)) / 1000;
+	return (days > 0 ? days + " 天 " : '') + hours + " 小时 " + minutes + " 分钟 " + seconds + " 秒 ";
+}
+	
+function getTimeInfo(left, interval)
+{
+	var leftnum = parseInt(left);
+	var pertime = parseInt(interval);
+	if(leftnum != 'NaN' && leftnum > 0 && pertime != 'NaN' && pertime > 0)
+	{
+		var t = pertime * leftnum;
+		var info = ', 预计还需要' + formatDuring(t);
+	}
+	return '';
+}
+
 //设置当前状态信息
 SetCurrentStatus= function(page)
 {
@@ -348,6 +368,7 @@ SetCurrentStatus= function(page)
 		break;
 	case 2:
 		statusInfo = '正在下载数据';
+		info += getTimeInfo(left, page.interval);
 		break;
 	case 3:
 		statusInfo = '已经停止数据下载'

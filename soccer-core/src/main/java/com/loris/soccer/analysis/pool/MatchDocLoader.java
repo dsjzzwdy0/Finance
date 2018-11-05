@@ -95,17 +95,9 @@ public class MatchDocLoader
 	 * @return 赔率公司配置
 	 */
 	public static CorpSetting getDefaultCorpSetting()
-	{
+	{		
 		SoccerManager manager = getSoccerManager();
-
-		List<UserCorporate> corps = manager.getUserCoporates(true);
-		CorpSetting configure = new CorpSetting();
-		configure.setName(CORP_ODDS_DEFAULT);
-		for (UserCorporate userCorporate : corps)
-		{
-			configure.addUserCorporate(userCorporate);
-		}
-		return configure;
+		return manager.getDefaultCorpSetting();
 	}
 	
 	/**
@@ -125,6 +117,8 @@ public class MatchDocLoader
 		}
 		return items;
 	}
+	
+	
 	
 	/**
 	 * 获得比赛数据元素列表
@@ -231,6 +225,13 @@ public class MatchDocLoader
 			if(ypsource.equalsIgnoreCase(SoccerConstants.DATA_SOURCE_OKOOO))
 			{
 				List<OkoooYp> yps = soccerManager.getOkoooYpList(mid, ypcorp.getGid());
+				for (OkoooYp okoooYp : yps)
+				{
+					okoooYp.setFirstwinodds(okoooYp.getFirstwinodds() - 1.0f);
+					okoooYp.setFirstloseodds(okoooYp.getFirstloseodds() - 1.0f);
+					okoooYp.setWinodds(okoooYp.getWinodds() - 1.0f);
+					okoooYp.setLoseodds(okoooYp.getLoseodds() - 1.0f);
+				}
 				element.addYpList(yps);
 			}
 			else

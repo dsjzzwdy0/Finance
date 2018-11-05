@@ -34,7 +34,7 @@ import com.loris.lottery.context.ApplicationContextHelper;
 
 @Controller
 @RequestMapping("/download")
-public class DownloadController implements WebPageStatusListener
+public class DownloadController extends BaseController implements WebPageStatusListener
 {
 	private static Logger logger = Logger.getLogger(DownloadController.class);
 

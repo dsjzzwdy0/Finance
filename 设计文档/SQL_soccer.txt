@@ -214,6 +214,26 @@ create table SOCCER_WEB_MATCH_CONTENT(
 	PRIMARY KEY  (`id`)
 )
 
+<<<<<<< HEAD
+create table SOCCER_WEB_ROUND_CONTENT(
+	ID int NOT NULL auto_increment,	
+	LID varchar(10), 
+	ROUND varchar(5),
+	SEASON varchar(10),
+	RACETYPE varchar(8), 
+	URL varchar(100),	 
+	TYPE varchar(5), 
+	CREATETIME char(20), 
+	CONTENT longtext,
+	COMPLETE tinyint(1),
+	INDEX index_symbol(LID),
+	INDEX index_createtime(CREATETIME),
+	INDEX index_url(URL),
+	PRIMARY KEY  (`id`)
+)
+
+=======
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 create table soccer_rank
 (
 	ID int NOT NULL auto_increment,
@@ -317,6 +337,63 @@ create table SOCCER_ISSUE_MATCH(
 	PRIMARY KEY  (`id`)
 ),
 
+<<<<<<< HEAD
+create table SOCCER_ODDS_OP(
+	id int not null auto_increment,
+	mid varchar(10),
+	gid varchar(10),
+	gname varchar(30),
+	ordinary varchar(5),
+	oddstype varchar(5),
+	firsttime varchar(20),
+	firstwinodds varchar(10),
+	firstdrawodds varchar(10),
+	firstloseodds varchar(10),
+	lasttime varchar(16),
+	winodds varchar(10),
+	drawodds varchar(10),
+	loseodds varchar(10),
+	winprob varchar(10),
+	drawprob varchar(10),
+	loseprob varchar(10),
+	winkelly varchar(10),
+	drawkelly varchar(10),
+	losekelly varchar(10),
+	lossratio varchar(10),
+	PRIMARY KEY (`id`),
+	INDEX index_mid(mid),
+	INDEX index_gid(gid),
+	INDEX index_gname(gname)
+);
+
+create table SOCCER_ODDS_YP(
+	id int not null auto_increment,
+	mid varchar(10),
+	gid varchar(10),
+	gname varchar(30),
+	ordinary varchar(5),
+	oddstype varchar(5),
+	firsttime varchar(20),
+	firstwinodds varchar(10),
+	firsthandicap varchar(12),
+	firstloseodds varchar(10),
+	lasttime varchar(16),
+	winodds varchar(10),
+	handicap varchar(12),
+	loseodds varchar(10),
+	winprob varchar(10),
+	loseprob varchar(10),
+	winkelly varchar(10),
+	losekelly varchar(10),
+	lossratio varchar(10),
+	PRIMARY KEY (`id`),
+	INDEX index_mid(mid),
+	INDEX index_gid(gid),
+	INDEX index_gname(gname)
+);
+
+=======
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 create table SOCCER_ISSUE_MATCH_14(
 	id int NOT NULL auto_increment,
 	mid varchar(10),
@@ -377,6 +454,47 @@ create table soccer_issue_bd(
 )
 
 
+<<<<<<< HEAD
+CREATE TABLE `soccer_web_yp_zhishu` (
+`ID`  int(11) NOT NULL AUTO_INCREMENT ,
+`MID`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`GID`  varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`GNAME`  varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`URL`  varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`TYPE`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`ENCODING`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`CREATETIME`  char(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`CONTENT`  longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL ,
+`LOADTIME`  varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`COMPLETED`  tinyint(1) NULL DEFAULT NULL ,
+`METHOD`  varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`HTTPSTATUS`  smallint(6) NULL DEFAULT NULL ,
+PRIMARY KEY (`ID`),
+INDEX `index_symbol` (`MID`) USING BTREE ,
+INDEX `index_createtime` (`CREATETIME`) USING BTREE ,
+INDEX `index_url` (`URL`) USING BTREE 
+)
+
+CREATE TABLE `soccer_web_history_content` (
+`ID`  int(11) NOT NULL AUTO_INCREMENT ,
+`MID`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`URL`  varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`TYPE`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`ENCODING`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`CREATETIME`  char(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`CONTENT`  longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL ,
+`LOADTIME`  varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`COMPLETED`  tinyint(1) NULL DEFAULT NULL ,
+`METHOD`  varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`HTTPSTATUS`  smallint(6) NULL DEFAULT NULL ,
+PRIMARY KEY (`ID`),
+INDEX `index_symbol` (`MID`) USING BTREE ,
+INDEX `index_createtime` (`CREATETIME`) USING BTREE ,
+INDEX `index_url` (`URL`) USING BTREE 
+)
+
+=======
+>>>>>>> 9b450c39b7c085402877e394d4583d6f2ceaf855
 ALTER table soccer_web_match_content ADD INDEX url_index(url)
 
 

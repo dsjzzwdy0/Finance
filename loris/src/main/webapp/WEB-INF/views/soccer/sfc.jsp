@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@page import="java.net.URLEncoder"%>
 <%@page import="com.baomidou.mybatisplus.toolkit.StringUtils" %>
-<%@page import="com.loris.soccer.analysis.util.IssueMatchUtil" %>
+<%@page import="com.loris.soccer.analysis.util.JcMatchUtil" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <link rel="stylesheet" type="text/css" href="../content/css/soccer/sfcitem.css" />
@@ -10,7 +10,7 @@
     String issue = request.getParameter("issue");
 	if(StringUtils.isEmpty(issue))
 	{
-		issue = IssueMatchUtil.getCurrentIssue();
+		issue = JcMatchUtil.getCurrentIssue();
 	}
 %>
 
