@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.loris.soccer.web.repository.mapper.OddsOpWebPageMapper">
-	<select id="getDownloadedPages" resultType="com.loris.soccer.web.downloader.zgzcw.page.OddsOpWebPage">
-	    select mid, LOADTIME, COMPLETED from soccer_web_op_content where completed=1
-	</select>
-</mapper>
