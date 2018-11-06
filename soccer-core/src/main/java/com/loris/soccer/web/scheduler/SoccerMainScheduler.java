@@ -22,7 +22,7 @@ public class SoccerMainScheduler implements Runnable
 	/** The Application main scheduler. */
 	protected static SoccerMainScheduler scheduler;
 	
-	
+	/** The Main Thread stop flag.*/
 	private boolean stop = false;
 	
 	/**
