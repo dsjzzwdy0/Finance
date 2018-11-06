@@ -15,14 +15,6 @@ public class User extends UUIDEntity implements Cloneable
 	private String email;
 	private String usertype;
 	
-	public String getId()
-	{
-		return id;
-	}
-	public void setId(String id)
-	{
-		this.id = id;
-	}
 	public String getRealname()
 	{
 		return realname;
