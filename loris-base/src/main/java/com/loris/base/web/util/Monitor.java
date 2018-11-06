@@ -21,7 +21,6 @@ import org.apache.log4j.Logger;
 import com.loris.base.web.manager.Downloader;
 
 
-
 /**
  *
  * <p>
