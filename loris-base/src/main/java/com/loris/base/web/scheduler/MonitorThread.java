@@ -174,7 +174,5 @@ public class MonitorThread extends Thread
 
 			speedCS = (float) speed;
 		}
-
 	}
-
 }

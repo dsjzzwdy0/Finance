@@ -134,8 +134,6 @@ function getRelatedMatch(element)
 	var gid = $(element).attr('gid');
 	var val = $(element).text();
 	
-	foreach()
-	
 	layer.msg(mid + ': ' + gid + ', ' + val);
 }
 
