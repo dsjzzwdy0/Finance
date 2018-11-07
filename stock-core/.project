@@ -3,7 +3,6 @@
 	<name>stock-core</name>
 	<comment></comment>
 	<projects>
-		<project>loris-base</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

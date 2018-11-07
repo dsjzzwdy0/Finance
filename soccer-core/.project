@@ -3,7 +3,6 @@
 	<name>soccer-core</name>
 	<comment></comment>
 	<projects>
-		<project>loris-base</project>
 		<project>htmlunit</project>
 	</projects>
 	<buildSpec>

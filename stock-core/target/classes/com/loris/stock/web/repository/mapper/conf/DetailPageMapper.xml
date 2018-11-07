@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loris.stock.web.repository.mapper.DetailPageMapper">
+    <select id="selectDetailPageInfo" resultType="com.loris.stock.web.page.StockDetailWebPage">
+        select id, symbol, url, type, createtime, completed 
+        from STOCK_WEB_CAPITAL_CONTENT where createtime=#{arg0}
+    </select>
+    
+    <select id="getDownloadDays" resultType="java.lang.String">
+        select createtime from STOCK_WEB_CAPITAL_CONTENT group by createtime
+    </select>
+</mapper>

@@ -2,9 +2,6 @@
     <wb-module deploy-name="mybatis-plus">
         <wb-resource deploy-path="/" source-path="/src/main/java"/>
         <wb-resource deploy-path="/" source-path="/src/main/resources"/>
-        <dependent-module archiveName="loris-base.jar" deploy-path="/" handle="module:/resource/loris-base/loris-base">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <dependent-module archiveName="htmlunit.jar" deploy-path="/" handle="module:/resource/htmlunit/htmlunit">
             <dependency-type>uses</dependency-type>
         </dependent-module>
