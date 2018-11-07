@@ -14,15 +14,15 @@ import com.loris.base.context.LorisContext;
  * @author deng
  *
  */
-public class MainSchedulerManager implements Runnable
+public class MainSchedulerMonitor implements Runnable
 {
-	private static Logger logger = Logger.getLogger(MainSchedulerManager.class);
+	private static Logger logger = Logger.getLogger(MainSchedulerMonitor.class);
 	
 	/** The LorisContext object.*/
 	protected static LorisContext appContext = null;
 	
 	/** The Application main scheduler. */
-	protected static MainSchedulerManager scheduler;
+	protected static MainSchedulerMonitor scheduler;
 	
 	/** The Main Thread stop flag.*/
 	private boolean stop = false;
@@ -44,11 +44,11 @@ public class MainSchedulerManager implements Runnable
 	 * 获得应用实例
 	 * @return 实例
 	 */
-	public static MainSchedulerManager getInstance()
+	public static MainSchedulerMonitor getInstance()
 	{
 		if(scheduler == null)
 		{
-			scheduler = new MainSchedulerManager();
+			scheduler = new MainSchedulerMonitor();
 		}
 		return scheduler;
 	}

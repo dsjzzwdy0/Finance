@@ -2,7 +2,12 @@ package com.loris.base.web.scheduler;
 
 import com.loris.base.web.task.Task;
 
-public interface TaskScheduler extends Runnable
+/**
+ * 任务管理器
+ * @author deng
+ *
+ */
+public interface TaskHolder
 {
 	/**
 	 * 添加任务Task

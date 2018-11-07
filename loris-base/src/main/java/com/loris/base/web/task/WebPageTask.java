@@ -6,13 +6,54 @@ import org.apache.log4j.Logger;
 import com.loris.base.bean.web.WebPage;
 import com.loris.base.web.http.UrlFetchException;
 import com.loris.base.web.manager.Downloader;
+import com.loris.base.web.util.LoaderMonitor;
 import com.loris.base.web.util.URLUtil;
 
-public class WebPageTask extends AbstractWebTask
+public class WebPageTask extends AbstractTask
 {
 	private static Logger log = Logger.getLogger(WebPageTask.class);
 	
-	protected long waitTime = 1000;
+	/** The manager. */
+	protected Downloader downloader;
+	
+	/** The Monitor. */
+	protected LoaderMonitor monitor;
+	
+	/** The task name. */
+	protected String name;
+
+	/**
+	 * Get the Downloader.
+	 */
+	public Downloader getDownloader()
+	{
+		return downloader;
+	}
+
+	public void setDownloader(Downloader manager)
+	{
+		this.downloader = manager;
+		setName(manager.getName());
+	}
+	
+	/**
+	 * Set the LoaderMonitor
+	 * @param monitor The LoaderMonitor.
+	 */
+	public void setLoaderMonitor(LoaderMonitor monitor)
+	{
+		this.monitor = monitor;
+	}
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
 	
 	/**
 	 * Create the WebPageManager instance.
@@ -21,15 +62,7 @@ public class WebPageTask extends AbstractWebTask
 	{
 	}
 
-	public long getWaitTime()
-	{
-		return waitTime;
-	}
-
-	public void setWaitTime(long waitTime)
-	{
-		this.waitTime = waitTime;
-	}
+	
 
 	/**
 	 * Create the instance of WebPageTask.

@@ -1,5 +1,12 @@
 package com.loris.base.web.task;
 
+import com.loris.base.web.task.event.TaskEventListener;
+
+/**
+ * 多线程任务
+ * @author deng
+ *
+ */
 public interface Task extends Runnable
 {
 	/**
@@ -13,4 +20,16 @@ public interface Task extends Runnable
 	 * @param waitTime 等待的时间
 	 */
 	void setWaitTime(long waitTime);
+	
+	/**
+	 * 加入消息监听器
+	 * @param listener
+	 */
+	void addTaskEventListener(TaskEventListener listener);
+	
+	/**
+	 * 删除消息监听器
+	 * @param listener
+	 */
+	void removeTaskEventListener(TaskEventListener listener);
 }
