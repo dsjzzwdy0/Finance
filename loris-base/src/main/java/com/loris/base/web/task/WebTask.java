@@ -3,7 +3,7 @@ package com.loris.base.web.task;
 import com.loris.base.web.manager.Downloader;
 import com.loris.base.web.util.LoaderMonitor;
 
-public interface Task extends Runnable
+public interface WebTask extends Task
 {
 	/**
 	 * Get webPagemanager. 

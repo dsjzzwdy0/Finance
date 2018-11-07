@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 
 import com.loris.base.web.manager.Downloader;
 import com.loris.base.web.manager.DownloaderStatus;
-import com.loris.base.web.task.Task;
+import com.loris.base.web.task.WebTask;
 import com.loris.base.web.util.LoaderMonitor;
 import com.loris.base.web.util.Monitor;
 import com.loris.base.web.util.RandomUtil;
@@ -29,7 +29,7 @@ public class SingleTaskSchedulerThread extends Thread
 	private LoaderMonitor monitor = null;
 
 	/** The task */
-	private Task task;
+	private WebTask task;
 
 	/**
 	 * Create a new instance of SingleTaskSchedulerThread.
@@ -39,7 +39,7 @@ public class SingleTaskSchedulerThread extends Thread
 	 * @param milliseconds
 	 *            The time to stop when two task.
 	 */
-	public SingleTaskSchedulerThread(Downloader downloader, Class<? extends Task> taskClass, long milliseconds)
+	public SingleTaskSchedulerThread(Downloader downloader, Class<? extends WebTask> taskClass, long milliseconds)
 	{
 		this.milliseconds = milliseconds;
 		this.downloader = downloader;

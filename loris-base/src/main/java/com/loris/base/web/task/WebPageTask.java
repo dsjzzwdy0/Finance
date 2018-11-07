@@ -8,9 +8,11 @@ import com.loris.base.web.http.UrlFetchException;
 import com.loris.base.web.manager.Downloader;
 import com.loris.base.web.util.URLUtil;
 
-public class WebPageTask extends AbstractTask
+public class WebPageTask extends AbstractWebTask
 {
 	private static Logger log = Logger.getLogger(WebPageTask.class);
+	
+	protected long waitTime = 1000;
 	
 	/**
 	 * Create the WebPageManager instance.
@@ -18,7 +20,17 @@ public class WebPageTask extends AbstractTask
 	public WebPageTask()
 	{
 	}
-	
+
+	public long getWaitTime()
+	{
+		return waitTime;
+	}
+
+	public void setWaitTime(long waitTime)
+	{
+		this.waitTime = waitTime;
+	}
+
 	/**
 	 * Create the instance of WebPageTask.
 	 * @param type

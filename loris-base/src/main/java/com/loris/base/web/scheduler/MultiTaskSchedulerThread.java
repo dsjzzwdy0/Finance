@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
 import com.loris.base.web.manager.DownloaderStatus;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.loris.base.web.manager.Downloader;
-import com.loris.base.web.task.Task;
+import com.loris.base.web.task.WebTask;
 import com.loris.base.web.util.LoaderMonitor;
 import com.loris.base.web.util.Monitor;
 import com.loris.base.web.util.RandomUtil;
@@ -27,7 +27,7 @@ public class MultiTaskSchedulerThread extends Thread
 	private static Logger logger = Logger.getLogger(MultiTaskSchedulerThread.class);
 
 	/** The Task Class name. */
-	private Class<? extends Task> taskClass;
+	private Class<? extends WebTask> taskClass;
 	
 	/** The time value to sleep. */
 	private long milliseconds;
@@ -47,7 +47,7 @@ public class MultiTaskSchedulerThread extends Thread
 	/**
 	 * @todo make sure that task class extends Thread.
 	 */
-	public MultiTaskSchedulerThread(Downloader manager, Class<? extends Task> taskClass, long milliseconds)
+	public MultiTaskSchedulerThread(Downloader manager, Class<? extends WebTask> taskClass, long milliseconds)
 	{
 		this.downloader = manager;
 		this.taskClass = taskClass;
@@ -57,7 +57,7 @@ public class MultiTaskSchedulerThread extends Thread
 	/**
 	 * @todo make sure that task class extends Thread.
 	 */
-	public MultiTaskSchedulerThread(Downloader manager, Class<? extends Task> taskClass, long milliseconds, 
+	public MultiTaskSchedulerThread(Downloader manager, Class<? extends WebTask> taskClass, long milliseconds, 
 			WebClient client)
 	{
 		this.downloader = manager;
@@ -140,7 +140,7 @@ public class MultiTaskSchedulerThread extends Thread
 		try
 		{
 			//Monitor.restartIfNeeded();
-			Task task = (Task) taskClass.newInstance();
+			WebTask task = (WebTask) taskClass.newInstance();
 			task.setDownloader(downloader);
 			task.setLoaderMonitor(monitor);
 			

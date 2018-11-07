@@ -24,7 +24,6 @@ import com.loris.base.web.util.Monitor;
 
 public class MonitorThread extends Thread
 {
-
 	private static Logger log = Logger.getLogger(MonitorThread.class);
 	private static final String FILENAME = "monitor.log";
 	private BufferedWriter out;

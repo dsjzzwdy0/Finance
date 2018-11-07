@@ -3,7 +3,7 @@ package com.loris.base.web.task;
 import com.loris.base.web.manager.Downloader;
 import com.loris.base.web.util.LoaderMonitor;
 
-public abstract class AbstractTask implements Task
+public abstract class AbstractWebTask implements WebTask
 {
 	/** The manager. */
 	protected Downloader downloader;
