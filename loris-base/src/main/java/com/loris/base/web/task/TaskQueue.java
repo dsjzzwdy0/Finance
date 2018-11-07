@@ -1,13 +1,11 @@
-package com.loris.base.web.scheduler;
-
-import com.loris.base.web.task.Task;
+package com.loris.base.web.task;
 
 /**
  * 任务管理器
  * @author deng
  *
  */
-public interface TaskHolder
+public interface TaskQueue
 {
 	/**
 	 * 添加任务Task
@@ -20,6 +18,12 @@ public interface TaskHolder
 	 * @return
 	 */
 	Task popTask();
+	
+	/**
+	 * 队列的个数
+	 * @return
+	 */
+	int size();
 	
 	/**
 	 * 检测是否有更多的任务

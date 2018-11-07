@@ -1,10 +1,12 @@
 package com.loris.base.web.scheduler;
 
 import java.util.List;
-import org.apache.log4j.Logger;
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+
 import com.loris.base.web.task.Task;
+import com.loris.base.web.task.TaskQueue;
 import com.loris.base.web.task.event.TaskEvent;
 import com.loris.base.web.task.event.TaskEventListener;
 import com.loris.base.web.task.event.TaskEvent.TaskEventType;
@@ -19,7 +21,7 @@ public class TaskSchedulerMonitor implements Runnable, TaskEventListener
 	private static Logger logger = Logger.getLogger(TaskSchedulerMonitor.class);
 
 	/** TaskScheduler. */
-	protected TaskHolder taskScheduler;
+	protected TaskQueue taskQueue;
 
 	/** 默认的空闲时间 */
 	protected long idleTimeLong = 1000 * 60;
@@ -42,9 +44,9 @@ public class TaskSchedulerMonitor implements Runnable, TaskEventListener
 	 * 
 	 * @param scheduler
 	 */
-	public TaskSchedulerMonitor(TaskHolder scheduler)
+	public TaskSchedulerMonitor(TaskQueue scheduler)
 	{
-		this.taskScheduler = scheduler;
+		this.taskQueue = scheduler;
 	}
 
 	/**
@@ -56,7 +58,7 @@ public class TaskSchedulerMonitor implements Runnable, TaskEventListener
 		Task currentTask = null;
 		while (true)
 		{
-			if (hasIdleTaskThread() && ((currentTask = taskScheduler.popTask()) != null))
+			if (hasIdleTaskThread() && ((currentTask = taskQueue.popTask()) != null))
 			{
 				try
 				{
@@ -72,7 +74,7 @@ public class TaskSchedulerMonitor implements Runnable, TaskEventListener
 					logger.info("Error: " + e.toString());
 					
 					//如果出现处理错误,则进入待处理任务
-					taskScheduler.pushTask(currentTask);
+					taskQueue.pushTask(currentTask);
 				}
 			}
 			else // 没有新的任务时,则进入休眠时间
@@ -102,18 +104,18 @@ public class TaskSchedulerMonitor implements Runnable, TaskEventListener
 	 * 任务调度器
 	 * @return
 	 */
-	public TaskHolder getTaskScheduler()
+	public TaskQueue getTaskQueue()
 	{
-		return taskScheduler;
+		return taskQueue;
 	}
 
 	/**
 	 * 任务调度器
 	 * @param taskScheduler
 	 */
-	public void setTaskScheduler(TaskHolder taskScheduler)
+	public void setTaskQueue(TaskQueue taskScheduler)
 	{
-		this.taskScheduler = taskScheduler;
+		this.taskQueue = taskScheduler;
 	}
 
 	/**

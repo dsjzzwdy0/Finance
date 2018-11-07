@@ -18,9 +18,6 @@ public class WebPageTask extends AbstractTask
 	
 	/** The Monitor. */
 	protected LoaderMonitor monitor;
-	
-	/** The task name. */
-	protected String name;
 
 	/**
 	 * Get the Downloader.
@@ -43,16 +40,6 @@ public class WebPageTask extends AbstractTask
 	public void setLoaderMonitor(LoaderMonitor monitor)
 	{
 		this.monitor = monitor;
-	}
-
-	public String getName()
-	{
-		return name;
-	}
-
-	public void setName(String name)
-	{
-		this.name = name;
 	}
 	
 	/**

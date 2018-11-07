@@ -10,10 +10,22 @@ import com.loris.base.web.task.event.TaskEventListener;
 public interface Task extends Runnable
 {
 	/**
+	 * 名称
+	 * @return
+	 */
+	String getName();
+	
+	/**
 	 * 任务开始之前等候的时间,这项参数很重要
 	 * @return 时间值(毫秒)
 	 */
 	long getWaitTime();
+	
+	/**
+	 * 任务的优先度
+	 * @return 优先度
+	 */
+	int getPriority();
 	
 	/**
 	 * 设置等待的时间

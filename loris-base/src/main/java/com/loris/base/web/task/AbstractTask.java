@@ -7,10 +7,21 @@ import com.loris.base.web.task.event.TaskEvent.TaskEventType;
 
 import java.util.ArrayList;
 
-public abstract class AbstractTask implements WebTask
+/**
+ * 多线程中的任务
+ * @author deng
+ *
+ */
+public abstract class AbstractTask implements Task
 {
 	/** 等待时间 (毫秒) */
 	protected long waitTime = 1000;
+	
+	/** 任务的名称 */
+	protected String name;
+	
+	/** 任务的优先度,默认设置为1 */
+	protected int priority = 1;
 	
 	/** 任务消息管理器 */
 	protected List<TaskEventListener> listeners = new ArrayList<>();
@@ -28,7 +39,8 @@ public abstract class AbstractTask implements WebTask
 	@Override
 	public void addTaskEventListener(TaskEventListener listener)
 	{
-		listeners.add(listener);
+		if(!listeners.contains(listener))
+			listeners.add(listener);
 	}
 
 	@Override
@@ -49,6 +61,26 @@ public abstract class AbstractTask implements WebTask
 		}
 	}
 	
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	public int getPriority()
+	{
+		return priority;
+	}
+
+	public void setPriority(int priority)
+	{
+		this.priority = priority;
+	}
+
 	/**
 	 * 开始任务
 	 */
