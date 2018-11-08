@@ -23,6 +23,8 @@ import com.loris.base.util.NumberUtil;
 import com.loris.base.web.http.UrlFetcher;
 import com.loris.base.web.http.WebClientFetcher;
 import com.loris.base.web.manager.Downloader;
+import com.loris.base.web.task.PriorityTaskQueue;
+import com.loris.base.web.task.TaskQueue;
 import com.loris.soccer.analysis.data.MatchOpVariance;
 import com.loris.soccer.analysis.data.MatchData;
 import com.loris.soccer.analysis.data.MatchDoc;
@@ -73,6 +75,7 @@ import com.loris.soccer.web.downloader.okooo.parser.OddsYpChangeParser;
 import com.loris.soccer.web.downloader.okooo.parser.OddsYpChildParser;
 import com.loris.soccer.web.downloader.okooo.parser.OkoooBdPageParser;
 import com.loris.soccer.web.downloader.okooo.parser.SoccerPageParser;
+import com.loris.soccer.web.downloader.zgzcw.ZgzcwDataDownloader;
 import com.loris.soccer.web.downloader.zgzcw.ZgzcwWebPageCreator;
 import com.loris.soccer.web.downloader.zgzcw.loader.IssueMatchDownloader;
 import com.loris.soccer.web.downloader.zgzcw.loader.MatchDataDownloader;
@@ -108,6 +111,8 @@ import com.loris.soccer.web.downloader.zgzcw.parser.RoundLeagueWebPageParser;
 import com.loris.soccer.web.downloader.zgzcw.parser.SeasonWebPageParser;
 import com.loris.soccer.web.downloader.zgzcw.parser.TeamWebPageParser;
 import com.loris.soccer.web.downloader.zgzcw.parser.ZgzcwCenterParser;
+import com.loris.soccer.web.task.MatchWebTask;
+import com.loris.soccer.web.task.SoccerMatchTaskProducer;
 
 public class SoccerApp
 {
@@ -199,8 +204,10 @@ public class SoccerApp
 			//testOYCompare(context);
 			
 			//testOddsUtil(context);
-			testPossion(context);
+			//testPossion(context);
 			//testIssueLeagueMatches(context);
+			
+			testTaskQueue(context);
 			
 			close();
 			// context = null;
@@ -209,6 +216,48 @@ public class SoccerApp
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * 
+	 * @param context
+	 * @throws Exception
+	 */
+	public static void testTaskQueue(LorisContext context) throws Exception
+	{
+		ZgzcwDataDownloader.initialize(context);
+		
+		TaskQueue<MatchWebTask> queue = new PriorityTaskQueue<>();
+		SoccerMatchTaskProducer producer = new SoccerMatchTaskProducer();
+		producer.setTaskQueue(queue);
+		
+		Thread thread = new Thread(producer);
+		thread.start();
+		
+		/*SoccerManager soccerManager = context.getBean(SoccerManager.class);
+		
+		String st = "2018-11-07";
+		String en = "2018-11-09";
+		List<BdMatch> matchs = soccerManager.getBdMatchByMatchtime(st, en);
+		
+		TaskQueue<MatchWebTask> queue = new PriorityTaskQueue<>();
+		
+		int index = 1;
+		for (BdMatch match : matchs)
+		{
+			//logger.info(index +++ ": " + match);
+			
+			MatchWebTask task = new MatchWebTask(match, MatchWebTaskType.Op);
+			queue.pushTask(task);
+		}
+		
+		int size = queue.size();
+		for(index = 0; index < size; index ++)
+		{
+			logger.info(index + ": " + queue.popTask().getMatch());
+		}*/
+		
+		logger.info("Test exit.");
 	}
 	
 	public static void testPossion(LorisContext context) throws Exception
@@ -2296,7 +2345,7 @@ public class SoccerApp
 	public static LorisContext getLorisContext()
 	{
 		/** The Application Context. */
-		context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
+		context = new ClassPathXmlApplicationContext("classpath:soccerApplicationContext.xml");
 		LorisContext appContext = new SoccerContext(context);
 		return appContext;
 	}

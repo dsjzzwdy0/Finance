@@ -1,8 +1,9 @@
 package com.loris.base.web.task.event;
 
+import com.loris.base.web.task.Task;
 import com.loris.base.web.task.TaskProducer;
 
-public class TaskProcuderEvent
+public class TaskProcuderEvent<T extends Task>
 {
 	public static enum TaskProducerEventType
 	{
@@ -11,21 +12,21 @@ public class TaskProcuderEvent
 		Finished
 	}
 	
-	protected TaskProducer producer;
+	protected TaskProducer<T> producer;
 	protected TaskProducerEventType type;
 	
-	public TaskProcuderEvent(TaskProducer producer, TaskProducerEventType type)
+	public TaskProcuderEvent(TaskProducer<T> producer, TaskProducerEventType type)
 	{
 		this.producer = producer;
 		this.type = type;
 	}
 
-	public TaskProducer getProducer()
+	public TaskProducer<T> getProducer()
 	{
 		return producer;
 	}
 
-	public void setProducer(TaskProducer producer)
+	public void setProducer(TaskProducer<T> producer)
 	{
 		this.producer = producer;
 	}

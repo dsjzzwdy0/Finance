@@ -32,7 +32,7 @@ public class DownloadRecord extends Record<String, Date>
 	 * 清除有些已经比较旧的数据记录
 	 * @param date
 	 */
-	public void clearRecord(Date date)
+	public void clearRecordByDate(Date date)
 	{
 		int size = size();
 		Date d;
@@ -45,5 +45,34 @@ public class DownloadRecord extends Record<String, Date>
 				list.remove(i);
 			}
 		}
+	}
+	
+	/**
+	 * 获得最近的时间
+	 * @return
+	 */
+	public Date getLastDate()
+	{
+		if(list.isEmpty())
+		{
+			return null;
+		}
+		Date r = null;
+		for (Date date : list)
+		{
+			if(r == null)
+			{
+				r = date;
+				continue;
+			}
+			else
+			{
+				if(r.getTime() < date.getTime())
+				{
+					r = date;
+				}
+			}
+		}
+		return r;
 	}
 }

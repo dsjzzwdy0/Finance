@@ -6,7 +6,7 @@
         <dependent-module archiveName="htmlunit.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/htmlunit/htmlunit">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="mybatis-plus.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/soccer-core/soccer-core">
+        <dependent-module archiveName="soccer-core.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/soccer-core/soccer-core">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module archiveName="stock-core.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/stock-core/stock-core">

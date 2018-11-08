@@ -11,25 +11,25 @@ import com.loris.base.web.task.event.TaskProducerEventListener;
  * @author deng
  *
  */
-public interface TaskProducer extends Runnable, TaskEventListener
+public interface TaskProducer<T extends Task> extends Runnable, TaskEventListener
 {
 	/**
 	 * 添加任务生成器监听管理器
 	 * @param listener 监听器
 	 */
-	void addTaskProducerEventListener(TaskProducerEventListener listener);
+	void addTaskProducerEventListener(TaskProducerEventListener<T> listener);
 	
 	/**
 	 * 删除任务生成器监听管理器
 	 * @param listener
 	 */
-	void removeTaskProducerEventListener(TaskProducerEventListener listener);
+	void removeTaskProducerEventListener(TaskProducerEventListener<T> listener);
 	
 	/**
 	 * 任务队列管理器
 	 * @param queue
 	 */
-	void setTaskQueue(TaskQueue queue);
+	void setTaskQueue(TaskQueue<T> queue);
 	
 	/**
 	 * 是否需要启动管理器

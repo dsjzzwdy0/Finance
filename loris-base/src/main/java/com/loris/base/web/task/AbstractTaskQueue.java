@@ -7,22 +7,25 @@ import java.util.Queue;
  * @author deng
  *
  */
-public class AbstractTaskQueue implements TaskQueue
+public class AbstractTaskQueue<T> implements TaskQueue<T>
 {
 	/** 队列数据 */
-	protected Queue<Task> queue;
+	protected Queue<T> queue;
 	
 	/**
 	 * 加入任务到队列数据中
 	 */
 	@Override
-	public void pushTask(Task task)
+	public void pushTask(T task)
 	{
-		queue.add(task);
+		synchronized (queue)
+		{
+			queue.add(task);
+		}
 	}
 
 	@Override
-	public Task popTask()
+	public T popTask()
 	{
 		return queue.poll();
 	}

@@ -7,7 +7,7 @@ import java.util.List;
 import com.loris.base.web.task.event.TaskEvent;
 import com.loris.base.web.task.event.TaskProducerEventListener;
 
-public abstract class AbstractTaskProducer implements TaskProducer
+public abstract class AbstractTaskProducer<T extends Task> implements TaskProducer<T>
 {
 	/** The Producer's name. */
 	protected String name;
@@ -25,13 +25,13 @@ public abstract class AbstractTaskProducer implements TaskProducer
 	protected boolean oneTimeFlag = false;
 	
 	/** 任务队列 */
-	protected TaskQueue taskQueue;
+	protected TaskQueue<T> taskQueue;
 	
 	/** 等待时间 */
 	protected long waitTime = 1000;
 	
 	/** 任务监听器 */
-	protected List<TaskProducerEventListener> listeners = new ArrayList<>();
+	protected List<TaskProducerEventListener<T>> listeners = new ArrayList<>();
 	
 	@Override
 	public abstract void run();
@@ -47,7 +47,7 @@ public abstract class AbstractTaskProducer implements TaskProducer
 	 * @param listener 监听器
 	 */
 	@Override
-	public void addTaskProducerEventListener(TaskProducerEventListener listener)
+	public void addTaskProducerEventListener(TaskProducerEventListener<T> listener)
 	{
 		if(!listeners.contains(listener))
 		{
@@ -56,13 +56,13 @@ public abstract class AbstractTaskProducer implements TaskProducer
 	}
 
 	@Override
-	public void removeTaskProducerEventListener(TaskProducerEventListener listener)
+	public void removeTaskProducerEventListener(TaskProducerEventListener<T> listener)
 	{
 		listeners.remove(listener);
 	}
 
 	@Override
-	public void setTaskQueue(TaskQueue queue)
+	public void setTaskQueue(TaskQueue<T> queue)
 	{
 		this.taskQueue = queue;
 	}

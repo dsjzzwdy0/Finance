@@ -820,6 +820,7 @@ public class SoccerController extends BaseController
 		calendar.setTime(new Date());
 		List<String> issues = new ArrayList<>();
 		
+		calendar.add(Calendar.DAY_OF_YEAR, 2);
 		issues.add(DateUtil.formatDay(calendar.getTime()));
 		for(int i = 0; i < size; i ++)
 		{

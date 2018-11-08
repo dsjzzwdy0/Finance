@@ -57,6 +57,11 @@ public class MatchItem extends AutoIdEntity implements Comparator<MatchItem>
 		this.clientid = clientid;
 	}
 	
+	public Date getMatchDate()
+	{
+		return DateUtil.tryToParseDate(matchtime);
+	}
+	
 	public long getMatchtimevalue()
 	{
 		Date d1 = DateUtil.tryToParseDate(matchtime);

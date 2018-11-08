@@ -15,42 +15,13 @@ import com.loris.base.web.task.event.TaskEvent.TaskEventType;
  * @author deng
  *
  */
-public class SoccerTaskProducer extends AbstractTaskProducer
+public abstract class SoccerTaskProducer extends AbstractTaskProducer<MatchWebTask>
 {
 	/** 数据下载的记录 */
 	protected Map<String, DownloadRecord> downRecords = new HashMap<>();
 	
 	/** 数据下载的间隔,默认是一个小时*/
 	protected long interval = 1000 * 60 * 60;
-	
-	@Override
-	public void run()
-	{
-	}
-	
-	/**
-	 * 线程处理完成之后的后期处理
-	 */
-	public void postRun()
-	{
-		//最近一次的开始的时间
-		lastTimeStamp = new Date();
-		initialized = true;
-	}
-
-	@Override
-	public boolean needToStart()
-	{
-		if(!initialized)
-		{
-			return true;
-		}
-		long current = System.currentTimeMillis();
-		long last = lastTimeStamp == null ? current : lastTimeStamp.getTime();
-		
-		long diff = current - last;
-		return diff > interval;
-	}
 
 	@Override
 	public void notify(TaskEvent event)
@@ -95,5 +66,23 @@ public class SoccerTaskProducer extends AbstractTaskProducer
 	public void removeDownRecord(String key)
 	{
 		downRecords.remove(key);
+	}
+	
+	/**
+	 * 获得最近的下载时间
+	 * @param key
+	 * @return
+	 */
+	public Date getLastDownTime(String key)
+	{
+		DownloadRecord record = downRecords.get(key);
+		if(record == null)
+		{
+			return null;
+		}
+		else
+		{
+			return record.getLastDate();
+		}
 	}
 }

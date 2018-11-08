@@ -1,6 +1,7 @@
 package com.loris.base.web.scheduler;
 
 import java.util.List;
+import java.util.Random;
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
@@ -16,12 +17,12 @@ import com.loris.base.web.task.event.TaskEvent.TaskEventType;
  * @author deng
  *
  */
-public class TaskSchedulerMonitor implements Runnable, TaskEventListener
+public class TaskSchedulerMonitor<T extends Task> implements Runnable, TaskEventListener
 {
 	private static Logger logger = Logger.getLogger(TaskSchedulerMonitor.class);
 
 	/** TaskScheduler. */
-	protected TaskQueue taskQueue;
+	protected TaskQueue<T> taskQueue;
 
 	/** 默认的空闲时间 */
 	protected long idleTimeLong = 1000 * 60;
@@ -31,6 +32,8 @@ public class TaskSchedulerMonitor implements Runnable, TaskEventListener
 
 	/** 当前正在运行的任务 */
 	protected List<Task> currentRunningTasks = new ArrayList<>();
+	
+	protected Random random = new Random();
 
 	/**
 	 * Create a new instance of TaskMonitorScheduler.
@@ -44,7 +47,7 @@ public class TaskSchedulerMonitor implements Runnable, TaskEventListener
 	 * 
 	 * @param scheduler
 	 */
-	public TaskSchedulerMonitor(TaskQueue scheduler)
+	public TaskSchedulerMonitor(TaskQueue<T> scheduler)
 	{
 		this.taskQueue = scheduler;
 	}
@@ -55,7 +58,7 @@ public class TaskSchedulerMonitor implements Runnable, TaskEventListener
 	@Override
 	public void run()
 	{
-		Task currentTask = null;
+		T currentTask = null;
 		while (true)
 		{
 			if (hasIdleTaskThread() && ((currentTask = taskQueue.popTask()) != null))
@@ -64,8 +67,12 @@ public class TaskSchedulerMonitor implements Runnable, TaskEventListener
 				{
 					currentTask.addTaskEventListener(this);
 					long waitTime = currentTask.getWaitTime();
+					
+					int rand = random.nextInt((int)(waitTime * 0.2));
+					waitTime = (rand % 2 == 0) ? (waitTime + rand) : (waitTime - rand);
 					sleep(waitTime);
 					
+					logger.info("Starting task: " + currentTask);
 					Thread thread = new Thread(currentTask);
 					thread.start();
 				}
@@ -104,7 +111,7 @@ public class TaskSchedulerMonitor implements Runnable, TaskEventListener
 	 * 任务调度器
 	 * @return
 	 */
-	public TaskQueue getTaskQueue()
+	public TaskQueue<T> getTaskQueue()
 	{
 		return taskQueue;
 	}
@@ -113,7 +120,7 @@ public class TaskSchedulerMonitor implements Runnable, TaskEventListener
 	 * 任务调度器
 	 * @param taskScheduler
 	 */
-	public void setTaskQueue(TaskQueue taskScheduler)
+	public void setTaskQueue(TaskQueue<T> taskScheduler)
 	{
 		this.taskQueue = taskScheduler;
 	}
@@ -145,6 +152,7 @@ public class TaskSchedulerMonitor implements Runnable, TaskEventListener
 		else if(type == TaskEventType.Finished)
 		{
 			currentRunningTasks.remove(task);
+			logger.info("Finished task: " + task + "\r\n");
 		}
 	}
 	

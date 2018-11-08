@@ -5,7 +5,13 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.loris.base.context.LorisContext;
 import com.loris.base.web.scheduler.MainSchedulerMonitor;
+import com.loris.base.web.scheduler.TaskSchedulerMonitor;
+import com.loris.base.web.task.PriorityTaskQueue;
+import com.loris.base.web.task.TaskQueue;
 import com.loris.soccer.repository.SoccerContext;
+import com.loris.soccer.web.downloader.zgzcw.ZgzcwDataDownloader;
+import com.loris.soccer.web.task.MatchWebTask;
+import com.loris.soccer.web.task.SoccerMatchTaskProducer;
 
 /**
  * 足球数据下载总调度类
@@ -32,6 +38,7 @@ public class SoccerMainSchedulerMonitor
 		}
 		catch(Exception exception)
 		{
+			exception.printStackTrace();
 			logger.info("Error: " + exception.toString());
 		}
 	}
@@ -48,7 +55,7 @@ public class SoccerMainSchedulerMonitor
 		}
 		ClassPathXmlApplicationContext context;
 		/** The Application Context. */
-		context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
+		context = new ClassPathXmlApplicationContext("classpath:soccerApplicationContext.xml");
 		appContext = new SoccerContext(context);
 		return appContext;
 	}
@@ -65,8 +72,17 @@ public class SoccerMainSchedulerMonitor
 		{
 			return;
 		}
-		
 		scheduler.setStop(false);
+		
+		TaskQueue<MatchWebTask> queue = new PriorityTaskQueue<>();
+		
+		//产生器
+		SoccerMatchTaskProducer producer = new SoccerMatchTaskProducer(queue);
+		scheduler.addRunnerable(producer);
+		
+		TaskSchedulerMonitor<MatchWebTask> monitor = new TaskSchedulerMonitor<>(queue);
+		scheduler.addRunnerable(monitor);
+		
 		Thread mainThread = new Thread(scheduler);
 		mainThread.start();
 	}
@@ -83,6 +99,10 @@ public class SoccerMainSchedulerMonitor
 			logger.info("The Application context is null, exit.");
 			return false;
 		}
+		
+		//初始化下载管理器
+		ZgzcwDataDownloader.initialize(context);
+		
 		return true;
 	}
 }

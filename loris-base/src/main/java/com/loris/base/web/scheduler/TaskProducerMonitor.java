@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.loris.base.web.task.Task;
 import com.loris.base.web.task.TaskProducer;
 import com.loris.base.web.task.event.TaskProcuderEvent;
 import com.loris.base.web.task.event.TaskProcuderEvent.TaskProducerEventType;
@@ -15,12 +16,12 @@ import com.loris.base.web.task.event.TaskProducerEventListener;
  * @author deng
  *
  */
-public class TaskProducerMonitor implements Runnable, TaskProducerEventListener
+public class TaskProducerMonitor<T extends Task> implements Runnable, TaskProducerEventListener<T>
 {
 	private static Logger logger = Logger.getLogger(TaskProducerMonitor.class);
 	
 	/** TaskProducer. */
-	protected List<TaskProducer> producers = new ArrayList<>();
+	protected List<TaskProducer<T>> producers = new ArrayList<>();
 	
 	/** 空闲时间 */
 	protected long idleTime = 10000;
@@ -31,7 +32,7 @@ public class TaskProducerMonitor implements Runnable, TaskProducerEventListener
 	@Override
 	public void run()
 	{
-		TaskProducer producer = null;
+		TaskProducer<T> producer = null;
 		
 		//这里是一个无限循环的工作
 		while(true)
@@ -69,7 +70,7 @@ public class TaskProducerMonitor implements Runnable, TaskProducerEventListener
 	 * 添加任务生成器
 	 * @param producer 任务生成器
 	 */
-	public void addTaskProducer(TaskProducer producer)
+	public void addTaskProducer(TaskProducer<T> producer)
 	{
 		producer.addTaskProducerEventListener(this);
 		producers.add(producer);
@@ -79,7 +80,7 @@ public class TaskProducerMonitor implements Runnable, TaskProducerEventListener
 	 * 删除任务生成器
 	 * @param producer 任务生成器
 	 */
-	public void removeTaskProducer(TaskProducer producer)
+	public void removeTaskProducer(TaskProducer<T> producer)
 	{
 		producer.removeTaskProducerEventListener(this);
 		producers.remove(producer);
@@ -91,10 +92,10 @@ public class TaskProducerMonitor implements Runnable, TaskProducerEventListener
 	 * @param event 任务生成器事件
 	 */
 	@Override
-	public void notify(TaskProcuderEvent event)
+	public void notify(TaskProcuderEvent<T> event)
 	{
 		TaskProducerEventType type = event.getType();
-		TaskProducer producer = event.getProducer();
+		TaskProducer<T> producer = event.getProducer();
 		if(type == TaskProducerEventType.Add)
 		{
 			if(producer != null)

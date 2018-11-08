@@ -5,19 +5,19 @@ package com.loris.base.web.task;
  * @author deng
  *
  */
-public interface TaskQueue
+public interface TaskQueue<T>
 {
 	/**
 	 * 添加任务Task
 	 * @param task
 	 */
-	void pushTask(Task task);
+	void pushTask(T task);
 	
 	/**
 	 * 弹出任务
 	 * @return
 	 */
-	Task popTask();
+	T popTask();
 	
 	/**
 	 * 队列的个数
