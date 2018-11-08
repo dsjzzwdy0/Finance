@@ -50,6 +50,17 @@ public interface TaskProducer extends Runnable, TaskEventListener
 	String getName();
 	
 	/**
+	 * 设置等待的时间
+	 * @param waitTime
+	 */
+	void setWaitTime(long waitTime);
+	
+	/**
+	 * 重置数据
+	 */
+	void reset();
+	
+	/**
 	 * 获得最近一次完成任务的时间
 	 * @return
 	 */

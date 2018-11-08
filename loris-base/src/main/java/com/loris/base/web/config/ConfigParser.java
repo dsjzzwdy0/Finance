@@ -80,14 +80,25 @@ public class ConfigParser
 	}
 		
 	/**
-	 * 解析默认的下载配置管理器
+	 * 解析默认的下载配置管理器,解析之后的数据存储在WebCrawler中
 	 * @throws IOException
 	 * @throws SAXException
 	 * @throws JDOMException
 	 */
-	public static void parseDefaultWebPageSettings() throws IOException, SAXException, JDOMException
+	public static void parseWebDownloaders() throws IOException, SAXException, JDOMException
 	{
 		parseWebPageSettings(ConfigParser.class.getResourceAsStream("/web-downloads.xml"));
+	}
+	
+	/**
+	 * 
+	 * @throws IOException
+	 * @throws SAXException
+	 * @throws JDOMException
+	 */
+	public static void parseTaskProducers() throws IOException, SAXException, JDOMException
+	{
+		
 	}
 	
 	/**

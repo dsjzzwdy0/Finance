@@ -18,11 +18,17 @@ public abstract class AbstractTaskProducer implements TaskProducer
 	/** 最近一次创建时间 */
 	protected Date lastTimeStamp;
 	
+	/** 是否已经初始化 */
+	protected boolean initialized = false;
+	
 	/** 仅进行一次的任务 */
 	protected boolean oneTimeFlag = false;
 	
 	/** 任务队列 */
 	protected TaskQueue taskQueue;
+	
+	/** 等待时间 */
+	protected long waitTime = 1000;
 	
 	/** 任务监听器 */
 	protected List<TaskProducerEventListener> listeners = new ArrayList<>();
@@ -100,5 +106,33 @@ public abstract class AbstractTaskProducer implements TaskProducer
 	public Date getLastFinishedTimeStamp()
 	{
 		return lastFinishedTimeStamp;
+	}
+
+	public long getWaitTime()
+	{
+		return waitTime;
+	}
+
+	public void setWaitTime(long waitTime)
+	{
+		this.waitTime = waitTime;
+	}
+
+	public boolean isInitialized()
+	{
+		return initialized;
+	}
+
+	public void setInitialized(boolean initialized)
+	{
+		this.initialized = initialized;
+	}
+	
+	@Override
+	public void reset()
+	{
+		this.initialized = false;
+		this.lastTimeStamp = null;
+		this.lastFinishedTimeStamp = null;
 	}
 }

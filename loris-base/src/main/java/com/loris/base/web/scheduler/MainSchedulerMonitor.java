@@ -3,10 +3,6 @@ package com.loris.base.web.scheduler;
 import java.util.Stack;
 
 import org.apache.log4j.Logger;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import com.loris.base.context.DefaultLorisContext;
-import com.loris.base.context.LorisContext;
 
 /**
  * 
@@ -18,76 +14,11 @@ public class MainSchedulerMonitor implements Runnable
 {
 	private static Logger logger = Logger.getLogger(MainSchedulerMonitor.class);
 	
-	/** The LorisContext object.*/
-	protected static LorisContext appContext = null;
-	
-	/** The Application main scheduler. */
-	protected static MainSchedulerMonitor scheduler;
-	
 	/** The Main Thread stop flag.*/
 	private boolean stop = false;
 	
 	/** 处理线程 */
 	protected Stack<Runnable> runnerables = new Stack<>();
-	
-	/**
-	 * 开始主进程,程序的主入口
-	 * @param args
-	 */
-	public static void main(String[] args)
-	{
-		scheduler = getInstance();
-		scheduler.startMainThread(args);
-	}
-	
-	/**
-	 * 获得应用实例
-	 * @return 实例
-	 */
-	public static MainSchedulerMonitor getInstance()
-	{
-		if(scheduler == null)
-		{
-			scheduler = new MainSchedulerMonitor();
-		}
-		return scheduler;
-	}
-	
-	/**
-	 * Get the LorisContext.
-	 * @return LorisContext
-	 */
-	public static LorisContext getLorisContext()
-	{
-		if(appContext != null)
-		{
-			return appContext;
-		}
-		ClassPathXmlApplicationContext context;
-		/** The Application Context. */
-		context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
-		appContext = new DefaultLorisContext(context);
-		return appContext;
-	}
-	
-	/**
-	 * 主程序
-	 * @param args
-	 */
-	public void startMainThread(String[] args)
-	{
-		logger.info("Start SoccerMainScheduler Downloader Application.");
-		
-		LorisContext context = getLorisContext();		
-		if(context == null)
-		{
-			logger.info("The Application context is null, exit.");
-			return;
-		}		
-		scheduler.stop = false;
-		Thread mainThread = new Thread(scheduler);
-		mainThread.start();
-	}
 
 	/**
 	 * 线程启动
@@ -119,7 +50,7 @@ public class MainSchedulerMonitor implements Runnable
 			}
 			try
 			{
-				Thread.sleep(1000 * 5);
+				Thread.sleep(2000);
 			}
 			catch(Exception e)
 			{
@@ -170,5 +101,10 @@ public class MainSchedulerMonitor implements Runnable
 	public void stop()
 	{
 		stop = true;
+	}
+
+	public void setStop(boolean stop)
+	{
+		this.stop = stop;
 	}
 }
