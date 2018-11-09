@@ -35,6 +35,7 @@ public class MatchWebTask extends AbstractTask implements Comparable<MatchWebTas
 	public MatchWebTask()
 	{
 		this.waitTime = 4500;
+		this.name = "MatchWebTask.";
 	}
 	
 	/**
@@ -52,15 +53,17 @@ public class MatchWebTask extends AbstractTask implements Comparable<MatchWebTas
 	@Override
 	public void run()
 	{
+		notify(new TaskEvent(this, TaskEventType.Start));
 		try
 		{
 			ZgzcwDataDownloader.downloadMatchTask(this);
-			notify(new TaskEvent(this, TaskEventType.Finished));
 		}
 		catch(Exception e)
 		{
 			logger.info("Error when run MatchWebTask(" + match.getMid() + ")...");
 		}
+
+		notify(new TaskEvent(this, TaskEventType.Finished));
 	}
 
 	public MatchItem getMatch()

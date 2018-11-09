@@ -149,7 +149,7 @@ public class SoccerDataController
 	 */
 	@ResponseBody
 	@RequestMapping("/getRelationMatches")
-	public Rest getRelationMatches(String sid, String mid)
+	public Rest getRelationMatches(String mid, String sid, String first, String threshold)
 	{
 		return Rest.ok();
 	}

@@ -5,6 +5,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.loris.base.context.LorisContext;
 import com.loris.base.web.scheduler.MainSchedulerMonitor;
+import com.loris.base.web.scheduler.TaskProducerMonitor;
 import com.loris.base.web.scheduler.TaskSchedulerMonitor;
 import com.loris.base.web.task.PriorityTaskQueue;
 import com.loris.base.web.task.TaskQueue;
@@ -76,10 +77,15 @@ public class SoccerMainSchedulerMonitor
 		
 		TaskQueue<MatchWebTask> queue = new PriorityTaskQueue<>();
 		
-		//产生器
+		//任务产生器
 		SoccerMatchTaskProducer producer = new SoccerMatchTaskProducer(queue);
-		scheduler.addRunnerable(producer);
 		
+		//任务生成器管理调度
+		TaskProducerMonitor<MatchWebTask> producerMonitor = new TaskProducerMonitor<>();
+		producerMonitor.addTaskProducer(producer);
+		scheduler.addRunnerable(producerMonitor);
+		
+		//任务执行进程管理器
 		TaskSchedulerMonitor<MatchWebTask> monitor = new TaskSchedulerMonitor<>(queue);
 		scheduler.addRunnerable(monitor);
 		

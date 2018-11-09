@@ -26,6 +26,7 @@ public class MainSchedulerMonitor implements Runnable
 	@Override
 	public void run()
 	{
+		logger.info("Start MainSchedulerMonitor...");
 		/**
 		 * 线程无限循环
 		 */
@@ -37,6 +38,7 @@ public class MainSchedulerMonitor implements Runnable
 				if(runner != null)
 				{					
 					Thread thread = new Thread(runner);
+					//thread.setDaemon(false);
 					thread.start();
 				}
 			}
@@ -46,6 +48,7 @@ public class MainSchedulerMonitor implements Runnable
 			}
 			if(stop)
 			{
+				logger.info("Stop MainSchedulerMonitor, exit.");
 				break;
 			}
 			try
@@ -54,6 +57,7 @@ public class MainSchedulerMonitor implements Runnable
 			}
 			catch(Exception e)
 			{
+				logger.info("Error: " + e.toString());
 				break;
 			}
 		}

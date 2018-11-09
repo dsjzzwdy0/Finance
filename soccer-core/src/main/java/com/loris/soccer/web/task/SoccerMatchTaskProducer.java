@@ -33,6 +33,7 @@ public class SoccerMatchTaskProducer extends SoccerTaskProducer
 	
 	public SoccerMatchTaskProducer()
 	{
+		this.name = "SoccerMatchTaskProducer";
 	}
 	
 	/**
@@ -41,6 +42,7 @@ public class SoccerMatchTaskProducer extends SoccerTaskProducer
 	 */
 	public SoccerMatchTaskProducer(TaskQueue<MatchWebTask> queue)
 	{
+		this();
 		this.taskQueue = queue;
 	}
 	
@@ -99,14 +101,18 @@ public class SoccerMatchTaskProducer extends SoccerTaskProducer
 		}
 		catch(Exception e)
 		{
+			logger.info("Error: " + e.toString());
 		}
 		try
 		{
 			matches = ZgzcwDataDownloader.downloadLatestMatch("bd");
 			if(matches == null || matches.size() <= 0)
 			{
+				logger.info("The match size is 0, exit");
 				return false;
 			}
+			
+			logger.info("There are total " + matches.size() + " matches.");
 		}
 		catch(Exception e)
 		{
@@ -130,13 +136,14 @@ public class SoccerMatchTaskProducer extends SoccerTaskProducer
 			throw new IllegalArgumentException("The TaskQueue object is null, please set the taskQueue value first.");
 		}
 		
-		if(!isInitialized() || matches == null)
+		if(!initialized || matches == null || matches.isEmpty())
 		{
 			if(!initialize())
 			{
 				logger.info("Initialize error, producer exit.");
 				return ;
 			}
+			logger.info("Initialize success");
 		}
 		
 		cleanMatchs();

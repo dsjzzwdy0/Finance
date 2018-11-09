@@ -118,7 +118,21 @@ public class MatchDocLoader
 		return items;
 	}
 	
-	
+	/**
+	 * 获得关联比赛的数据,包含欧赔数据、亚盘数据，相关联比赛的同联赛、同赛季轮次的比赛数据
+	 * @param sid
+	 * @param odds
+	 * @param gid
+	 * @param threshold
+	 * @param bwin
+	 * @param first
+	 * @return
+	 */
+	public static List<MatchOdds> getRelationMatchOdds(String sid, float odds, String gid,
+			float threshold, boolean bwin, boolean first)
+	{
+		return null;
+	}
 	
 	/**
 	 * 获得比赛数据元素列表

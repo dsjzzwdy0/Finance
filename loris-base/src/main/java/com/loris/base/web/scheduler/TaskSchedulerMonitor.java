@@ -61,8 +61,10 @@ public class TaskSchedulerMonitor<T extends Task> implements Runnable, TaskEvent
 		T currentTask = null;
 		while (true)
 		{
+			//logger.info("Process task...");
 			if (hasIdleTaskThread() && ((currentTask = taskQueue.popTask()) != null))
 			{
+				logger.info("Task: " + currentTask);
 				try
 				{
 					currentTask.addTaskEventListener(this);
@@ -86,6 +88,7 @@ public class TaskSchedulerMonitor<T extends Task> implements Runnable, TaskEvent
 			}
 			else // 没有新的任务时,则进入休眠时间
 			{
+				logger.info("Waiting for new task...");
 				sleep(idleTimeLong);
 			}
 		}
@@ -104,6 +107,7 @@ public class TaskSchedulerMonitor<T extends Task> implements Runnable, TaskEvent
 		}
 		catch (Exception e)
 		{
+			logger.info("Error: " + e.toString());
 		}
 	}
 

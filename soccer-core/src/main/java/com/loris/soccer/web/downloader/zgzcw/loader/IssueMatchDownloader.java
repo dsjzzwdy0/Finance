@@ -197,8 +197,9 @@ public class IssueMatchDownloader extends ZgzcwSoccerDownloader
 				//该数据只需要下载一次
 				if(!ArraysUtil.hasSameObject(historyWebPages, historyChecker))
 				{
-					MatchHistoryWebPage historyWebPage = creator.createMatchHistoryWebPage(mid);
-					pages.put(historyWebPage);
+					//历史数据不再下载
+					//MatchHistoryWebPage historyWebPage = creator.createMatchHistoryWebPage(mid);
+					//pages.put(historyWebPage);
 				}
 			}
 		}

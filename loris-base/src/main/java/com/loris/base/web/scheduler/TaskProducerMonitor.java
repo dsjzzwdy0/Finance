@@ -24,7 +24,7 @@ public class TaskProducerMonitor<T extends Task> implements Runnable, TaskProduc
 	protected List<TaskProducer<T>> producers = new ArrayList<>();
 	
 	/** 空闲时间 */
-	protected long idleTime = 10000;
+	protected long idleTime = 60000;
 	
 	/**
 	 * 启动线程
@@ -40,6 +40,7 @@ public class TaskProducerMonitor<T extends Task> implements Runnable, TaskProduc
 			//没有生成器,则停止该循环处理工作
 			if(producers.size() == 0)
 			{
+				logger.info("There are no producers, exit.");
 				break;
 			}
 			
@@ -53,15 +54,22 @@ public class TaskProducerMonitor<T extends Task> implements Runnable, TaskProduc
 					
 					Thread thread = new Thread(producer);
 					thread.start();
+					//continue;
 				}
-				
-				//设置空闲资源
-				try
+				else
 				{
-					Thread.sleep(idleTime);
+					logger.info(producer.getName() + " neednot to start.");
 				}
-				catch (Exception e) {
-				}
+			}
+			
+			//设置空闲资源
+			try
+			{
+				logger.info("Waiting for next producing...");
+				Thread.sleep(idleTime);
+			}
+			catch (Exception e) {
+				logger.info("Error: " + e.toString());
 			}
 		}
 	}
