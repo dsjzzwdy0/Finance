@@ -225,6 +225,23 @@ public class SoccerController extends BaseController
 	}
 	
 	/**
+	 * 查看关联的比赛
+	 * @return
+	 */
+	@RequestMapping("matchrel")
+	public ModelAndView getMatchRelation()
+	{
+		List<CorpSetting> settings = soccerManager.getCorpSettings();
+		ModelAndView view = new ModelAndView("matchrel.soccer");
+		view.addObject("type", "analysis");
+		view.addObject("issues", getLatestIssues(10));		
+		view.addObject("settings", settings);	
+
+		setUserObject(view);
+		return view;
+	}
+	
+	/**
 	 * 赛事中心页面：一张总的数据页面
 	 * 
 	 * @return 赛事中心

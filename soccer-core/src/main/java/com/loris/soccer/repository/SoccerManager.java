@@ -974,6 +974,18 @@ public class SoccerManager
 	}
 	
 	/**
+	 * 获得北单数据
+	 * @param mids
+	 * @return
+	 */
+	public List<BdMatch> getBdMatches(List<String> mids)
+	{
+		EntityWrapper<BdMatch> ew = new EntityWrapper<>();
+		ew.in("mid", mids);
+		return bdMatchService.selectList(ew);
+	}
+	
+	/**
 	 * 按照日期获得比赛数据
 	 * @param date 日期
 	 * @return 比赛列表

@@ -4,21 +4,14 @@
 <%@page import="com.loris.soccer.analysis.util.IssueMatchUtil" %>
 <%@page import="com.baomidou.mybatisplus.toolkit.StringUtils" %>
 <%
-    String issue = request.getParameter("issue");
+	String mids = request.getParameter("mids");
 	String sid = request.getParameter("sid");		//配置编号
-	String type = request.getParameter("type");
-	if(StringUtils.isEmpty(issue))
-	{
-		issue = IssueMatchUtil.getCurrentIssue();
-	}
+
 	if(StringUtils.isEmpty(sid))
 	{
 		sid = "d774110d-8fbc-4284-bb07-1a98f2cfdc0d";
 	}
-	if(StringUtils.isEmpty(type))
-	{
-		type = "bd";
-	}
+
 %>
 <link rel="stylesheet" type="text/css" href="../content/css/soccer/datacenter.css" />
 <link rel="stylesheet" type="text/css" href="../content/scripts/soccer/soccer-table.css" />
@@ -40,10 +33,9 @@
 
 <script type="text/javascript">
 
-var url = "../soccerdata/getMatchesOdds";
+var url = "../soccerdata/getRelationMatchesOdds";
 //系统参数
-var issue = "<%=issue%>";
-var type = "<%=type%>";
+var mids = "<%=mids%>";
 var sid = "<%=sid%>"
 
 //基础数据
@@ -97,8 +89,7 @@ function createMatchOddsTable(conf)
 		dataType : "json",
 		data : {
 			"sid": sid,
-			"issue": issue,
-			"type": type,
+			"mids": mids,
 		},
 		jsonp:'callback',
 		success: null,
@@ -116,9 +107,9 @@ function createMatchOddsTable(conf)
 			}
 		},
 		complete: function(){
-			$('#gridTable tbody').on('click', '.relation', function(){
-				getRelatedMatch($(this));
-			});
+			//$('#gridTable tbody').on('click', '.relation', function(){
+			//	getRelatedMatch($(this));
+			//});
 		}
 	}	
 	options.source = source;
@@ -160,7 +151,7 @@ function getRelatedMatch(element)
 	});
 	
 	//layer.msg(mid + ': ' + gid + ', ' + val + ': ' + mids.join(';'));
-	window.open('../soccer/matchrel?mids=' + mids.join(','));
+	window.open('../soccer/ralation?mids=' + mids.join(','));
 }
 
 function stateChange(state, source, conf)
@@ -199,14 +190,13 @@ function stateChange(state, source, conf)
 $(document).ready(function() {
 	showNewToolBar();
 	showSettingSel();
+	$('#issueSel').hide();
+	$('#typeSel').hide();
+	$('#sameLeague').attr('checked', false);
 	
 	if($.isNotNullOrEmpty(sid))
 	{
 		$('#settingSel').val(sid);
-	}
-	if($.isNotNullOrEmpty(issue))
-	{
-		$('#issueSel').val(issue);
 	}
 
 	var conf = getConfValue();

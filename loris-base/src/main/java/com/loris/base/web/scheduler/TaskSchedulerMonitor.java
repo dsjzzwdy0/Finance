@@ -68,13 +68,14 @@ public class TaskSchedulerMonitor<T extends Task> implements Runnable, TaskEvent
 				try
 				{
 					currentTask.addTaskEventListener(this);
-					long waitTime = currentTask.getWaitTime();
+					long waitTime = computeWaitTime((int)currentTask.getWaitTime());
 					
-					int rand = random.nextInt((int)(waitTime * 0.2));
-					waitTime = (rand % 2 == 0) ? (waitTime + rand) : (waitTime - rand);
 					sleep(waitTime);
 					
 					logger.info("Starting task: " + currentTask);
+					
+					//添加到当前正在执行的任务
+					currentRunningTasks.add(currentTask);
 					Thread thread = new Thread(currentTask);
 					thread.start();
 				}
@@ -92,6 +93,18 @@ public class TaskSchedulerMonitor<T extends Task> implements Runnable, TaskEvent
 				sleep(idleTimeLong);
 			}
 		}
+	}
+	
+	/**
+	 * 计算等待时间
+	 * @param waitTime
+	 * @return
+	 */
+	public int computeWaitTime(int waitTime)
+	{
+		int rand = random.nextInt((int)(waitTime * 0.2));
+		waitTime = (rand % 2 == 0) ? (waitTime + rand) : (waitTime + rand);
+		return waitTime;
 	}
 
 	/**

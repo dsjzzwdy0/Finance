@@ -155,6 +155,53 @@ public class SoccerDataController
 	}
 	
 	/**
+	 * 获取相关比赛的信息
+	 * @param mids 比赛列表
+	 * @param sid 欧赔配置方案
+	 * @return　比赛信息列表
+	 */
+	@ResponseBody
+	@RequestMapping("/getRelationMatchesOdds")
+	public Rest getRelationMatchesOdds(String mids, String sid)
+	{
+		List<String> midlist = splitString(mids, ",");
+		if(midlist == null || midlist.isEmpty())
+		{
+			return Rest.failure("There are no matches in the list.");
+		}
+		
+		CorpSetting setting = null;
+		setting = soccerManager.getCorpSetting(sid);
+		if(setting == null)
+		{
+			return Rest.failure("The CorpSetting '" + sid + "' is not set correctly.");
+		}
+		
+		long st = System.currentTimeMillis();		
+		List<MatchOdds> ops = MatchDocLoader.loadMatchesOdds(midlist, setting);
+		long en = System.currentTimeMillis();
+		if(ops == null)
+		{
+			String info = "There are no match ops in the database. ";
+			logger.info(info);
+			return Rest.failure(info);
+		}
+		
+		List<MatchOddsElement> elements = new ArrayList<>();
+		for (MatchOdds op : ops)
+		{
+			elements.add(new MatchOddsElement(op));
+		}
+		
+		logger.info("Total spend " + (en - st) + " ms to load " + ops.size() + " match ops.");
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("setting", setting);
+		map.put("matches", elements);
+		return Rest.okData(map);
+	}
+	
+	/**
 	 * 计算比赛的欧赔赔率方差值
 	 * @param issue 日期
 	 * @return 数据列表
@@ -1252,5 +1299,24 @@ public class SoccerDataController
 			gids.add(corp.getGid());
 		}
 		return gids;
+	}
+	
+	/**
+	 * 分割字符串
+	 * @param str
+	 * @param regex
+	 * @return
+	 */
+	protected static List<String> splitString(String str, String regex)
+	{
+		String[] reStrings = str.split(regex);
+		List<String> list = new ArrayList<>();
+		for (String string : reStrings)
+		{
+			string = string.trim();
+			if(StringUtils.isNotEmpty(string))
+				list.add(string);
+		}
+		return list;
 	}
 }

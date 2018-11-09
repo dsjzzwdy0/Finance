@@ -203,7 +203,7 @@ public class ZgzcwDataDownloader
 		OddsOpWebPageParser parser = new OddsOpWebPageParser();
 		if(!parser.parseWebPage(page))
 		{
-			logger.info("Error occured when parser " + page + ".");
+			logger.info("Error occured when parse " + page + ".");
 			return false;
 		}
 		

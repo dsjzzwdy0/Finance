@@ -1,5 +1,10 @@
 package com.loris.base.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.baomidou.mybatisplus.toolkit.StringUtils;
+
 public class StringUtil
 {
 	/**
@@ -16,6 +21,8 @@ public class StringUtil
 		}
 		return false;
 	}
+	
+	
 	
 	/**
 	 * 压缩掉所有空格符号
