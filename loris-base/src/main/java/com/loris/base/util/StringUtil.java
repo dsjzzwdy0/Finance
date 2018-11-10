@@ -1,10 +1,5 @@
 package com.loris.base.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.baomidou.mybatisplus.toolkit.StringUtils;
-
 public class StringUtil
 {
 	/**

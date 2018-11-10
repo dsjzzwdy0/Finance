@@ -3,7 +3,6 @@ package com.loris.lottery.aop;
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -44,8 +43,9 @@ public class PermissionAspect extends BaseAspect
 		user = (User)request.getSession().getAttribute(WebConstants.CURRENT_USER);		
 		if(user == null)
 		{
-			HttpServletResponse response = getHttpServletResponse();
-			response.sendRedirect("../user/login?redirect=" + request.getRequestURI());
+			//HttpServletResponse response = getHttpServletResponse();
+			//response.sendRedirect("../user/login?redirect=" + request.getRequestURI());
+			
 		}
 		startTimeMillis = System.currentTimeMillis(); // 记录方法开始执行的时间		
 		//System.out.println("Permission: " + targetClass + " " + methodName + " " + startTimeMillis);		
