@@ -37,7 +37,6 @@ public class SoccerMatchTaskProducer extends SoccerTaskProducer
 	}
 	
 	/**
-	 * 
 	 * @param queue
 	 */
 	public SoccerMatchTaskProducer(TaskQueue<MatchWebTask> queue)

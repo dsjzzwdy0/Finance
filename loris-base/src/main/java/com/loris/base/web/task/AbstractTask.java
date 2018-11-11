@@ -90,6 +90,30 @@ public abstract class AbstractTask implements Task
 	}
 	
 	/**
+	 * 在执行任务之前
+	 */
+	@Override
+	public void preExecute()
+	{
+	}
+	
+	/**
+	 * 在执行任务之后
+	 */
+	@Override
+	public void postExecute()
+	{
+	}
+	
+	/**
+	 * 在执行任务过程中发现有问题
+	 */
+	@Override
+	public void errExecute()
+	{
+	}
+	
+	/**
 	 * 任务结束
 	 */
 	protected void finish()

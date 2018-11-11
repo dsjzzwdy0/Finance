@@ -2,13 +2,12 @@ package com.loris.soccer.web.task;
 
 import org.apache.log4j.Logger;
 
-import com.loris.base.web.task.AbstractTask;
 import com.loris.base.web.task.event.TaskEvent;
 import com.loris.base.web.task.event.TaskEvent.TaskEventType;
 import com.loris.soccer.bean.item.MatchItem;
 import com.loris.soccer.web.downloader.zgzcw.ZgzcwDataDownloader;
 
-public class MatchWebTask extends AbstractTask implements Comparable<MatchWebTask>
+public class MatchWebTask extends SoccerTask implements Comparable<MatchWebTask>
 {
 	private static Logger logger = Logger.getLogger(MatchWebTask.class);
 	

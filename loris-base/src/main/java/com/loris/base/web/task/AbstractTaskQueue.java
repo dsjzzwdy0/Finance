@@ -1,5 +1,6 @@
 package com.loris.base.web.task;
 
+import java.util.List;
 import java.util.Queue;
 
 /**
@@ -16,7 +17,7 @@ public class AbstractTaskQueue<T> implements TaskQueue<T>
 	 * 加入任务到队列数据中
 	 */
 	@Override
-	public void pushTask(T task)
+	public <K extends T> void pushTask(K task)
 	{
 		synchronized (queue)
 		{
@@ -40,6 +41,21 @@ public class AbstractTaskQueue<T> implements TaskQueue<T>
 	public boolean hasMoreTask()
 	{
 		return !queue.isEmpty();
+	}
+
+	@Override
+	public void remove(T task)
+	{
+		synchronized(queue)
+		{
+			queue.remove(task);
+		}
+	}
+
+	@Override
+	public <K extends T> void pushAllTasks(List<K> tasks)
+	{
+		queue.addAll(tasks);
 	}
 
 }

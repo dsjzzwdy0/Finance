@@ -34,6 +34,21 @@ public interface Task extends Runnable
 	void setWaitTime(long waitTime);
 	
 	/**
+	 * 在执行任务之前
+	 */
+	void preExecute();
+	
+	/**
+	 * 在执行任务之后
+	 */
+	void postExecute();
+	
+	/**
+	 * 在执行任务过程中发现有问题
+	 */
+	void errExecute();
+	
+	/**
 	 * 加入消息监听器
 	 * @param listener
 	 */

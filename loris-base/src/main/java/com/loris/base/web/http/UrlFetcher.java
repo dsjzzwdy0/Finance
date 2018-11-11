@@ -220,7 +220,6 @@ public class UrlFetcher
 				throw (new UrlFetchException("Page not Found."));
 			}
 			
-
 			content = httpost.getResponseBody();
 
 			// byte[] bs = httpget.getResponseBody();

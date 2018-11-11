@@ -14,7 +14,8 @@ public class TaskEvent
 		Add,
 		Start,
 		Finished,
-		Removed
+		Removed,
+		Error
 	}
 	
 	/** Task */
@@ -30,6 +31,7 @@ public class TaskEvent
 	public TaskEvent(Task task, TaskEventType type)
 	{
 		this.task = task;
+		this.type = type;
 	}
 
 	public Task getTask()
