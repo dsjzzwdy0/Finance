@@ -184,7 +184,7 @@ public class SoccerApp
 			//testOddsCorpConfigure(context);		
 			// testJcMatchMapping(context);			
 			// testJcMatchDataVector(context);			
-			//testMainPageParser(context);
+			testMainPageParser(context);
 			
 			//testRoundMatch(context);
 			
@@ -207,7 +207,7 @@ public class SoccerApp
 			//testPossion(context);
 			//testIssueLeagueMatches(context);
 			
-			testTaskQueue(context);
+			//testTaskQueue(context);
 			
 			close();
 			// context = null;
