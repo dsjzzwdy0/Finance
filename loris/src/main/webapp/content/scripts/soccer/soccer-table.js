@@ -16,11 +16,11 @@ function getDataFromServer(soccerTable, gridTable) {
 		return;
 	}
 	source.success = function(json) {
+		$($body).html('');
 		if($.isNotNullOrEmpty(this.presuccess))
 		{
 			this.presuccess(json, soccerTable);
 		}
-		$($body).html('');
 		soccerTable.createTable(gridTable);
 	};
 	source.error = function() {
@@ -361,20 +361,23 @@ function SoccerTableColumns()
 			name: '编号',
 			sortable: true,
 			rowspan: rowspan,
+			type: 'base',
 		}
 		var col1 = {
 			field: 'leaguename',
 			name: '联赛',
 			sortable: true,
 			rowspan: rowspan,
+			type: 'base',
 			formatter: function(value, row, index){
 				return '<a href="analeague?type=leaguerel&mid=' + row.mid + '" class="leagueInfo">' + value + '</a>';
-			}
+			},
 		}
 		var col2 = {
 			field: 'mid',
 			name: '比赛',
 			rowspan: rowspan,
+			type: 'base',
 			formatter: function(value, row, index){
 				return formatMatchTeamInfo(row);
 			}
@@ -384,6 +387,7 @@ function SoccerTableColumns()
 			sortable: true,
 			name: '比赛时间',
 			rowspan: rowspan,
+			type: 'base',
 			formatter: function(value, row, index){
 				return '<div title="比赛时间: ' + value + '">' + formatDate(value, 'hh:mm') + '</div>';
 			}			
@@ -407,19 +411,20 @@ function SoccerTableColumns()
 				className: 'oddsvalue',
 				param: opcorp,
 				indexValue: j,
-				formatter: function(value, row, index){
+				type: 'odds',
+				formatter: function(value, row, index, first){
 					var c = this.param;
-					var j = this.indexValue;
+					var j = index;//this.indexValue;
 					var odds = MatchDoc.getOpOdds(row, c.gid);
 					if($.isNullOrEmpty(odds) || $.isNullOrEmpty(odds.values)) return '无';
 					else if($.isNotNullOrEmpty(table.options.relator))
 					{
-						return formatOpValueColumn(j, row, odds, c, table.options.first);
+						return formatOpValueColumn(j, row, odds, c, first);
 					}
 					else
 					{
-						var st = table.options.first ? 0 : 3;
-						var title = table.options.first ? '初盘时间 ' + odds.firsttime : '即时盘时间 ' + odds.time;
+						var st = first ? 0 : 3;
+						var title = first ? '初盘时间 ' + odds.firsttime : '即时盘时间 ' + odds.time;
 						return '<div class="oddsvalue" title="' + (st) + '">' 
 							+ formatValue(odds.values[st + j]) + '</div>';
 					}
@@ -442,19 +447,23 @@ function SoccerTableColumns()
 				className: 'oddsvalue',
 				param: ypcorp,
 				indexValue: j,
-				formatter: function(value, row, index){
+				type: 'odds',
+				formatter: function(value, row, index, first){
 					var c = this.param;
-					var j = this.indexValue;
+					var j = index;
 					var odds = MatchDoc.getYpOdds(row, c.gid);
 					if($.isNullOrEmpty(odds)) return '无';
 					else
 					{							
-						var st = table.options.first ? 0 : 3;
+						var st = first ? 0 : 3;
 						if(j == 1)
 						{
 							return '<div class="oddsvalue">' + OddsUtil.formatHandicap(odds.values[st + j])+ '</div>';
 						}
-						return '<div class="oddsvalue">' + formatValue(odds.values[st + j]) + '</div>';
+						else
+						{
+							return '<div class="oddsvalue">' + formatValue(odds.values[st + j]) + '</div>';
+						}
 					}
 				}
 			}
@@ -514,6 +523,7 @@ function SoccerTableColumns()
 			field: 'mid',
 			name: '详细信息',
 			rowspan: 2,
+			type: 'base',
 			formatter: function(value, row, index){
 				var mid = value;
 			   	var html = '<a class="analysis" href="match?type=bjop&mid=' + mid + '" target="blank">欧</a>';
@@ -1087,7 +1097,14 @@ function SoccerTable(options)
 		var cols = this.formlize(columns);
 		for(var i = 0; i < len; i ++)
 		{
-			html.push(this.formatRowValue(cols, rows[i], i));
+			if(this.options.firstWithLast)
+			{
+				html.push(this.formatTwoRowValue(cols, rows[i], i));
+			}
+			else
+			{
+				html.push(this.formatRowValue(cols, rows[i], i));
+			}
 		}
 		$(tbody).html(html.join(''));
 		
@@ -1095,6 +1112,39 @@ function SoccerTable(options)
 		{
 			this.options.postshow();
 		}
+	}
+	
+	/**
+	 * 格式化两行数据
+	 */
+	this.formatTwoRowValue = function(formats, row, index)
+	{
+		var len = formats.length;
+		var html = [];
+		var row1 = [];
+		var row2 = [];
+		row1.push('<tr>')
+		row2.push('<tr>')
+		for(var i = 0; i < len; i ++)
+		{
+			var format = formats[i];
+			
+			if(format.type == 'odds')
+			{
+				row1.push(this.formatColumnValue(format, row, index, true));
+				row2.push(this.formatColumnValue(format, row, index, false));
+			}
+			else
+			{
+				row1.push(this.formatColumnValue(format, row, index, false, 2));
+			}
+		}
+		row1.push('</tr>');
+		row2.push('</tr>')
+		
+		html.push(row1);
+		html.push(row2);
+		return html.join('');
 	}
 	
 	/**
@@ -1108,7 +1158,7 @@ function SoccerTable(options)
 		for(var i = 0; i < len; i ++)
 		{
 			var format = formats[i];
-			html.push(this.formatColumnValue(format, row, index));	
+			html.push(this.formatColumnValue(format, row, i, this.options.first));	
 		}
 		html.push('</tr>');
 		return html.join('');
@@ -1117,7 +1167,7 @@ function SoccerTable(options)
 	/**
 	 * 格式化字段数据
 	 */
-	this.formatColumnValue = function(format, row, index)
+	this.formatColumnValue = function(format, row, index, first, rowspan)
 	{
 		var key = format.field;
 		var html = [];
@@ -1130,6 +1180,10 @@ function SoccerTable(options)
 		{
 			html.push(' title="' + format['title'] + '"');
 		}
+		if($.isNotNullOrEmpty(rowspan) && rowspan > 1)
+		{
+			html.push(' rowspan="' + rowspan + '"');
+		}
 		html.push('>')
 		if($.isNullOrEmpty(format['formatter']))
 		{
@@ -1137,7 +1191,7 @@ function SoccerTable(options)
 		}
 		else
 		{
-			html.push(format.formatter(row[key], row, index));
+			html.push(format.formatter(row[key], row, format.indexValue, first));
 		}
 		html.push('</td>')
 		return html.join(''); 

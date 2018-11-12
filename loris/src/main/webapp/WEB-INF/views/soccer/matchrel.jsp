@@ -51,6 +51,7 @@ var options = {
 	setting: null,
 	first: true,
 	filter: null,
+	firstWithLast: true,
 	clear: function()
 	{
 		this.columns = null;
@@ -96,6 +97,10 @@ function createMatchOddsTable(conf)
 		error: null,
 		presuccess: function(json, soccerTable)
 		{
+			if($.isNullOrEmpty(json.data))
+			{
+				return;
+			}
 			if ($.isNotNullOrEmpty(json.data.setting)) {
 				var corpSetting = new CorpSetting(json.data.setting);
 				soccerTable.options.setting = corpSetting;
