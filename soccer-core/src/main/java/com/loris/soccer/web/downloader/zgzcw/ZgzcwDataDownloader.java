@@ -13,6 +13,7 @@ import com.loris.base.util.DateUtil;
 import com.loris.base.web.http.UrlFetchException;
 import com.loris.base.web.http.UrlFetcher;
 import com.loris.soccer.analysis.checker.IssueMatchChecker;
+import com.loris.soccer.bean.data.table.league.League;
 import com.loris.soccer.bean.data.table.lottery.BdMatch;
 import com.loris.soccer.bean.data.table.lottery.JcMatch;
 import com.loris.soccer.bean.data.table.odds.Op;
@@ -23,10 +24,12 @@ import com.loris.soccer.repository.SoccerManager;
 import com.loris.soccer.web.downloader.zgzcw.page.LotteryWebPage;
 import com.loris.soccer.web.downloader.zgzcw.page.OddsOpWebPage;
 import com.loris.soccer.web.downloader.zgzcw.page.OddsYpWebPage;
+import com.loris.soccer.web.downloader.zgzcw.page.ZgzcwCenterPage;
 import com.loris.soccer.web.downloader.zgzcw.parser.LotteryBdWebPageParser;
 import com.loris.soccer.web.downloader.zgzcw.parser.LotteryJcWebPageParser;
 import com.loris.soccer.web.downloader.zgzcw.parser.OddsOpWebPageParser;
 import com.loris.soccer.web.downloader.zgzcw.parser.OddsYpWebPageParser;
+import com.loris.soccer.web.downloader.zgzcw.parser.ZgzcwCenterParser;
 import com.loris.soccer.web.repository.SoccerWebPageManager;
 import com.loris.soccer.web.task.MatchWebTask;
 import com.loris.soccer.web.task.MatchWebTask.MatchWebTaskType;
@@ -85,6 +88,27 @@ public class ZgzcwDataDownloader
 		soccerWebPageManager = context.getBean(SoccerWebPageManager.class);
 		
 		processor = new ZgzcwWebPageProcessor(soccerManager, soccerWebPageManager);
+	}
+	
+	/**
+	 * 下载数据中心页面
+	 * @return 联赛数据
+	 * @throws UrlFetchException
+	 */
+	public static boolean downloadZgzcwCenterPage() throws UrlFetchException
+	{
+		ZgzcwCenterPage page = pageCreator.createZgzcwMainPage();
+		if(!download(page))
+		{
+			return false;
+		}
+		ZgzcwCenterParser parser = new ZgzcwCenterParser();
+		if(parser.parseWebPage(page))
+		{
+			List<League> leagues = parser.getLeagues();
+			return soccerManager.addOrUpdateLeagues(leagues);
+		}
+		return false;
 	}
 	
 	/**

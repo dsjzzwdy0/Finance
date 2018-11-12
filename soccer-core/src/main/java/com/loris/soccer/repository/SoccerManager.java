@@ -248,6 +248,7 @@ public class SoccerManager
 				if(!existInLeagues(league))
 				{
 					newLeagues.add(league);
+					leagues.add(league);
 				}
 			}
 		}
