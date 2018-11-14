@@ -38,7 +38,7 @@ public class ClassifierUtil
 			Attribute<?> attr = as.getAttribute(attributeName);
 			if (attributes.containsKey(attr.getAttributeValue()))
 			{
-				List<Element> l = attributes.get(attr);
+				List<Element> l = attributes.get(attr.getAttributeValue());
 				l.add(as);
 			}
 			else

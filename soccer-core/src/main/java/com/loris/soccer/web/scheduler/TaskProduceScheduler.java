@@ -56,6 +56,15 @@ public abstract class TaskProduceScheduler<T extends Task> extends AbstractSched
 	}
 	
 	/**
+	 * 
+	 * @return
+	 */
+	public boolean isInitialized()
+	{
+		return initialized;
+	}
+	
+	/**
 	 * 线程运行
 	 */
 	@Override
@@ -65,7 +74,7 @@ public abstract class TaskProduceScheduler<T extends Task> extends AbstractSched
 		{
 			if(shouldBegin())
 			{
-				if(!initialized)
+				if(!isInitialized())
 				{
 					logger.info("Start to initialize the '" + name + "'.");
 					initialize();

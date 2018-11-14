@@ -87,7 +87,7 @@ public class IssueMatchMapping
 	 */
 	public boolean contains(IssueMatch match)
 	{
-		if(pairs.containsKey(match) || pairs.containsValue(match))
+		if(pairs.containsKey((Object)match) || pairs.containsValue((Object)match))
 		{
 			return true;
 		}
