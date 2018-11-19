@@ -80,6 +80,13 @@ OddsUtil.formatHandicap = function(value)
 	return '';
 }
 
+if (!Array.isArray)
+{
+	Array.isArray = function(arg) {
+		return Object.prototype.toString.call(arg) === '[object Array]';
+	};
+}
+
 var Association = Association || {};
 Association.AssClasses = ['association_red', 'association_thin', 'association_cyan', 'association_blue', 'association_orange'];
 
@@ -1142,8 +1149,8 @@ function SoccerTable(options)
 		row1.push('</tr>');
 		row2.push('</tr>')
 		
-		html.push(row1);
-		html.push(row2);
+		html.push(row1.join(''));
+		html.push(row2.join(''));
 		return html.join('');
 	}
 	
