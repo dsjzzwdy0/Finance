@@ -50,7 +50,7 @@
 			</div>
 		</div>
 		<div class="progressBar">
-			<img id="progressImgage" class="progress hide" alt="" src="../content/images/ajax-loader.gif")"/>
+			<img id="progressImgage" class="progress hide" alt="" src="../content/images/ajax-loader.gif"/>
         	<div id="maskOfProgressImage" class="mask hide"></div>
 		</div>
 	</div>
