@@ -931,9 +931,9 @@ function SoccerTable(options)
 		//格式化头部栏目
 		function formatHeaderColumn(html, column)
 		{
-			html.push('<th ' + (column.rowspan > 0 ? 'rowspan="' + column.rowspan + "' " : '') 
-					+ (column.colspan > 0 ? 'colspan="' + column.colspan + "' " : '') 
-					+ ($.isNullOrEmpty(column.className) ? '' : 'class="' + column.className + "' ")
+			html.push('<th ' + (column.rowspan > 0 ? 'rowspan="' + column.rowspan + '" ' : '') 
+					+ (column.colspan > 0 ? 'colspan="' + column.colspan + '" ' : '') 
+					+ ($.isNullOrEmpty(column.className) ? '' : 'class="' + column.className + '" ')
 					+ 'style="align: center;">');
 			
 			html.push('<div class="th-wrap">');			
