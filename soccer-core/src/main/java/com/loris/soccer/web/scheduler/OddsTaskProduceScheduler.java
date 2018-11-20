@@ -221,6 +221,24 @@ public class OddsTaskProduceScheduler extends TaskProduceScheduler<SoccerTask>
 	}
 	
 	/**
+	 * 加入比赛数据
+	 * @param match
+	 */
+	protected void addMatch(MatchItem match)
+	{
+		if(matches == null)
+		{
+			matches = new ArrayList<>();
+		}
+		
+		matchChecker.setMid(match.getMid());
+		if(!ArraysUtil.hasSameObject(matches, matchChecker))
+		{
+			matches.add(match);
+		}
+	}
+	
+	/**
 	 * 生成器的初始化
 	 * @return 是否成功的标志
 	 */
@@ -241,10 +259,7 @@ public class OddsTaskProduceScheduler extends TaskProduceScheduler<SoccerTask>
 					isJcInitialized = true;
 					for (IssueMatch issueMatch : jcMatches)
 					{
-						if(!ArraysUtil.hasSameObject(matches, matchChecker))
-						{
-							matches.add(issueMatch);
-						}
+						addMatch(issueMatch);
 					}
 				}
 				logger.info("There are total " + jcMatches.size() + " JcMatches.");
@@ -273,10 +288,7 @@ public class OddsTaskProduceScheduler extends TaskProduceScheduler<SoccerTask>
 					isBdInitialized = true;
 					for (IssueMatch issueMatch : bdMatches)
 					{
-						if(!ArraysUtil.hasSameObject(matches, matchChecker))
-						{
-							matches.add(issueMatch);
-						}
+						addMatch(issueMatch);
 					}
 				}				
 				logger.info("There are total " + bdMatches.size() + " BdMatches.");
