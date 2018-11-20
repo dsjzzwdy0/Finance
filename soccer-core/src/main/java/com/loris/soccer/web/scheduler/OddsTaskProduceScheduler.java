@@ -1,5 +1,6 @@
 package com.loris.soccer.web.scheduler;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -7,9 +8,11 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import com.loris.base.util.ArraysUtil;
 import com.loris.base.web.task.Task;
 import com.loris.base.web.task.event.TaskEvent;
 import com.loris.base.web.task.event.TaskEvent.TaskEventType;
+import com.loris.soccer.analysis.checker.MatchChecker;
 import com.loris.soccer.bean.item.IssueMatch;
 import com.loris.soccer.bean.item.MatchItem;
 import com.loris.soccer.web.downloader.zgzcw.ZgzcwDataDownloader;
@@ -23,7 +26,7 @@ public class OddsTaskProduceScheduler extends TaskProduceScheduler<SoccerTask>
 	private static Logger logger = Logger.getLogger(OddsTaskProduceScheduler.class);
 	
 	/** The matches. */
-	List<? extends IssueMatch> matches = null;
+	List<MatchItem> matches = null;
 	
 	/** 数据下载的记录 */
 	protected Map<String, DownloadRecord> downRecords = new HashMap<>();
@@ -39,6 +42,15 @@ public class OddsTaskProduceScheduler extends TaskProduceScheduler<SoccerTask>
 	
 	/** Task的序列编号*/
 	protected int taskIndex = 1;
+	
+	/** 竞彩数据初始化 */
+	protected boolean isJcInitialized = false;
+
+	/** 北单数据初始化*/
+	protected boolean isBdInitialized = false;
+	
+	/** 比赛检测器 */
+	protected MatchChecker<MatchItem> matchChecker = new MatchChecker<>();
 	
 	/**
 	 * Create a new instance ofOddsTaskProduceScheduler.
@@ -74,7 +86,7 @@ public class OddsTaskProduceScheduler extends TaskProduceScheduler<SoccerTask>
 		
 		taskIndex = 1;		
 		Date date = new Date();
-		for (IssueMatch match : matches)
+		for (MatchItem match : matches)
 		{
 			//检测是否需要下载
 			if(needToDownload(date, match))
@@ -122,6 +134,17 @@ public class OddsTaskProduceScheduler extends TaskProduceScheduler<SoccerTask>
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * 初始化数据
+	 */
+	@Override
+	public void reset()
+	{
+		super.reset();
+		isBdInitialized = false;
+		isJcInitialized = false;
 	}
 	
 	/**
@@ -189,15 +212,58 @@ public class OddsTaskProduceScheduler extends TaskProduceScheduler<SoccerTask>
 	}
 	
 	/**
+	 * 
+	 * @return
+	 */
+	public boolean isInitialized()
+	{
+		return initialized && isBdInitialized && isJcInitialized;
+	}
+	
+	/**
+	 * 加入比赛数据
+	 * @param match
+	 */
+	protected void addMatch(MatchItem match)
+	{
+		if(matches == null)
+		{
+			matches = new ArrayList<>();
+		}
+		
+		matchChecker.setMid(match.getMid());
+		if(!ArraysUtil.hasSameObject(matches, matchChecker))
+		{
+			matches.add(match);
+		}
+	}
+	
+	/**
 	 * 生成器的初始化
 	 * @return 是否成功的标志
 	 */
 	public boolean initialize()
 	{
+		logger.info("Start to initialize the SoccerMatchTaskProducer...");
+		if(matches == null)
+		{
+			matches = new ArrayList<>();
+		}
 		try
 		{
-			logger.info("Start to initialize the SoccerMatchTaskProducer...");
-			ZgzcwDataDownloader.downloadLatestMatch("jc");
+			if(!isJcInitialized)
+			{			
+				List<? extends IssueMatch> jcMatches = ZgzcwDataDownloader.downloadLatestMatch("jc");
+				if(jcMatches != null && !jcMatches.isEmpty())
+				{
+					isJcInitialized = true;
+					for (IssueMatch issueMatch : jcMatches)
+					{
+						addMatch(issueMatch);
+					}
+				}
+				logger.info("There are total " + jcMatches.size() + " JcMatches.");
+			}
 		}
 		catch(Exception exception)
 		{
@@ -214,18 +280,29 @@ public class OddsTaskProduceScheduler extends TaskProduceScheduler<SoccerTask>
 		}
 		try
 		{
-			matches = ZgzcwDataDownloader.downloadLatestMatch("bd");
-			if(matches == null || matches.size() <= 0)
+			if(!isBdInitialized)
 			{
-				logger.info("The match size is 0, exit");
-				return false;
+				List<? extends IssueMatch> bdMatches = ZgzcwDataDownloader.downloadLatestMatch("bd");
+				if(bdMatches != null && !bdMatches.isEmpty())
+				{
+					isBdInitialized = true;
+					for (IssueMatch issueMatch : bdMatches)
+					{
+						addMatch(issueMatch);
+					}
+				}				
+				logger.info("There are total " + bdMatches.size() + " BdMatches.");
 			}
-			
-			logger.info("There are total " + matches.size() + " BdMatches.");
 		}
 		catch(Exception e)
 		{
 			logger.info("Error when downloading JcMatch datas.");
+			return false;
+		}
+		
+		if(matches.isEmpty())
+		{
+			logger.info("The match size is 0, exit");
 			return false;
 		}
 		
@@ -248,7 +325,7 @@ public class OddsTaskProduceScheduler extends TaskProduceScheduler<SoccerTask>
 		long diff;
 		int size = matches.size();
 
-		IssueMatch match;
+		MatchItem match;
 		Date matchTime;
 		for(int i = size - 1; i >= 0; i --)
 		{
