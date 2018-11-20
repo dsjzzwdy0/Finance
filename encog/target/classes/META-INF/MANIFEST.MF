@@ -1,2 +1,8 @@
 Manifest-Version: 1.0
+<<<<<<< HEAD
+=======
+Built-By: deng
+Build-Jdk: 1.8.0_73
+Created-By: Maven Integration for Eclipse
+>>>>>>> a7d1b88f6aa5c99b74224ff1ade05017aab3035c
 
