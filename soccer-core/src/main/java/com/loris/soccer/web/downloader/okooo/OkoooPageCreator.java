@@ -1,8 +1,8 @@
 package com.loris.soccer.web.downloader.okooo;
 
-import com.loris.base.bean.web.WebPage;
 import com.loris.base.util.DateUtil;
 import com.loris.base.web.manager.Downloader;
+import com.loris.base.web.page.WebPage;
 import com.loris.soccer.web.downloader.okooo.page.OkoooRequestHeaderWebPage;
 import com.loris.soccer.web.downloader.okooo.page.OkoooWebPage;
 

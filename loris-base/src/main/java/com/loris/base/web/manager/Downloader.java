@@ -2,11 +2,11 @@ package com.loris.base.web.manager;
 
 import java.io.Closeable;
 
-import com.loris.base.bean.web.WebPage;
 import com.loris.base.context.LorisContext;
 import com.loris.base.web.config.setting.DownSetting;
 import com.loris.base.web.http.UrlFetchException;
 import com.loris.base.web.manager.event.WebPageStatusListener;
+import com.loris.base.web.page.WebPage;
 
 
 public interface Downloader extends Closeable

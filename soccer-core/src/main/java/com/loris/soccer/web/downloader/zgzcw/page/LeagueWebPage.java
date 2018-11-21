@@ -1,8 +1,8 @@
 package com.loris.soccer.web.downloader.zgzcw.page;
 
 import com.baomidou.mybatisplus.annotations.TableName;
-import com.loris.base.bean.web.WebPage;
 import com.loris.base.util.StringUtil;
+import com.loris.base.web.page.WebPage;
 
 @TableName("soccer_web_league_content")
 public class LeagueWebPage extends WebPage

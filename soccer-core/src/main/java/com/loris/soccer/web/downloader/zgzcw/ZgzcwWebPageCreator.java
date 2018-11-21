@@ -3,9 +3,9 @@ package com.loris.soccer.web.downloader.zgzcw;
 import java.net.URLEncoder;
 
 import com.baomidou.mybatisplus.toolkit.StringUtils;
-import com.loris.base.bean.web.WebPage;
 import com.loris.base.util.DateUtil;
 import com.loris.base.web.manager.Downloader;
+import com.loris.base.web.page.WebPage;
 import com.loris.soccer.bean.SoccerConstants;
 import com.loris.soccer.web.downloader.zgzcw.page.LeagueWebPage;
 import com.loris.soccer.web.downloader.zgzcw.page.LotteryCalendarWebPage;

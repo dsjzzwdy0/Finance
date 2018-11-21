@@ -3,9 +3,9 @@ package com.loris.base.web.task;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.log4j.Logger;
 
-import com.loris.base.bean.web.WebPage;
 import com.loris.base.web.http.UrlFetchException;
 import com.loris.base.web.manager.Downloader;
+import com.loris.base.web.page.WebPage;
 import com.loris.base.web.util.LoaderMonitor;
 import com.loris.base.web.util.URLUtil;
 

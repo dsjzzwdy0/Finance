@@ -3,8 +3,8 @@ package com.loris.soccer.web.downloader.zgzcw.parser;
 import java.util.List;
 
 import com.alibaba.fastjson.JSON;
-import com.loris.base.bean.web.WebPage;
 import com.loris.base.util.DateUtil;
+import com.loris.base.web.page.WebPage;
 import com.loris.base.web.parser.WebPageParser;
 import com.loris.soccer.bean.data.table.lottery.LotteryCalendar;
 import com.loris.soccer.web.downloader.zgzcw.page.LotteryCalendarWebPage;

@@ -1,6 +1,6 @@
 package com.loris.soccer.web.downloader.zgzcw.page;
 
-import com.loris.base.bean.web.WebPage;
+import com.loris.base.web.page.WebPage;
 
 /**
  * 比赛的数据页面

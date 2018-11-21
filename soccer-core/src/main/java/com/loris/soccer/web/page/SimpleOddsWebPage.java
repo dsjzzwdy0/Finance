@@ -1,6 +1,6 @@
 package com.loris.soccer.web.page;
 
-import com.loris.base.bean.web.SimpleWebPage;
+import com.loris.base.web.page.SimpleWebPage;
 
 public class SimpleOddsWebPage extends SimpleWebPage
 {

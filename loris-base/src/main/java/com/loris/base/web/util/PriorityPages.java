@@ -4,7 +4,7 @@ import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-import com.loris.base.bean.web.WebPage;
+import com.loris.base.web.page.WebPage;
 
 /**
  * 优先序列管理器

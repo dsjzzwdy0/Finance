@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableName;
-import com.loris.base.bean.web.WebPage;
+import com.loris.base.web.page.WebPage;
 import com.loris.base.web.util.URLUtil;
 import com.loris.soccer.bean.data.table.league.Round;
 

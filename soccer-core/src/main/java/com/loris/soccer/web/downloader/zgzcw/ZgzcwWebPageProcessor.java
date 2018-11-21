@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.loris.base.bean.web.WebPage;
+import com.loris.base.web.page.WebPage;
 import com.loris.soccer.bean.data.table.league.Match;
 import com.loris.soccer.bean.data.table.league.Rank;
 import com.loris.soccer.bean.data.table.league.Round;

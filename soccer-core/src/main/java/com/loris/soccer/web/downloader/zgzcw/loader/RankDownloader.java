@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.loris.base.bean.web.WebPage;
 import com.loris.base.util.ArraysUtil;
 import com.loris.base.util.DateUtil;
+import com.loris.base.web.page.WebPage;
 import com.loris.soccer.bean.data.table.league.League;
 import com.loris.soccer.bean.model.LeagueMap;
 import com.loris.soccer.repository.SoccerManager;

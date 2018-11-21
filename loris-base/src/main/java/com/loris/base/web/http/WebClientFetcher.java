@@ -21,8 +21,8 @@ import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
-import com.loris.base.bean.web.WebPage;
 import com.loris.base.util.DateUtil;
+import com.loris.base.web.page.WebPage;
 
 /**
  * 

@@ -8,9 +8,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.baomidou.mybatisplus.toolkit.StringUtils;
-import com.loris.base.bean.web.WebPage;
 import com.loris.base.util.DateUtil;
 import com.loris.base.util.NumberUtil;
+import com.loris.base.web.page.WebPage;
 import com.loris.soccer.bean.SoccerConstants;
 import com.loris.soccer.bean.data.table.league.Rank;
 import com.loris.soccer.web.downloader.zgzcw.page.RankWebPage;

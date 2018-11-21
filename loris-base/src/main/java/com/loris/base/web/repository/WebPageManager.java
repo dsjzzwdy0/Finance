@@ -9,9 +9,9 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import com.loris.base.bean.web.WebPage;
 import com.loris.base.util.DateUtil;
 import com.loris.base.web.config.setting.PageSetting;
+import com.loris.base.web.page.WebPage;
 import com.loris.base.web.repository.io.WebPageContentIO;
 
 /**

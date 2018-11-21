@@ -32,9 +32,9 @@ import org.apache.commons.httpclient.params.HttpConnectionParams;
 import org.apache.log4j.Logger;
 
 import com.baomidou.mybatisplus.toolkit.StringUtils;
-import com.loris.base.bean.web.WebPage;
 import com.loris.base.util.DateUtil;
 import com.loris.base.web.config.ConfigParser;
+import com.loris.base.web.page.WebPage;
 import com.loris.base.web.scheduler.MonitorThread;
 import com.loris.base.web.util.Monitor;
 import com.loris.base.web.util.DashBoard;
