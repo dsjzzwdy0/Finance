@@ -13,8 +13,8 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpConnectionParams;
 import org.apache.log4j.Logger;
 
-import com.loris.base.bean.web.WebPage;
 import com.loris.base.web.config.ConfigParser;
+import com.loris.base.web.page.WebPage;
 
 public class AjaxClient
 {

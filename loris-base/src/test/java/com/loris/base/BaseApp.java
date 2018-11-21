@@ -15,7 +15,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-import com.loris.base.bean.web.WebPage;
 import com.loris.base.data.IrisData;
 import com.loris.base.analysis.logistics.Element;
 import com.loris.base.analysis.logistics.Logistics;
@@ -28,6 +27,7 @@ import com.loris.base.web.config.setting.PageSetting;
 import com.loris.base.web.http.LoginManager;
 import com.loris.base.web.http.UrlFetcher;
 import com.loris.base.web.http.WebClientFetcher;
+import com.loris.base.web.page.WebPage;
 import com.loris.base.web.repository.WebPageManager;
 
 /**

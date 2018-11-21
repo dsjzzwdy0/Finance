@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.loris.base.bean.web.WebPage;
 import com.loris.base.context.LorisContext;
 import com.loris.base.util.DateUtil;
 import com.loris.base.web.config.setting.DownSetting;
@@ -14,6 +13,7 @@ import com.loris.base.web.http.UrlFetchException;
 import com.loris.base.web.http.UrlFetcher;
 import com.loris.base.web.manager.event.WebPageStatusEvent;
 import com.loris.base.web.manager.event.WebPageStatusListener;
+import com.loris.base.web.page.WebPage;
 import com.loris.base.web.util.BoundedFIFO;
 
 /**

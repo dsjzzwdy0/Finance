@@ -2,8 +2,8 @@ package com.loris.stock.web.downloader.sina.loader;
 
 import java.util.List;
 
-import com.loris.base.bean.web.WebPage;
 import com.loris.base.context.LorisContext;
+import com.loris.base.web.page.WebPage;
 import com.loris.stock.bean.data.table.StockInfo;
 import com.loris.stock.repository.StockManager;
 import com.loris.stock.web.downloader.sina.SinaStockDownloader;

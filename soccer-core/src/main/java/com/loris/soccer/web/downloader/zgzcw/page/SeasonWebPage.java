@@ -2,7 +2,7 @@ package com.loris.soccer.web.downloader.zgzcw.page;
 
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
-import com.loris.base.bean.web.WebPage;
+import com.loris.base.web.page.WebPage;
 
 /**
  * 联赛信息页面

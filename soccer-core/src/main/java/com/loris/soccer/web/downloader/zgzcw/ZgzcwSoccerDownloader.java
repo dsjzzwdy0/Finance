@@ -1,7 +1,7 @@
 package com.loris.soccer.web.downloader.zgzcw;
 
-import com.loris.base.bean.web.WebPage;
 import com.loris.base.context.LorisContext;
+import com.loris.base.web.page.WebPage;
 import com.loris.soccer.bean.SoccerConstants;
 import com.loris.soccer.repository.SoccerManager;
 import com.loris.soccer.web.downloader.SoccerDownloader;

@@ -3,9 +3,9 @@ package com.loris.stock.web.downloader.sina;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-import com.loris.base.bean.web.WebPage;
 import com.loris.base.util.DateUtil;
 import com.loris.base.web.manager.Downloader;
+import com.loris.base.web.page.WebPage;
 import com.loris.stock.web.downloader.StockWebPageCreator;
 import com.loris.stock.web.downloader.sina.loader.StockBaseInfoWebPageDownloader;
 import com.loris.stock.web.page.StockDailyWebPage;

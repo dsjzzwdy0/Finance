@@ -8,12 +8,12 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import com.loris.base.bean.web.WebPage;
 import com.loris.base.util.ArraysUtil;
 import com.loris.base.util.DateUtil;
 import com.loris.base.web.http.UrlFetchException;
 import com.loris.base.web.http.WebClientFetcher;
 import com.loris.base.web.manager.TaskMode;
+import com.loris.base.web.page.WebPage;
 import com.loris.soccer.bean.data.table.lottery.UserCorporate;
 import com.loris.soccer.bean.item.IssueMatch;
 import com.loris.soccer.bean.okooo.OkoooBdMatch;

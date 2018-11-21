@@ -3,8 +3,8 @@ package com.loris.base.web.parser;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import com.loris.base.bean.web.WebPage;
 import com.loris.base.util.NumberUtil;
+import com.loris.base.web.page.WebPage;
 
 /**
  * 父类数据

@@ -1,4 +1,4 @@
-package com.loris.base.bean.web;
+package com.loris.base.web.page;
 
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.loris.base.bean.entity.AutoIdEntity;

@@ -7,7 +7,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import com.loris.base.bean.web.WebPage;
+import com.loris.base.web.page.WebPage;
 import com.loris.base.web.parser.AbstractWebPageParser;
 import com.loris.soccer.bean.data.table.league.League;
 

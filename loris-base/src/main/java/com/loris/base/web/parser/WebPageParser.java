@@ -2,7 +2,7 @@ package com.loris.base.web.parser;
 
 import java.util.regex.Pattern;
 
-import com.loris.base.bean.web.WebPage;
+import com.loris.base.web.page.WebPage;
 
 public interface WebPageParser
 {

@@ -2,7 +2,7 @@ package com.loris.stock.web.page;
 
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableName;
-import com.loris.base.bean.web.WebPage;
+import com.loris.base.web.page.WebPage;
 
 @TableName("stock_web_capital_content")
 public class StockDetailWebPage extends WebPage

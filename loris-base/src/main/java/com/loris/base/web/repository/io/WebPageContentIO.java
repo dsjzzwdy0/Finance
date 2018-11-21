@@ -9,7 +9,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import com.baomidou.mybatisplus.toolkit.StringUtils;
-import com.loris.base.bean.web.WebPage;
+import com.loris.base.web.page.WebPage;
 
 public class WebPageContentIO
 {

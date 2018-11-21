@@ -1,6 +1,6 @@
 package com.loris.soccer.web.downloader.zgzcw.page;
 
-import com.loris.base.bean.web.WebPage;
+import com.loris.base.web.page.WebPage;
 
 /**
  * 足彩、竞彩、北单计划日历表

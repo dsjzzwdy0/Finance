@@ -4,7 +4,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import com.loris.base.bean.web.WebPage;
+import com.loris.base.web.page.WebPage;
 import com.loris.base.web.parser.AbstractWebPageParser;
 import com.loris.stock.bean.data.table.StockInfo;
 import com.loris.stock.bean.model.CompanyIndustryInfo;

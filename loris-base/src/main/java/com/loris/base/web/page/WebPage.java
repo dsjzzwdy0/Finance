@@ -1,4 +1,4 @@
-package com.loris.base.bean.web;
+package com.loris.base.web.page;
 
 import java.io.File;
 import java.util.Calendar;

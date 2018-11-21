@@ -7,7 +7,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
-import com.loris.base.bean.web.WebPage;
+import com.loris.base.web.page.WebPage;
 import com.loris.base.web.parser.WebPageParser;
 import com.loris.soccer.bean.SoccerConstants;
 import com.loris.soccer.bean.data.table.lottery.ZcMatch;
