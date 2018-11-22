@@ -60,6 +60,9 @@ public class WebPage extends SimpleWebPage
 	/** check if there are more header parameter. */
 	@TableField(exist=false)
 	protected boolean hasMoreHeader = false;
+	
+	@TableField(exist=false)
+	protected Map<String, String> params = new HashMap<>();
 
 	public WebPage()
 	{
@@ -140,7 +143,12 @@ public class WebPage extends SimpleWebPage
 	//请求数据示例
 	public Map<String, String> getParams()
 	{
-		return null;
+		return params;
+	}
+	
+	public void addParam(String key, String value)
+	{
+		params.put(key, value);
 	}
 
 	public Map<String, String> getHeaders()

@@ -15,7 +15,10 @@ import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.ScriptResult;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.loris.base.bean.User;
+import com.loris.base.bean.entity.Entity;
 import com.loris.base.context.LorisContext;
+import com.loris.base.repository.BasicManager;
 import com.loris.base.util.ArraysUtil;
 import com.loris.base.util.DateUtil;
 import com.loris.base.util.NumberUtil;
@@ -61,6 +64,7 @@ import com.loris.soccer.bean.okooo.OkoooYp;
 import com.loris.soccer.bean.setting.CorpSetting;
 import com.loris.soccer.bean.setting.Parameter;
 import com.loris.soccer.bean.setting.Setting;
+import com.loris.soccer.repository.RemoteSoccerManager;
 import com.loris.soccer.repository.SettingManager;
 import com.loris.soccer.repository.SoccerContext;
 import com.loris.soccer.repository.SoccerManager;
@@ -184,7 +188,7 @@ public class SoccerApp
 			//testOddsCorpConfigure(context);		
 			// testJcMatchMapping(context);			
 			// testJcMatchDataVector(context);			
-			testMainPageParser(context);
+			//testMainPageParser(context);
 			
 			//testRoundMatch(context);
 			
@@ -209,6 +213,8 @@ public class SoccerApp
 			
 			//testTaskQueue(context);
 			
+			testRemoteManager(context);
+			
 			close();
 			// context = null;
 		}
@@ -216,6 +222,25 @@ public class SoccerApp
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	public static void testRemoteManager(LorisContext context) throws Exception
+	{
+		BasicManager soccerManager = context.getBean(BasicManager.class);
+		RemoteSoccerManager manager = new RemoteSoccerManager();
+		manager.setHost("localhost");
+		manager.setPort("8080");
+		manager.setUri("/loris/upload/table");
+		
+		List<Entity> entities = new ArrayList<>();
+		List<User> users = soccerManager.getUserList();
+		entities.addAll(users);
+		
+		long st = System.currentTimeMillis();		
+		String result = manager.saveEntities(entities);
+		long en = System.currentTimeMillis();
+		logger.info(result);
+		logger.info("Total spend " + (en - st) + "ms.");
 	}
 	
 	/**

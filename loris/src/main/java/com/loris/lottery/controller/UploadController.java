@@ -1,5 +1,6 @@
 package com.loris.lottery.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -11,6 +12,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+import com.loris.base.bean.entity.Entity;
 import com.loris.base.bean.wrapper.Rest;
 
 /**
@@ -31,7 +33,7 @@ public class UploadController extends BaseController
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping("table")
+	@RequestMapping("/table")
 	public Rest uploadTableRecord(String json)
 	{
 		logger.info("Upload Data: " + json);
@@ -43,26 +45,37 @@ public class UploadController extends BaseController
 	 * 
 	 * @param json
 	 * @return
+	 * @throws ClassNotFoundException 
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
 	 */
-	protected List<Object> parseObjects(String json)
+	protected List<Object> parseObjects(String json) throws InstantiationException, IllegalAccessException, ClassNotFoundException
 	{
 		JSONObject object = JSON.parseObject(json);
 		if(object == null)
 		{
 			return null;
 		}
-		String type = object.getString("type");
-		if(StringUtils.isEmpty(type))
+		String clazzname = object.getString("clazzname");
+		if(StringUtils.isEmpty(clazzname))
 		{
 			logger.info("Error, the type is not specified.");
 			return null;
 		}
 		
-		JSONArray array = object.getJSONArray("values");
+		JSONArray array = object.getJSONArray("records");
 		if(array == null)
 		{
 			logger.info("Error, the values are null.");
 			return null;
+		}
+			
+		List<Entity> entities = new ArrayList<>();
+		Class<?> clazz = Class.forName(clazzname);
+		for (Object rec : array)
+		{
+			Entity entity = (Entity) clazz.newInstance();
+			entities.add(entity);
 		}
 		
 		return null;
