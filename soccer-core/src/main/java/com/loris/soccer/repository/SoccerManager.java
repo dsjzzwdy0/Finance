@@ -1204,6 +1204,78 @@ public class SoccerManager
 	}
 	
 	/**
+	 * 添加或更新欧赔数据
+	 * @param mid
+	 * @param list
+	 * @return
+	 */
+	public boolean addOrUpdateMatchOps(String mid, List<Op> list)
+	{
+		EntityWrapper<Op> ew = new EntityWrapper<>();
+		ew.eq("mid", mid);
+		List<Op> ops = opService.selectList(ew);
+		
+		List<Op> results = new ArrayList<>();
+		for (Op op : list)
+		{
+			if(!mid.equals(op.getMid()))
+			{
+				continue;
+			}
+			boolean contains = false;
+			for (Op op2 : ops)
+			{
+				if(op2.equal(op))
+				{
+					contains = true;
+					break;
+				}
+			}
+			if(!contains)
+			{
+				results.add(op);
+			}
+		}
+		return opService.insertBatch(results);
+	}
+	
+	/**
+	 * 添加或更新欧赔数据
+	 * @param mid
+	 * @param list
+	 * @return
+	 */
+	public boolean addOrUpdateMatchYps(String mid, List<Yp> list)
+	{
+		EntityWrapper<Yp> ew = new EntityWrapper<>();
+		ew.eq("mid", mid);
+		List<Yp> ops = ypService.selectList(ew);
+		
+		List<Yp> results = new ArrayList<>();
+		for (Yp op : list)
+		{
+			if(!mid.equals(op.getMid()))
+			{
+				continue;
+			}
+			boolean contains = false;
+			for (Yp op2 : ops)
+			{
+				if(op2.equal(op))
+				{
+					contains = true;
+					break;
+				}
+			}
+			if(!contains)
+			{
+				results.add(op);
+			}
+		}
+		return ypService.insertBatch(results);
+	}
+	
+	/**
 	 * 查询某一场比赛的欧赔数据
 	 * 
 	 * @param mid 比赛编号

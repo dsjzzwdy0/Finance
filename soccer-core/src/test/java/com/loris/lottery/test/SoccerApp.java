@@ -229,7 +229,7 @@ public class SoccerApp
 		BasicManager soccerManager = context.getBean(BasicManager.class);
 		RemoteSoccerManager manager = new RemoteSoccerManager();
 		manager.setHost("localhost");
-		manager.setPort("8080");
+		manager.setPort("80");
 		manager.setUri("/loris/upload/table");
 		
 		List<Entity> entities = new ArrayList<>();

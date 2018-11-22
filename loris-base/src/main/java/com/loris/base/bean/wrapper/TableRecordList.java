@@ -9,6 +9,16 @@ public class TableRecordList
 	private String clazzname;
 	private List<Entity> records;
 	
+	public TableRecordList()
+	{
+	}
+	
+	public TableRecordList(String clazzName, List<Entity> entities)
+	{
+		this.clazzname = clazzName;
+		this.records = entities;
+	}
+	
 	public String getClazzname()
 	{
 		return clazzname;
