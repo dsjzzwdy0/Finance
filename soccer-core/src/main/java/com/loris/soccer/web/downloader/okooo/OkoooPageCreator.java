@@ -33,7 +33,7 @@ public class OkoooPageCreator
 	};
 	
 	
-	protected String encoding;
+	protected static String encoding = Downloader.ENCODING_UTF8;
 	
 	/**
 	 * Create a new instance of OkoooWebPageCreator.
@@ -48,7 +48,7 @@ public class OkoooPageCreator
 	 * 
 	 * @return 页面
 	 */
-	public OkoooWebPage createJcWebPage()
+	public static OkoooWebPage createJcWebPage()
 	{
 		int typeIndex = 0;
 		OkoooWebPage page = new OkoooWebPage();
@@ -64,7 +64,7 @@ public class OkoooPageCreator
 	 * 
 	 * @return
 	 */
-	public OkoooWebPage createBaseWebPage()
+	public static OkoooWebPage createBaseWebPage()
 	{
 		return createBdWebPage();
 	}
@@ -73,7 +73,7 @@ public class OkoooPageCreator
 	 * 创建北单主页
 	 * @return 北单主页
 	 */
-	public OkoooWebPage createBdWebPage()
+	public static OkoooWebPage createBdWebPage()
 	{
 		int typeIndex = 6;
 		OkoooWebPage page = new OkoooWebPage();
@@ -90,7 +90,7 @@ public class OkoooPageCreator
 	 * @param mid 比赛编号
 	 * @return 返回页面
 	 */
-	public OkoooWebPage createYpWebPage(String mid)
+	public static OkoooWebPage createYpWebPage(String mid)
 	{
 		int typeIndex = 2;
 		OkoooWebPage page = new OkoooWebPage();
@@ -105,12 +105,29 @@ public class OkoooPageCreator
 	}
 	
 	/**
+	 * 创建澳客欧赔数据下载页面
+	 * @param mid
+	 * @return
+	 */
+	public static OkoooWebPage createOpWebPage(String mid)
+	{
+		int typeIndex = 1;
+		OkoooWebPage page = new OkoooWebPage();
+		setBasicParams(page, typeIndex);
+		page.setUrl(PAGE_URLS[typeIndex] + mid + "/odds");
+		page.setMid(mid);
+		page.setHasMoreHeader(true);
+		page.addHeader(OKOOO_HEADER_REFERER, "http://www.okooo.com/danchang/");
+		return page;
+	}
+	
+	/**
 	 * 创建亚盘数据详细下载页面
 	 * @param mid 比赛编号
 	 * @param gid 公司编号
 	 * @return 返回页面
 	 */
-	public OkoooWebPage createYpChangeWebPage(String mid, String gid)
+	public static OkoooWebPage createYpChangeWebPage(String mid, String gid)
 	{
 		int typeIndex = 4;
 		OkoooWebPage page = new OkoooWebPage();
@@ -130,7 +147,7 @@ public class OkoooPageCreator
 	 * @param pageIndex 页面序号
 	 * @return 创建的页面
 	 */
-	public OkoooRequestHeaderWebPage createYpPageWebPage(String mid, int pageIndex)
+	public static OkoooRequestHeaderWebPage createYpPageWebPage(String mid, int pageIndex)
 	{
 		int typeIndex = 5;
 		
@@ -146,6 +163,28 @@ public class OkoooPageCreator
 		return page;
 	}
 	
+	/**
+	 * 
+	 * @param mid
+	 * @param pageIndex
+	 * @return
+	 */
+	public static OkoooRequestHeaderWebPage createOpPageWebPage(String mid, int pageIndex)
+	{
+		int typeIndex = 5;
+		int trnum = pageIndex * 30;
+		OkoooRequestHeaderWebPage page = new OkoooRequestHeaderWebPage();
+		setBasicParams(page, typeIndex);
+		page.setMid(mid);
+		String baseURL = getBaseOpURL(typeIndex, mid);
+		String url = baseURL + "ajax/?page=" + pageIndex 
+				+ "&trnum=" + trnum + "&companytype=BaijiaBooks&type=1";
+		page.setUrl(url);
+		page.addHeader(OKOOO_HEADER_REFERER, baseURL);				
+		return page;
+		//ajax/?page=1&trnum=30&companytype=BaijiaBooks&type=1
+	}
+	
 	
 	/**
 	 * 创建亚盘基础网络URL地址
@@ -153,9 +192,20 @@ public class OkoooPageCreator
 	 * @param mid 比赛编号
 	 * @return 基础网络地址
 	 */
-	protected String getBaseYpURL(int typeIndex, String mid)
+	protected static String getBaseYpURL(int typeIndex, String mid)
 	{
 		return PAGE_URLS[typeIndex] + mid + "/ah/";
+	}
+	
+	/**
+	 * 创建欧盘基础网络URL地址
+	 * @param typeIndex 地址类型
+	 * @param mid 比赛编号
+	 * @return 基础网络地址
+	 */
+	protected static String getBaseOpURL(int typeIndex, String mid)
+	{
+		return PAGE_URLS[typeIndex] + mid + "/odds/";
 	}
 	
 	/**
@@ -163,7 +213,7 @@ public class OkoooPageCreator
 	 * 
 	 * @param page
 	 */
-	protected void setBasicParams(WebPage page, int typeIndex)
+	protected static void setBasicParams(WebPage page, int typeIndex)
 	{
 		page.setEncoding(encoding);
 		page.setType(PAGE_TYPES[typeIndex]);

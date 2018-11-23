@@ -46,7 +46,7 @@
     </bean>
     
     <bean id="remoteSoccerManager" class="com.loris.soccer.repository.RemoteSoccerManager">
-    	<property name="host" value="localhost"/>
+    	<property name="host" value="106.12.205.220"/>
     	<property name="port" value="80"/>
     	<property name="uri" value="/loris/upload/table"/>
     	<property name="encoding" value="utf-8"/>

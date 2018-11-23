@@ -77,7 +77,7 @@ public class TaskExecuteScheduler<T extends Task> extends AbstractScheduler impl
 			}
 			else if (((currentTask = taskQueue.popTask()) != null))
 			{
-				logger.info("Execute task");
+				logger.info("Execute task, and there are left " + taskQueue.size() + " task.");
 				long waitTime = computeWaitTime(currentTask.getWaitTime());
 				sleep(waitTime);
 				executeTask(currentTask);
@@ -177,7 +177,7 @@ public class TaskExecuteScheduler<T extends Task> extends AbstractScheduler impl
 	 */
 	public long computeWaitTime(long waitTime)
 	{
-		int rand = random.nextInt((int)(waitTime * 0.2));
+		int rand = random.nextInt((int)(waitTime * 0.4));
 		//waitTime = (rand % 2 == 0) ? (waitTime + rand) : (waitTime + rand);
 		waitTime += rand;
 		return waitTime;

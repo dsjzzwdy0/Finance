@@ -122,4 +122,30 @@ public class RemoteSoccerManager
 	{
 		return "http://" + host + (StringUtils.isEmpty(port) ? "" : ":" + port) + uri;
 	}
+	
+	public void setRemoteSoccerManagerInfo(RemoteSoccerManager manager)
+	{
+		if(StringUtils.isNotEmpty(manager.getHost()))
+		{
+			this.host = manager.getHost();
+		}
+		if(StringUtils.isNotEmpty(manager.getEncoding()))
+		{
+			this.encoding = manager.getEncoding();
+		}
+		if(StringUtils.isNotEmpty(manager.getUri()))
+		{
+			this.uri = manager.getUri();
+		}
+		if(StringUtils.isNotEmpty(manager.getPort()))
+		{
+			this.port = manager.getPort();
+		}
+	}
+
+	@Override
+	public String toString()
+	{
+		return "RemoteSoccerManager [" + getBaseUrl() + "]";
+	}
 }

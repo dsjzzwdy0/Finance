@@ -107,7 +107,7 @@ public class OkoooDailyDownloader extends OkoooDownloader
 	@Override
 	public boolean prepare()
 	{
-		OkoooWebPage basePage = creator.createBaseWebPage();
+		OkoooWebPage basePage = OkoooPageCreator.createBaseWebPage();
 		try
 		{
 			fetcher = WebClientFetcher.createFetcher(basePage);
@@ -151,7 +151,7 @@ public class OkoooDailyDownloader extends OkoooDownloader
 			{
 				if(!isMatchOkoooYpPageDownloaded(downloadedMainYpPages, issueMatch.getMid()))
 				{
-					page = creator.createYpWebPage(issueMatch.getMid());
+					page = OkoooPageCreator.createYpWebPage(issueMatch.getMid());
 					pages.put(page);
 				}
 				checker.setMid(issueMatch.getMid());
@@ -163,7 +163,7 @@ public class OkoooDailyDownloader extends OkoooDownloader
 					{
 						continue;
 					}
-					page = creator.createYpChangeWebPage(issueMatch.getMid(), userCorporate.getGid());
+					page = OkoooPageCreator.createYpChangeWebPage(issueMatch.getMid(), userCorporate.getGid());
 					pages.put(page);
 				}
 			}
@@ -300,7 +300,7 @@ public class OkoooDailyDownloader extends OkoooDownloader
 		
 		try
 		{
-			OkoooRequestHeaderWebPage morePage = creator.createYpPageWebPage(match.getMid(), pageIndex);
+			OkoooRequestHeaderWebPage morePage = OkoooPageCreator.createYpPageWebPage(match.getMid(), pageIndex);
 			logger.info("Downloading '" + match.getMid() + "' page " + pageIndex);
 			
 			//数据下载

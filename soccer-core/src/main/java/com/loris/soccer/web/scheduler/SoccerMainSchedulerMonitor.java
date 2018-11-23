@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.ApplicationContext;
 
 import com.loris.base.context.LorisContext;
 import com.loris.base.web.task.PriorityTaskQueue;
 import com.loris.base.web.task.TaskQueue;
 import com.loris.soccer.repository.SoccerContext;
+import com.loris.soccer.web.config.ContextLoader;
 import com.loris.soccer.web.downloader.zgzcw.ZgzcwDataDownloader;
 import com.loris.soccer.web.task.SoccerTask;
 
@@ -50,15 +51,13 @@ public class SoccerMainSchedulerMonitor implements Runnable
 	 * Get the LorisContext.
 	 * @return LorisContext
 	 */
-	public static SoccerContext getLorisContext()
+	public static SoccerContext getDefaultLorisContext()
 	{
 		if(appContext != null)
 		{
 			return appContext;
 		}
-		ClassPathXmlApplicationContext context;
-		/** The Application Context. */
-		context = new ClassPathXmlApplicationContext("classpath:soccerApplicationContext.xml");
+		ApplicationContext context = ContextLoader.getClassPathXmlApplicationContext("classpath:soccerApplicationContext.xml");
 		appContext = new SoccerContext(context);
 		return appContext;
 	}
@@ -97,7 +96,7 @@ public class SoccerMainSchedulerMonitor implements Runnable
 	 */
 	protected static boolean initSchedulerMonitor(SoccerMainSchedulerMonitor monitor)
 	{
-		LorisContext context = getLorisContext();		
+		LorisContext context = getDefaultLorisContext();		
 		if(context == null)
 		{
 			logger.info("The Application context is null, exit.");

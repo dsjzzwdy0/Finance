@@ -450,8 +450,7 @@ public class SoccerApp
 	 */
 	public static void testOkoooBdMatch(LorisContext context) throws Exception
 	{
-		OkoooPageCreator creator = new OkoooPageCreator();
-		WebPage page = creator.createBdWebPage();
+		WebPage page = OkoooPageCreator.createBdWebPage();
 
 		try (WebClientFetcher fetcher = WebClientFetcher.createFetcher(page))
 		{
@@ -991,9 +990,7 @@ public class SoccerApp
 	 */
 	public static void testOkoooDownloader(LorisContext context) throws Exception
 	{
-		OkoooPageCreator creator = new OkoooPageCreator();
-
-		OkoooWebPage basePage = creator.createBaseWebPage();
+		OkoooWebPage basePage = OkoooPageCreator.createBaseWebPage();
 		String issue = DateUtil.getCurDayStr();
 
 		try (WebClientFetcher fetcher = WebClientFetcher.createFetcher(basePage))
@@ -1042,7 +1039,7 @@ public class SoccerApp
 			}
 
 			// 亚盘
-			OkoooWebPage ypPage = creator.createYpWebPage(match.getMid());
+			OkoooWebPage ypPage = OkoooPageCreator.createYpWebPage(match.getMid());
 			if (fetcher.fetch(ypPage))
 			{
 				// 亚盘数据下载
@@ -1066,13 +1063,13 @@ public class SoccerApp
 					// 暂停下载数据
 					try
 					{
-						Thread.sleep(1000);
+						Thread.sleep(100);
 					}
 					catch (Exception e)
 					{
 						e.printStackTrace();
 					}
-					OkoooRequestHeaderWebPage morePage = creator.createYpPageWebPage(match.getMid(), j);
+					OkoooRequestHeaderWebPage morePage = OkoooPageCreator.createYpPageWebPage(match.getMid(), j);
 
 					// 数据下载
 					if (!fetcher.fetch(morePage))
