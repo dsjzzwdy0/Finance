@@ -57,7 +57,7 @@ public class RemoteSoccerManager
 	protected WebPage createWebPage(String clazzname, List<Entity> entities)
 	{
 		WebPage page = new WebPage();
-		page.setUrl("http://" + host + (StringUtils.isEmpty(port) ? "" : ":" + port) + uri);
+		page.setUrl(getBaseUrl());
 		page.setEncoding(encoding);
 		page.setMethod(WebPage.HTTP_METHOD_POST);
 		String json = toJson(clazzname, entities);
@@ -116,5 +116,10 @@ public class RemoteSoccerManager
 	public void setEncoding(String encoding)
 	{
 		this.encoding = encoding;
+	}
+	
+	public String getBaseUrl()
+	{
+		return "http://" + host + (StringUtils.isEmpty(port) ? "" : ":" + port) + uri;
 	}
 }

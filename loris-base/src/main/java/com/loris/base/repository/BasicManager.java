@@ -9,8 +9,10 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.loris.base.bean.Log;
+import com.loris.base.bean.UploadRecord;
 import com.loris.base.bean.User;
 import com.loris.base.repository.service.LogService;
+import com.loris.base.repository.service.UploadRecordService;
 import com.loris.base.repository.service.UserService;
 import com.loris.base.web.config.setting.DownSetting;
 import com.loris.base.repository.service.DownSettingService;
@@ -26,6 +28,9 @@ public class BasicManager
 	
 	@Autowired
 	protected DownSettingService downSettingService;
+	
+	@Autowired
+	protected UploadRecordService uploadRecordService;
 	
 	/**
 	 * 获得下载页面
@@ -159,5 +164,59 @@ public class BasicManager
 	{
 		EntityWrapper<User> ew = new EntityWrapper<>();
 		return userService.selectList(ew);
+	}
+	
+	/**
+	 * 记录数据更新的记录
+	 * @param rec
+	 * @return
+	 */
+	public boolean addUploadRecrod(UploadRecord rec)
+	{
+		return uploadRecordService.insert(rec);
+	}
+	
+	/**
+	 * 获得数据的记录
+	 * @param type
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	public List<UploadRecord> getUploadRecord(String type, String start, String end)
+	{
+		EntityWrapper<UploadRecord> ew = new EntityWrapper<>();
+		ew.eq("type", type);
+		if(StringUtils.isNotEmpty(start))
+		{
+			ew.and().gt("updatetime", start);
+		}
+		if(StringUtils.isNotEmpty(end))
+		{
+			ew.and().lt("updatetime", end);
+		}
+		return uploadRecordService.selectList(ew);
+	}
+	
+	/**
+	 * 获得数据的记录
+	 * @param type
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	public List<UploadRecord> getUploadRecordById(String dataid, String start, String end)
+	{
+		EntityWrapper<UploadRecord> ew = new EntityWrapper<>();
+		ew.eq("dataid", dataid);
+		if(StringUtils.isNotEmpty(start))
+		{
+			ew.and().gt("updatetime", start);
+		}
+		if(StringUtils.isNotEmpty(end))
+		{
+			ew.and().lt("updatetime", end);
+		}
+		return uploadRecordService.selectList(ew);
 	}
 }

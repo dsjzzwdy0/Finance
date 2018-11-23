@@ -8,7 +8,9 @@ import java.util.Map;
 
 import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
 import org.apache.log4j.Logger;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
@@ -126,19 +128,19 @@ public class SoccerApp
 	static ClassPathXmlApplicationContext context;
 
 	static String OKOOO_OP_BASE_URL = "http://www.okooo.com/soccer/match/";
-	
+
 	static class EqualChecker implements ArraysUtil.EqualChecker<Op>
 	{
 		protected String gid;
-		
+
 		@Override
 		public boolean isSameObject(Op obj)
 		{
-			if(obj.getGid().equals(gid))
+			if (obj.getGid().equals(gid))
 				return true;
 			return false;
 		}
-		
+
 	}
 
 	/**
@@ -185,36 +187,36 @@ public class SoccerApp
 			// testOkoooDailyDownloader(context);
 			// testOkoooDownloader(context);
 			// testL500WebPageDownloader(context);
-			//testOddsCorpConfigure(context);		
-			// testJcMatchMapping(context);			
-			// testJcMatchDataVector(context);			
-			//testMainPageParser(context);
-			
-			//testRoundMatch(context);
-			
-			//testOpStat(context);
-			
-			//testOkoooBdMatch(context);
-			//testRoundCupDownloader(context);
+			// testOddsCorpConfigure(context);
+			// testJcMatchMapping(context);
+			// testJcMatchDataVector(context);
+			// testMainPageParser(context);
+
+			// testRoundMatch(context);
+
+			// testOpStat(context);
+
+			// testOkoooBdMatch(context);
+			// testRoundCupDownloader(context);
 			// testOddsConversion(context);
 			// testSetting(context);
 			// testOpVariance(context);
 			// testSeasonDownloader(context);
 			// testLeagueUtil(context);
-			//testIssueMatchDownloader(context);
-			//testRoundMatchDownloader(context);
-			
-			//testRankInfo(context);
-			//testOYCompare(context);
-			
-			//testOddsUtil(context);
-			//testPossion(context);
-			//testIssueLeagueMatches(context);
-			
-			//testTaskQueue(context);
-			
+			// testIssueMatchDownloader(context);
+			// testRoundMatchDownloader(context);
+
+			// testRankInfo(context);
+			// testOYCompare(context);
+
+			// testOddsUtil(context);
+			// testPossion(context);
+			// testIssueLeagueMatches(context);
+
+			// testTaskQueue(context);
+
 			testRemoteManager(context);
-			
+
 			close();
 			// context = null;
 		}
@@ -223,26 +225,31 @@ public class SoccerApp
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void testRemoteManager(LorisContext context) throws Exception
 	{
+		//getFileApplicationContext();		
 		BasicManager soccerManager = context.getBean(BasicManager.class);
-		RemoteSoccerManager manager = new RemoteSoccerManager();
-		manager.setHost("localhost");
-		manager.setPort("80");
-		manager.setUri("/loris/upload/table");
-		
+
+		// ClassPathXmlApplicationContext appContext;
+		/** The Application Context. */
+		RemoteSoccerManager manager = (RemoteSoccerManager) context.getBean("remoteSoccerManager");
+		logger.info("BaseURL: " + manager.getBaseUrl());
+		/*
+		 * manager.setHost("localhost"); manager.setPort("80");
+		 * manager.setUri("/loris/upload/table");
+		 */
 		List<Entity> entities = new ArrayList<>();
 		List<User> users = soccerManager.getUserList();
 		entities.addAll(users);
-		
-		long st = System.currentTimeMillis();		
+
+		long st = System.currentTimeMillis();
 		String result = manager.saveEntities(entities);
 		long en = System.currentTimeMillis();
 		logger.info(result);
 		logger.info("Total spend " + (en - st) + "ms.");
 	}
-	
+
 	/**
 	 * 
 	 * @param context
@@ -251,75 +258,69 @@ public class SoccerApp
 	public static void testTaskQueue(LorisContext context) throws Exception
 	{
 		ZgzcwDataDownloader.initialize(context);
-		
+
 		TaskQueue<MatchWebTask> queue = new PriorityTaskQueue<>();
 		SoccerMatchTaskProducer producer = new SoccerMatchTaskProducer();
 		producer.setTaskQueue(queue);
-		
+
 		Thread thread = new Thread(producer);
 		thread.start();
-		
-		/*SoccerManager soccerManager = context.getBean(SoccerManager.class);
-		
-		String st = "2018-11-07";
-		String en = "2018-11-09";
-		List<BdMatch> matchs = soccerManager.getBdMatchByMatchtime(st, en);
-		
-		TaskQueue<MatchWebTask> queue = new PriorityTaskQueue<>();
-		
-		int index = 1;
-		for (BdMatch match : matchs)
-		{
-			//logger.info(index +++ ": " + match);
-			
-			MatchWebTask task = new MatchWebTask(match, MatchWebTaskType.Op);
-			queue.pushTask(task);
-		}
-		
-		int size = queue.size();
-		for(index = 0; index < size; index ++)
-		{
-			logger.info(index + ": " + queue.popTask().getMatch());
-		}*/
-		
+
+		/*
+		 * SoccerManager soccerManager = context.getBean(SoccerManager.class);
+		 * 
+		 * String st = "2018-11-07"; String en = "2018-11-09"; List<BdMatch>
+		 * matchs = soccerManager.getBdMatchByMatchtime(st, en);
+		 * 
+		 * TaskQueue<MatchWebTask> queue = new PriorityTaskQueue<>();
+		 * 
+		 * int index = 1; for (BdMatch match : matchs) { //logger.info(index +++
+		 * ": " + match);
+		 * 
+		 * MatchWebTask task = new MatchWebTask(match, MatchWebTaskType.Op);
+		 * queue.pushTask(task); }
+		 * 
+		 * int size = queue.size(); for(index = 0; index < size; index ++) {
+		 * logger.info(index + ": " + queue.popTask().getMatch()); }
+		 */
+
 		logger.info("Test exit.");
 	}
-	
+
 	public static void testPossion(LorisContext context) throws Exception
 	{
 		SoccerManager soccerManager = context.getBean(SoccerManager.class);
 		String lid = "284";
-		//String season = "2018-2019";
-		//int round = 26;
-		
+		// String season = "2018-2019";
+		// int round = 26;
+
 		List<RankInfo> ranks = soccerManager.getLatestRanks(lid, SoccerConstants.RANK_TOTAL);
-		
+
 		int size = ranks.size();
 		double[] p = new double[size];
 		double[] scores = new double[size];
-				
-		int i = 0;		
+
+		int i = 0;
 		for (RankInfo rankInfo : ranks)
-		{	
+		{
 			p[i] = rankInfo.getGoal() * 1.0 / rankInfo.getLosegoal();
 			scores[i] = rankInfo.getScore();
-			
-			i ++;
-			//logger.info(i +++ ": " + rankInfo);		
+
+			i++;
+			// logger.info(i +++ ": " + rankInfo);
 		}
-		
+
 		logger.info(Arrays.toString(p));
 		logger.info(Arrays.toString(scores));
 		double cov = new PearsonsCorrelation().correlation(p, scores);
 		logger.info("Covraiance: " + cov);
-		
-		
+
 		double lamda1 = 1.71;
 		double lamda2 = 2.14;
 		double[] prob = PossionUtil.computeOddsProb(lamda1, lamda2);
 		logger.info(Arrays.toString(prob));
 	}
-	
+
 	/**
 	 * 
 	 * @param context
@@ -330,13 +331,13 @@ public class SoccerApp
 		context.getBean(SoccerManager.class);
 		String issue = "2018-09-19";
 		String lid = "127";
-		
+
 		long st = System.currentTimeMillis();
 		List<MatchInfo> matchInfos = MatchDocLoader.getMatchInfos(issue, lid);
 		long en = System.currentTimeMillis();
 		logger.info("Total spend time to load " + (en - st) + " ms.");
 
-		if(matchInfos == null)
+		if (matchInfos == null)
 		{
 			logger.info("There are no matchs in the issue=" + issue + " lid=" + lid);
 			return;
@@ -344,13 +345,13 @@ public class SoccerApp
 		int i = 1;
 		for (MatchInfo matchInfo : matchInfos)
 		{
-			logger.info(i +++ ": " + matchInfo);
+			logger.info(i++ + ": " + matchInfo);
 		}
 	}
-	
-	
+
 	/**
 	 * 测试转换的数据
+	 * 
 	 * @param context
 	 * @throws Exception
 	 */
@@ -358,19 +359,19 @@ public class SoccerApp
 	{
 		String string = "平/半↓";
 		String string2 = formatHandicap(string);
-		
+
 		logger.info("String: " + string + " Format: " + string2);
-		
-		
+
 		String handicap = "平/半";
 		YpValue value = new YpValue("平手", 0.78f, 1.16f);
-		
+
 		YpValue value2 = OddsUtil.formatYpValue(value, handicap);
 		logger.info("Info: " + value + " -> Info:" + value2);
 	}
-	
+
 	/**
 	 * 测试对比分析的情况
+	 * 
 	 * @param context
 	 * @throws Exception
 	 */
@@ -378,27 +379,27 @@ public class SoccerApp
 	{
 		SoccerManager soccerManager = context.getBean(SoccerManager.class);
 		String issue = "2018-09-08";
-		
+
 		long st = System.currentTimeMillis();
 		List<BdMatch> matchs = soccerManager.getBdMatches(issue);
 		List<String> mids = ArraysUtil.getObjectFieldValue(matchs, BdMatch.class, "mid");
-		
+
 		List<MatchOdds> matchOdds = new ArrayList<>();
 		for (BdMatch bdMatch : matchs)
 		{
 			matchOdds.add(new MatchOdds(bdMatch));
 		}
-		
+
 		List<Op> ops = soccerManager.getOddsOp(mids, true);
 		List<Yp> yps = soccerManager.getYpList(mids, true);
-		
-		//int i = 0;
+
+		// int i = 0;
 		for (Op op : ops)
 		{
-			//logger.info(i +++ ": " + op);
+			// logger.info(i +++ ": " + op);
 			for (MatchOdds match : matchOdds)
 			{
-				if(op.getMid().equals(match.getMid()))
+				if (op.getMid().equals(match.getMid()))
 				{
 					match.addOp(op);
 					break;
@@ -409,38 +410,39 @@ public class SoccerApp
 		{
 			float win, lose;
 			float ratio;
-			win =  yp.getWinodds() + 1.0f;
+			win = yp.getWinodds() + 1.0f;
 			lose = yp.getLoseodds() + 1.0f;
 			ratio = yp.getLossratio();
-			
+
 			String info = yp.getMid() + ": " + yp.getHandicap();
-			info += " Odds Prob(" + NumberUtil.setFloatScale(2, 100.0 * ratio / win ) + ",";
-			info += NumberUtil.setFloatScale(2, 100.0 * ratio / lose ) + ") Prob(" + yp.getWinprob() + ", " + yp.getLoseprob() + ")";
-			
+			info += " Odds Prob(" + NumberUtil.setFloatScale(2, 100.0 * ratio / win) + ",";
+			info += NumberUtil.setFloatScale(2, 100.0 * ratio / lose) + ") Prob(" + yp.getWinprob() + ", "
+					+ yp.getLoseprob() + ")";
+
 			logger.info(info);
-			//logger.info(i +++ ": " + yp);
+			// logger.info(i +++ ": " + yp);
 			for (MatchOdds match : matchOdds)
 			{
-				
-				if(yp.getMid().equals(match.getMid()))
+
+				if (yp.getMid().equals(match.getMid()))
 				{
 					match.addYp(yp);
 					break;
 				}
 			}
 		}
-		
+
 		long en = System.currentTimeMillis();
 		logger.info("Total spend " + (en - st) + " ms to load '" + issue + "' " + matchOdds.size() + " data.");
-		
+
 		List<MatchInfo> matchInfos = soccerManager.getMatchInfos(mids);
 		int i = 1;
 		for (MatchInfo matchInfo : matchInfos)
 		{
-			logger.info(i +++ ": " + matchInfo);
+			logger.info(i++ + ": " + matchInfo);
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @param context
@@ -450,8 +452,8 @@ public class SoccerApp
 	{
 		OkoooPageCreator creator = new OkoooPageCreator();
 		WebPage page = creator.createBdWebPage();
-		
-		try(WebClientFetcher fetcher = WebClientFetcher.createFetcher(page))
+
+		try (WebClientFetcher fetcher = WebClientFetcher.createFetcher(page))
 		{
 			int i = 0;
 			logger.info("Success fetch: " + page);
@@ -477,151 +479,143 @@ public class SoccerApp
 				logger.info("Parse web page error.");
 			}
 
-		}		
+		}
 	}
-	
+
 	public static void testOpStat(LorisContext context) throws Exception
 	{
-		String mid = "2413492"; //2342630
+		String mid = "2413492"; // 2342630
 		SoccerManager soccerManager = context.getBean(SoccerManager.class);
-		
+
 		List<Op> ops = soccerManager.getOpListOrderByTime(mid, true);
 		List<Op> cleanOps = new ArrayList<>();
-		
+
 		EqualChecker checker = new EqualChecker();
-		
+
 		for (Op op : ops)
 		{
 			checker.gid = op.getGid();
 			Op op1 = ArraysUtil.getSameObject(cleanOps, checker);
-			if(op1 == null)
+			if (op1 == null)
 			{
 				cleanOps.add(op);
 			}
 			else
 			{
-				if(op.getLastTimeValue() > op1.getLastTimeValue())
+				if (op.getLastTimeValue() > op1.getLastTimeValue())
 				{
 					cleanOps.remove(op1);
 					cleanOps.add(op);
 				}
 			}
 		}
-		//ArraysUtil.getListValues(ops, cleanOps, checker)
-		
-		//OpVariance vars = MatchOddsUtil.computeMatchOpVariance(mid, cleanOps);
-		//for (String key : vars.keySet())
-		//{
-		//	logger.info(vars.getOpVariance(key));
-		//}
+		// ArraysUtil.getListValues(ops, cleanOps, checker)
+
+		// OpVariance vars = MatchOddsUtil.computeMatchOpVariance(mid,
+		// cleanOps);
+		// for (String key : vars.keySet())
+		// {
+		// logger.info(vars.getOpVariance(key));
+		// }
 	}
-	
-	
-	
+
 	public static void testRankInfo(LorisContext context) throws Exception
 	{
 		SoccerManager soccerManager = context.getBean(SoccerManager.class);
 		String lid = "915";
 		List<RankInfo> ranks = soccerManager.getLatestAllRanks(lid);
-		
+
 		int i = 1;
 		for (RankInfo rankInfo : ranks)
 		{
-			logger.info(i +++ ": " + rankInfo);
+			logger.info(i++ + ": " + rankInfo);
 		}
 	}
-	
+
 	public static void testIssueMatchDownloader(LorisContext context) throws Exception
 	{
-		/*SoccerWebPageManager soccerManager = context.getBean(SoccerWebPageManager.class);
-		
-		String sqlwhere = "jc";
-		List<LotteryWebPage> pages = soccerManager.getDownloadedLotteryWebPages(sqlwhere);
-		logger.info(pages.size());*/
-		
-		
+		/*
+		 * SoccerWebPageManager soccerManager =
+		 * context.getBean(SoccerWebPageManager.class);
+		 * 
+		 * String sqlwhere = "jc"; List<LotteryWebPage> pages =
+		 * soccerManager.getDownloadedLotteryWebPages(sqlwhere);
+		 * logger.info(pages.size());
+		 */
+
 		context.getBean(SoccerManager.class);
-		
+
 		IssueMatchDownloader downloader = new IssueMatchDownloader();
 		downloader.setLorisContext(context);
 		downloader.setCheckexist(false);
-		
-		if(downloader.prepare())
+
+		if (downloader.prepare())
 		{
 			List<IssueMatch> matchs = downloader.getIssueMatchs();
-			//int i = 0;
-			
+			// int i = 0;
+
 			logger.info("Match size: " + (matchs.size()));
-			//for (BdMatch bdMatch : matchs)
-			//{
-			//	logger.info(i +++ ": " + bdMatch);
-			//}
+			// for (BdMatch bdMatch : matchs)
+			// {
+			// logger.info(i +++ ": " + bdMatch);
+			// }
 			logger.info(downloader.totalSize());
-		}	
-		
-		downloader.close();
-		
-		/*
-		long start = System.currentTimeMillis();
-		ZgzcwWebPageCreator creator = new ZgzcwWebPageCreator();
-		LotteryWebPage page = creator.createBdWebPage("");
-		if(UrlFetcher.fetch(page))
-		{
-			LotteryBdWebPageParser parser = new LotteryBdWebPageParser();
-			if(parser.parseWebPage(page))
-			{
-				List<BdMatch> bdMatchs = parser.getMatches();
-				logger.info("Total match is :" + bdMatchs.size());
-				
-				int i = 0;
-				
-				logger.info("Match size: " + (bdMatchs.size()));
-				for (BdMatch bdMatch : bdMatchs)
-				{
-					logger.info(i +++ ": " + bdMatch);
-				}
-			}
 		}
-		long en = System.currentTimeMillis();
-		logger.info("Total spend time is " + (en - start) + " ms.");*/
+
+		downloader.close();
+
+		/*
+		 * long start = System.currentTimeMillis(); ZgzcwWebPageCreator creator
+		 * = new ZgzcwWebPageCreator(); LotteryWebPage page =
+		 * creator.createBdWebPage(""); if(UrlFetcher.fetch(page)) {
+		 * LotteryBdWebPageParser parser = new LotteryBdWebPageParser();
+		 * if(parser.parseWebPage(page)) { List<BdMatch> bdMatchs =
+		 * parser.getMatches(); logger.info("Total match is :" +
+		 * bdMatchs.size());
+		 * 
+		 * int i = 0;
+		 * 
+		 * logger.info("Match size: " + (bdMatchs.size())); for (BdMatch bdMatch
+		 * : bdMatchs) { logger.info(i +++ ": " + bdMatch); } } } long en =
+		 * System.currentTimeMillis(); logger.info("Total spend time is " + (en
+		 * - start) + " ms.");
+		 */
 	}
-	
-	
-	
+
 	/**
 	 * 测试欧赔数据的方差值计算
+	 * 
 	 * @param context
 	 * @throws Exception
 	 */
 	public static void testOpVariance(LorisContext context) throws Exception
 	{
 		SoccerManager manager = context.getBean(SoccerManager.class);
-		
-		if(manager == null)
+
+		if (manager == null)
 		{
 			logger.info("The manager is not initialized.");
 			return;
 		}
 		String issue = "2018-08-20";
 		int i = 1;
-		
-		
+
 		List<MatchOpVariance> vars = MatchOddsPool.computeJcMatchsOpVariance(issue);
 		for (MatchOpVariance matchOpVariance : vars)
 		{
-			logger.info(i ++ + ": " + matchOpVariance);
-			
-			//OpVariance var = matchOpVariance.getVariance();
-			
-			//logger.info("    初始方差值： " + matchOpVariance.getFirstVariance());
+			logger.info(i++ + ": " + matchOpVariance);
+
+			// OpVariance var = matchOpVariance.getVariance();
+
+			// logger.info(" 初始方差值： " + matchOpVariance.getFirstVariance());
 			logger.info("    即时方差值： " + matchOpVariance);
-			//logger.info("    胜赔超限： " + var.getWinextremenum()
-			//			+ " 平赔超限: " + var.getDrawextremenum() 
-			//			+ " 负赔超限： " + var.getLoseextremenum());
-			
+			// logger.info(" 胜赔超限： " + var.getWinextremenum()
+			// + " 平赔超限: " + var.getDrawextremenum()
+			// + " 负赔超限： " + var.getLoseextremenum());
+
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @param context
@@ -629,23 +623,23 @@ public class SoccerApp
 	 */
 	public static void testRoundMatchDownloader(LorisContext context) throws Exception
 	{
-		context.getBean(SoccerManager.class);		
+		context.getBean(SoccerManager.class);
 		RoundMatchDownloader downloader = new RoundMatchDownloader();
 		downloader.setLorisContext(context);
-		
+
 		downloader.setStart("2018-08-12");
 		downloader.setEnd("2018-08-18");
 		downloader.checkCupPages();
-		
+
 		int i = 1;
-		while(downloader.hasNextWebPage())
+		while (downloader.hasNextWebPage())
 		{
-			logger.info(i +++ ": " + downloader.popWebPage());
+			logger.info(i++ + ": " + downloader.popWebPage());
 		}
-		
+
 		downloader.close();
 	}
-	
+
 	public static void testSetting(LorisContext context) throws Exception
 	{
 		context.getBean(SoccerManager.class);
@@ -654,10 +648,10 @@ public class SoccerApp
 		{
 			logger.info(setting);
 		}
-		//Setting setting = SettingManager.getSettingManager().createDefaultCorpSetting();
-		//SettingManager.updateSetting(setting);
+		// Setting setting =
+		// SettingManager.getSettingManager().createDefaultCorpSetting();
+		// SettingManager.updateSetting(setting);
 	}
-	
 
 	public static void testOddsConversion(LorisContext context) throws Exception
 	{
@@ -698,7 +692,7 @@ public class SoccerApp
 		 * logger.info(oddsvalues); }
 		 */
 	}
-	
+
 	/**
 	 * 测试RoundLeague下载数据
 	 * 
@@ -727,12 +721,12 @@ public class SoccerApp
 					logger.info(i++ + ":" + match);
 				}
 				manager.addOrUpdateMatches(matchs);
-				
+
 				List<Round> rounds = parser.getRounds();
 				i = 1;
 				for (Round round : rounds)
 				{
-					logger.info(i +++ ": " + round);
+					logger.info(i++ + ": " + round);
 				}
 				manager.addOrUpdateRound(rounds.get(0));
 			}
@@ -746,130 +740,114 @@ public class SoccerApp
 			logger.info("Error when downloading page.");
 		}
 	}
-	
+
 	public static void testLeagueUtil(LorisContext context) throws Exception
 	{
 		SoccerManager soccerManager = context.getBean(SoccerManager.class);
 		LeagueDataUtil.computeRoundTime(soccerManager);
 	}
-	
+
 	public static void testSeasonDownloader(LorisContext context) throws Exception
 	{
 		context.getBean(SoccerManager.class);
-		
+
 		SeasonDownloader downloader = new SeasonDownloader();
 		downloader.setLorisContext(context);
 		downloader.prepare();
-		
+
 		int i = 1;
-		while(downloader.hasNextWebPage())
+		while (downloader.hasNextWebPage())
 		{
 			WebPage page = downloader.popWebPage();
 			logger.info(i + ": " + page);
 
-			i ++;
+			i++;
 		}
-		
+
 		downloader.close();
 	}
-	
+
 	public static void testRoundMatch(LorisContext context) throws Exception
 	{
 		context.getBean(SoccerManager.class);
-		
+
 		String start = "2018-09-01";
 		String end = "2018-09-05";
-		
+
 		RoundMatchDownloader downloader = new RoundMatchDownloader();
 		downloader.setLorisContext(context);
 		downloader.setStart(start);
 		downloader.setEnd(end);
-		
-		//logger.info("Check League Main page...");
-		//downloader.checkLeagueMainPage();
-		
-		//logger.info("Check League round page...");
-		//downloader.checkRoundPage();
+
+		// logger.info("Check League Main page...");
+		// downloader.checkLeagueMainPage();
+
+		// logger.info("Check League round page...");
+		// downloader.checkRoundPage();
 		downloader.prepare();
-		
+
 		int i = 1;
-		//int downpage = 0;
-		
-		//WebClientFetcher fetcher = null;
-		
-		while(downloader.hasNextWebPage())
+		// int downpage = 0;
+
+		// WebClientFetcher fetcher = null;
+
+		while (downloader.hasNextWebPage())
 		{
 			WebPage page = downloader.popWebPage();
-			logger.info(i +++ ": " + page);
+			logger.info(i++ + ": " + page);
 			/*
-			if(page instanceof RoundCupWebPage)
-			{
-				logger.info(i + ": " + page);
-			}
-			else if(page instanceof RoundLeagueWebPage)
-			{
-				RoundLeagueWebPage page2 = (RoundLeagueWebPage) page;
-				
-				WebPage p = new WebPage();
-				p.setUrl(page2.getParentURL());
-				
-				if(fetcher == null)
-				{
-					fetcher = WebClientFetcher.createFetcher(p);
-				}
-				
-				if(fetcher.fetch(page2))
-				{
-					logger.info(i + " Page: " + page2 + "\r\n" + page2.getContent());
-				}
-				
-				downpage ++;
-				if(downpage == 20)
-				{
-					
-					break;
-				}
-			}*/
-			//i ++;
+			 * if(page instanceof RoundCupWebPage) { logger.info(i + ": " +
+			 * page); } else if(page instanceof RoundLeagueWebPage) {
+			 * RoundLeagueWebPage page2 = (RoundLeagueWebPage) page;
+			 * 
+			 * WebPage p = new WebPage(); p.setUrl(page2.getParentURL());
+			 * 
+			 * if(fetcher == null) { fetcher =
+			 * WebClientFetcher.createFetcher(p); }
+			 * 
+			 * if(fetcher.fetch(page2)) { logger.info(i + " Page: " + page2 +
+			 * "\r\n" + page2.getContent()); }
+			 * 
+			 * downpage ++; if(downpage == 20) {
+			 * 
+			 * break; } }
+			 */
+			// i ++;
 		}
-		
-		/*if(fetcher != null)
-		{
-			fetcher.close();
-		}*/
-		
+
+		/*
+		 * if(fetcher != null) { fetcher.close(); }
+		 */
+
 		downloader.close();
 
-		/*Map<String, LeagueSeason> maps = manager.getSeasonsMap();
-		
-		Date date = new Date();
-		boolean b;
-		
-		for (String key : maps.keySet())
-		{
-			LeagueSeason leagueSeason = maps.get(key);
-			Season season = leagueSeason.getLastSeason();
-			b = leagueSeason.hasLastSeason(date);
-			logger.info(season + ": " + (b ? "更新" : "不更新"));
-		}*/
+		/*
+		 * Map<String, LeagueSeason> maps = manager.getSeasonsMap();
+		 * 
+		 * Date date = new Date(); boolean b;
+		 * 
+		 * for (String key : maps.keySet()) { LeagueSeason leagueSeason =
+		 * maps.get(key); Season season = leagueSeason.getLastSeason(); b =
+		 * leagueSeason.hasLastSeason(date); logger.info(season + ": " + (b ?
+		 * "更新" : "不更新")); }
+		 */
 	}
-	
-	
+
 	public static void testMainPageParser(LorisContext context) throws Exception
 	{
 		ZgzcwWebPageCreator creator = new ZgzcwWebPageCreator();
 		WebPage page = creator.createZgzcwMainPage();
-		
-		if(UrlFetcher.fetch(page))
+
+		if (UrlFetcher.fetch(page))
 		{
 			ZgzcwCenterParser parser = new ZgzcwCenterParser();
-			if(parser.parseWebPage(page))
+			if (parser.parseWebPage(page))
 			{
 				List<League> leagues = parser.getLeagues();
 				int i = 0;
 				for (League league : leagues)
 				{
-					logger.info(i +++ ": " + league);
+					logger.info(i++ + ": " + league);
 				}
 			}
 			else
@@ -879,13 +857,14 @@ public class SoccerApp
 		}
 		else
 		{
-			logger.info("Error occered when Fetching page: " + page );
+			logger.info("Error occered when Fetching page: " + page);
 		}
-		
+
 	}
-	
+
 	/**
 	 * 测试竞彩数据的内容
+	 * 
 	 * @param context
 	 * @throws Exception
 	 */
@@ -893,32 +872,32 @@ public class SoccerApp
 	{
 		context.getBean(SoccerManager.class);
 		long st = System.currentTimeMillis();
-		
+
 		String issue = "2018-06-02";
 		CorpSetting configure = MatchDocLoader.getDefaultCorpSetting();
 		logger.info("Configured UserCorporate number is " + configure.getParams().size());
-		
+
 		MatchDoc dataVector = MatchDocLoader.getMatchDoc(issue, configure);
 		logger.info(dataVector.size());
-		
-		//int size = dataVector.size();
+
+		// int size = dataVector.size();
 		int i = 1;
-		for(String mid : dataVector.keySet())
+		for (String mid : dataVector.keySet())
 		{
 			MatchData data = dataVector.getMatchData(mid);
 			logger.info(i++ + ": " + data);
-			
+
 			List<Match> history = data.getHistoryMatch();
 			for (Match match : history)
 			{
 				logger.info(match);
 			}
-		}		
-		
+		}
+
 		long en = System.currentTimeMillis();
 		logger.info("Total spend " + (en - st) + " ms to process the data.");
 	}
-	
+
 	/**
 	 * 
 	 * @param context
@@ -927,67 +906,67 @@ public class SoccerApp
 	public static void testJcMatchMapping(LorisContext context) throws Exception
 	{
 		SoccerManager soccerManager = context.getBean(SoccerManager.class);
-		//OkoooManager okoooManager = context.getBean(OkoooManager.class);
-		
+		// OkoooManager okoooManager = context.getBean(OkoooManager.class);
+
 		long st = System.currentTimeMillis();
-		String issue = "2018-05-27";		
+		String issue = "2018-05-27";
 		List<JcMatch> sourceMatches = soccerManager.getJcMatches(issue);
 		List<OkoooJcMatch> destMatches = soccerManager.getOkoooJcMatches(issue);
-		
+
 		logger.info("Source size " + sourceMatches.size() + ", Dest size " + destMatches.size());
-		
-		IssueMatchMapping mapping = MatchDocLoader.mappingJcMatchIds(issue, SoccerConstants.DATA_SOURCE_ZGZCW, sourceMatches,
-				SoccerConstants.DATA_SOURCE_OKOOO, destMatches);		
-		
+
+		IssueMatchMapping mapping = MatchDocLoader.mappingJcMatchIds(issue, SoccerConstants.DATA_SOURCE_ZGZCW,
+				sourceMatches, SoccerConstants.DATA_SOURCE_OKOOO, destMatches);
+
 		long en = System.currentTimeMillis();
 		logger.info("Total spend " + (en - st) + " ms to process the data.");
-		
+
 		/*
-		int size = mapping.size();		
-		for(int i = 0; i < size; i ++)
-		{
-			PairValue<JcMatch, JcMatch> p = mapping.getPairValue(i);
-			String info = p.getKey().getHomename() + " vs " + p.getKey().getClientname();
-			info += " => " + p.getValue().getHomename() + " vs " + p.getValue().getClientname();
-			logger.info((i + 1) + ": " + info);
-		}*/
-		
+		 * int size = mapping.size(); for(int i = 0; i < size; i ++) {
+		 * PairValue<JcMatch, JcMatch> p = mapping.getPairValue(i); String info
+		 * = p.getKey().getHomename() + " vs " + p.getKey().getClientname();
+		 * info += " => " + p.getValue().getHomename() + " vs " +
+		 * p.getValue().getClientname(); logger.info((i + 1) + ": " + info); }
+		 */
+
 		for (JcMatch match : sourceMatches)
 		{
-			if(!mapping.contains(match))
+			if (!mapping.contains(match))
 			{
-				logger.info("Source: " + match.getHomename() + " vs " + match.getClientname() + " is not mapped." + match.getOrdinary());
+				logger.info("Source: " + match.getHomename() + " vs " + match.getClientname() + " is not mapped."
+						+ match.getOrdinary());
 			}
 		}
-		
+
 		for (JcMatch match : destMatches)
 		{
-			if(!mapping.contains(match))
+			if (!mapping.contains(match))
 			{
-				logger.info("Dest: " + match.getHomename() + " vs " + match.getClientname() + " is not mapped." + match.getOrdinary());
+				logger.info("Dest: " + match.getHomename() + " vs " + match.getClientname() + " is not mapped."
+						+ match.getOrdinary());
 			}
 		}
 	}
-	
-	
+
 	/**
 	 * Test for the OddsCorp
+	 * 
 	 * @param context
 	 * @throws Exception
 	 */
 	public static void testOddsCorpConfigure(LorisContext context) throws Exception
 	{
 		context.getBean(SoccerManager.class);
-		
+
 		CorpSetting configure = MatchDocLoader.getDefaultCorpSetting();
 		List<Parameter> corporates = configure.getParams();
-		
+
 		int i = 1;
 		for (Parameter corp : corporates)
 		{
-			logger.info(i +++ ": " + corp);
+			logger.info(i++ + ": " + corp);
 		}
-		
+
 		List<String> mids = new ArrayList<>();
 		List<String> gids = new ArrayList<>();
 		mids.add("2342367");
@@ -1000,10 +979,9 @@ public class SoccerApp
 		i = 1;
 		for (Op op : ops)
 		{
-			logger.info(i +++ ": " + op);
+			logger.info(i++ + ": " + op);
 		}
 	}
-	
 
 	/**
 	 * 测试Okooo
@@ -1046,73 +1024,72 @@ public class SoccerApp
 			OkoooJcMatch match = null;
 			for (OkoooJcMatch m : matchs)
 			{
-				if(i == 1)
+				if (i == 1)
 				{
 					match = m;
 				}
 				logger.info(i++ + ": " + m);
 			}
-			
-			//暂停下载数据
+
+			// 暂停下载数据
 			try
 			{
 				Thread.sleep(1000);
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				e.printStackTrace();
 			}
-			
-			//亚盘
+
+			// 亚盘
 			OkoooWebPage ypPage = creator.createYpWebPage(match.getMid());
-			if(fetcher.fetch(ypPage))
+			if (fetcher.fetch(ypPage))
 			{
-				//亚盘数据下载
-				com.loris.soccer.web.downloader.okooo.parser.OddsYpPageParser parser2 = 
-						new com.loris.soccer.web.downloader.okooo.parser.OddsYpPageParser();
+				// 亚盘数据下载
+				com.loris.soccer.web.downloader.okooo.parser.OddsYpPageParser parser2 = new com.loris.soccer.web.downloader.okooo.parser.OddsYpPageParser();
 				parser2.setMatchtime(DateUtil.tryToParseDate(match.getMatchtime()));
 				parser2.setMid(match.getMid());
-				
-				int k = 1;	
+
+				int k = 1;
 				if (parser2.parseWebPage(ypPage))
 				{
 					List<OkoooYp> yps = parser2.getYps();
-					
+
 					for (OkoooYp okoooYp : yps)
 					{
-						logger.info(k +++ ": " + okoooYp);
+						logger.info(k++ + ": " + okoooYp);
 					}
 				}
-				
-				for (int j = 1; j < 3; j ++ )
+
+				for (int j = 1; j < 3; j++)
 				{
-					//暂停下载数据
+					// 暂停下载数据
 					try
 					{
 						Thread.sleep(1000);
 					}
-					catch(Exception e)
+					catch (Exception e)
 					{
 						e.printStackTrace();
 					}
 					OkoooRequestHeaderWebPage morePage = creator.createYpPageWebPage(match.getMid(), j);
-					
-					//数据下载
-					if(!fetcher.fetch(morePage))
+
+					// 数据下载
+					if (!fetcher.fetch(morePage))
 					{
 						continue;
 					}
 					OddsYpChildParser parser3 = new OddsYpChildParser();
 					parser3.setMid(match.getMid());
 					parser3.setCurrentTime(DateUtil.tryToParseDate(morePage.getLoadtime()));
-					
-					if(parser3.parseWebPage(morePage))
+
+					if (parser3.parseWebPage(morePage))
 					{
-						//int k = 1;
-						List<OkoooYp> yps = parser3.getYps(); 
+						// int k = 1;
+						List<OkoooYp> yps = parser3.getYps();
 						for (OkoooYp okoooYp : yps)
 						{
-							logger.info(k +++ ": " + okoooYp);
+							logger.info(k++ + ": " + okoooYp);
 						}
 					}
 				}
@@ -1243,51 +1220,40 @@ public class SoccerApp
 	public static void testJcMatchCalculator(LorisContext context) throws Exception
 	{
 		context.getApplicationContext().getBean(SoccerManager.class);
-		//String issue = "2018-05-05";
+		// String issue = "2018-05-05";
 		// List<JcMatch> matchs = soccerManager.getJcMatches(issue);
 
 		/*
-		AnalyzerFactory calculator = new AnalyzerFactory();
-
-		long st = System.currentTimeMillis();
-		if (!calculator.loadJcMatchFromDatabase(issue))
-		{
-			logger.info("Error when loading data from database.");
-			return;
-		}
-
-		long en = System.currentTimeMillis();
-		logger.info(
-				"Today '" + issue + "' there are " + calculator.size() + " matches, and spend " + (en - st) + " ms.");
-
-		st = System.currentTimeMillis();
-		if (!calculator.loadOddsFromDatabase(null))
-		{
-			logger.info("Error when loading odds data from database.");
-		}
-
-		en = System.currentTimeMillis();
-		logger.info("Loaded Yp and Op data from database spend " + (en - st) + " ms.");
-
-		List<MatchDataList> vectors = calculator.getLeagueVectors();
-		Graph graph = MatchGraph.createGraph(issue, vectors);
-
-		List<GraphNode> nodes = graph.getNodes();
-		for (GraphNode graphNode : nodes)
-		{
-			logger.info(graphNode);
-		}
-
-		List<GraphEdge> edges = graph.getLinks();
-		for (GraphEdge graphEdge : edges)
-		{
-			logger.info(graphEdge);
-		}
-
-		/*
-		 * List<LeagueMatchVector> leagues = calculator.getLeagueVectors(); for
-		 * (LeagueMatchVector league : leagues) { String info = league.getLid()
-		 * + ": " + league.getLeaguename(); logger.info(info);
+		 * AnalyzerFactory calculator = new AnalyzerFactory();
+		 * 
+		 * long st = System.currentTimeMillis(); if
+		 * (!calculator.loadJcMatchFromDatabase(issue)) {
+		 * logger.info("Error when loading data from database."); return; }
+		 * 
+		 * long en = System.currentTimeMillis(); logger.info( "Today '" + issue
+		 * + "' there are " + calculator.size() + " matches, and spend " + (en -
+		 * st) + " ms.");
+		 * 
+		 * st = System.currentTimeMillis(); if
+		 * (!calculator.loadOddsFromDatabase(null)) {
+		 * logger.info("Error when loading odds data from database."); }
+		 * 
+		 * en = System.currentTimeMillis();
+		 * logger.info("Loaded Yp and Op data from database spend " + (en - st)
+		 * + " ms.");
+		 * 
+		 * List<MatchDataList> vectors = calculator.getLeagueVectors(); Graph
+		 * graph = MatchGraph.createGraph(issue, vectors);
+		 * 
+		 * List<GraphNode> nodes = graph.getNodes(); for (GraphNode graphNode :
+		 * nodes) { logger.info(graphNode); }
+		 * 
+		 * List<GraphEdge> edges = graph.getLinks(); for (GraphEdge graphEdge :
+		 * edges) { logger.info(graphEdge); }
+		 * 
+		 * /* List<LeagueMatchVector> leagues = calculator.getLeagueVectors();
+		 * for (LeagueMatchVector league : leagues) { String info =
+		 * league.getLid() + ": " + league.getLeaguename(); logger.info(info);
 		 * 
 		 * league.computeCorrelationMatchs();
 		 * 
@@ -2315,8 +2281,6 @@ public class SoccerApp
 		}
 	}
 
-	
-
 	/**
 	 * 测试RoundLeague下载数据
 	 * 
@@ -2362,6 +2326,23 @@ public class SoccerApp
 			logger.info("Error when downloading page.");
 		}
 	}
+	
+	/**
+	 * 配置文件
+	 * @return
+	 */
+	public static ApplicationContext getFileApplicationContext()
+	{
+		try
+		{
+			ApplicationContext appContenxt = new FileSystemXmlApplicationContext("file:../conf/spring.xml");
+			return appContenxt;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	/**
 	 * 
@@ -2370,15 +2351,17 @@ public class SoccerApp
 	public static LorisContext getLorisContext()
 	{
 		/** The Application Context. */
-		context = new ClassPathXmlApplicationContext("classpath:soccerApplicationContext.xml");
+		context = new ClassPathXmlApplicationContext("classpath*:soccerApplicationContext.xml");
 		LorisContext appContext = new SoccerContext(context);
 		return appContext;
 	}
-	
-	static char[] chars = {'↓', '↑', '→'};
-	
+
+	static char[] chars =
+	{ '↓', '↑', '→' };
+
 	/**
 	 * 标准化亚盘让球数据
+	 * 
 	 * @param handicap
 	 * @return
 	 */
@@ -2387,8 +2370,8 @@ public class SoccerApp
 		for (char c : chars)
 		{
 			handicap = handicap.replace("" + c, "");
-		}		
-		//handicap = handicap.replaceAll("↑", "");
+		}
+		// handicap = handicap.replaceAll("↑", "");
 		return handicap;
 	}
 

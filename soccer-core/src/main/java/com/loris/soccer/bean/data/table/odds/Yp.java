@@ -1,6 +1,7 @@
 package com.loris.soccer.bean.data.table.odds;
 
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.loris.soccer.bean.SoccerConstants;
 import com.loris.soccer.bean.item.YpItem;
 import com.loris.soccer.bean.item.YpValue;
@@ -90,12 +91,19 @@ public class Yp extends YpItem
 	 * @param yp 待比赛的欧赔数据
 	 * @return 是否相等
 	 */
-	public boolean equal(Yp yp)
+	public boolean equals(Yp yp)
 	{
 		if(mid.equalsIgnoreCase(yp.getMid()) && gid.equalsIgnoreCase(yp.getGid())
 				&& lasttime.equalsIgnoreCase(yp.getLasttime()))
 		{
-			return true;
+			if(StringUtils.isNotEmpty(firsttime) && firsttime.equalsIgnoreCase(yp.getFirsttime()))
+			{
+				return true;
+			}
+			else if(StringUtils.isEmpty(firsttime) && StringUtils.isEmpty(yp.getFirsttime()))
+			{
+				return true;
+			}
 		}
 		return false;
 	}

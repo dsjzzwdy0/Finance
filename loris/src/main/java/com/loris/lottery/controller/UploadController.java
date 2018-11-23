@@ -3,7 +3,10 @@ package com.loris.lottery.controller;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +18,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+import com.loris.base.bean.ClientInfo;
 import com.loris.base.bean.entity.Entity;
 import com.loris.base.bean.wrapper.Rest;
 import com.loris.base.bean.wrapper.TableRecordList;
@@ -38,6 +42,43 @@ public class UploadController extends BaseController
 	
 	@Autowired
 	SoccerManager soccerManager;
+	
+	/** 注册的信息 */
+	Map<String, ClientInfo> clients = new HashMap<>();
+	
+	/**
+	 * 注册数据上传客户端
+	 * @return 返回注册的状态
+	 */
+	@ResponseBody
+	@RequestMapping("regist")
+	public Rest registUploadClient()
+	{
+		ClientInfo info = getClientInfo();
+		if(clients.containsKey(info.getAddr()))
+		{
+			logger.info("Has Registed: " + info);
+		}
+		else
+		{
+			logger.info("Regist: " + info);
+		}
+		clients.put(info.getAddr(), info);		
+		return Rest.ok();
+	}
+	
+	/**
+	 * 注销客户端
+	 * @return 返回注册的状态
+	 */
+	@ResponseBody
+	@RequestMapping("unregist")
+	public Rest unregistUploadClient()
+	{
+		ClientInfo info = getClientInfo();
+		logger.info("Info: " + info);
+		return Rest.ok();
+	}
 
 	/**
 	 * 上传数据
@@ -116,6 +157,21 @@ public class UploadController extends BaseController
 			records.add((T)entity);
 		}
 		return records;
+	}
+	
+	/**
+	 * 获得当前的访问信息
+	 * @return
+	 */
+	protected ClientInfo getClientInfo()
+	{
+		ClientInfo clientInfo = new ClientInfo();
+		clientInfo.setAddr(request.getRemoteAddr());
+		clientInfo.setHost(request.getRemoteHost());
+		clientInfo.setUser(request.getRemoteUser());
+		clientInfo.setPort(request.getRemotePort());
+		clientInfo.setConnecttime(new Date());
+		return clientInfo;
 	}
 
 	/**

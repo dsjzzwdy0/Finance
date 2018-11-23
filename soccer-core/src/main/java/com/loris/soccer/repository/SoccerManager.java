@@ -1225,7 +1225,7 @@ public class SoccerManager
 			boolean contains = false;
 			for (Op op2 : ops)
 			{
-				if(op2.equal(op))
+				if(op2.equals(op))
 				{
 					contains = true;
 					break;
@@ -1261,7 +1261,7 @@ public class SoccerManager
 			boolean contains = false;
 			for (Yp op2 : ops)
 			{
-				if(op2.equal(op))
+				if(op2.equals(op))
 				{
 					contains = true;
 					break;
@@ -1333,7 +1333,7 @@ public class SoccerManager
 	{
 		for (Op existOp : existOps)
 		{
-			if(op.equal(existOp))
+			if(op.equals(existOp))
 			{
 				return true;
 			}
@@ -1411,7 +1411,7 @@ public class SoccerManager
 	{
 		for (Yp existYp : existYps)
 		{
-			if(yp.equal(existYp))
+			if(yp.equals(existYp))
 			{
 				return true;
 			}
@@ -2081,7 +2081,7 @@ public class SoccerManager
 	{
 		for (Yp existYp : existYps)
 		{
-			if(yp.equal(existYp))
+			if(yp.equals(existYp))
 			{
 				return true;
 			}
