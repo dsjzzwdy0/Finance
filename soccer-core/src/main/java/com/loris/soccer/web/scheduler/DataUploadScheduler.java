@@ -1,8 +1,19 @@
 package com.loris.soccer.web.scheduler;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 
+import com.baomidou.mybatisplus.toolkit.StringUtils;
+import com.loris.base.bean.entity.Entity;
+import com.loris.base.util.DateUtil;
+import com.loris.soccer.bean.data.table.league.Match;
+import com.loris.soccer.bean.data.table.lottery.BdMatch;
+import com.loris.soccer.bean.data.table.lottery.JcMatch;
+import com.loris.soccer.bean.data.table.odds.Op;
+import com.loris.soccer.bean.data.table.odds.Yp;
 import com.loris.soccer.repository.RemoteSoccerManager;
 import com.loris.soccer.repository.SoccerManager;
 import com.loris.soccer.web.config.ContextLoader;
@@ -16,6 +27,12 @@ public class DataUploadScheduler extends AbstractScheduler
 	
 	/** 本地数据管理器 */
 	protected SoccerManager soccerManager;
+	
+	/** 开始的日期 */
+	protected String start;
+	
+	/** 结束的日期 */
+	protected String end;
 	
 	/** 默认的系统配置路径 */
 	protected final String defaultContextFile = "classpath:soccerApplicationContext.xml";
@@ -83,6 +100,12 @@ public class DataUploadScheduler extends AbstractScheduler
 		{
 			logger.info("Error when initialized.");
 		}
+		
+		if(soccerManager != null && remoteManager != null)
+		{
+			logger.info("Success to initialize the system.");
+			return true;
+		}
 		return false;
 	}
 	
@@ -104,14 +127,112 @@ public class DataUploadScheduler extends AbstractScheduler
 	{
 		ApplicationContext context = ContextLoader.getClassPathXmlApplicationContext(userContextFile);
 		return context;
-		
 	}
 
 	/**
-	 * 
+	 * 保存数据到远程服务器
+	 * @param entities
+	 * @return
+	 */
+	protected String saveEntities(List<? extends Entity> entities)
+	{
+		try
+		{
+			logger.info("Upload " + entities.get(0).getClass().getName() + " with [" + entities.size() + "] entities.");
+			return remoteManager.saveEntities(entities);
+		}
+		catch(Exception e)
+		{
+			logger.info("Error when save " + entities.get(0).getClass().getName() + " with [" + entities.size() + "] entities.");
+			return "error";
+		}
+	}
+	
+	protected void saveMatches(List<Match> matchs)
+	{
+		int size = matchs.size();
+		logger.info("Save matches [" + size + "].");
+		
+		int pernum = 100;
+		int st = 0;
+		for(; st < size;)
+		{
+			List<Match> temp = new ArrayList<>();
+			for(int j = 0; j < pernum; j ++)
+			{
+				if(j + st >= size)
+				{
+					break;
+				}
+				else
+				{
+					temp.add(matchs.get(j + st));
+				}
+			}
+			st += pernum;
+			saveEntities(temp);
+			sleep(100);
+		}
+	}
+	
+	/**
+	 * 运行线程
 	 */
 	@Override
 	public void run()
 	{
+		if(StringUtils.isEmpty(start))
+		{
+			start = DateUtil.getCurDayStr();
+		}
+		
+		List<Match> matchs = soccerManager.getMatches(start, end);
+		saveMatches(matchs);
+
+		List<JcMatch> jcMatchs = soccerManager.getJcMatchesByDate(start, end);
+		String result = saveEntities(jcMatchs);
+		logger.info("Save result: " + result);
+		sleep(100);
+		
+		List<BdMatch> bdMatchs = soccerManager.getBdMatchByMatchtime(start, end);
+		result = saveEntities(bdMatchs);
+		logger.info("Save result: " + result);
+		sleep(100);
+		
+		int i = 1;
+		for (BdMatch match : bdMatchs)
+		{
+			logger.info(i +++ ": " + match);
+			List<Op> ops = soccerManager.getOddsOp(match.getMid());
+			result = saveEntities(ops);
+			logger.info("Save result: " + result);
+			sleep(100);
+			
+			List<Yp> yps = soccerManager.getYpList(match.getMid());
+			result = saveEntities(yps);
+			logger.info("Save result: " + result);
+			sleep(100);
+
+		}
+	}
+
+	public String getStart()
+	{
+		return start;
+	}
+
+	public void setStart(String start)
+	{
+		this.start = start;
+	}
+
+	public String getEnd()
+	{
+		return end;
+	}
+
+	public void setEnd(String end)
+	{
+		this.end = end;
 	}
 }

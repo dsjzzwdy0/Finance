@@ -243,7 +243,33 @@ public class DownloadController extends BaseController implements WebPageStatusL
 	public Rest downloadData(DownSetting setting)
 	{
 		logger.info("Start Download Thread: " + setting);
-
+		
+		DownSetting defaulSetting = crawler.getDefaultDownSetting(setting.getWid());
+		if(defaulSetting == null)
+		{
+			String info = "Error, downloader " + setting.getWid() + " is not exit.";
+			logger.info(info);
+			return Rest.failure(info);
+		}
+		
+		try
+		{
+			defaulSetting = defaulSetting.cloneAndSetDownSetting(setting);
+		}
+		catch(Exception e)
+		{
+			String info = "Error, downloader " + setting.getWid() + " is not exit.";
+			logger.info(info);
+			return Rest.failure(info);
+		}
+		
+		if(defaulSetting == null)
+		{
+			String info = "Error, Can't create DownSetting.";
+			logger.info(info);
+			return Rest.failure(info);
+		}
+		setting = defaulSetting;
 		Downloader downloader = getOrCreateWebPageDownloader(setting);
 		if (downloader == null)
 		{
@@ -388,30 +414,21 @@ public class DownloadController extends BaseController implements WebPageStatusL
 	protected Downloader getOrCreateWebPageDownloader(DownSetting setting)
 	{
 		Downloader downloader = null;
-		if (StringUtils.isEmpty(setting.getId()))
-		{
-			basicManager.addOrUpdateDownSettingById(setting);
-			downloader = DownloaderCreator.createDownloader(setting, this);
-		}
-		else
+		if (StringUtils.isNotEmpty(setting.getId()))
 		{
 			downloader = crawler.getWebPageDownloaderByID(setting.getId());
-			if(downloader == null)
-			{
-				downloader = DownloaderCreator.createDownloader(setting, this);
-			}
-			else
-			{
-				//设置下载管理器信息
-				DownloaderCreator.setDownloader(downloader, setting);
-			}
-			
 			//如果是已经停止，则需要重新启动
-			if(downloader.isStopped())
+			if(downloader != null && downloader.isStopped())
 			{
 				downloader.restartDownloader();
 			}
 		}
+		if(downloader == null)
+		{
+			basicManager.addOrUpdateDownSettingById(setting);
+			downloader = DownloaderCreator.createDownloader(setting, this);
+		}
+		
 		if (downloader != null)
 		{			
 			downloader.setLorisContext(ApplicationContextHelper.getLorisContext());

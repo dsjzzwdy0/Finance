@@ -35,6 +35,8 @@ public interface DownloaderCreator
 			Class<?> clazz = Class.forName(className);
 			Downloader downloader = (Downloader)clazz.newInstance();
 			
+			setDownloader(downloader, webPageSetting);
+			/*
 			List<Method> methods = new ArrayList<Method>();
 			ClassUtil.getAllMethods(methods, clazz);
 			Field[] infoFields = webPageSetting.getClass().getDeclaredFields();
@@ -57,7 +59,9 @@ public interface DownloaderCreator
 						method.invoke(downloader, value);
 					}
 				}
-			}
+			}*/
+			
+			
 			//Downloader downloader = (Downloader) obj;
 			downloader.setWebPageSetting(webPageSetting);
 			downloader.addWebPageStatusListener(listener);

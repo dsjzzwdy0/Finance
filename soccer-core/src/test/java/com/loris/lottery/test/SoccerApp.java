@@ -117,6 +117,7 @@ import com.loris.soccer.web.downloader.zgzcw.parser.RoundLeagueWebPageParser;
 import com.loris.soccer.web.downloader.zgzcw.parser.SeasonWebPageParser;
 import com.loris.soccer.web.downloader.zgzcw.parser.TeamWebPageParser;
 import com.loris.soccer.web.downloader.zgzcw.parser.ZgzcwCenterParser;
+import com.loris.soccer.web.scheduler.DataUploadScheduler;
 import com.loris.soccer.web.task.MatchWebTask;
 import com.loris.soccer.web.task.SoccerMatchTaskProducer;
 
@@ -215,7 +216,9 @@ public class SoccerApp
 
 			// testTaskQueue(context);
 
-			testRemoteManager(context);
+			//testRemoteManager(context);
+			
+			testUploadDataSchecduler(context);
 
 			close();
 			// context = null;
@@ -225,9 +228,19 @@ public class SoccerApp
 			e.printStackTrace();
 		}
 	}
+	
+	public static void testUploadDataSchecduler(LorisContext context) throws Exception
+	{
+		DataUploadScheduler scheduler = new DataUploadScheduler();
+		scheduler.initialize();
+		
+		Thread thread = new Thread(scheduler);
+		thread.start();
+	}
 
 	public static void testRemoteManager(LorisContext context) throws Exception
 	{
+		
 		//getFileApplicationContext();		
 		BasicManager soccerManager = context.getBean(BasicManager.class);
 
@@ -1571,7 +1584,7 @@ public class SoccerApp
 	 */
 	public static void testOkoooOpWebPage(LorisContext context) throws Exception
 	{
-		String mid = "955142"; // "1007916";
+		String mid = "1026861"; // "1007916";
 		String url = OKOOO_OP_BASE_URL + mid + "/odds/";
 
 		WebClient client = new WebClient(BrowserVersion.FIREFOX_52);

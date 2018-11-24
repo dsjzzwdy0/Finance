@@ -22,7 +22,10 @@ import com.loris.base.bean.ClientInfo;
 import com.loris.base.bean.entity.Entity;
 import com.loris.base.bean.wrapper.Rest;
 import com.loris.base.bean.wrapper.TableRecordList;
+import com.loris.base.util.DateUtil;
+import com.loris.base.util.NumberUtil;
 import com.loris.base.util.ReflectUtil;
+import com.loris.soccer.bean.data.table.league.Match;
 import com.loris.soccer.bean.data.table.lottery.BdMatch;
 import com.loris.soccer.bean.data.table.lottery.JcMatch;
 import com.loris.soccer.bean.data.table.odds.Op;
@@ -101,7 +104,7 @@ public class UploadController extends BaseController
 				logger.info(error);
 				return Rest.failure(error);
 			}
-			List<Entity> entities = list.getRecords();
+			List<? extends Entity> entities = list.getRecords();
 			String clazz = list.getClazzname();
 			
 			if(Op.class.getName().equals(clazz))
@@ -126,6 +129,11 @@ public class UploadController extends BaseController
 				List<BdMatch> bdMatchs = transformRecords(entities);
 				soccerManager.addOrUpdateBdMatches(bdMatchs);
 			}
+			else if(Match.class.getName().equals(clazz))
+			{
+				List<Match> matchs =transformRecords(entities);
+				soccerManager.addOrUpdateMatches(matchs);
+			}
 			
 			logger.info("Success to add " + entities.size() + " " + clazz + " records.");
 			
@@ -136,6 +144,7 @@ public class UploadController extends BaseController
 		}
 		catch(Exception e)
 		{
+			e.printStackTrace();
 			String error = "Error: " + e.toString();
 			logger.info(error);
 			return Rest.failure(error);
@@ -149,7 +158,7 @@ public class UploadController extends BaseController
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	protected static<T extends Entity> List<T> transformRecords(List<Entity> entities)
+	protected static<T extends Entity> List<T> transformRecords(List<? extends Entity> entities)
 	{
 		List<T> records = new ArrayList<>();
 		for (Entity entity : entities)
@@ -213,21 +222,64 @@ public class UploadController extends BaseController
 		for (Object rec : array)
 		{
 			Entity entity = (Entity) clazz.newInstance();
-			entities.add(entity);
-			
+
 			JSONObject obj = (JSONObject)rec;
 			for (String key : obj.keySet())
 			{
 				Object value = obj.get(key);
 				for (Method method : methods)
 				{
+					//不是Bean的方法，带有多个参数
+					if(method.getParameterCount() < 1 || method.getParameterCount() > 1)
+					{
+						continue;
+					}
 					String methodName = method.getName();
 					if(methodName.equals("set" + key.substring(0, 1).toUpperCase() + key.substring(1)))
 					{
-						method.invoke(entity, value);
+						String type = method.getParameterTypes()[0].getName();
+						if(type.equals("java.lang.String")){  
+		                    method.invoke(entity, (String)value);  
+		                }  
+		                else if(type.equals("java.util.Date"))
+		                {
+		                	Date date = DateUtil.tryToParseDate(value.toString());
+		                    method.invoke(entity, date);  
+		                }  
+		                else if(type.equals("java.lang.Integer") || type.equals("int"))
+		                {
+		                	int t = NumberUtil.parseInt(object);
+		                	method.invoke(entity, t);
+		                }
+		                else if(type.equals("java.lang.Float") || type.equals("float"))
+		                {
+		                	float f = NumberUtil.parseFloat(object);
+		                	method.invoke(entity, f);
+		                }
+		                else if(type.equals("java.lang.Double") || type.equals("double"))
+		                {
+		                	double d = NumberUtil.parseDouble(object);
+		                	method.invoke(entity, d);
+		                }
+		                else 
+		                {
+		                	try
+							{
+								method.invoke(entity, value);
+							}
+							catch(Exception e)
+							{
+								logger.info("MethodName: " + methodName + ", Argument Type: " +  type);
+								e.printStackTrace();
+							}
+		                }
+
 					}
 				}
 			}
+			
+			//logger.info(entity);
+			entities.add(entity);
 		}
 		
 		return new TableRecordList(clazzname, entities);

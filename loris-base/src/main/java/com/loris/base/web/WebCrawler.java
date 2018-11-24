@@ -295,6 +295,26 @@ public class WebCrawler implements Runnable
 	{
 		return downloaders.get(index);
 	}
+	
+	/**
+	 * 设置的内容
+	 * @param wid
+	 * @return
+	 */
+	public DownSetting getDefaultDownSetting(String wid)
+	{
+		for (List<DownSetting> settings : settingMap.values())
+		{
+			for (DownSetting downSetting : settings)
+			{
+				if(wid.equals(downSetting.getWid()))
+				{
+					return downSetting;
+				}
+			}
+		}
+		return null;
+	}
 
 	/**
 	 * Start main scheduler thread.

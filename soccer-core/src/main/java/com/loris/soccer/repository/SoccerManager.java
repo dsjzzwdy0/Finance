@@ -1047,7 +1047,11 @@ public class SoccerManager
 	public List<BdMatch> getBdMatchByMatchtime(String start, String end)
 	{
 		EntityWrapper<BdMatch> ew = new EntityWrapper<>();
-		ew.gt("matchtime", start).and().lt("matchtime", end);
+		ew.gt("matchtime", start);
+		if(StringUtils.isNotEmpty(end)) 
+		{
+			ew.and().lt("matchtime", end);
+		}
 		return bdMatchService.selectList(ew);
 	}
 	
@@ -1105,7 +1109,11 @@ public class SoccerManager
 	public List<JcMatch> getJcMatchesByDate(String start, String end)
 	{
 		EntityWrapper<JcMatch> ew = new EntityWrapper<>();
-		ew.gt("matchtime", start).and().lt("matchtime", end);
+		ew.gt("matchtime", start);
+		if(StringUtils.isNotEmpty(end))
+		{
+			ew.and().lt("matchtime", end);
+		}
 		return jcMatchService.selectList(ew);
 	}
 	
@@ -1236,6 +1244,10 @@ public class SoccerManager
 				results.add(op);
 			}
 		}
+		if(results.isEmpty())
+		{
+			return true;
+		}
 		return opService.insertBatch(results);
 	}
 	
@@ -1271,6 +1283,10 @@ public class SoccerManager
 			{
 				results.add(op);
 			}
+		}
+		if(results.isEmpty())
+		{
+			return true;
 		}
 		return ypService.insertBatch(results);
 	}

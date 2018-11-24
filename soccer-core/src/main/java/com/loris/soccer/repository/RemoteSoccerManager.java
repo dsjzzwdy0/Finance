@@ -1,5 +1,6 @@
 package com.loris.soccer.repository;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -28,7 +29,7 @@ public class RemoteSoccerManager
 	 * @return
 	 * @throws UrlFetchException 
 	 */
-	public String saveEntities(List<Entity> entities) throws UrlFetchException
+	public String saveEntities(List<? extends Entity> entities) throws UrlFetchException, UnsupportedEncodingException
 	{
 		if(entities == null || entities.isEmpty())
 		{
@@ -53,14 +54,17 @@ public class RemoteSoccerManager
 	 * @param clazzname
 	 * @param entities
 	 * @return
+	 * @throws UnsupportedEncodingException 
 	 */
-	protected WebPage createWebPage(String clazzname, List<Entity> entities)
+	protected WebPage createWebPage(String clazzname, List<? extends Entity> entities) throws UnsupportedEncodingException
 	{
 		WebPage page = new WebPage();
 		page.setUrl(getBaseUrl());
 		page.setEncoding(encoding);
 		page.setMethod(WebPage.HTTP_METHOD_POST);
 		String json = toJson(clazzname, entities);
+		//json = URLEncoder.encode(json, encoding);
+		//logger.info("json: " + json);
 		page.addParam("json", json);
 		return page;
 	}
@@ -70,7 +74,7 @@ public class RemoteSoccerManager
 	 * @param list
 	 * @return
 	 */
-	protected String toJson(String clazzname, List<Entity> entities)
+	protected String toJson(String clazzname, List<? extends Entity> entities)
 	{
 		TableRecordList list = new TableRecordList();
 		list.setClazzname(clazzname);

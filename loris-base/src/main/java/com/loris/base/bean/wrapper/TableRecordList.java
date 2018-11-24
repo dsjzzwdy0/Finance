@@ -7,7 +7,7 @@ import com.loris.base.bean.entity.Entity;
 public class TableRecordList
 {
 	private String clazzname;
-	private List<Entity> records;
+	private List<? extends Entity> records;
 	
 	public TableRecordList()
 	{
@@ -27,11 +27,11 @@ public class TableRecordList
 	{
 		this.clazzname = clazzname;
 	}
-	public List<Entity> getRecords()
+	public List<? extends Entity> getRecords()
 	{
 		return records;
 	}
-	public void setRecords(List<Entity> records)
+	public void setRecords(List<? extends Entity> records)
 	{
 		this.records = records;
 	}
