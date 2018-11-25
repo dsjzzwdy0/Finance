@@ -114,7 +114,7 @@ public class OkoooPageCreator
 		int typeIndex = 1;
 		OkoooWebPage page = new OkoooWebPage();
 		setBasicParams(page, typeIndex);
-		page.setUrl(PAGE_URLS[typeIndex] + mid + "/odds");
+		page.setUrl(PAGE_URLS[typeIndex] + mid + "/odds/");
 		page.setMid(mid);
 		page.setHasMoreHeader(true);
 		page.addHeader(OKOOO_HEADER_REFERER, "http://www.okooo.com/danchang/");

@@ -35,7 +35,7 @@ public class OddsTaskProduceScheduler extends TaskProduceScheduler<SoccerTask>
 	protected long timeToDiscard = 1000 * 180;
 	
 	/** 重新开始的时间 */
-	protected double timeToReproduce = 1.0;
+	protected double timeToReproduce = 4.0;
 	
 	/** 重新初始化的时间　*/
 	protected double timeToReinitialize = 12.0;

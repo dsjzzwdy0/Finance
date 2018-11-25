@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -17,7 +19,9 @@ import com.loris.base.web.parser.AbstractWebPageParser;
 import com.loris.soccer.analysis.util.OddsUtil;
 import com.loris.soccer.bean.SoccerConstants;
 import com.loris.soccer.bean.okooo.OkoooYp;
+import com.loris.soccer.web.downloader.okooo.OkoooUtil;
 import com.loris.soccer.web.downloader.okooo.page.OkoooRequestHeaderWebPage;
+import com.loris.soccer.web.downloader.okooo.page.OkoooWebPage;
 
 public class OddsYpChildParser extends AbstractWebPageParser
 {
@@ -51,31 +55,35 @@ public class OddsYpChildParser extends AbstractWebPageParser
 	@Override
 	public boolean parseWebPage(WebPage page)
 	{
-		//页面类型不正确
-		if(!(page instanceof OkoooRequestHeaderWebPage) )
+		if(!(page instanceof OkoooWebPage) && !(page instanceof OkoooRequestHeaderWebPage))
 		{
-			logger.info("Error page parameter, parse failed.");
 			return false;
 		}
 		
-		String content = page.getContent();		
-		//空字符串，则表示为解析不可用
-		if(StringUtils.isEmpty(content))
+		if (!page.isCompleted() || page.getContent() == null)
 		{
-			logger.info("The page content value is empty, parse failed.");
+			throw new IllegalArgumentException("The Okooo JcPageParser is not completed or Content is null. ");
+		}
+				
+		Document doc = parseHtml(page);
+		if(doc == null)
+		{
 			return false;
 		}
 		
-		int pos = content.indexOf("<script>");
-		int lastPos = content.indexOf("</script>");
+		Element scriptEl = doc.selectFirst("script");
+		if(scriptEl == null || StringUtils.isEmpty(scriptEl.data()))
+		{
+			logger.info("The script value is null.");
+			return false;
+		}
 		
-		//logger.info("StartPos: " + pos + ", LastPos: " + lastPos);
-		String text = content.substring(pos + 8, lastPos);
-		String result = getDataStr(text);
-		
+		String content = scriptEl.data();
+		String dataStr = OkoooUtil.getDataStr(content, ";", "var data_str");
+		logger.info("DataStr: " + dataStr);
 		try
 		{
-			parseJson(result);		
+			parseJson(dataStr);
 		}
 		catch(Exception e)
 		{
@@ -158,6 +166,10 @@ public class OddsYpChildParser extends AbstractWebPageParser
 			{
 				yp.setLossratio(NumberUtil.parseFloat(value.toString()));
 			}
+			/*else if("DisplayOrder".equalsIgnoreCase(key))
+			{
+				yp.setOrdinary(value.toString());
+			}*/
 		}
 		yps.add(yp);
 	}

@@ -19,7 +19,6 @@ import com.loris.soccer.bean.data.table.lottery.Corporate;
 import com.loris.soccer.bean.okooo.OkoooYp;
 import com.loris.soccer.web.downloader.okooo.OkoooPageCreator;
 import com.loris.soccer.web.downloader.okooo.page.OkoooWebPage;
-import com.loris.soccer.web.downloader.zgzcw.ZgzcwSoccerDownloader;
 
 public class OddsYpPageParser extends AbstractWebPageParser
 {
@@ -188,7 +187,7 @@ public class OddsYpPageParser extends AbstractWebPageParser
 		corporate.setGid(gid);
 		corporate.setName(gname);
 		corporate.setType(CORP_TYPE);
-		corporate.setSource(ZgzcwSoccerDownloader.SOURCE_ZGZCW);
+		corporate.setSource(SoccerConstants.DATA_SOURCE_OKOOO);
 		corps.add(corporate);
 	}
 	

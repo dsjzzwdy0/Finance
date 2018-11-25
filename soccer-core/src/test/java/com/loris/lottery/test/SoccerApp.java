@@ -23,6 +23,7 @@ import com.loris.base.context.LorisContext;
 import com.loris.base.repository.BasicManager;
 import com.loris.base.util.ArraysUtil;
 import com.loris.base.util.DateUtil;
+import com.loris.base.util.FileUtils;
 import com.loris.base.util.NumberUtil;
 import com.loris.base.web.http.UrlFetcher;
 import com.loris.base.web.http.WebClientFetcher;
@@ -70,13 +71,15 @@ import com.loris.soccer.repository.RemoteSoccerManager;
 import com.loris.soccer.repository.SettingManager;
 import com.loris.soccer.repository.SoccerContext;
 import com.loris.soccer.repository.SoccerManager;
+import com.loris.soccer.web.downloader.okooo.OkoooDataDownloader;
 import com.loris.soccer.web.downloader.okooo.OkoooPageCreator;
 import com.loris.soccer.web.downloader.okooo.loader.OkoooDailyDownloader;
 import com.loris.soccer.web.downloader.okooo.page.OkoooRequestHeaderWebPage;
 import com.loris.soccer.web.downloader.okooo.page.OkoooWebPage;
 import com.loris.soccer.web.downloader.okooo.parser.OkoooJcPageParser;
 import com.loris.soccer.web.downloader.okooo.parser.LeaguePageParser;
-import com.loris.soccer.web.downloader.okooo.parser.OddsOpMainPageParser;
+import com.loris.soccer.web.downloader.okooo.parser.OddsOpChildParser;
+import com.loris.soccer.web.downloader.okooo.parser.OddsOpPageParser;
 import com.loris.soccer.web.downloader.okooo.parser.OddsYpChangeParser;
 import com.loris.soccer.web.downloader.okooo.parser.OddsYpChildParser;
 import com.loris.soccer.web.downloader.okooo.parser.OkoooBdPageParser;
@@ -218,7 +221,11 @@ public class SoccerApp
 
 			//testRemoteManager(context);
 			
-			testUploadDataSchecduler(context);
+			//testUploadDataSchecduler(context);
+			
+			//testDownloadOkoooOpWebPage(context);
+			
+			testOkoooChileYpParser(context);
 
 			close();
 			// context = null;
@@ -228,6 +235,136 @@ public class SoccerApp
 			e.printStackTrace();
 		}
 	}
+	
+	
+	public static void testDownloadOkoooOpWebPage(LorisContext context) throws Exception
+	{
+		OkoooWebPage basePage = OkoooPageCreator.createBaseWebPage();
+		WebClientFetcher fetcher = WebClientFetcher.createFetcher(basePage);
+		fetcher.waitForBackgroundJavaScript(10000);
+		
+		if(!basePage.isCompleted())
+		{
+			logger.info("Error loading the base page '" + basePage.getFullURL() + ", the prepare process is not success, exit.");
+			//logger.info(basePage.getContent());
+			return;
+		}
+		
+		List<OkoooBdMatch> matchs = processBdBaseWebPage(basePage);
+		if(matchs == null)
+		{
+			return;
+		}
+		
+		int i = 1;
+		for (OkoooBdMatch okoooBdMatch : matchs)
+		{
+			logger.info(i +++ ": " + okoooBdMatch);
+		}
+		
+		OkoooDataDownloader.downloadMatchMainOp(fetcher, "1047076");
+	}
+	
+	/**
+	 * 
+	 * @param context
+	 * @throws Exception
+	 */
+	public static void testOkoooChileYpParser(LorisContext context) throws Exception
+	{
+		StringBuffer sb = new StringBuffer();
+		FileUtils.readToBuffer(sb, "D:\\tmp\\test2.txt");
+		logger.info(sb.toString());
+		
+		WebPage page = new OkoooWebPage();
+		page.setContent(sb.toString());
+		page.setContent(sb.toString());
+		page.setCompleted(true);
+		
+		OddsYpChildParser parser = new OddsYpChildParser();
+		parser.setCurrentTime(new Date());
+		if(parser.parseWebPage(page))
+		{
+			logger.info("Success to parse the WebPage: " + page);
+			List<OkoooYp> yps = parser.getYps();
+			int i = 1;
+			for (OkoooYp okoooOp : yps)
+			{
+				logger.info(i +++ ": " + okoooOp);
+			}
+			
+			//logger.info("Total Corprate number is : " + parser.getCorpNum());
+		}
+		else
+		{
+			logger.info("Error when parse the page: " + page);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param context
+	 * @throws Exception
+	 */
+	public static void testOkoooChileOpParser(LorisContext context) throws Exception
+	{
+		StringBuffer sb = new StringBuffer();
+		FileUtils.readToBuffer(sb, "D:\\tmp\\test.txt");
+		//logger.info(sb.toString());
+		
+		WebPage page = new OkoooWebPage();
+		page.setContent(sb.toString());
+		page.setContent(sb.toString());
+		page.setCompleted(true);
+		
+		OddsOpChildParser parser = new OddsOpChildParser();
+		if(parser.parseWebPage(page))
+		{
+			logger.info("Success to parse the WebPage: " + page);
+			List<OkoooOp> ops = parser.getOps();
+			int i = 1;
+			for (OkoooOp okoooOp : ops)
+			{
+				logger.info(i +++ ": " + okoooOp);
+			}
+			
+			logger.info("Total Corprate number is : " + parser.getCorpNum());
+		}
+		else
+		{
+			logger.info("Error when parse the page: " + page);
+		}
+	}
+	
+	
+	protected static List<OkoooBdMatch> processBdBaseWebPage(OkoooWebPage page)
+	{
+		OkoooBdPageParser parser = new OkoooBdPageParser();
+		if(parser.parseWebPage(page))
+		{
+			logger.info("Success to parse Bd WebPage " + page.getFullURL() + ".");
+			Map<String, List<OkoooBdMatch>> pairs = parser.getMatchMap();
+			
+	
+			List<OkoooBdMatch> matchList = new ArrayList<>();
+			for (String key : pairs.keySet())
+			{
+				List<OkoooBdMatch> list = pairs.get(key);
+				if(list != null && list.size() > 0)
+				{
+					matchList.addAll(list);
+				}
+			}
+			return matchList;
+		}
+		else
+		{
+			logger.info(page.getContent());
+			logger.info("Error occured when parsing the base page '" + page.getFullURL() + ".");
+			return null;
+		}
+	}
+	
 	
 	public static void testUploadDataSchecduler(LorisContext context) throws Exception
 	{
@@ -1611,7 +1748,7 @@ public class SoccerApp
 		page.setCompleted(true);
 		page.setContent(jspage.asXml());
 
-		OddsOpMainPageParser parser = new OddsOpMainPageParser();
+		OddsOpPageParser parser = new OddsOpPageParser();
 		if (parser.parseWebPage(page))
 		{
 			logger.info("Parse success");

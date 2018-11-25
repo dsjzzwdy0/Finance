@@ -19,55 +19,8 @@
 	}
 %>
 
-<style>
-.main_wrapper .gridTable th
-{
-	background-color: #008B8B;
-	font-weight: 700;
-	color: #fff;
-	white-space: nowrap;
-}
-
-thead th .asc {
-    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAZ0lEQVQ4y2NgGLKgquEuFxBPAGI2ahhWCsS/gDibUoO0gPgxEP8H4ttArEyuQYxAPBdqEAxPBImTY5gjEL9DM+wTENuQahAvEO9DMwiGdwAxOymGJQLxTyD+jgWDxCMZRsEoGAVoAADeemwtPcZI2wAAAABJRU5ErkJggg==');
-}
-
-thead th .desc {
-    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAZUlEQVQ4y2NgGAWjYBSggaqGu5FA/BOIv2PBIPFEUgxjB+IdQPwfC94HxLykus4GiD+hGfQOiB3J8SojEE9EM2wuSJzcsFMG4ttQgx4DsRalkZENxL+AuJQaMcsGxBOAmGvopk8AVz1sLZgg0bsAAAAASUVORK5CYII= ');
-}
-
-thead th .both {
-    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAQAAADYWf5HAAAAkElEQVQoz7X QMQ5AQBCF4dWQSJxC5wwax1Cq1e7BAdxD5SL+Tq/QCM1oNiJidwox0355mXnG/DrEtIQ6azioNZQxI0ykPhTQIwhCR+BmBYtlK7kLJYwWCcJA9M4qdrZrd8pPjZWPtOqdRQy320YSV17OatFC4euts6z39GYMKRPCTKY9UnPQ6P+GtMRfGtPnBCiqhAeJPmkqAAAAAElFTkSuQmCC');
-}
-
-thead th .sortable {
-    cursor: pointer;
-    background-position: right;
-    background-repeat: no-repeat;
-    padding-right: 10px;
-}
-
-.gridTable .red
-{
-	color: red;
-}
-
-.gridTable tr:hover .red
-{
-	color: yellow;
-}
-
-.gridTable tr:hover .green
-{
-	color: blue;
-}
-
-.gridTable .green
-{
-	color: green;
-}
-
-</style>
+<link rel="stylesheet" type="text/css" href="../content/scripts/soccer/soccer-table.css" />
+<script type="text/javascript" src="../content/scripts/soccer/soccer-table.js"></script>
 
 <div id="content" class="container_wrapper">
 	<%@include file="./analysis/anatoolbar.jsp"%>
@@ -273,6 +226,51 @@ function formatValue(value)
 	return value.toFixed(2);
 }
 
+/**
+ * 格式化联赛信息
+ * @param match
+ * @returns
+ */
+function formatLeagueInfo(match)
+{
+	return '<a href="analeague?type=leaguerel&mid=' + match.mid + '" class="leagueInfo">' + match.leaguename + '</a>';
+}
+/**
+ * 格式化比赛的球队信息
+ * @param match
+ * @returns
+ */
+function formatMatchTeamInfo(match)
+{
+	var str = '<div class="team"><a class="teamInfo left" tid="' + match.homeid 
+		str	+= '" href="#" onclick="showTeamInfo(this, ' + match.homeid + ')" title="'; 
+		str	+= match.homename + '">';
+		str += $.isNullOrEmpty(match.homerank) ? '' : '[' + match.homerank + ']';
+		str += match.homename 
+		str	+= '</a> <div class="vsclass" > vs </div> <a class="teamInfo right" tid="' 
+		str += match.clientid +'" href="#" onclick="showTeamInfo(this, ' + match.homeid + ')" title="';
+		str	+= match.clientname + '">' + match.clientname; 
+		str += $.isNullOrEmpty(match.clientrank) ? '' : '[' + match.clientrank + ']';
+		str += '</a></div>';
+	return str;
+}
+var DEFAUL_THRESHOLD =0.002;
+
+/**
+ * 检测是否在误差范围内
+ * @param left
+ * @param right
+ * @returns
+ */
+function withinErrorMargin (left, right, threshold)
+{
+	if($.isNullOrEmpty(threshold) || threshold <= 0)
+	{
+		threshold = DEFAUL_THRESHOLD;
+	}
+	return Math.abs(left - right) < threshold;
+}
+
 function showMatchData()
 {
 	var conf = getConfValue();
@@ -473,23 +471,4 @@ $(document).ready(function()
 	});	
 });
 
-/*初始化表格头部信息
-function initHeader()
-{
-	$('#gridTable thead').html('');
-	var header = [];
-	header.push('<tr>')
-	header.push('<th rowspan="2" class="baseinfo">编号</th>');
-	header.push('<th rowspan="2" class="baseinfo">联赛</th>');
-	header.push('<th rowspan="3" class="matchname">比赛</th>');
-	header.push('<th rowspan="3" class="baseinfo">时间</th>');
-	header.push('<th class="oddsvalue"><div class="sortable both">初胜</div></th>');
-	header.push('<th class="oddsvalue"><div class="sortable both">初平</div></th>');
-	header.push('<th class="oddsvalue"><div class="sortable both">初负</div></th>');
-	header.push('<th class="oddsvalue"><div class="sortable both">胜</div></th>');
-	header.push('<th class="oddsvalue"><div class="sortable both">平</div></th>');
-	header.push('<th class="oddsvalue"><div class="sortable both">负</div></th>');
-	header.push('</tr>');
-	$('#gridTable thead').html(header.join(''));
-}*/
 </script>

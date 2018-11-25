@@ -74,17 +74,39 @@ public class SoccerMainSchedulerMonitor implements Runnable
 		{
 			return;
 		}
-		TaskQueue<SoccerTask> queue = new PriorityTaskQueue<>();
 		
-		//任务生成器管理调度
-		OddsTaskProduceScheduler producer = new OddsTaskProduceScheduler();
-		producer.setTaskQueue(queue);
-		scheduler.addScheduler(producer);
-		
-		//任务执行进程管理器
-		TaskExecuteScheduler<SoccerTask> processor = new TaskExecuteScheduler<>();
-		processor.setTaskQueue(queue);
-		scheduler.addScheduler(processor);
+		if(args == null)
+		{
+			TaskQueue<SoccerTask> queue = new PriorityTaskQueue<>();
+			
+			//任务生成器管理调度
+			OddsTaskProduceScheduler producer = new OddsTaskProduceScheduler();
+			producer.setTaskQueue(queue);
+			scheduler.addScheduler(producer);
+			
+			//任务执行进程管理器
+			TaskExecuteScheduler<SoccerTask> processor = new TaskExecuteScheduler<>();
+			processor.setTaskQueue(queue);
+			scheduler.addScheduler(processor);
+		}
+		else
+		{
+			int argnum = args.length;
+			for (int i = 0; i < argnum; i ++)
+			{
+				if("-upload".equalsIgnoreCase(args[i]))
+				{
+					String userXmlFile = args[i + 1];
+					DataUploadScheduler uploadScheduler = new DataUploadScheduler();
+					uploadScheduler.userContextFile = userXmlFile;
+					if(uploadScheduler.initialize())
+					{
+						scheduler.addScheduler(uploadScheduler);
+					}
+					i ++;
+				}
+			}
+		}
 		
 		//启动调动器
 		scheduler.run();
