@@ -12,6 +12,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.ScriptResult;
@@ -223,9 +224,9 @@ public class SoccerApp
 			
 			//testUploadDataSchecduler(context);
 			
-			//testDownloadOkoooOpWebPage(context);
+			testDownloadOkoooOpWebPage(context);
 			
-			testOkoooChileYpParser(context);
+			//testOkoooChileYpParser(context);
 
 			close();
 			// context = null;
@@ -257,12 +258,32 @@ public class SoccerApp
 		}
 		
 		int i = 1;
+		String mid = "";
 		for (OkoooBdMatch okoooBdMatch : matchs)
 		{
+			if(StringUtils.isEmpty(mid) && DateUtil.isSameDay(okoooBdMatch.getMatchDate(), new Date()))
+			{
+				logger.info("Will download match: " + okoooBdMatch);
+				mid = okoooBdMatch.getMid();
+			}
 			logger.info(i +++ ": " + okoooBdMatch);
 		}
 		
-		OkoooDataDownloader.downloadMatchMainOp(fetcher, "1047076");
+		if(StringUtils.isNotEmpty(mid))
+		{
+			logger.info("Will download '" + mid + " op datas.");
+			List<OkoooOp> ops = OkoooDataDownloader.downloadMatchMainOp(fetcher, mid);
+			if(ops == null)
+			{
+				logger.info("The op data is null");
+			}
+			
+			i = 1;
+			for (OkoooOp okoooOp : ops)
+			{
+				logger.info(i +++ ": " + okoooOp);
+			}
+		}
 	}
 	
 	/**
