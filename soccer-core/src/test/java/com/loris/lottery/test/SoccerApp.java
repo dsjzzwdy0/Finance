@@ -12,7 +12,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
-import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.ScriptResult;
@@ -258,30 +257,47 @@ public class SoccerApp
 		}
 		
 		int i = 1;
-		String mid = "";
+		OkoooBdMatch downloadMatch = null;
 		for (OkoooBdMatch okoooBdMatch : matchs)
 		{
-			if(StringUtils.isEmpty(mid) && DateUtil.isSameDay(okoooBdMatch.getMatchDate(), new Date()))
+			if(downloadMatch == null && DateUtil.isSameDay(okoooBdMatch.getMatchDate(), new Date()))
 			{
 				logger.info("Will download match: " + okoooBdMatch);
-				mid = okoooBdMatch.getMid();
+				downloadMatch = okoooBdMatch;
 			}
 			logger.info(i +++ ": " + okoooBdMatch);
 		}
 		
-		if(StringUtils.isNotEmpty(mid))
+		if(downloadMatch != null)
 		{
-			logger.info("Will download '" + mid + " op datas.");
-			List<OkoooOp> ops = OkoooDataDownloader.downloadMatchMainOp(fetcher, mid);
+			/*logger.info("Will download '" + mid + " 欧赔 datas.");
+			List<OkoooOp> ops = OkoooDataDownloader.downloadMatchMainOp(fetcher, downloadMatch);
 			if(ops == null)
 			{
 				logger.info("The op data is null");
 			}
-			
-			i = 1;
-			for (OkoooOp okoooOp : ops)
+			else
 			{
-				logger.info(i +++ ": " + okoooOp);
+				i = 1;
+				for (OkoooOp okoooOp : ops)
+				{
+					logger.info(i +++ ": " + okoooOp);
+				}
+			}
+			*/
+			logger.info("Will download '" + downloadMatch.getMid() + " 亚盘 datas.");
+			List<OkoooYp> yps = OkoooDataDownloader.downloadMatchMainYp(fetcher, downloadMatch);
+			if(yps == null)
+			{
+				logger.info("The yp data is null");
+			}
+			else
+			{			
+				i = 1;
+				for (OkoooYp okoooYp : yps)
+				{
+					logger.info(i +++ ": " + okoooYp);
+				}
 			}
 		}
 	}

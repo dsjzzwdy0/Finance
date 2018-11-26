@@ -87,7 +87,7 @@ public class OddsYpChildParser extends AbstractWebPageParser
 		}
 		catch(Exception e)
 		{
-			//e.printStackTrace();
+			e.printStackTrace();
 			logger.info("Error when parse OddsYp: " + e.toString());
 			return false;
 		}
