@@ -80,14 +80,14 @@ public class OddsOpChildParser extends AbstractWebPageParser
 		}
 		
 		String content = scriptEl.data();
-		String dataStr = OkoooUtil.getDataStr(content, ";", "var data_str");
+		String dataStr = OkoooUtil.getDataStr(content, ";|\n", "var data_str");
 		//logger.info(dataStr);
 		if(StringUtils.isNotEmpty(dataStr))
 		{
 			parseJson(dataStr);
 		}
 		
-		String staticStr = OkoooUtil.getDataStr(content, ";", "var static_str");
+		String staticStr = OkoooUtil.getDataStr(content, ";|\n", "var static_str");
 		if(StringUtils.isNotEmpty(staticStr))
 		{
 			parseStaticInfo(staticStr);

@@ -223,9 +223,9 @@ public class SoccerApp
 			
 			//testUploadDataSchecduler(context);
 			
-			//testDownloadOkoooOpWebPage(context);
+			testDownloadOkoooOpWebPage(context);
 			
-			testOkoooChileYpParser(context);
+			//testOkoooChileYpParser(context);
 
 			close();
 			// context = null;
@@ -257,12 +257,49 @@ public class SoccerApp
 		}
 		
 		int i = 1;
+		OkoooBdMatch downloadMatch = null;
 		for (OkoooBdMatch okoooBdMatch : matchs)
 		{
+			if(downloadMatch == null && DateUtil.isSameDay(okoooBdMatch.getMatchDate(), new Date()))
+			{
+				logger.info("Will download match: " + okoooBdMatch);
+				downloadMatch = okoooBdMatch;
+			}
 			logger.info(i +++ ": " + okoooBdMatch);
 		}
 		
-		OkoooDataDownloader.downloadMatchMainOp(fetcher, "1047076");
+		if(downloadMatch != null)
+		{
+			/*logger.info("Will download '" + mid + " 欧赔 datas.");
+			List<OkoooOp> ops = OkoooDataDownloader.downloadMatchMainOp(fetcher, downloadMatch);
+			if(ops == null)
+			{
+				logger.info("The op data is null");
+			}
+			else
+			{
+				i = 1;
+				for (OkoooOp okoooOp : ops)
+				{
+					logger.info(i +++ ": " + okoooOp);
+				}
+			}
+			*/
+			logger.info("Will download '" + downloadMatch.getMid() + " 亚盘 datas.");
+			List<OkoooYp> yps = OkoooDataDownloader.downloadMatchMainYp(fetcher, downloadMatch);
+			if(yps == null)
+			{
+				logger.info("The yp data is null");
+			}
+			else
+			{			
+				i = 1;
+				for (OkoooYp okoooYp : yps)
+				{
+					logger.info(i +++ ": " + okoooYp);
+				}
+			}
+		}
 	}
 	
 	/**

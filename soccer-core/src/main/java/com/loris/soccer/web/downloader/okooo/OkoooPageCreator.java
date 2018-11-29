@@ -149,9 +149,21 @@ public class OkoooPageCreator
 	 */
 	public static OkoooRequestHeaderWebPage createYpPageWebPage(String mid, int pageIndex)
 	{
+		return createYpPageWebPage(mid, pageIndex, 30);
+	}
+	
+	/**
+	 * 创建OKOOO亚盘主要盘面数据页面
+	 * @param mid
+	 * @param pageIndex
+	 * @param perPageNum
+	 * @return
+	 */
+	public static OkoooRequestHeaderWebPage createYpPageWebPage(String mid, int pageIndex, int perPageNum)
+	{
 		int typeIndex = 5;
 		
-		int trnum = pageIndex * 30;
+		int trnum = pageIndex * perPageNum;
 		OkoooRequestHeaderWebPage page = new OkoooRequestHeaderWebPage();
 		setBasicParams(page, typeIndex);
 		page.setMid(mid);
@@ -164,15 +176,26 @@ public class OkoooPageCreator
 	}
 	
 	/**
-	 * 
+	 * 创建欧赔数据的子页面
 	 * @param mid
 	 * @param pageIndex
 	 * @return
 	 */
 	public static OkoooRequestHeaderWebPage createOpPageWebPage(String mid, int pageIndex)
 	{
+		return createOpPageWebPage(mid, pageIndex, 30);
+	}
+	
+	/**
+	 * 创建欧赔数据的子页面
+	 * @param mid
+	 * @param pageIndex
+	 * @return
+	 */
+	public static OkoooRequestHeaderWebPage createOpPageWebPage(String mid, int pageIndex, int perPageNum)
+	{
 		int typeIndex = 5;
-		int trnum = pageIndex * 30;
+		int trnum = pageIndex * perPageNum;
 		OkoooRequestHeaderWebPage page = new OkoooRequestHeaderWebPage();
 		setBasicParams(page, typeIndex);
 		page.setMid(mid);

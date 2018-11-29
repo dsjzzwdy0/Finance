@@ -68,43 +68,48 @@ public class SoccerMainSchedulerMonitor implements Runnable
 	 */
 	public static void startMainThread(String[] args)
 	{
-		logger.info("Start SoccerMainScheduler Downloader Application.");
+		logger.info("Start SoccerMainScheduler Application.");
+		
+		if(args == null)
+		{
+			printUsage();
+			return;
+		}
+		
 		SoccerMainSchedulerMonitor scheduler = new SoccerMainSchedulerMonitor();
 		if(!initSchedulerMonitor(scheduler))
 		{
 			return;
 		}
 		
-		if(args == null)
+		int argnum = args.length;
+		for (int i = 0; i < argnum; i++)
 		{
-			TaskQueue<SoccerTask> queue = new PriorityTaskQueue<>();
-			
-			//任务生成器管理调度
-			OddsTaskProduceScheduler producer = new OddsTaskProduceScheduler();
-			producer.setTaskQueue(queue);
-			scheduler.addScheduler(producer);
-			
-			//任务执行进程管理器
-			TaskExecuteScheduler<SoccerTask> processor = new TaskExecuteScheduler<>();
-			processor.setTaskQueue(queue);
-			scheduler.addScheduler(processor);
-		}
-		else
-		{
-			int argnum = args.length;
-			for (int i = 0; i < argnum; i ++)
+			if ("-upload".equalsIgnoreCase(args[i]))
 			{
-				if("-upload".equalsIgnoreCase(args[i]))
+				String userXmlFile = args[i + 1];
+				DataUploadScheduler uploadScheduler = new DataUploadScheduler();
+				uploadScheduler.userContextFile = userXmlFile;
+				if (uploadScheduler.initialize())
 				{
-					String userXmlFile = args[i + 1];
-					DataUploadScheduler uploadScheduler = new DataUploadScheduler();
-					uploadScheduler.userContextFile = userXmlFile;
-					if(uploadScheduler.initialize())
-					{
-						scheduler.addScheduler(uploadScheduler);
-					}
-					i ++;
+					scheduler.addScheduler(uploadScheduler);
 				}
+				i++;
+			}
+
+			if ("-download".equalsIgnoreCase(args[i]))
+			{
+				TaskQueue<SoccerTask> queue = new PriorityTaskQueue<>();
+
+				// 任务生成器管理调度
+				OddsTaskProduceScheduler producer = new OddsTaskProduceScheduler();
+				producer.setTaskQueue(queue);
+				scheduler.addScheduler(producer);
+
+				// 任务执行进程管理器
+				TaskExecuteScheduler<SoccerTask> processor = new TaskExecuteScheduler<>();
+				processor.setTaskQueue(queue);
+				scheduler.addScheduler(processor);
 			}
 		}
 		
@@ -151,5 +156,15 @@ public class SoccerMainSchedulerMonitor implements Runnable
 	public void addScheduler(Scheduler scheduler)
 	{
 		threads.add(scheduler);
+	}
+	
+	/**
+	 * 打印用户的操作方法
+	 */
+	protected static void printUsage()
+	{
+		logger.info("Usage: java SoccerMainScheduler -download -upload xmlfile");
+		logger.info("-download 下载网络远程数据.");
+		logger.info("-upload xmlfile 上传本地数据至远程网络服务器, xmlfile表示远程服务的配置表信息.");
 	}
 }

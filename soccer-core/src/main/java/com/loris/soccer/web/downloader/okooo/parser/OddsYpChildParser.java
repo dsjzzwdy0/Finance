@@ -79,15 +79,15 @@ public class OddsYpChildParser extends AbstractWebPageParser
 		}
 		
 		String content = scriptEl.data();
-		String dataStr = OkoooUtil.getDataStr(content, ";", "var data_str");
-		logger.info("DataStr: " + dataStr);
+		String dataStr = OkoooUtil.getDataStr(content, ";|\n", "var data_str");
+		//logger.info("DataStr: " + dataStr);
 		try
 		{
 			parseJson(dataStr);
 		}
 		catch(Exception e)
 		{
-			//e.printStackTrace();
+			e.printStackTrace();
 			logger.info("Error when parse OddsYp: " + e.toString());
 			return false;
 		}
