@@ -8,6 +8,7 @@ import com.loris.base.web.manager.Downloader;
 import com.loris.base.web.page.WebPage;
 import com.loris.soccer.bean.SoccerConstants;
 import com.loris.soccer.web.downloader.zgzcw.page.LeagueWebPage;
+import com.loris.soccer.web.downloader.zgzcw.page.LiveWebPage;
 import com.loris.soccer.web.downloader.zgzcw.page.LotteryCalendarWebPage;
 import com.loris.soccer.web.downloader.zgzcw.page.LotteryWebPage;
 import com.loris.soccer.web.downloader.zgzcw.page.MatchHistoryWebPage;
@@ -52,6 +53,8 @@ public class ZgzcwWebPageCreator
 		"http://fenxi.zgzcw.com/", 														//2282960/bsls
 		"http://saishi.zgzcw.com/soccer/",												//数据主页面
 		"http://saishi.zgzcw.com/soccer/",												//数据主页面
+		"http://live.zgzcw.com/",														//实时数据页面   //ls/AllData.action
+		"http://live.zgzcw.com/",														//实时数据页面   //ls/AllData.action
 	};
 	
 	/** 页面的类型. */
@@ -72,7 +75,8 @@ public class ZgzcwWebPageCreator
 		"ypzhishu",
 		"history",
 		"center",
-		"leaguem"
+		"leaguem",
+		"live",							//竞彩
 	};
 	
 	/** 通用的页面编码 */
@@ -430,6 +434,22 @@ public class ZgzcwWebPageCreator
 		String url = PAGE_URLS[pageType] + leagueType + "/" + lid + "/";
 		page.setUrl(url);
 		
+		return page;
+	}
+	
+	/**
+	 * 
+	 * @param issue
+	 * @return
+	 */
+	public LiveWebPage createLiveWebPage(String issue, String type)
+	{
+		int pageType = 17;
+		LiveWebPage page = new LiveWebPage();
+		setBasicParams(page, pageType);
+		String url =PAGE_URLS[pageType] + type + "/";
+		page.setUrl(url);
+		page.setLotteryType(type);
 		return page;
 	}
 
