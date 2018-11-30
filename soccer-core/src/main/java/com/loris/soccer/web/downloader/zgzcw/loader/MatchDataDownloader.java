@@ -22,6 +22,7 @@ import com.loris.soccer.bean.data.table.odds.Yp;
 import com.loris.soccer.bean.item.IssueMatch;
 import com.loris.soccer.bean.item.MatchItem;
 import com.loris.soccer.web.downloader.zgzcw.ZgzcwSoccerDownloader;
+import com.loris.soccer.web.downloader.zgzcw.ZgzcwWebPageCreator;
 import com.loris.soccer.web.downloader.zgzcw.page.LotteryWebPage;
 import com.loris.soccer.web.downloader.zgzcw.page.MatchHistoryWebPage;
 import com.loris.soccer.web.downloader.zgzcw.page.MatchWebPage;
@@ -93,7 +94,7 @@ public class MatchDataDownloader extends ZgzcwSoccerDownloader
 		matchs = soccerManager.getBdMatches(issue);
 		if(matchs == null || matchs.size() <= 0)
 		{
-			LotteryWebPage webPage = creator.createBdWebPage(issue);
+			LotteryWebPage webPage = ZgzcwWebPageCreator.createBdWebPage(issue);
 			downloadLotteryPage(webPage);
 		}
 		
@@ -152,7 +153,7 @@ public class MatchDataDownloader extends ZgzcwSoccerDownloader
 			{
 				if (dynamicDataNeedToLoad(opZhishuWebPages, mid, corporate.getGid(), date))
 				{
-					OddsOpZhishuWebPage opZhishuPage = creator.createOddsOpZhishuWebPage(mid,
+					OddsOpZhishuWebPage opZhishuPage = ZgzcwWebPageCreator.createOddsOpZhishuWebPage(mid,
 							corporate.getGid(), corporate.getName());
 					pages.put(opZhishuPage);
 				}
@@ -163,7 +164,7 @@ public class MatchDataDownloader extends ZgzcwSoccerDownloader
 			{
 				if (dynamicDataNeedToLoad(ypZhishuWebPages, mid, corporate.getGid(), date))
 				{
-					OddsYpZhishuWebPage ypZhishuPage = creator.createOddsYpZhishuWebPage(mid, corporate.getGid(),
+					OddsYpZhishuWebPage ypZhishuPage = ZgzcwWebPageCreator.createOddsYpZhishuWebPage(mid, corporate.getGid(),
 					        corporate.getName());
 					pages.put(ypZhishuPage);
 				}
@@ -414,14 +415,14 @@ public class MatchDataDownloader extends ZgzcwSoccerDownloader
 			totalSize ++;
 			if(!isOddsOpPageNeedToLoad(lastMid))
 			{				
-				OddsOpWebPage opWebPage = creator.createOddsOpWebPage(lastMid);
+				OddsOpWebPage opWebPage = ZgzcwWebPageCreator.createOddsOpWebPage(lastMid);
 				pages.put(opWebPage);
 			}
 			
 			totalSize ++;
 			if(!isOddsYpPageNeedToLoad(lastMid))
 			{
-				OddsYpWebPage ypWebPage = creator.createOddsYpWebPage(lastMid);
+				OddsYpWebPage ypWebPage = ZgzcwWebPageCreator.createOddsYpWebPage(lastMid);
 				pages.put(ypWebPage);
 			}
 		}

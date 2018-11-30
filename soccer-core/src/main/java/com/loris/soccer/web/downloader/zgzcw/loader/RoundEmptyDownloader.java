@@ -16,6 +16,7 @@ import com.loris.soccer.bean.data.table.league.Match;
 import com.loris.soccer.bean.data.table.league.Round;
 import com.loris.soccer.repository.SoccerManager;
 import com.loris.soccer.web.downloader.zgzcw.ZgzcwSoccerDownloader;
+import com.loris.soccer.web.downloader.zgzcw.ZgzcwWebPageCreator;
 import com.loris.soccer.web.downloader.zgzcw.page.RoundCupWebPage;
 import com.loris.soccer.web.downloader.zgzcw.page.RoundLeagueWebPage;
 import com.loris.soccer.web.downloader.zgzcw.parser.RoundCupWebPageParser;
@@ -117,7 +118,7 @@ public class RoundEmptyDownloader extends ZgzcwSoccerDownloader
 				{
 					continue;
 				}
-				page = creator.createRoundCupWebpage(round.getLid(), round.getSeason());
+				page = ZgzcwWebPageCreator.createRoundCupWebpage(round.getLid(), round.getSeason());
 			}
 			// 联赛
 			else if (SoccerConstants.MATCH_TYPE_LEAGUE.equals(league.getType()))
@@ -126,7 +127,7 @@ public class RoundEmptyDownloader extends ZgzcwSoccerDownloader
 				{
 					continue;
 				}
-				page = creator.createRoundLeagueWebPage(round.getLid(), round.getSeason(), round.getName());
+				page = ZgzcwWebPageCreator.createRoundLeagueWebPage(round.getLid(), round.getSeason(), round.getName());
 			}
 
 			if (page != null)

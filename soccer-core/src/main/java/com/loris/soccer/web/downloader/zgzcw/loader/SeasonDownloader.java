@@ -14,6 +14,7 @@ import com.loris.soccer.bean.data.table.league.Season;
 import com.loris.soccer.bean.model.LeagueSeason;
 import com.loris.soccer.repository.SoccerManager;
 import com.loris.soccer.web.downloader.zgzcw.ZgzcwSoccerDownloader;
+import com.loris.soccer.web.downloader.zgzcw.ZgzcwWebPageCreator;
 import com.loris.soccer.web.downloader.zgzcw.page.SeasonWebPage;
 
 /**
@@ -67,7 +68,7 @@ public class SeasonDownloader extends ZgzcwSoccerDownloader
 			
 			if(leagueSeason == null)
 			{
-				SeasonWebPage page = creator.createSeasonWebPage(league.getLid(), league.getType(), "");
+				SeasonWebPage page = ZgzcwWebPageCreator.createSeasonWebPage(league.getLid(), league.getType(), "");
 				pages.put(page);
 				continue;
 			}
@@ -79,7 +80,7 @@ public class SeasonDownloader extends ZgzcwSoccerDownloader
 				//如果已经下载，则不需要再行下载数据
 				if(!isDownloaded(list, season.getLid(), season.getSeason(), league.getType()))
 				{
-					SeasonWebPage page = creator.createSeasonWebPage(league.getLid(), league.getType(), season.getSeason());
+					SeasonWebPage page = ZgzcwWebPageCreator.createSeasonWebPage(league.getLid(), league.getType(), season.getSeason());
 					pages.put(page);
 				}
 			}

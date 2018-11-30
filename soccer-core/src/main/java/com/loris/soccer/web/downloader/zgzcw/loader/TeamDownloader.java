@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import com.loris.base.web.page.WebPage;
 import com.loris.soccer.bean.data.table.league.Team;
 import com.loris.soccer.web.downloader.zgzcw.ZgzcwSoccerDownloader;
+import com.loris.soccer.web.downloader.zgzcw.ZgzcwWebPageCreator;
 import com.loris.soccer.web.downloader.zgzcw.page.TeamWebPage;
 import com.loris.soccer.web.downloader.zgzcw.parser.TeamWebPageParser;
 
@@ -47,7 +48,7 @@ public class TeamDownloader extends ZgzcwSoccerDownloader
 		{
 			if (!isDownloaded(team))
 			{
-				pages.put(creator.createTeamWebPage(team.getTid()));
+				pages.put(ZgzcwWebPageCreator.createTeamWebPage(team.getTid()));
 			}
 		}
 		return true;

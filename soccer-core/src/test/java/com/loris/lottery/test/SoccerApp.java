@@ -29,8 +29,6 @@ import com.loris.base.web.http.UrlFetcher;
 import com.loris.base.web.http.WebClientFetcher;
 import com.loris.base.web.manager.Downloader;
 import com.loris.base.web.page.WebPage;
-import com.loris.base.web.task.PriorityTaskQueue;
-import com.loris.base.web.task.TaskQueue;
 import com.loris.soccer.analysis.data.MatchOpVariance;
 import com.loris.soccer.analysis.data.MatchData;
 import com.loris.soccer.analysis.data.MatchDoc;
@@ -121,8 +119,6 @@ import com.loris.soccer.web.downloader.zgzcw.parser.SeasonWebPageParser;
 import com.loris.soccer.web.downloader.zgzcw.parser.TeamWebPageParser;
 import com.loris.soccer.web.downloader.zgzcw.parser.ZgzcwCenterParser;
 import com.loris.soccer.web.scheduler.DataUploadScheduler;
-import com.loris.soccer.web.task.MatchWebTask;
-import com.loris.soccer.web.task.SoccerMatchTaskProducer;
 
 public class SoccerApp
 {
@@ -446,12 +442,12 @@ public class SoccerApp
 	{
 		ZgzcwDataDownloader.initialize(context);
 
-		TaskQueue<MatchWebTask> queue = new PriorityTaskQueue<>();
+		/*TaskQueue<MatchWebTask> queue = new PriorityTaskQueue<>();
 		SoccerMatchTaskProducer producer = new SoccerMatchTaskProducer();
 		producer.setTaskQueue(queue);
 
 		Thread thread = new Thread(producer);
-		thread.start();
+		thread.start();*/
 
 		/*
 		 * SoccerManager soccerManager = context.getBean(SoccerManager.class);
@@ -751,9 +747,9 @@ public class SoccerApp
 		downloader.close();
 
 		/*
-		 * long start = System.currentTimeMillis(); ZgzcwWebPageCreator creator
+		 * long start = System.currentTimeMillis(); ZgzcwWebPageCreator ZgzcwWebPageCreator
 		 * = new ZgzcwWebPageCreator(); LotteryWebPage page =
-		 * creator.createBdWebPage(""); if(UrlFetcher.fetch(page)) {
+		 * ZgzcwWebPageCreator.createBdWebPage(""); if(UrlFetcher.fetch(page)) {
 		 * LotteryBdWebPageParser parser = new LotteryBdWebPageParser();
 		 * if(parser.parseWebPage(page)) { List<BdMatch> bdMatchs =
 		 * parser.getMatches(); logger.info("Total match is :" +
@@ -887,12 +883,11 @@ public class SoccerApp
 	 */
 	public static void testRoundCupDownloader(LorisContext context) throws Exception
 	{
-		ZgzcwWebPageCreator creator = new ZgzcwWebPageCreator();
 		SoccerManager manager = context.getBean(SoccerManager.class);
 		String lid = "114";
 		String season = "";
 
-		RoundCupWebPage page = creator.createRoundCupWebpage(lid, season);
+		RoundCupWebPage page = ZgzcwWebPageCreator.createRoundCupWebpage(lid, season);
 		logger.info("Downloading " + page);
 
 		if (UrlFetcher.fetch(page))
@@ -1021,8 +1016,7 @@ public class SoccerApp
 
 	public static void testMainPageParser(LorisContext context) throws Exception
 	{
-		ZgzcwWebPageCreator creator = new ZgzcwWebPageCreator();
-		WebPage page = creator.createZgzcwMainPage();
+		WebPage page = ZgzcwWebPageCreator.createZgzcwMainPage();
 
 		if (UrlFetcher.fetch(page))
 		{
@@ -1596,9 +1590,8 @@ public class SoccerApp
 	public static void testMatchHistory(LorisContext context) throws Exception
 	{
 		context.getApplicationContext().getBean(SoccerManager.class);
-		ZgzcwWebPageCreator creator = new ZgzcwWebPageCreator();
 		String mid = "2350309";
-		MatchHistoryWebPage page = creator.createMatchHistoryWebPage(mid);
+		MatchHistoryWebPage page = ZgzcwWebPageCreator.createMatchHistoryWebPage(mid);
 
 		// 调取数据
 		if (!UrlFetcher.fetch(page))
@@ -1907,8 +1900,7 @@ public class SoccerApp
 		String mid = "2373979";
 		String gid = "8";
 		String gname = "Bet365";
-		ZgzcwWebPageCreator creator = new ZgzcwWebPageCreator();
-		OddsYpZhishuWebPage yppage = creator.createOddsYpZhishuWebPage(mid, gid, gname);
+		OddsYpZhishuWebPage yppage = ZgzcwWebPageCreator.createOddsYpZhishuWebPage(mid, gid, gname);
 
 		if (UrlFetcher.fetch(yppage))
 		{
@@ -1930,7 +1922,7 @@ public class SoccerApp
 
 		gid = "281";
 		gname = "Bet365";
-		OddsOpZhishuWebPage oppage = creator.createOddsOpZhishuWebPage(mid, gid, gname);
+		OddsOpZhishuWebPage oppage = ZgzcwWebPageCreator.createOddsOpZhishuWebPage(mid, gid, gname);
 
 		if (UrlFetcher.fetch(oppage))
 		{
@@ -2127,11 +2119,11 @@ public class SoccerApp
 		downloader.close();
 
 		/*
-		 * ZgzcwWebPageCreator creator = new ZgzcwWebPageCreator(); String mid =
+		 * ZgzcwWebPageCreator ZgzcwWebPageCreator = new ZgzcwWebPageCreator(); String mid =
 		 * "2018-03-21"; int num = 10;
 		 * 
 		 * LotteryCalendarWebPage page =
-		 * creator.createLotteryCalendarWebPage(mid, num);
+		 * ZgzcwWebPageCreator.createLotteryCalendarWebPage(mid, num);
 		 * logger.info("Downloading " + page);
 		 * 
 		 * if(UrlFetcher.fetch(page)) { LotteryCalendarWebPageParser parser =
@@ -2151,10 +2143,9 @@ public class SoccerApp
 	 */
 	public static void testOddsYpDownloader(LorisContext context) throws Exception
 	{
-		ZgzcwWebPageCreator creator = new ZgzcwWebPageCreator();
 		String mid = "2467763";
 
-		OddsYpWebPage page = creator.createOddsYpWebPage(mid);
+		OddsYpWebPage page = ZgzcwWebPageCreator.createOddsYpWebPage(mid);
 		logger.info("Downloading " + page);
 
 		if (UrlFetcher.fetch(page))
@@ -2188,10 +2179,9 @@ public class SoccerApp
 	 */
 	public static void testOddsOpDownloader(LorisContext context) throws Exception
 	{
-		ZgzcwWebPageCreator creator = new ZgzcwWebPageCreator();
 		String mid = "2249815";
 
-		OddsOpWebPage page = creator.createOddsOpWebPage(mid);
+		OddsOpWebPage page = ZgzcwWebPageCreator.createOddsOpWebPage(mid);
 		logger.info("Downloading " + page);
 
 		if (UrlFetcher.fetch(page))
@@ -2225,10 +2215,9 @@ public class SoccerApp
 	 */
 	public static void testLotteryZcDownloader(LorisContext context) throws Exception
 	{
-		ZgzcwWebPageCreator creator = new ZgzcwWebPageCreator();
 		String issue = "18043";
 
-		LotteryWebPage page = creator.createZcWebPage(issue);
+		LotteryWebPage page = ZgzcwWebPageCreator.createZcWebPage(issue);
 		logger.info("Downloading " + page);
 
 		if (UrlFetcher.fetch(page))
@@ -2266,10 +2255,9 @@ public class SoccerApp
 		logger.info("SoccerManager is " + (SoccerManager.getInstance() == null));
 		int i = 0;
 
-		ZgzcwWebPageCreator creator = new ZgzcwWebPageCreator();
 		String issue = DateUtil.getCurDayStr();
 
-		LotteryWebPage page = creator.createJcWebPage(issue);
+		LotteryWebPage page = ZgzcwWebPageCreator.createJcWebPage(issue);
 		logger.info("Downloading " + page);
 
 		if (UrlFetcher.fetch(page))
@@ -2305,10 +2293,9 @@ public class SoccerApp
 	 */
 	public static void testLotteryBdDownloader(LorisContext context) throws Exception
 	{
-		ZgzcwWebPageCreator creator = new ZgzcwWebPageCreator();
 		String issue = "80401";
 
-		LotteryWebPage page = creator.createBdWebPage(issue);
+		LotteryWebPage page = ZgzcwWebPageCreator.createBdWebPage(issue);
 		logger.info("Downloading " + page);
 
 		if (UrlFetcher.fetch(page))
@@ -2343,10 +2330,9 @@ public class SoccerApp
 	 */
 	public static void testTeamDownloader(LorisContext context) throws Exception
 	{
-		ZgzcwWebPageCreator creator = new ZgzcwWebPageCreator();
 		String tid = "165";
 
-		TeamWebPage page = creator.createTeamWebPage(tid);
+		TeamWebPage page = ZgzcwWebPageCreator.createTeamWebPage(tid);
 		logger.info("Downloading " + page);
 
 		if (UrlFetcher.fetch(page))
@@ -2377,11 +2363,10 @@ public class SoccerApp
 	public static void createSeasonDownloader(LorisContext context) throws Exception
 	{
 		logger.info("Test Create Round Downloader.");
-		ZgzcwWebPageCreator creator = new ZgzcwWebPageCreator();
 		String lid = "8";
 		// String season = "2017-2018";
 
-		SeasonWebPage page = creator.createSeasonWebPage(lid, "", "");
+		SeasonWebPage page = ZgzcwWebPageCreator.createSeasonWebPage(lid, "", "");
 		logger.info("Downloading " + page);
 
 		if (UrlFetcher.fetch(page))
@@ -2436,10 +2421,9 @@ public class SoccerApp
 	 */
 	public static void testRankDownloader(LorisContext context) throws Exception
 	{
-		ZgzcwWebPageCreator creator = new ZgzcwWebPageCreator();
 		String lid = "8";
 
-		RankWebPage page = creator.createRankWebPage(lid);
+		RankWebPage page = ZgzcwWebPageCreator.createRankWebPage(lid);
 		logger.info("Downloading " + page);
 
 		if (UrlFetcher.fetch(page))
@@ -2473,12 +2457,11 @@ public class SoccerApp
 	 */
 	public static void testRoundLeagueDownloader(LorisContext context) throws Exception
 	{
-		ZgzcwWebPageCreator creator = new ZgzcwWebPageCreator();
 		String lid = "8";
 		String season = "2017-2018";
 		String round = "6";
 
-		RoundLeagueWebPage page = creator.createRoundLeagueWebPage(lid, season, round);
+		RoundLeagueWebPage page = ZgzcwWebPageCreator.createRoundLeagueWebPage(lid, season, round);
 		logger.info("Downloading " + page);
 
 		if (UrlFetcher.fetch(page))

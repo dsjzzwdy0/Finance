@@ -27,6 +27,8 @@ public class LiveMatchDownloader extends ZgzcwSoccerDownloader
 	public boolean prepare()
 	{
 		logger.info("Starting to preparing LiveMatchDownloader...");
+		
+		
 		return false;
 	}
 	

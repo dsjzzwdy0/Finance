@@ -14,6 +14,7 @@ import com.loris.soccer.bean.data.table.lottery.JcMatch;
 import com.loris.soccer.bean.data.table.lottery.LotteryCalendar;
 import com.loris.soccer.bean.data.table.lottery.ZcMatch;
 import com.loris.soccer.web.downloader.zgzcw.ZgzcwSoccerDownloader;
+import com.loris.soccer.web.downloader.zgzcw.ZgzcwWebPageCreator;
 import com.loris.soccer.web.downloader.zgzcw.page.LotteryWebPage;
 import com.loris.soccer.web.downloader.zgzcw.parser.LotteryBdWebPageParser;
 import com.loris.soccer.web.downloader.zgzcw.parser.LotteryJcWebPageParser;
@@ -88,13 +89,13 @@ public class LotteryMatchDownloader extends ZgzcwSoccerDownloader
 			{
 				switch (issue.getKey()) {
 				case bd:
-					pages.put(creator.createBdWebPage(issue.getValue()));
+					pages.put(ZgzcwWebPageCreator.createBdWebPage(issue.getValue()));
 					break;
 				case jc:
-					pages.put(creator.createJcWebPage(issue.getValue()));
+					pages.put(ZgzcwWebPageCreator.createJcWebPage(issue.getValue()));
 					break;
 				case zc:
-					pages.put(creator.createZcWebPage(issue.getValue()));
+					pages.put(ZgzcwWebPageCreator.createZcWebPage(issue.getValue()));
 					break;
 				default:
 					break;

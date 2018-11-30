@@ -8,13 +8,14 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import com.loris.base.bean.wrapper.Result;
 import com.loris.base.util.ArraysUtil;
 import com.loris.base.web.task.Task;
 import com.loris.base.web.task.event.TaskEvent;
 import com.loris.base.web.task.event.TaskEvent.TaskEventType;
 import com.loris.soccer.analysis.checker.MatchChecker;
-import com.loris.soccer.bean.item.IssueMatch;
 import com.loris.soccer.bean.item.MatchItem;
+import com.loris.soccer.bean.model.MatchList;
 import com.loris.soccer.web.downloader.zgzcw.ZgzcwDataDownloader;
 import com.loris.soccer.web.task.DownloadRecord;
 import com.loris.soccer.web.task.MatchWebTask;
@@ -242,7 +243,7 @@ public class OddsTaskProduceScheduler extends TaskProduceScheduler<SoccerTask>
 	 * 生成器的初始化
 	 * @return 是否成功的标志
 	 */
-	public boolean initialize()
+	public boolean initialize() throws ClassCastException
 	{
 		logger.info("Start to initialize the SoccerMatchTaskProducer...");
 		if(matches == null)
@@ -252,17 +253,22 @@ public class OddsTaskProduceScheduler extends TaskProduceScheduler<SoccerTask>
 		try
 		{
 			if(!isJcInitialized)
-			{			
-				List<? extends IssueMatch> jcMatches = ZgzcwDataDownloader.downloadLatestMatch("jc");
-				if(jcMatches != null && !jcMatches.isEmpty())
+			{
+				Result result = ZgzcwDataDownloader.downloadLatestMatch("jc");
+				if(result != null)
 				{
-					isJcInitialized = true;
-					for (IssueMatch issueMatch : jcMatches)
+					MatchList jcMatches = (MatchList)result.get("test");
+					if(jcMatches != null && !jcMatches.isEmpty())
 					{
-						addMatch(issueMatch);
+						isJcInitialized = true;
+						for (MatchItem issueMatch : jcMatches)
+						{
+							addMatch(issueMatch);
+						}
 					}
+
+					logger.info("There are total " + jcMatches.size() + " JcMatches.");
 				}
-				logger.info("There are total " + jcMatches.size() + " JcMatches.");
 			}
 		}
 		catch(Exception exception)
@@ -282,16 +288,20 @@ public class OddsTaskProduceScheduler extends TaskProduceScheduler<SoccerTask>
 		{
 			if(!isBdInitialized)
 			{
-				List<? extends IssueMatch> bdMatches = ZgzcwDataDownloader.downloadLatestMatch("bd");
-				if(bdMatches != null && !bdMatches.isEmpty())
+				Result result = ZgzcwDataDownloader.downloadLatestMatch("bd");
+				if(result != null)
 				{
-					isBdInitialized = true;
-					for (IssueMatch issueMatch : bdMatches)
+					MatchList bdMatches = (MatchList)result.get("matches");
+					if(bdMatches != null && !bdMatches.isEmpty())
 					{
-						addMatch(issueMatch);
-					}
-				}				
-				logger.info("There are total " + bdMatches.size() + " BdMatches.");
+						isBdInitialized = true;
+						for (MatchItem issueMatch : bdMatches)
+						{
+							addMatch(issueMatch);
+						}
+					}				
+					logger.info("There are total " + bdMatches.size() + " BdMatches.");
+				}
 			}
 		}
 		catch(Exception e)

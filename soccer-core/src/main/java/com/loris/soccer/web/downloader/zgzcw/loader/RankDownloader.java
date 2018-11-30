@@ -12,6 +12,7 @@ import com.loris.soccer.bean.data.table.league.League;
 import com.loris.soccer.bean.model.LeagueMap;
 import com.loris.soccer.repository.SoccerManager;
 import com.loris.soccer.web.downloader.zgzcw.ZgzcwSoccerDownloader;
+import com.loris.soccer.web.downloader.zgzcw.ZgzcwWebPageCreator;
 import com.loris.soccer.web.downloader.zgzcw.page.RankWebPage;
 
 public class RankDownloader extends ZgzcwSoccerDownloader
@@ -88,7 +89,7 @@ public class RankDownloader extends ZgzcwSoccerDownloader
 				continue;
 			}
 			
-			page = creator.createRankWebPage(league.getLid());
+			page = ZgzcwWebPageCreator.createRankWebPage(league.getLid());
 			pages.put(page);
 		}
 		return true;

@@ -24,9 +24,6 @@ public abstract class ZgzcwSoccerDownloader extends SoccerDownloader
 	/** The Soccer WebPage Manager. */
 	protected static SoccerWebPageManager soccerWebPageManager;
 	
-	/** The WebPageCreator */
-	protected static ZgzcwWebPageCreator creator;
-	
 	/** The WebPageProcessor. */
 	protected static SoccerWebPageProcessor processor;
 	
@@ -58,13 +55,7 @@ public abstract class ZgzcwSoccerDownloader extends SoccerDownloader
 		if(context != null && soccerWebPageManager == null)
 		{
 			soccerWebPageManager = context.getApplicationContext().getBean(SoccerWebPageManager.class);
-		}
-		
-		if(creator == null)
-		{
-			creator = new ZgzcwWebPageCreator();
-		}
-		
+		}		
 		if(processor == null)
 		{
 			processor = new ZgzcwWebPageProcessor(soccerManager, soccerWebPageManager);

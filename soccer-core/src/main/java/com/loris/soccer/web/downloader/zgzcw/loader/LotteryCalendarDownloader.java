@@ -11,6 +11,7 @@ import com.loris.base.util.DateUtil;
 import com.loris.base.web.page.WebPage;
 import com.loris.soccer.bean.data.table.lottery.LotteryCalendar;
 import com.loris.soccer.web.downloader.zgzcw.ZgzcwSoccerDownloader;
+import com.loris.soccer.web.downloader.zgzcw.ZgzcwWebPageCreator;
 import com.loris.soccer.web.downloader.zgzcw.page.LotteryCalendarWebPage;
 import com.loris.soccer.web.downloader.zgzcw.parser.LotteryCalendarWebPageParser;
 
@@ -90,7 +91,7 @@ public class LotteryCalendarDownloader extends ZgzcwSoccerDownloader
 		int diffNum = DateUtil.getDiscrepantDays(stDate, edDate) + 1;
 
 		start = DateUtil.formatDay(stDate);
-		LotteryCalendarWebPage page = creator.createLotteryCalendarWebPage(start, diffNum);
+		LotteryCalendarWebPage page = ZgzcwWebPageCreator.createLotteryCalendarWebPage(start, diffNum);
 		pages.put(page);
 		
 		return true;

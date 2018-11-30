@@ -32,6 +32,7 @@ import com.loris.soccer.bean.model.LeagueSeason;
 import com.loris.soccer.bean.type.LeagueType;
 import com.loris.soccer.repository.SoccerManager;
 import com.loris.soccer.web.downloader.zgzcw.ZgzcwSoccerDownloader;
+import com.loris.soccer.web.downloader.zgzcw.ZgzcwWebPageCreator;
 import com.loris.soccer.web.downloader.zgzcw.page.LeagueWebPage;
 import com.loris.soccer.web.downloader.zgzcw.page.RoundCupWebPage;
 import com.loris.soccer.web.downloader.zgzcw.page.RoundLeagueWebPage;
@@ -286,7 +287,7 @@ public class RoundMatchDownloader extends ZgzcwSoccerDownloader
 			{
 				continue;
 			}
-			page = creator.createRoundLeagueWebPage(round.getLid(), round.getSeason(), round.getName());
+			page = ZgzcwWebPageCreator.createRoundLeagueWebPage(round.getLid(), round.getSeason(), round.getName());
 			pages.put(page);
 		}
 	}
@@ -321,7 +322,7 @@ public class RoundMatchDownloader extends ZgzcwSoccerDownloader
 			league = leagueMap.getLeague(lid);
 			if(league != null && league.getLeagueType() == LeagueType.CUP)
 			{
-				page = creator.createRoundCupWebpage(lid, null);
+				page = ZgzcwWebPageCreator.createRoundCupWebpage(lid, null);
 				pages.put(page);
 			}			
 		}
@@ -374,7 +375,7 @@ public class RoundMatchDownloader extends ZgzcwSoccerDownloader
 					continue;
 				}
 				cupRoundsInPages.add(round);
-				page = creator.createRoundCupWebpage(round.getLid(), round.getSeason());
+				page = ZgzcwWebPageCreator.createRoundCupWebpage(round.getLid(), round.getSeason());
 				pages.put(page);
 			}
 			//联赛
@@ -384,7 +385,7 @@ public class RoundMatchDownloader extends ZgzcwSoccerDownloader
 				{
 					continue;
 				}
-				page = creator.createRoundLeagueWebPage(round.getLid(), round.getSeason(), round.getName());
+				page = ZgzcwWebPageCreator.createRoundLeagueWebPage(round.getLid(), round.getSeason(), round.getName());
 				pages.put(page);
 			}
 		}
@@ -484,7 +485,7 @@ public class RoundMatchDownloader extends ZgzcwSoccerDownloader
 			LeagueSeason leagueSeason = seasons.get(league.getLid());
 			if(isLeagueNeedToDownloaded(league, leagueSeason) && (!leagueMap.isNotActive(league.getLid())))
 			{
-				LeagueWebPage page = creator.createLeagueWebPage(league.getLid(), league.getType());
+				LeagueWebPage page = ZgzcwWebPageCreator.createLeagueWebPage(league.getLid(), league.getType());
 				pages.put(page);
 				logger.info("下载：" + league);
 			}
@@ -512,7 +513,7 @@ public class RoundMatchDownloader extends ZgzcwSoccerDownloader
 	 */
 	protected void downloadCenterPage()
 	{
-		ZgzcwCenterPage page = creator.createZgzcwMainPage();
+		ZgzcwCenterPage page = ZgzcwWebPageCreator.createZgzcwMainPage();
 		logger.info("Downloading Zgzcw main page: " + page.getFullURL());
 		try
 		{

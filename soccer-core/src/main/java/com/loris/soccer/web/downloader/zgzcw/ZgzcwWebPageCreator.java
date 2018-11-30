@@ -80,14 +80,14 @@ public class ZgzcwWebPageCreator
 	};
 	
 	/** 通用的页面编码 */
-	protected String encoding;
+	protected static String encoding = Downloader.ENCODING_UTF8;
 	
 	/**
 	 * Create a new instance of WebPageCreator.
 	 */
-	public ZgzcwWebPageCreator()
+	private ZgzcwWebPageCreator()
 	{
-		this.encoding = Downloader.ENCODING_UTF8;
+		encoding = Downloader.ENCODING_UTF8;
 	}
 	
 	/**
@@ -95,7 +95,7 @@ public class ZgzcwWebPageCreator
 	 * 
 	 * @return
 	 */
-	public ZgzcwCenterPage createZgzcwMainPage()
+	public static ZgzcwCenterPage createZgzcwMainPage()
 	{
 		int pageType = 14;
 		ZgzcwCenterPage page = new ZgzcwCenterPage();
@@ -112,7 +112,7 @@ public class ZgzcwWebPageCreator
 	 * @param season 赛季编号
 	 * @return 赛季信息下载页面
 	 */
-	public SeasonWebPage createSeasonWebPage(String lid, String type, String season)
+	public static SeasonWebPage createSeasonWebPage(String lid, String type, String season)
 	{
 		int pageType = 0;
 		SeasonWebPage page = new SeasonWebPage();
@@ -139,7 +139,7 @@ public class ZgzcwWebPageCreator
 	 * @param round 比赛轮次
 	 * @return 联赛比赛下载页面
 	 */
-	public RoundLeagueWebPage createRoundLeagueWebPage(String lid, String season, String round)
+	public static RoundLeagueWebPage createRoundLeagueWebPage(String lid, String season, String round)
 	{
 		int pageType = 1;
 		RoundLeagueWebPage page = new RoundLeagueWebPage();
@@ -161,7 +161,7 @@ public class ZgzcwWebPageCreator
 	 * @param season 赛季编号
 	 * @return 杯赛下载页面
 	 */
-	public RoundCupWebPage createRoundCupWebpage(String lid, String season)
+	public static RoundCupWebPage createRoundCupWebpage(String lid, String season)
 	{
 		int pageType = 2;
 		RoundCupWebPage page = new RoundCupWebPage();
@@ -186,7 +186,7 @@ public class ZgzcwWebPageCreator
 	 * @param issue 北单下载期号
 	 * @return 北单下载页面
 	 */
-	public LotteryWebPage createBdWebPage(String issue)
+	public static LotteryWebPage createBdWebPage(String issue)
 	{
 		int pageType = 3;
 		LotteryWebPage page = new LotteryWebPage();
@@ -211,7 +211,7 @@ public class ZgzcwWebPageCreator
 	 * @param issue 期号
 	 * @return 竞彩足球下载页面
 	 */
-	public LotteryWebPage createJcWebPage(String issue)
+	public static LotteryWebPage createJcWebPage(String issue)
 	{
 		int pageType = 4;
 		LotteryWebPage page = new LotteryWebPage();
@@ -236,7 +236,7 @@ public class ZgzcwWebPageCreator
 	 * @param issue 足彩期号
 	 * @return 足彩期号
 	 */
-	public LotteryWebPage createZcWebPage(String issue)
+	public static LotteryWebPage createZcWebPage(String issue)
 	{
 		int pageType = 5;
 		LotteryWebPage page = new LotteryWebPage();
@@ -256,7 +256,7 @@ public class ZgzcwWebPageCreator
 	 * @param mid 比赛编号
 	 * @return 欧赔数据下载页面
 	 */
-	public OddsOpWebPage createOddsOpWebPage(String mid)
+	public static OddsOpWebPage createOddsOpWebPage(String mid)
 	{
 		int pageType = 6;
 		OddsOpWebPage page = new OddsOpWebPage();
@@ -274,7 +274,7 @@ public class ZgzcwWebPageCreator
 	 * @param mid 比赛编号
 	 * @return 亚盘数据下载页面
 	 */
-	public OddsYpWebPage createOddsYpWebPage(String mid)
+	public static OddsYpWebPage createOddsYpWebPage(String mid)
 	{
 		int pageType = 7;
 		OddsYpWebPage page = new OddsYpWebPage();
@@ -292,7 +292,7 @@ public class ZgzcwWebPageCreator
 	 * @param mid 比赛编号
 	 * @return 亚盘数据下载页面
 	 */
-	public RankWebPage createRankWebPage(String lid)
+	public static RankWebPage createRankWebPage(String lid)
 	{
 		int pageType = 8;
 		RankWebPage page = new RankWebPage();
@@ -310,7 +310,7 @@ public class ZgzcwWebPageCreator
 	 * @param mid 比赛编号
 	 * @return 亚盘数据下载页面
 	 */
-	public TeamWebPage createTeamWebPage(String tid)
+	public static TeamWebPage createTeamWebPage(String tid)
 	{
 		int pageType = 9;
 		TeamWebPage page = new TeamWebPage();
@@ -329,7 +329,7 @@ public class ZgzcwWebPageCreator
 	 * @param daynum
 	 * @return
 	 */
-	public LotteryCalendarWebPage createLotteryCalendarWebPage(String startdate, int daynum)
+	public static LotteryCalendarWebPage createLotteryCalendarWebPage(String startdate, int daynum)
 	{
 		int pageType = 10;
 		LotteryCalendarWebPage page = new LotteryCalendarWebPage();
@@ -351,7 +351,7 @@ public class ZgzcwWebPageCreator
 	 * @param gname 博彩公司名称
 	 * @return 页面
 	 */
-	public OddsOpZhishuWebPage createOddsOpZhishuWebPage(String mid, String gid, String gname)
+	public static OddsOpZhishuWebPage createOddsOpZhishuWebPage(String mid, String gid, String gname)
 	{
 		int pageType = 11;
 		OddsOpZhishuWebPage page = new OddsOpZhishuWebPage();
@@ -380,7 +380,7 @@ public class ZgzcwWebPageCreator
 	 * @param gname 博彩公司名称
 	 * @return 页面
 	 */
-	public OddsYpZhishuWebPage createOddsYpZhishuWebPage(String mid, String gid, String gname)
+	public static OddsYpZhishuWebPage createOddsYpZhishuWebPage(String mid, String gid, String gname)
 	{
 		int pageType = 12;
 		OddsYpZhishuWebPage page = new OddsYpZhishuWebPage();
@@ -406,11 +406,11 @@ public class ZgzcwWebPageCreator
 	 * @param mid 比赛编号
 	 * @return 下载页面
 	 */
-	public MatchHistoryWebPage createMatchHistoryWebPage(String mid)
+	public static MatchHistoryWebPage createMatchHistoryWebPage(String mid)
 	{
 		int pageType = 13;
 		MatchHistoryWebPage page = new MatchHistoryWebPage();
-		this.setBasicParams(page, pageType);
+		setBasicParams(page, pageType);
 		page.setMid(mid);
 		String url = PAGE_URLS[pageType] + mid + "/bsls";
 		page.setUrl(url);
@@ -424,7 +424,7 @@ public class ZgzcwWebPageCreator
 	 * @param leagueType
 	 * @return
 	 */
-	public LeagueWebPage createLeagueWebPage(String lid, String leagueType)
+	public static LeagueWebPage createLeagueWebPage(String lid, String leagueType)
 	{
 		int pageType = 14;
 		LeagueWebPage page = new LeagueWebPage();
@@ -438,11 +438,11 @@ public class ZgzcwWebPageCreator
 	}
 	
 	/**
-	 * 
+	 * 创建页面
 	 * @param issue
 	 * @return
 	 */
-	public LiveWebPage createLiveWebPage(String issue, String type)
+	public static LiveWebPage createLiveWebPage(String type)
 	{
 		int pageType = 17;
 		LiveWebPage page = new LiveWebPage();
@@ -458,7 +458,7 @@ public class ZgzcwWebPageCreator
 	 * 
 	 * @param page
 	 */
-	protected void setBasicParams(WebPage page, int typeIndex)
+	protected static void setBasicParams(WebPage page, int typeIndex)
 	{
 		page.setEncoding(encoding);
 		page.setType(PAGE_TYPES[typeIndex]);
@@ -470,7 +470,7 @@ public class ZgzcwWebPageCreator
 	 * 
 	 * @return 编码类型
 	 */
-	public String getEncoding()
+	public static String getEncoding()
 	{
 		return encoding;
 	}
@@ -480,8 +480,8 @@ public class ZgzcwWebPageCreator
 	 * 
 	 * @param encoding 编码
 	 */
-	public void setEncoding(String encoding)
+	public static void setEncoding(String encoding1)
 	{
-		this.encoding = encoding;
+		encoding = encoding1;
 	}
 }

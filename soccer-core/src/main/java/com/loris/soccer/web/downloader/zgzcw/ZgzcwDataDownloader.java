@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.loris.base.bean.wrapper.Result;
 import com.loris.base.context.LorisContext;
 import com.loris.base.util.ArraysUtil;
 import com.loris.base.util.DateUtil;
@@ -18,13 +19,15 @@ import com.loris.soccer.bean.data.table.lottery.BdMatch;
 import com.loris.soccer.bean.data.table.lottery.JcMatch;
 import com.loris.soccer.bean.data.table.odds.Op;
 import com.loris.soccer.bean.data.table.odds.Yp;
-import com.loris.soccer.bean.item.IssueMatch;
 import com.loris.soccer.bean.item.MatchItem;
+import com.loris.soccer.bean.model.MatchList;
 import com.loris.soccer.repository.SoccerManager;
+import com.loris.soccer.web.downloader.zgzcw.page.LiveWebPage;
 import com.loris.soccer.web.downloader.zgzcw.page.LotteryWebPage;
 import com.loris.soccer.web.downloader.zgzcw.page.OddsOpWebPage;
 import com.loris.soccer.web.downloader.zgzcw.page.OddsYpWebPage;
 import com.loris.soccer.web.downloader.zgzcw.page.ZgzcwCenterPage;
+import com.loris.soccer.web.downloader.zgzcw.parser.LiveBdWebPageParser;
 import com.loris.soccer.web.downloader.zgzcw.parser.LotteryBdWebPageParser;
 import com.loris.soccer.web.downloader.zgzcw.parser.LotteryJcWebPageParser;
 import com.loris.soccer.web.downloader.zgzcw.parser.OddsOpWebPageParser;
@@ -42,9 +45,6 @@ import com.loris.soccer.web.task.MatchWebTask.MatchWebTaskType;
 public class ZgzcwDataDownloader
 {
 	private static Logger logger = Logger.getLogger(ZgzcwDataDownloader.class);
-	
-	/** Page Creator. */
-	protected static ZgzcwWebPageCreator pageCreator = new ZgzcwWebPageCreator();
 	
 	/** The processor. */
 	protected static ZgzcwWebPageProcessor processor = null;
@@ -95,20 +95,24 @@ public class ZgzcwDataDownloader
 	 * @return 联赛数据
 	 * @throws UrlFetchException
 	 */
-	public static boolean downloadZgzcwCenterPage() throws UrlFetchException
+	public static Result downloadZgzcwCenterPage() throws UrlFetchException
 	{
-		ZgzcwCenterPage page = pageCreator.createZgzcwMainPage();
+		ZgzcwCenterPage page = ZgzcwWebPageCreator.createZgzcwMainPage();
 		if(!download(page))
 		{
-			return false;
+			return null;
 		}
 		ZgzcwCenterParser parser = new ZgzcwCenterParser();
 		if(parser.parseWebPage(page))
 		{
 			List<League> leagues = parser.getLeagues();
-			return soccerManager.addOrUpdateLeagues(leagues);
+			soccerManager.addOrUpdateLeagues(leagues);
+			
+			Result result = new Result();
+			result.put("league", leagues);
+			return result;
 		}
-		return false;
+		return null;
 	}
 	
 	/**
@@ -116,33 +120,42 @@ public class ZgzcwDataDownloader
 	 * @param task 任务
 	 * @return 是否完成的标志
 	 */
-	public static boolean downloadMatchTask(MatchWebTask task) throws UrlFetchException
+	public static Result downloadMatchTask(MatchWebTask task) throws UrlFetchException
 	{
-		MatchWebTaskType type = task.getType();
-		MatchItem match = task.getMatch();
-		
+		return downloadMatchOdds(task.getMatch(), task.getType());
+	}
+	
+	/**
+	 * 下载赔率数据
+	 * @param match
+	 * @param oddsType
+	 * @return
+	 * @throws UrlFetchException
+	 */
+	public static Result downloadMatchOdds(MatchItem match, MatchWebTaskType oddsType) throws UrlFetchException
+	{
 		if(match == null)
 		{
-			return false;
+			return null;
 		}
-		if(type == MatchWebTaskType.Op)
+		if(oddsType == MatchWebTaskType.Op)
 		{
-			OddsOpWebPage page = pageCreator.createOddsOpWebPage(match.getMid());
+			OddsOpWebPage page = ZgzcwWebPageCreator.createOddsOpWebPage(match.getMid());
 			
 			if(download(page))
 			{
 				return processOddsOpWebPage(match, page);
 			}
 		}
-		else if(type == MatchWebTaskType.Yp)
+		else if(oddsType == MatchWebTaskType.Yp)
 		{
-			OddsYpWebPage page = pageCreator.createOddsYpWebPage(match.getMid());
+			OddsYpWebPage page = ZgzcwWebPageCreator.createOddsYpWebPage(match.getMid());
 			if(download(page))
 			{
 				return processOddsYpWebPage(match, page);
 			}
 		}
-		return false;
+		return null;
 	}
 	
 	
@@ -151,16 +164,16 @@ public class ZgzcwDataDownloader
 	 * @param date 日期
 	 * @return 下载的数据集
 	 */
-	public static List<? extends IssueMatch> downloadLatestMatch(String type) throws UrlFetchException
+	public static Result downloadLatestMatch(String type) throws UrlFetchException
 	{
 		LotteryWebPage page = null;
 		if("bd".equalsIgnoreCase(type))
 		{
-			page = pageCreator.createBdWebPage("");
+			page = ZgzcwWebPageCreator.createBdWebPage("");
 		}
 		else if("jc".equalsIgnoreCase(type))
 		{
-			page = pageCreator.createJcWebPage("");
+			page = ZgzcwWebPageCreator.createJcWebPage("");
 		}
 		
 		if(page == null)
@@ -184,11 +197,40 @@ public class ZgzcwDataDownloader
 	}
 	
 	/**
+	 * 下载北单数据的主页面
+	 * @return
+	 * @throws UrlFetchException
+	 */
+	public static Result downloadLiveBdWebPage() throws UrlFetchException
+	{
+		LiveWebPage page = ZgzcwWebPageCreator.createLiveWebPage("bd");
+		if(download(page))
+		{
+			soccerWebPageManager.addOrUpdateLiveWebPage(page);
+			
+			LiveBdWebPageParser parser = new LiveBdWebPageParser();
+			if(parser.parseWebPage(page))
+			{
+				List<BdMatch> matchs = parser.getMatches();
+				soccerManager.addOrUpdateBdMatches(matchs);
+				
+				Result result = new Result("matches", matchs);
+				result.put("current", parser.getCurrentIssue());
+				result.put("issues", parser.getIssues());
+				
+				return result;
+			}
+		}		
+		logger.info("Error when downloading or parsing WebPage: " + page);
+		return null;
+	}
+	
+	/**
 	 * 北单数据页面下载处理器
 	 * @param page 数据页
 	 * @return 返回是否成功的标志
 	 */
-	protected static List<? extends IssueMatch> processBdWebPage(LotteryWebPage page)
+	protected static Result processBdWebPage(LotteryWebPage page)
 	{
 		LotteryBdWebPageParser parser = new LotteryBdWebPageParser();
 		if(parser.parseWebPage(page))
@@ -212,7 +254,7 @@ public class ZgzcwDataDownloader
 			soccerManager.addOrUpdateBdMatches(saveMatches);
 			
 			logger.info("Total BdMatch size is " + matchs.size());
-			return matchs;
+			return new Result("matches", new MatchList(matchs));
 		}
 		return null;
 	}
@@ -222,23 +264,24 @@ public class ZgzcwDataDownloader
 	 * 
 	 * @param page 欧赔主页数据
 	 */
-	protected static boolean processOddsOpWebPage(MatchItem match, OddsOpWebPage page)
+	protected static Result processOddsOpWebPage(MatchItem match, OddsOpWebPage page)
 	{
 		OddsOpWebPageParser parser = new OddsOpWebPageParser();
 		if(!parser.parseWebPage(page))
 		{
 			logger.info("Error occured when parse " + page + ".");
-			return false;
+			return null;
 		}
 		
 		//解析得到欧赔数据
 		List<Op> ops = parser.getOddsList();
+		Result result = new Result("ops", ops);
 		synchronized (soccerManager)
 		{
 			soccerWebPageManager.addOrUpdateOpWebPage(page);
 			soccerManager.addNewOpList(page.getMid(), ops);
 		}
-		return true;
+		return result;
 	}
 	
 	/**
@@ -247,7 +290,7 @@ public class ZgzcwDataDownloader
 	 * @param page
 	 * @return
 	 */
-	protected static List<JcMatch> processJcWebPage(LotteryWebPage page)
+	protected static Result processJcWebPage(LotteryWebPage page)
 	{
 		LotteryJcWebPageParser parser = new LotteryJcWebPageParser();
 		if(parser.parseWebPage(page))
@@ -257,17 +300,16 @@ public class ZgzcwDataDownloader
 			{
 				return null;
 			}
-			//
+			//保留数据
 			IssueMatchChecker<JcMatch> checker = new IssueMatchChecker<>(DateUtil.getCurDayStr());
 			List<JcMatch> saveMatches = new ArrayList<>();
 			ArraysUtil.getListValues(matchs, saveMatches, checker);
 			
 			saveLotteryWebPage(page);
 			
-			soccerManager.addOrUpdateJcMatches(saveMatches);
-			
+			soccerManager.addOrUpdateJcMatches(saveMatches);			
 			logger.info("Total JcMatch size is " + matchs.size());
-			return matchs;
+			return new Result("matchs", new MatchList(matchs));
 		}
 		return null;
 	}
@@ -277,7 +319,7 @@ public class ZgzcwDataDownloader
 	 * 
 	 * @param page 亚盘主页数据
 	 */
-	protected static boolean processOddsYpWebPage(MatchItem match, OddsYpWebPage page)
+	protected static Result processOddsYpWebPage(MatchItem match, OddsYpWebPage page)
 	{
 		OddsYpWebPageParser parser = new OddsYpWebPageParser();
 		
@@ -290,7 +332,7 @@ public class ZgzcwDataDownloader
 		if(!parser.parseWebPage(page))
 		{
 			logger.info("Error occured when parser " + page + ".");
-			return false;
+			return null;
 		}
 		
 		List<Yp> yps = parser.getOddsList();
@@ -299,7 +341,7 @@ public class ZgzcwDataDownloader
 			soccerWebPageManager.addOrUpdateYpWebPage(page);
 			soccerManager.addNewYpList(page.getMid(), yps);
 		}
-		return true;
+		return new Result("yps", yps);
 	}
 	
 	/**

@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.loris.base.web.repository.WebPageManager;
 import com.loris.soccer.web.downloader.okooo.page.OkoooWebPage;
 import com.loris.soccer.web.downloader.zgzcw.page.LeagueWebPage;
+import com.loris.soccer.web.downloader.zgzcw.page.LiveWebPage;
 import com.loris.soccer.web.downloader.zgzcw.page.LotteryWebPage;
 import com.loris.soccer.web.downloader.zgzcw.page.MatchHistoryWebPage;
 import com.loris.soccer.web.downloader.zgzcw.page.OddsOpWebPage;
@@ -25,6 +26,7 @@ import com.loris.soccer.web.downloader.zgzcw.page.ZgzcwCenterPage;
 import com.loris.soccer.web.page.SimpleOddsOpWebPage;
 import com.loris.soccer.web.page.SimpleOddsYpWebPage;
 import com.loris.soccer.web.repository.service.LeagueWebPageService;
+import com.loris.soccer.web.repository.service.LiveWebPageService;
 import com.loris.soccer.web.repository.service.LotteryWebPageService;
 import com.loris.soccer.web.repository.service.MatchHistoryWebPageService;
 import com.loris.soccer.web.repository.service.OddsOpWebPageService;
@@ -91,6 +93,10 @@ public class SoccerWebPageManager extends WebPageManager
 	
 	@Autowired
 	private LeagueWebPageService leagueWebPageService;
+	
+	@Autowired
+	private LiveWebPageService liveWebPageService;
+		
 	
 	/**
 	 * Add the page.
@@ -560,6 +566,8 @@ public class SoccerWebPageManager extends WebPageManager
 	}
 	
 	
+	
+	
 	/**
 	 * 获得已经下载的比赛历史页列表
 	 * 
@@ -588,6 +596,25 @@ public class SoccerWebPageManager extends WebPageManager
 		else
 		{
 			return matchHistoryWebPageService.insert(page);
+		}
+	}
+	
+	/**
+	 * 加入或更新下载的历史数据页面
+	 * 
+	 * @param page 历史数据页面
+	 * @return 是否成功的标志
+	 */
+	public boolean addOrUpdateLiveWebPage(LiveWebPage page)
+	{
+		super.saveWebPage(page);
+		if(StringUtils.isNotEmpty(page.getId()))
+		{
+			return liveWebPageService.updateAllColumnById(page);
+		}
+		else
+		{
+			return liveWebPageService.insert(page);
 		}
 	}
 	

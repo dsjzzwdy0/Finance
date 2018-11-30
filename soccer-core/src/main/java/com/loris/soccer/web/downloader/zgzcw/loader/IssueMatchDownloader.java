@@ -23,6 +23,7 @@ import com.loris.soccer.bean.data.table.odds.Yp;
 import com.loris.soccer.bean.item.IssueMatch;
 import com.loris.soccer.bean.item.MatchItem;
 import com.loris.soccer.web.downloader.zgzcw.ZgzcwSoccerDownloader;
+import com.loris.soccer.web.downloader.zgzcw.ZgzcwWebPageCreator;
 import com.loris.soccer.web.downloader.zgzcw.page.LotteryWebPage;
 import com.loris.soccer.web.downloader.zgzcw.page.MatchHistoryWebPage;
 import com.loris.soccer.web.downloader.zgzcw.page.MatchWebPage;
@@ -145,7 +146,7 @@ public class IssueMatchDownloader extends ZgzcwSoccerDownloader
 		
 		if(!checkexist || !isIssueMatchDownloaded(SoccerConstants.LOTTERY_BD, date))
 		{
-			LotteryWebPage bdWebPage = creator.createBdWebPage("");
+			LotteryWebPage bdWebPage = ZgzcwWebPageCreator.createBdWebPage("");
 			downloadLotteryPage(bdWebPage);
 		}
 		else
@@ -157,7 +158,7 @@ public class IssueMatchDownloader extends ZgzcwSoccerDownloader
 		
 		if(!checkexist || !isIssueMatchDownloaded(SoccerConstants.LOTTERY_JC, date))
 		{
-			LotteryWebPage jcWebPage = creator.createJcWebPage(date);
+			LotteryWebPage jcWebPage = ZgzcwWebPageCreator.createJcWebPage(date);
 			downloadLotteryPage(jcWebPage);
 		}
 		
@@ -184,13 +185,13 @@ public class IssueMatchDownloader extends ZgzcwSoccerDownloader
 				//该数据需要下多次
 				if(!ArraysUtil.hasSameObject(downOpPages, opChecker))
 				{
-					OddsOpWebPage opWebPage = creator.createOddsOpWebPage(mid);
+					OddsOpWebPage opWebPage = ZgzcwWebPageCreator.createOddsOpWebPage(mid);
 					pages.put(opWebPage);
 				}
 				
 				if(!ArraysUtil.hasSameObject(downYpPages, ypChecker))
 				{
-					OddsYpWebPage ypWebPage = creator.createOddsYpWebPage(mid);
+					OddsYpWebPage ypWebPage = ZgzcwWebPageCreator.createOddsYpWebPage(mid);
 					pages.put(ypWebPage);
 				} 
 				
@@ -341,7 +342,7 @@ public class IssueMatchDownloader extends ZgzcwSoccerDownloader
 			//totalSize ++;
 			if(!isOddsOpPageNeedToLoad(lastMid))
 			{				
-				OddsOpWebPage opWebPage = creator.createOddsOpWebPage(lastMid);
+				OddsOpWebPage opWebPage = ZgzcwWebPageCreator.createOddsOpWebPage(lastMid);
 				pages.put(opWebPage);
 			}
 			

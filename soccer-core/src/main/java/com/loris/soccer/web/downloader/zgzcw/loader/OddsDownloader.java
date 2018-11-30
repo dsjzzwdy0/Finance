@@ -11,6 +11,7 @@ import com.loris.soccer.bean.data.table.league.Match;
 import com.loris.soccer.bean.data.table.odds.Op;
 import com.loris.soccer.bean.data.table.odds.Yp;
 import com.loris.soccer.web.downloader.zgzcw.ZgzcwSoccerDownloader;
+import com.loris.soccer.web.downloader.zgzcw.ZgzcwWebPageCreator;
 import com.loris.soccer.web.downloader.zgzcw.page.OddsOpWebPage;
 import com.loris.soccer.web.downloader.zgzcw.page.OddsYpWebPage;
 import com.loris.soccer.web.downloader.zgzcw.parser.OddsOpWebPageParser;
@@ -64,13 +65,13 @@ public class OddsDownloader extends ZgzcwSoccerDownloader
 			//如果已经下载，则不计算下载库中
 			if(!isOpDownloaded(downOddsOpPages, match))
 			{
-				page = creator.createOddsOpWebPage(match.getMid());
+				page = ZgzcwWebPageCreator.createOddsOpWebPage(match.getMid());
 				pages.put(page);
 			}
 			
 			if(!isYpDownloaded(downOddsYpPages, match))
 			{
-				page = creator.createOddsYpWebPage(match.getMid());
+				page = ZgzcwWebPageCreator.createOddsYpWebPage(match.getMid());
 				pages.put(page);
 			}
 		}

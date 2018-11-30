@@ -1,8 +1,12 @@
 package com.loris.base.web.parser;
 
+import java.util.List;
+
+import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.loris.base.util.NumberUtil;
 import com.loris.base.web.page.WebPage;
 
@@ -14,6 +18,8 @@ import com.loris.base.web.page.WebPage;
  */
 public abstract class AbstractWebPageParser implements WebPageParser
 {
+	private static Logger logger = Logger.getLogger(AbstractWebPageParser.class);
+	
 	/**
 	 * Parse the html string to document.
 	 * 
@@ -45,6 +51,42 @@ public abstract class AbstractWebPageParser implements WebPageParser
 			}
 		}
 		return "";
+	}
+	
+	/**
+	 * 检测基本数据是否符合要求
+	 * @param page
+	 * @param clazzes
+	 * @return
+	 */
+	public boolean checkBasicInfo(WebPage page, List<Class<?>> clazzes)
+	{
+		if (!page.isCompleted())
+		{
+			logger.info("The WebPage: " + page + " is not null.");
+			return false;
+		}
+		
+		if(StringUtils.isEmpty(page.getContent()))
+		{
+			logger.info("The WebPage: " + page + " content is null.");
+			return false;
+		}
+		
+		if(clazzes == null)
+		{
+			return true;
+		}
+		for (Class<?> clazz : clazzes)
+		{
+			if(!clazz.isInstance(page))
+			{
+				logger.info("The WebPage: " + page + " is not a validate '" + clazz.getName() + "' object.");
+				return false;
+			}
+		}
+		
+		return true;
 	}
 	
 	/**
