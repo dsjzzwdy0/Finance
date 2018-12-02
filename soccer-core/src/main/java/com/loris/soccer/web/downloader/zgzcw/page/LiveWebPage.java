@@ -1,14 +1,16 @@
 package com.loris.soccer.web.downloader.zgzcw.page;
 
+import com.baomidou.mybatisplus.annotations.TableName;
 import com.loris.base.web.page.WebPage;
 
+@TableName("soccer_web_live_page")
 public class LiveWebPage extends WebPage
 {
 	/***/
 	private static final long serialVersionUID = 1L;
 
 	protected String issue;	
-	protected String lotteryType;
+	protected String lotterytype;
 
 	public String getIssue()
 	{
@@ -20,19 +22,20 @@ public class LiveWebPage extends WebPage
 		this.issue = issue;
 	}
 
-	public String getLotteryType()
+	
+	public String getLotterytype()
 	{
-		return lotteryType;
+		return lotterytype;
 	}
 
-	public void setLotteryType(String lotteryType)
+	public void setLotterytype(String lotterytype)
 	{
-		this.lotteryType = lotteryType;
+		this.lotterytype = lotterytype;
 	}
 
 	@Override
 	public String toString()
 	{
-		return "LiveWebPage [issue=" + issue + ", lotteryType=" + lotteryType + ", url: "  + url  + "]";
+		return "LiveWebPage [issue=" + issue + ", lotteryType=" + lotterytype + ", url: "  + url  + "]";
 	}	
 }

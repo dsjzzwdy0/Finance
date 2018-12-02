@@ -20,8 +20,28 @@ public class IssueMatchUtil
 	 */
 	public static String getCurrentIssue()
 	{
+		return getIssueDay(new Date());
+	}
+	
+	/**
+	 * 获得比赛的投注日期
+	 * @param matchtime
+	 * @return
+	 */
+	public static String getIssueDay(String matchtime)
+	{
+		Date date = DateUtil.tryToParseDate(matchtime);
+		if(date == null)
+		{
+			return "";
+		}
+		return getIssueDay(date);
+	}
+	
+	public static String getIssueDay(Date date)
+	{
 		Calendar calendar = Calendar.getInstance();
-		calendar.setTimeInMillis(System.currentTimeMillis());
+		calendar.setTimeInMillis(date.getTime());
 		int hour = calendar.get(Calendar.HOUR_OF_DAY);
 		int minute = calendar.get(Calendar.MINUTE);
 		

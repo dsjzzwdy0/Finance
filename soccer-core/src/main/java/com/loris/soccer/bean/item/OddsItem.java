@@ -1,6 +1,7 @@
 package com.loris.soccer.bean.item;
 
 import com.loris.base.bean.entity.AutoIdEntity;
+import com.loris.soccer.bean.data.table.lottery.Corporate;
 
 public class OddsItem extends AutoIdEntity implements Cloneable
 {
@@ -122,6 +123,14 @@ public class OddsItem extends AutoIdEntity implements Cloneable
 	public void setSource(String source)
 	{
 		this.source = source;
+	}
+	
+	public Corporate getCorporate()
+	{
+		Corporate corp = new Corporate();
+		corp.setGid(gid);
+		corp.setName(gname);
+		return corp;
 	}
 	@Override
 	public String toString()

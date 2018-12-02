@@ -322,6 +322,14 @@ public class DownSetting extends UUIDEntity implements Cloneable
 		{
 			setting2.setInterval(setting.getInterval());
 		}
+		if(StringUtils.isNotEmpty(setting.start))
+		{
+			setting2.setStart(setting.start);
+		}
+		if(StringUtils.isNotEmpty(setting.end))
+		{
+			setting2.setEnd(setting.end);
+		}
 		return setting2;
 	}
 	

@@ -28,6 +28,8 @@ import com.loris.soccer.web.downloader.zgzcw.page.OddsOpWebPage;
 import com.loris.soccer.web.downloader.zgzcw.page.OddsYpWebPage;
 import com.loris.soccer.web.downloader.zgzcw.page.ZgzcwCenterPage;
 import com.loris.soccer.web.downloader.zgzcw.parser.LiveBdWebPageParser;
+import com.loris.soccer.web.downloader.zgzcw.parser.LiveIssueJcWebPageParser;
+import com.loris.soccer.web.downloader.zgzcw.parser.LiveJcWebPageParser;
 import com.loris.soccer.web.downloader.zgzcw.parser.LotteryBdWebPageParser;
 import com.loris.soccer.web.downloader.zgzcw.parser.LotteryJcWebPageParser;
 import com.loris.soccer.web.downloader.zgzcw.parser.OddsOpWebPageParser;
@@ -214,13 +216,67 @@ public class ZgzcwDataDownloader
 				List<BdMatch> matchs = parser.getMatches();
 				soccerManager.addOrUpdateBdMatches(matchs);
 				
-				Result result = new Result("matches", matchs);
+				Result result = new Result("matches", new MatchList(matchs));
 				result.put("current", parser.getCurrentIssue());
 				result.put("issues", parser.getIssues());
 				
 				return result;
 			}
 		}		
+		logger.info("Error when downloading or parsing WebPage: " + page);
+		return null;
+	}
+	
+	/**
+	 * 下载北单数据的主页面
+	 * @return
+	 * @throws UrlFetchException
+	 */
+	public static Result downloadLiveJcWebPage() throws UrlFetchException
+	{
+		LiveWebPage page = ZgzcwWebPageCreator.createLiveWebPage("jz");
+		if(download(page))
+		{
+			soccerWebPageManager.addOrUpdateLiveWebPage(page);
+			
+			LiveJcWebPageParser parser = new LiveJcWebPageParser();
+			if(parser.parseWebPage(page))
+			{
+				List<JcMatch> matchs = parser.getMatches();
+				soccerManager.addOrUpdateJcMatches(matchs);
+				
+				Result result = new Result("matches", new MatchList(matchs));
+				result.put("current", parser.getCurrentIssue());
+				return result;
+			}
+		}		
+		logger.info("Error when downloading or parsing WebPage: " + page);
+		return null;
+	}
+	
+	/**
+	 * 下载及时竞彩数据
+	 * @param issue
+	 * @return
+	 * @throws UrlFetchException
+	 */
+	public static Result downloadLiveJcWebPage(String issue) throws UrlFetchException
+	{
+		LiveWebPage page = ZgzcwWebPageCreator.createLiveIssueWebPage(issue, "jz");
+		if(download(page))
+		{
+			soccerWebPageManager.addOrUpdateLiveWebPage(page);
+			
+			LiveIssueJcWebPageParser parser = new LiveIssueJcWebPageParser();
+			parser.setCurrentIssue(issue);
+			if(parser.parseWebPage(page))
+			{
+				List<JcMatch> matchs = parser.getMatches();				
+				soccerManager.addOrUpdateJcMatches(matchs);
+				return new Result("matches", new MatchList(matchs));
+			}
+		}
+		
 		logger.info("Error when downloading or parsing WebPage: " + page);
 		return null;
 	}

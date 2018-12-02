@@ -1,7 +1,7 @@
 package com.loris.lottery.controller;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -111,13 +111,21 @@ public class UploadController extends BaseController
 			{
 				List<Op> ops = transformRecords(entities);
 				String mid = ops.get(0).getMid();
-				soccerManager.addOrUpdateMatchOps(mid, ops);
+				logger.info("First Op Value: " + ops.get(0));
+				synchronized(soccerManager)
+				{
+					soccerManager.addOrUpdateMatchOps(mid, ops);
+				}
 			}
 			else if(Yp.class.getName().equals(clazz))
 			{
 				List<Yp> yps = transformRecords(entities);
 				String mid = yps.get(0).getMid();
-				soccerManager.addOrUpdateMatchYps(mid, yps);
+				logger.info("First Yp Value: " + yps.get(0));
+				synchronized(soccerManager)
+				{
+					soccerManager.addOrUpdateMatchYps(mid, yps);
+				}
 			}
 			else if(JcMatch.class.getName().equals(clazz))
 			{
@@ -218,7 +226,11 @@ public class UploadController extends BaseController
 		List<Entity> entities = new ArrayList<>();
 		Class<?> clazz = Class.forName(clazzname);
 		
-		List<Method> methods = ReflectUtil.getAllMethods(clazz, false);		
+		List<Field> fields = ReflectUtil.getAllFields(clazz, false);
+		for (Field field : fields)
+		{
+			field.setAccessible(true);
+		}
 		for (Object rec : array)
 		{
 			Entity entity = (Entity) clazz.newInstance();
@@ -227,8 +239,48 @@ public class UploadController extends BaseController
 			for (String key : obj.keySet())
 			{
 				Object value = obj.get(key);
-				for (Method method : methods)
+				for (Field field : fields)
 				{
+					if(key.equals(field.getName()))
+					{
+						String type = field.getType().getName();
+						if(type.equals("java.lang.String")){  
+							field.set(entity, (String)value);  
+		                }  
+		                else if(type.equals("java.util.Date"))
+		                {
+		                	Date date = DateUtil.tryToParseDate(value.toString());
+		                	field.set(entity, date);  
+		                }  
+		                else if(type.equals("java.lang.Integer") || type.equals("int"))
+		                {
+		                	int t = NumberUtil.parseInt(value);
+		                	field.set(entity, t);
+		                }
+		                else if(type.equals("java.lang.Float") || type.equals("float"))
+		                {
+		                	float f = NumberUtil.parseFloat(value);
+		                	field.set(entity, f);
+		                }
+		                else if(type.equals("java.lang.Double") || type.equals("double"))
+		                {
+		                	double d = NumberUtil.parseDouble(value);
+		                	field.set(entity, d);
+		                }
+		                else 
+		                {
+		                	try
+							{
+		                		field.set(entity, value);
+							}
+							catch(Exception e)
+							{
+								logger.info("MethodName: " + field.getName() + ", Argument Type: " +  type);
+								e.printStackTrace();
+							}
+		                }
+					}
+					/*
 					//不是Bean的方法，带有多个参数
 					if(method.getParameterCount() < 1 || method.getParameterCount() > 1)
 					{
@@ -274,7 +326,7 @@ public class UploadController extends BaseController
 							}
 		                }
 
-					}
+					}*/
 				}
 			}
 			

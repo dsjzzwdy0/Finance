@@ -17,6 +17,15 @@ public class Match extends MatchItem
 	protected String handicap;  	//让球盘
 	protected boolean ended;    	//是否关闭
 	
+	public Match()
+	{
+	}
+	
+	public Match(MatchItem item)
+	{
+		setMatchItem(item);
+	}
+	
 	public String getMid()
 	{
 		return mid;

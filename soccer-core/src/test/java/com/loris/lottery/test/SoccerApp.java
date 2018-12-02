@@ -1,5 +1,6 @@
 package com.loris.lottery.test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -19,6 +20,7 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.loris.base.bean.User;
 import com.loris.base.bean.entity.Entity;
+import com.loris.base.bean.wrapper.Result;
 import com.loris.base.context.LorisContext;
 import com.loris.base.repository.BasicManager;
 import com.loris.base.util.ArraysUtil;
@@ -35,6 +37,7 @@ import com.loris.soccer.analysis.data.MatchDoc;
 import com.loris.soccer.analysis.data.MatchOdds;
 import com.loris.soccer.analysis.pool.MatchDocLoader;
 import com.loris.soccer.analysis.pool.MatchOddsPool;
+import com.loris.soccer.analysis.stat.CorporateStat;
 import com.loris.soccer.analysis.util.PossionUtil;
 import com.loris.soccer.analysis.util.LeagueDataUtil;
 import com.loris.soccer.analysis.util.OddsUtil;
@@ -56,8 +59,11 @@ import com.loris.soccer.bean.data.table.odds.Yp;
 import com.loris.soccer.bean.data.view.MatchInfo;
 import com.loris.soccer.bean.data.view.RankInfo;
 import com.loris.soccer.bean.item.IssueMatch;
+import com.loris.soccer.bean.item.MatchItem;
 import com.loris.soccer.bean.item.YpValue;
 import com.loris.soccer.bean.model.IssueMatchMapping;
+import com.loris.soccer.bean.model.Keys;
+import com.loris.soccer.bean.model.MatchList;
 import com.loris.soccer.bean.okooo.OkoooBdMatch;
 import com.loris.soccer.bean.okooo.OkoooJcMatch;
 import com.loris.soccer.bean.okooo.OkoooOp;
@@ -218,9 +224,9 @@ public class SoccerApp
 			//testRemoteManager(context);
 			
 			//testUploadDataSchecduler(context);
-			
-			testDownloadOkoooOpWebPage(context);
-			
+			// testDownloadOkoooOpWebPage(context);
+			//testDownloadLiveJcWebPage(context);
+			testComputeCorpStat(context);
 			//testOkoooChileYpParser(context);
 
 			close();
@@ -229,6 +235,73 @@ public class SoccerApp
 		catch (Exception e)
 		{
 			e.printStackTrace();
+		}
+	}
+	
+	public static void testComputeCorpStat(LorisContext context) throws IOException
+	{
+		CorporateStat.initialize(context);
+		
+		String start = "2018-04-01";
+		String end = "2018-11-30";
+		
+		CorporateStat.computeStat(start, end);
+	}
+	
+	public static void testDownloadLiveJcWebPage(LorisContext context) throws Exception
+	{
+		ZgzcwDataDownloader.initialize(context);
+		Result result = ZgzcwDataDownloader.downloadLiveJcWebPage("2018-12-02");
+		
+		if(result == null)
+		{
+			logger.info("Error when downloading BdMatches.");
+			return;
+		}
+		
+		MatchList list = (MatchList)result.get("matches");
+		if(list == null || list.isEmpty())
+		{
+			logger.info("The MatchList is Null.");
+			return;
+		}
+		
+		logger.info("There are total: " + list.size() + " matches.");
+		
+		int i = 1;
+		for (MatchItem matchItem : list)
+		{
+			logger.info(i +++ ": " + matchItem);
+		}
+	}
+	
+	public static void testDownloadLiveWebPage(LorisContext context) throws Exception
+	{
+		ZgzcwDataDownloader.initialize(context);
+		Result result = ZgzcwDataDownloader.downloadLiveBdWebPage();
+		
+		if(result == null)
+		{
+			logger.info("Error when downloading BdMatches.");
+			return;
+		}
+		MatchList list = (MatchList)result.get("matches");
+		if(list == null)
+		{
+			logger.info("The MatchList is Null.");
+			return;
+		}
+		
+		int i = 1;
+		for (MatchItem matchItem : list)
+		{
+			logger.info(i +++ ": " + matchItem);
+		}
+		
+		Keys keys = (Keys)result.get("issues");
+		for (String string : keys)
+		{
+			logger.info(": " + string);
 		}
 	}
 	

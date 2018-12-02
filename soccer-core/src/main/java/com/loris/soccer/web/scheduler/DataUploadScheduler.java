@@ -141,6 +141,11 @@ public class DataUploadScheduler extends AbstractScheduler
 	 */
 	protected String saveEntities(List<? extends Entity> entities)
 	{
+		if(entities == null || entities.isEmpty())
+		{
+			logger.info("There are no Entities data to be uploaded.");
+			return "error";
+		}
 		try
 		{
 			logger.info("Upload " + entities.get(0).getClass().getName() + " with [" + entities.size() + "] entities.");
@@ -192,18 +197,18 @@ public class DataUploadScheduler extends AbstractScheduler
 		{
 			start = DateUtil.getCurDayStr();
 		}
-
+		/*
 		List<Match> matchs = soccerManager.getMatches(start, end);
-		saveMatches(matchs);
+		saveMatches(matchs);*/
 
 		List<JcMatch> jcMatchs = soccerManager.getJcMatchesByDate(start, end);
 		String result = saveEntities(jcMatchs);
-		logger.info("Save result: " + result);
+		logger.info("Save " + jcMatchs.size() + " JcMatches result: " + result);
 		sleep(100);
 
 		List<BdMatch> bdMatchs = soccerManager.getBdMatchByMatchtime(start, end);
 		result = saveEntities(bdMatchs);
-		logger.info("Save result: " + result);
+		logger.info("Save " + bdMatchs.size() + " BdMatches result: " + result);
 		sleep(100);
 
 		int i = 1;
@@ -211,15 +216,22 @@ public class DataUploadScheduler extends AbstractScheduler
 		{
 			logger.info(i++ + ": " + match);
 			List<Op> ops = soccerManager.getOddsOp(match.getMid());
-			result = saveEntities(ops);
-			logger.info("Save result: " + result);
-			sleep(100);
+			if(ops != null && !ops.isEmpty())
+			{
+				logger.info("First: " + ops.get(0));
+				result = saveEntities(ops);
+				logger.info("Save result: " + result);
+				sleep(100);
+			}
 
 			List<Yp> yps = soccerManager.getYpList(match.getMid());
-			result = saveEntities(yps);
-			logger.info("Save result: " + result);
-			sleep(100);
-
+			if(yps != null && !yps.isEmpty())
+			{
+				logger.info("First: " + yps.get(0));
+				result = saveEntities(yps);
+				logger.info("Save result: " + result);
+				sleep(100);
+			}
 		}
 	}
 

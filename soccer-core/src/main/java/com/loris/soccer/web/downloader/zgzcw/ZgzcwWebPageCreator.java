@@ -31,6 +31,9 @@ import com.loris.soccer.web.downloader.zgzcw.page.ZgzcwCenterPage;
  */
 public class ZgzcwWebPageCreator
 {
+	/** The Header Referer name. */
+	public static final String ZGZCW_HEADER_REFERER = "Referer";
+	
 	/** 右斜框 */
 	public static final String RIGHT_SPASH = "/";
 	
@@ -444,12 +447,34 @@ public class ZgzcwWebPageCreator
 	 */
 	public static LiveWebPage createLiveWebPage(String type)
 	{
-		int pageType = 17;
+		int pageType = 16;
 		LiveWebPage page = new LiveWebPage();
 		setBasicParams(page, pageType);
 		String url =PAGE_URLS[pageType] + type + "/";
 		page.setUrl(url);
-		page.setLotteryType(type);
+		page.setLotterytype(type);
+		return page;
+	}
+	
+	/**
+	 * 
+	 * @param issue
+	 * @param type
+	 * @return
+	 */
+	public static LiveWebPage createLiveIssueWebPage(String issue, String type)
+	{
+		int pageType = 16;
+		LiveWebPage page = new LiveWebPage();
+		page.setHasMoreHeader(true);
+		setBasicParams(page, pageType);
+		String url = PAGE_URLS[pageType] + "ls/AllData.action";
+		page.setUrl(url);
+		page.setMethod(WebPage.HTTP_METHOD_POST);
+		page.addHeader(ZGZCW_HEADER_REFERER, PAGE_URLS[pageType]);
+		page.addParam("code", "201");
+		page.addParam("ajax", "true");
+		page.addParam("date", issue);		
 		return page;
 	}
 

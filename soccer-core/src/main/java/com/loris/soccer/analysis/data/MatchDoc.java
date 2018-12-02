@@ -391,7 +391,7 @@ public class MatchDoc
 	/**
 	 * 获得球队的编号
 	 * 
-	 * @param matches 比赛数据列表
+	 * @param bdMatchs 比赛数据列表
 	 * @param tids 球队编号列表
 	 * @return 球队号
 	 */
@@ -408,7 +408,7 @@ public class MatchDoc
 	
 	/**
 	 * 获得比赛的编号列表
-	 * @param matches 比赛列表
+	 * @param bdMatchs 比赛列表
 	 * @return 列表数据
 	 */
 	public List<String> getMatchIds()

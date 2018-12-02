@@ -25,4 +25,46 @@ public class MatchList extends ArrayList<MatchItem>
 	{
 		addAll(matchItems);
 	}
+	
+	/**
+	 * 增加数据
+	 * @param items
+	 */
+	public void addSingleItems(List<? extends MatchItem> items)
+	{
+		for (MatchItem matchItem : items)
+		{
+			addSingleItem(matchItem);
+		}
+	}
+	
+	/**
+	 * 加入比赛数据
+	 * @param item
+	 */
+	public void addSingleItem(MatchItem item)
+	{
+		for (MatchItem m : this)
+		{
+			if(m.getMid().equals(item.getMid()))
+			{
+				return;
+			}
+		}
+		this.add(item);
+	}
+	
+	/**
+	 * 获得比赛的编号列表
+	 * @return
+	 */
+	public Keys getMids()
+	{
+		Keys keys = new Keys();
+		for (MatchItem m : this)
+		{
+			keys.add(m.getMid());
+		}
+		return keys;
+	}
 }
