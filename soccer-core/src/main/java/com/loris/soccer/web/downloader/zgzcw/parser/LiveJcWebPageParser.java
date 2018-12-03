@@ -9,11 +9,12 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+import com.loris.base.data.Keys;
 import com.loris.base.util.NumberUtil;
 import com.loris.base.web.page.WebPage;
 import com.loris.base.web.parser.AbstractWebPageParser;
 import com.loris.soccer.analysis.util.IssueMatchUtil;
-import com.loris.soccer.bean.data.table.lottery.JcMatch;
+import com.loris.soccer.bean.data.table.JcMatch;
 import com.loris.soccer.bean.type.MatchTeamType;
 import com.loris.soccer.web.downloader.zgzcw.page.LiveWebPage;
 
@@ -24,6 +25,9 @@ public class LiveJcWebPageParser extends AbstractWebPageParser
 	List<JcMatch> matches = new ArrayList<>();
 	
 	String currentIssue = "";
+	
+	/** 期次目录 */
+	Keys issues = new Keys();
 	
 	@Override
 	public boolean parseWebPage(WebPage page)
@@ -46,6 +50,7 @@ public class LiveJcWebPageParser extends AbstractWebPageParser
 		if(issueEl != null)
 		{
 			currentIssue = getSelectElementValue(issueEl);
+			issues = new Keys(getSelectElementValues(issueEl));
 		}
 		
 		Element matchesElement = document.selectFirst(".bf-main .live-sta #matchTable tbody");
@@ -183,5 +188,15 @@ public class LiveJcWebPageParser extends AbstractWebPageParser
 	public void setCurrentIssue(String currentIssue)
 	{
 		this.currentIssue = currentIssue;
+	}
+
+	public Keys getIssues()
+	{
+		return issues;
+	}
+
+	public void setIssues(Keys issues)
+	{
+		this.issues = issues;
 	}
 }

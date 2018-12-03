@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.loris.base.util.NumberUtil;
-import com.loris.soccer.bean.data.table.odds.Op;
+import com.loris.soccer.bean.data.table.Op;
 
 public class OpList extends ArrayList<Op>
 {

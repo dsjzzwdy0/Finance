@@ -22,6 +22,7 @@ import com.loris.base.bean.User;
 import com.loris.base.bean.entity.Entity;
 import com.loris.base.bean.wrapper.Result;
 import com.loris.base.context.LorisContext;
+import com.loris.base.data.Keys;
 import com.loris.base.repository.BasicManager;
 import com.loris.base.util.ArraysUtil;
 import com.loris.base.util.DateUtil;
@@ -42,27 +43,26 @@ import com.loris.soccer.analysis.util.PossionUtil;
 import com.loris.soccer.analysis.util.LeagueDataUtil;
 import com.loris.soccer.analysis.util.OddsUtil;
 import com.loris.soccer.analysis.util.TeamHistoryCalculator;
-import com.loris.soccer.bean.data.table.league.CountryLogo;
-import com.loris.soccer.bean.data.table.league.League;
 import com.loris.soccer.bean.SoccerConstants;
-import com.loris.soccer.bean.data.table.league.Match;
-import com.loris.soccer.bean.data.table.league.Rank;
-import com.loris.soccer.bean.data.table.league.Round;
-import com.loris.soccer.bean.data.table.league.Season;
-import com.loris.soccer.bean.data.table.league.SeasonTeam;
-import com.loris.soccer.bean.data.table.league.Team;
-import com.loris.soccer.bean.data.table.lottery.BdMatch;
-import com.loris.soccer.bean.data.table.lottery.JcMatch;
-import com.loris.soccer.bean.data.table.lottery.ZcMatch;
-import com.loris.soccer.bean.data.table.odds.Op;
-import com.loris.soccer.bean.data.table.odds.Yp;
+import com.loris.soccer.bean.data.table.BdMatch;
+import com.loris.soccer.bean.data.table.CountryLogo;
+import com.loris.soccer.bean.data.table.JcMatch;
+import com.loris.soccer.bean.data.table.League;
+import com.loris.soccer.bean.data.table.Match;
+import com.loris.soccer.bean.data.table.Op;
+import com.loris.soccer.bean.data.table.Rank;
+import com.loris.soccer.bean.data.table.Round;
+import com.loris.soccer.bean.data.table.Season;
+import com.loris.soccer.bean.data.table.SeasonTeam;
+import com.loris.soccer.bean.data.table.Team;
+import com.loris.soccer.bean.data.table.Yp;
+import com.loris.soccer.bean.data.table.ZcMatch;
 import com.loris.soccer.bean.data.view.MatchInfo;
 import com.loris.soccer.bean.data.view.RankInfo;
 import com.loris.soccer.bean.item.IssueMatch;
 import com.loris.soccer.bean.item.MatchItem;
 import com.loris.soccer.bean.item.YpValue;
 import com.loris.soccer.bean.model.IssueMatchMapping;
-import com.loris.soccer.bean.model.Keys;
 import com.loris.soccer.bean.model.MatchList;
 import com.loris.soccer.bean.okooo.OkoooBdMatch;
 import com.loris.soccer.bean.okooo.OkoooJcMatch;
@@ -251,7 +251,7 @@ public class SoccerApp
 	public static void testDownloadLiveJcWebPage(LorisContext context) throws Exception
 	{
 		ZgzcwDataDownloader.initialize(context);
-		Result result = ZgzcwDataDownloader.downloadLiveJcWebPage("2018-12-02");
+		Result result = ZgzcwDataDownloader.downloadLiveJcWebPage("2018-12-03");
 		
 		if(result == null)
 		{

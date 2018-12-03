@@ -1,20 +1,16 @@
 package com.loris.soccer.analysis.stat;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import com.loris.base.context.LorisContext;
-import com.loris.base.util.NumberUtil;
-import com.loris.soccer.bean.data.table.league.Match;
-import com.loris.soccer.bean.data.table.lottery.Corporate;
-import com.loris.soccer.bean.data.table.odds.Op;
+import com.loris.soccer.bean.data.table.Corporate;
+import com.loris.soccer.bean.data.table.Match;
+import com.loris.soccer.bean.data.table.Op;
+import com.loris.soccer.bean.item.CorpStatItem;
 import com.loris.soccer.bean.item.ScoreItem;
 import com.loris.soccer.bean.model.OpList;
 import com.loris.soccer.repository.SoccerManager;
@@ -57,9 +53,10 @@ public class CorporateStat
 	public static void computeStat(String start, String end) throws IOException
 	{
 		CorpStatList corpStatList = new CorpStatList();
-		
 		List<Match> matches = soccerManager.getMatches(start, end);
 		logger.info("Total match is : " + matches.size());
+		
+		List<Match> existOpMatches = new ArrayList<>();
 		int i = 1;
 		for (Match match : matches)
 		{
@@ -84,6 +81,8 @@ public class CorporateStat
 				logger.info("There are no average op record of '" + match.getMid() + " in database, next.");
 				continue;
 			}
+			
+			existOpMatches.add(match);
 			for (Op op : list)
 			{
 				//平均欧赔值
@@ -101,17 +100,64 @@ public class CorporateStat
 			}
 		}
 		
-		File file = new File("d:/index/stat.txt");
-		try(BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file))))
+		//计算平均值
+		for (CorpStat corpStat : corpStatList)
+		{
+			corpStat.computeMean();
+		}
+		
+		//第二次计算，计算方差值
+		int len = existOpMatches.size();
+		for (int j = 0; j < len; j ++)
+		{
+			Match match = existOpMatches.get(j);
+			logger.info("Compute " + (j++) + " of " + existOpMatches.size() + " Match: " + match);
+			List<Op> ops = soccerManager.getOpList(match.getMid(), true);
+			if(ops == null || ops.isEmpty())
+			{
+				logger.info("There are no op record of '" + match.getMid() + " in database, next.");
+				continue;
+			}
+			
+			OpList list = new OpList(ops);
+			Op avgOp = list.getAvgOp();
+			if(avgOp == null)
+			{
+				logger.info("There are no average op record of '" + match.getMid() + " in database, next.");
+				continue;
+			}
+			
+			for (Op op : list)
+			{
+				//平均欧赔值
+				if("0".equals(op.getGid()))
+				{
+					continue;
+				}
+				CorpStat stat = corpStatList.getCorporateStat(op.getCorporate());
+				if(stat == null)
+				{
+					continue;
+				}
+								
+				stat.addVar(match.getScoreResult(), op, avgOp);
+			}
+		}
+		
+		//File file = new File("d:/index/stat.txt");
+		//try(BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file))))
 		{
 			i = 1;
 			for (CorpStat corpStat : corpStatList)
 			{
-				corpStat.computeMean();
-				logger.info(i +++ ": " + corpStat);
-				writer.write(i + ": " + corpStat + "\r\n");
+				corpStat.computeStdErr();
+				CorpStatItem item = corpStat.createCorpStatItem();
+				
+				logger.info(i + ": " + item);
+				//writer.write(i++ + ": " + item + "\r\n");
+				soccerManager.addOrUpdateCorpStatItem(item);
 			}
-			writer.flush();
+			//writer.flush();
 		}		
 	}
 }
@@ -139,14 +185,20 @@ class CorpStatList extends ArrayList<CorpStat>
 class CorpStat
 {
 	Corporate corp;
-	
 	int matchNum = 0;
+	
+	CorpOpVar baseVar = new CorpOpVar();
+	CorpOpVar winVar = new CorpOpVar();
+	CorpOpVar drawVar = new CorpOpVar();
+	CorpOpVar loseVar = new CorpOpVar();
+	
+	/*
 	Deviation deviation = new Deviation();
 	Deviation firstDeviation = new Deviation();
 	
 	ResultStat winResult = new ResultStat(3);
 	ResultStat drawResult = new ResultStat(1);
-	ResultStat loseResult = new ResultStat(0);
+	ResultStat loseResult = new ResultStat(0);*/
 	
 	public CorpStat()
 	{
@@ -155,6 +207,50 @@ class CorpStat
 	public CorpStat(Corporate corp)
 	{
 		this.corp = corp;
+	}
+	
+	public void addVar(ScoreItem item, Op op, Op avgOp)
+	{
+		float winDiff;
+		float drawDiff;
+		float loseDiff;
+		float fwinDiff;
+		float fdrawDiff;
+		float floseDiff;
+		
+		fwinDiff = op.getFirstwinodds() - avgOp.getFirstwinodds();
+		fdrawDiff =	op.getFirstdrawodds() - avgOp.getFirstdrawodds();
+		floseDiff = op.getFirstloseodds() - avgOp.getFirstloseodds();
+		
+		winDiff = op.getWinodds() - avgOp.getWinodds();
+		drawDiff = op.getDrawodds() - avgOp.getDrawodds();
+		loseDiff = op.getLoseodds() - avgOp.getLoseodds();
+		
+		fwinDiff = fwinDiff - baseVar.getFirstwindiff();
+		fdrawDiff = fdrawDiff - baseVar.getFirstdrawdiff();
+		floseDiff = floseDiff - baseVar.getFirstlosediff();
+		winDiff = winDiff - baseVar.getWindiff();
+		drawDiff = drawDiff - baseVar.getDrawdiff();
+		loseDiff = loseDiff - baseVar.getLosediff();
+		
+		baseVar.add(0, 0, 0, fwinDiff * fwinDiff, fdrawDiff * fdrawDiff, floseDiff * floseDiff,
+				0, 0, 0, winDiff * winDiff, drawDiff * drawDiff, loseDiff * loseDiff);
+		int result = item.getResult();		
+		CorpOpVar var;
+		switch (result) {
+		case 3:
+			var = winVar;
+			break;
+		case 1:
+			var = drawVar;
+			break;
+		default:
+			var = loseVar;
+			break;
+		}
+		
+		var.add(0, 0, 0, fwinDiff * fwinDiff, fdrawDiff * fdrawDiff, floseDiff * floseDiff,
+				0, 0, 0, winDiff * winDiff, drawDiff * drawDiff, loseDiff * loseDiff);
 	}
 	
 	/**
@@ -172,42 +268,55 @@ class CorpStat
 		float fdrawDiff;
 		float floseDiff;
 		
-		winDiff = op.getWinodds() - avgOp.getWinodds();
-		drawDiff = op.getDrawodds() - avgOp.getDrawodds();
-		loseDiff = op.getLoseodds() - avgOp.getLoseodds();
 		fwinDiff = op.getFirstwinodds() - avgOp.getFirstwinodds();
 		fdrawDiff =	op.getFirstdrawodds() - avgOp.getFirstdrawodds();
 		floseDiff = op.getFirstloseodds() - avgOp.getFirstloseodds();
 		
-		deviation.add(winDiff, drawDiff, loseDiff);
-		firstDeviation.add(fwinDiff, fdrawDiff, floseDiff);
+		winDiff = op.getWinodds() - avgOp.getWinodds();
+		drawDiff = op.getDrawodds() - avgOp.getDrawodds();
+		loseDiff = op.getLoseodds() - avgOp.getLoseodds();
 		
-		int result = item.getResult();
+		baseVar.add(fwinDiff, fdrawDiff, floseDiff, 0, 0, 0,
+				winDiff, drawDiff, loseDiff, 0, 0, 0);
+		baseVar.addNum();
 		
-		ResultStat stat;
+		int result = item.getResult();		
+		CorpOpVar var;
 		switch (result) {
 		case 3:
-			stat = winResult;
+			var = winVar;
 			break;
 		case 1:
-			stat = drawResult;
+			var = drawVar;
 			break;
 		default:
-			stat = loseResult;
+			var = loseVar;
 			break;
 		}
 		
-		stat.add(winDiff, drawDiff, loseDiff, fwinDiff, fdrawDiff, floseDiff);		
+		var.add(fwinDiff, fdrawDiff, floseDiff, 0, 0, 0,
+				winDiff, drawDiff, loseDiff, 0, 0, 0);
+		var.addNum();
+		//var.add(fwinDiff, fdrawDiff, floseDiff, fwinDiff * fwinDiff, fdrawDiff * fdrawDiff, floseDiff * floseDiff,
+		//winDiff, drawDiff, loseDiff, winDiff * winDiff, drawDiff * drawDiff, loseDiff * loseDiff);
+
 		matchNum ++;
 	}
 	
 	public void computeMean()
 	{
-		deviation.computeMean();
-		firstDeviation.computeMean();
-		winResult.computeMean();
-		drawResult.computeMean();
-		loseResult.computeMean();
+		baseVar.computeMean();
+		winVar.computeMean();
+		drawVar.computeMean();
+		loseVar.computeMean();
+	}
+	
+	public void computeStdErr()
+	{
+		baseVar.computeStdErr();
+		winVar.computeStdErr();
+		drawVar.computeStdErr();
+		loseVar.computeStdErr();
 	}
 	
 	public Corporate getCorp()
@@ -218,190 +327,14 @@ class CorpStat
 	{
 		this.corp = corp;
 	}
-	public Deviation getDeviation()
-	{
-		return deviation;
-	}
-	public void setDeviation(Deviation deviation)
-	{
-		this.deviation = deviation;
-	}
-	public ResultStat getWinResult()
-	{
-		return winResult;
-	}
-	public void setWinResult(ResultStat winResult)
-	{
-		this.winResult = winResult;
-	}
-	public ResultStat getDrawResult()
-	{
-		return drawResult;
-	}
-	public void setDrawResult(ResultStat drawResult)
-	{
-		this.drawResult = drawResult;
-	}
-	public ResultStat getLoseResult()
-	{
-		return loseResult;
-	}
-	public void setLoseResult(ResultStat loseResult)
-	{
-		this.loseResult = loseResult;
-	}
-	@Override
-	public String toString()
-	{
-		return "CorpStat [初=" + firstDeviation + ", 即=" + deviation 
-			+ winResult + ", " + drawResult + ", " + loseResult 
-			+ "corp=" + corp.getGid() + ": " + corp.getName() + "]";
-	}
-}
-
-/**
- * 与百家欧赔平均值的偏离值
- * @author jiean
- *
- */
-class Deviation
-{
-	int num;	
-	float win;
-	float draw;
-	float lose;
 	
-	public int getNum()
+	public CorpStatItem createCorpStatItem()
 	{
-		return num;
-	}
-	public void setNum(int num)
-	{
-		this.num = num;
-	}
-	public float getWin()
-	{
-		return win;
-	}
-	public void setWin(float win)
-	{
-		this.win = win;
-	}
-	public float getDraw()
-	{
-		return draw;
-	}
-	public void setDraw(float draw)
-	{
-		this.draw = draw;
-	}
-	public float getLose()
-	{
-		return lose;
-	}
-	public void setLose(float lose)
-	{
-		this.lose = lose;
-	}
-	
-	public void add(float win, float draw, float lose)
-	{
-		this.win += win;
-		this.draw += draw;
-		this.lose += lose;
-		num ++;
-	}
-	
-	public void computeMean()
-	{
-		if(num == 0)
-		{
-			return;
-		}
-		win /= num;
-		draw /= num;
-		lose /= num;
-	}
-	
-	@Override
-	public String toString()
-	{
-		return "Dev[" + num + ", " + NumberUtil.formatDouble(2, win) + "," 
-				+  NumberUtil.formatDouble(2, draw) + ", " 
-				+ NumberUtil.formatDouble(2, lose) + "]";
-	}
-	
-}
-
-class ResultStat
-{
-	int result;
-	int num;
-	Deviation deviation = new Deviation();
-	Deviation firstDeviation = new Deviation();
-	
-	public ResultStat()
-	{
-		num = 0;
-	}
-	
-	public ResultStat(int result)
-	{
-		this();
-		this.result = result;
-	}
-	
-	public void add(float win, float draw, float lose, float fwin, float fdraw, float flose)
-	{
-		num ++;
-		deviation.add(win, draw, lose);
-		firstDeviation.add(fwin, fdraw, flose);
-	}
-	
-	public int getNum()
-	{
-		return num;
-	}
-
-	public void setNum(int num)
-	{
-		this.num = num;
-	}
-
-	public int getResult()
-	{
-		return result;
-	}
-	public void setResult(int result)
-	{
-		this.result = result;
-	}
-	public Deviation getDeviation()
-	{
-		return deviation;
-	}
-	public void setDeviation(Deviation deviation)
-	{
-		this.deviation = deviation;
-	}
-	public Deviation getFirstDeviation()
-	{
-		return firstDeviation;
-	}
-	public void setFirstDeviation(Deviation firstDeviation)
-	{
-		this.firstDeviation = firstDeviation;
-	}
-	
-	public void computeMean()
-	{
-		deviation.computeMean();
-		firstDeviation.computeMean();
-	}
-	@Override
-	public String toString()
-	{
-		String r = result == 3 ? "胜" : result == 1 ? "平" : "负";
-		return r + " Stat[" + num + ", 初=" + firstDeviation + ", 即=" + deviation + "]";
+		CorpStatItem item = new CorpStatItem(corp.getGid(), corp.getName());
+		item.setBaseOpVar(baseVar);
+		item.setWinOpVar(winVar);
+		item.setDrawOpVar(drawVar);
+		item.setLoseOpVar(loseVar);
+		return item;
 	}
 }

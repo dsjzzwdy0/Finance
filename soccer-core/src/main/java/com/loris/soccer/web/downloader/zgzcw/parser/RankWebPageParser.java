@@ -12,7 +12,7 @@ import com.loris.base.util.DateUtil;
 import com.loris.base.util.NumberUtil;
 import com.loris.base.web.page.WebPage;
 import com.loris.soccer.bean.SoccerConstants;
-import com.loris.soccer.bean.data.table.league.Rank;
+import com.loris.soccer.bean.data.table.Rank;
 import com.loris.soccer.web.downloader.zgzcw.page.RankWebPage;
 
 public class RankWebPageParser extends SeasonWebPageParser

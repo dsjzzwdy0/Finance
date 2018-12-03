@@ -3,6 +3,7 @@ package com.loris.soccer.bean.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.loris.base.data.Keys;
 import com.loris.soccer.bean.item.MatchItem;
 
 public class MatchList extends ArrayList<MatchItem>

@@ -1,6 +1,6 @@
 package com.loris.soccer.bean.okooo;
 
-import com.loris.soccer.bean.data.table.odds.Op;
+import com.loris.soccer.bean.data.table.Op;
 
 public class OkoooOp extends Op
 {

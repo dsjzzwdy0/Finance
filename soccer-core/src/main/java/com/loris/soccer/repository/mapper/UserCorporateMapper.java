@@ -1,7 +1,7 @@
 package com.loris.soccer.repository.mapper;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
-import com.loris.soccer.bean.data.table.lottery.UserCorporate;
+import com.loris.soccer.bean.data.table.UserCorporate;
 
 public interface UserCorporateMapper extends BaseMapper<UserCorporate>
 {

@@ -3,7 +3,7 @@ package com.loris.soccer.bean.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.loris.soccer.bean.data.table.league.Round;
+import com.loris.soccer.bean.data.table.Round;
 
 public class LeagueRound
 {

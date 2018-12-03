@@ -3,24 +3,23 @@ package com.loris.soccer.bean.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import com.loris.base.util.ArraysUtil;
 import com.loris.base.util.ArraysUtil.EqualChecker;
 import com.loris.soccer.bean.SoccerConstants;
-import com.loris.soccer.bean.data.table.league.League;
+import com.loris.soccer.bean.data.table.League;
 
 /**
  * 联赛数据类
  * @author jiean
  *
  */
-public class LeagueMap
-{
-	/** The maps. */
-	Map<String, League> maps = new HashMap<>();
-	
+public class LeagueMap extends HashMap<String, League>
+{	
+	/***/
+	private static final long serialVersionUID = 1L;
+
 	/** 不需要更新的列表 */
 	public static String[] EXCLUDE_LEAGUES = {
 		"264", //name=意超杯
@@ -97,7 +96,7 @@ public class LeagueMap
 	{
 		for (League league : leagues)
 		{
-			maps.put(league.getLid(), league);
+			put(league.getLid(), league);
 		}
 	}
 	
@@ -108,7 +107,7 @@ public class LeagueMap
 	 */
 	public League getLeague(String lid)
 	{
-		return maps.get(lid);
+		return get(lid);
 	}
 	
 	/**
@@ -118,7 +117,7 @@ public class LeagueMap
 	public List<League> getCupLeagues()
 	{
 		List<League> leagues = new ArrayList<>();
-		ArraysUtil.getListValues(maps.values(), leagues, cupChecker);
+		ArraysUtil.getListValues(values(), leagues, cupChecker);
 		return leagues;
 	}
 	
@@ -129,7 +128,7 @@ public class LeagueMap
 	public List<League> getLeagueLeagues()
 	{
 		List<League> leagues = new ArrayList<>();
-		ArraysUtil.getListValues(maps.values(), leagues, leagueChecker);
+		ArraysUtil.getListValues(values(), leagues, leagueChecker);
 		return leagues;
 	}
 	
@@ -139,7 +138,7 @@ public class LeagueMap
 	 */
 	public Set<String> keySet()
 	{
-		return maps.keySet();
+		return keySet();
 	}
 	
 	/**

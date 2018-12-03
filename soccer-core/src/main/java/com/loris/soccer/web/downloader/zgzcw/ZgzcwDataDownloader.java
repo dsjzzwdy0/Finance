@@ -14,11 +14,11 @@ import com.loris.base.web.http.UrlFetchException;
 import com.loris.base.web.http.UrlFetcher;
 import com.loris.base.web.page.WebPage;
 import com.loris.soccer.analysis.checker.IssueMatchChecker;
-import com.loris.soccer.bean.data.table.league.League;
-import com.loris.soccer.bean.data.table.lottery.BdMatch;
-import com.loris.soccer.bean.data.table.lottery.JcMatch;
-import com.loris.soccer.bean.data.table.odds.Op;
-import com.loris.soccer.bean.data.table.odds.Yp;
+import com.loris.soccer.bean.data.table.BdMatch;
+import com.loris.soccer.bean.data.table.JcMatch;
+import com.loris.soccer.bean.data.table.League;
+import com.loris.soccer.bean.data.table.Op;
+import com.loris.soccer.bean.data.table.Yp;
 import com.loris.soccer.bean.item.MatchItem;
 import com.loris.soccer.bean.model.MatchList;
 import com.loris.soccer.repository.SoccerManager;
@@ -247,6 +247,8 @@ public class ZgzcwDataDownloader
 				
 				Result result = new Result("matches", new MatchList(matchs));
 				result.put("current", parser.getCurrentIssue());
+				result.put("issues", parser.getIssues());
+				
 				return result;
 			}
 		}		

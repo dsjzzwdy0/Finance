@@ -14,23 +14,24 @@ import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.loris.base.util.ArraysUtil;
 import com.loris.base.util.DateUtil;
 import com.loris.soccer.bean.SoccerConstants;
+import com.loris.soccer.bean.data.table.BdMatch;
+import com.loris.soccer.bean.data.table.JcMatch;
+import com.loris.soccer.bean.data.table.League;
 import com.loris.soccer.bean.data.table.Logo;
-import com.loris.soccer.bean.data.table.league.League;
-import com.loris.soccer.bean.data.table.league.Match;
-import com.loris.soccer.bean.data.table.league.Rank;
-import com.loris.soccer.bean.data.table.league.Round;
-import com.loris.soccer.bean.data.table.league.Season;
-import com.loris.soccer.bean.data.table.league.SeasonTeam;
-import com.loris.soccer.bean.data.table.league.Team;
-import com.loris.soccer.bean.data.table.lottery.BdMatch;
-import com.loris.soccer.bean.data.table.lottery.JcMatch;
-import com.loris.soccer.bean.data.table.lottery.LotteryCalendar;
-import com.loris.soccer.bean.data.table.lottery.UserCorporate;
-import com.loris.soccer.bean.data.table.lottery.ZcMatch;
-import com.loris.soccer.bean.data.table.odds.Op;
-import com.loris.soccer.bean.data.table.odds.Yp;
+import com.loris.soccer.bean.data.table.LotteryCalendar;
+import com.loris.soccer.bean.data.table.Match;
+import com.loris.soccer.bean.data.table.Op;
+import com.loris.soccer.bean.data.table.Rank;
+import com.loris.soccer.bean.data.table.Round;
+import com.loris.soccer.bean.data.table.Season;
+import com.loris.soccer.bean.data.table.SeasonTeam;
+import com.loris.soccer.bean.data.table.Team;
+import com.loris.soccer.bean.data.table.UserCorporate;
+import com.loris.soccer.bean.data.table.Yp;
+import com.loris.soccer.bean.data.table.ZcMatch;
 import com.loris.soccer.bean.data.view.MatchInfo;
 import com.loris.soccer.bean.data.view.RankInfo;
+import com.loris.soccer.bean.item.CorpStatItem;
 import com.loris.soccer.bean.item.IssueMatch;
 import com.loris.soccer.bean.item.MatchItem;
 import com.loris.soccer.bean.model.LeagueMap;
@@ -42,6 +43,7 @@ import com.loris.soccer.bean.setting.CorpSetting;
 import com.loris.soccer.bean.setting.Parameter;
 import com.loris.soccer.repository.service.BdMatchService;
 import com.loris.soccer.repository.service.CorpSettingService;
+import com.loris.soccer.repository.service.CorpStatItemService;
 import com.loris.soccer.repository.service.JcMatchService;
 import com.loris.soccer.repository.service.LeagueService;
 import com.loris.soccer.repository.service.LotteryCalendarService;
@@ -138,6 +140,9 @@ public class SoccerManager
 	
 	@Autowired
 	private CorpSettingService corpSettingService;
+	
+	@Autowired
+	private CorpStatItemService corpStatItemService;
 	
 	/** 唯一实例 */
 	private static SoccerManager singleton = null;
@@ -2355,6 +2360,23 @@ public class SoccerManager
 			}
 			
 			return corpSettingService.updateAllColumnById(setting);
+		}
+	}
+	
+	/**
+	 * 保存数据
+	 * @param item
+	 * @return
+	 */
+	public boolean addOrUpdateCorpStatItem(CorpStatItem item)
+	{
+		if(StringUtils.isEmpty(item.getId()))
+		{
+			return corpStatItemService.insert(item);
+		}
+		else
+		{
+			return corpStatItemService.updateAllColumnById(item);
 		}
 	}
 	

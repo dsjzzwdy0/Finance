@@ -6,7 +6,7 @@ import org.jsoup.select.Elements;
 
 import com.loris.base.web.page.WebPage;
 import com.loris.base.web.parser.AbstractWebPageParser;
-import com.loris.soccer.bean.data.table.league.Team;
+import com.loris.soccer.bean.data.table.Team;
 import com.loris.soccer.web.downloader.zgzcw.page.TeamWebPage;
 
 public class TeamWebPageParser extends AbstractWebPageParser

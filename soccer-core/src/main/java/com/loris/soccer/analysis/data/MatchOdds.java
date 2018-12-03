@@ -3,8 +3,8 @@ package com.loris.soccer.analysis.data;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.loris.soccer.bean.data.table.odds.Op;
-import com.loris.soccer.bean.data.table.odds.Yp;
+import com.loris.soccer.bean.data.table.Op;
+import com.loris.soccer.bean.data.table.Yp;
 import com.loris.soccer.bean.data.view.MatchInfo;
 import com.loris.soccer.bean.item.IssueMatch;
 

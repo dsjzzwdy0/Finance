@@ -6,9 +6,9 @@ import org.apache.log4j.Logger;
 
 import com.loris.base.bean.wrapper.Result;
 import com.loris.base.context.LorisContext;
+import com.loris.base.data.Keys;
 import com.loris.base.util.ArraysUtil;
 import com.loris.soccer.bean.item.MatchItem;
-import com.loris.soccer.bean.model.Keys;
 import com.loris.soccer.bean.model.MatchList;
 import com.loris.soccer.web.downloader.zgzcw.ZgzcwDataDownloader;
 import com.loris.soccer.web.downloader.zgzcw.ZgzcwWebPageCreator;
@@ -58,6 +58,25 @@ public class LiveMatchDownloader extends IssueMatchDownloader
 			{
 				matches.addAll((MatchList)result.get("matches"));
 			}
+			
+			Keys keys = (Keys)result.get("issues");
+			String currentIssue = (String)result.get("current");
+			if(keys != null && !keys.isEmpty())
+			{
+				for (String issue : keys)
+				{
+					//比当前期号小的不再下载
+					if(issue.compareTo(currentIssue) > 0)
+					{
+						continue;
+					}
+
+					sleep(4000);
+					logger.info("Dowloading JCWebPage : " + issue);
+					ZgzcwDataDownloader.downloadLiveJcWebPage(issue);
+					
+				}
+			}
 		}
 		catch(Exception e)
 		{
@@ -65,13 +84,7 @@ public class LiveMatchDownloader extends IssueMatchDownloader
 			logger.info("Error when downloading Jc Live page.");
 		}
 		
-		try
-		{
-			Thread.sleep(3000);
-		}
-		catch(Exception e)
-		{
-		}
+		sleep(3000);
 		
 		try
 		{

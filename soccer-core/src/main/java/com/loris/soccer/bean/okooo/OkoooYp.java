@@ -2,7 +2,7 @@ package com.loris.soccer.bean.okooo;
 
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.loris.soccer.bean.SoccerConstants;
-import com.loris.soccer.bean.data.table.odds.Yp;
+import com.loris.soccer.bean.data.table.Yp;
 
 @TableName("soccer_okooo_odds_yp")
 public class OkoooYp extends Yp

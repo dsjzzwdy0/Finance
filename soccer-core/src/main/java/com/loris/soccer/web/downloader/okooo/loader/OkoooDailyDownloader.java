@@ -14,7 +14,7 @@ import com.loris.base.web.http.UrlFetchException;
 import com.loris.base.web.http.WebClientFetcher;
 import com.loris.base.web.manager.TaskMode;
 import com.loris.base.web.page.WebPage;
-import com.loris.soccer.bean.data.table.lottery.UserCorporate;
+import com.loris.soccer.bean.data.table.UserCorporate;
 import com.loris.soccer.bean.item.IssueMatch;
 import com.loris.soccer.bean.okooo.OkoooBdMatch;
 import com.loris.soccer.bean.okooo.OkoooJcMatch;

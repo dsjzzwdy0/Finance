@@ -8,12 +8,12 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.loris.base.data.Keys;
 import com.loris.base.util.NumberUtil;
 import com.loris.base.web.page.WebPage;
 import com.loris.base.web.parser.AbstractWebPageParser;
 import com.loris.soccer.analysis.util.IssueMatchUtil;
-import com.loris.soccer.bean.data.table.lottery.BdMatch;
-import com.loris.soccer.bean.model.Keys;
+import com.loris.soccer.bean.data.table.BdMatch;
 import com.loris.soccer.bean.type.MatchTeamType;
 import com.loris.soccer.web.downloader.zgzcw.page.LiveWebPage;
 

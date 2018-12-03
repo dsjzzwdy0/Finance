@@ -1,7 +1,7 @@
 package com.loris.soccer.bean.item;
 
 import com.loris.base.bean.entity.AutoIdEntity;
-import com.loris.soccer.bean.data.table.lottery.Corporate;
+import com.loris.soccer.bean.data.table.Corporate;
 
 public class OddsItem extends AutoIdEntity implements Cloneable
 {

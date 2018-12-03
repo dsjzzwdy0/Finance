@@ -1,7 +1,7 @@
 package com.loris.soccer.bean.data.view;
 
 import com.baomidou.mybatisplus.annotations.TableName;
-import com.loris.soccer.bean.data.table.league.Round;
+import com.loris.soccer.bean.data.table.Round;
 
 @TableName("soccer_league_round_matchnum")
 public class RoundInfo extends Round

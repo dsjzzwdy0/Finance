@@ -6,8 +6,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.baomidou.mybatisplus.toolkit.StringUtils;
-import com.loris.soccer.bean.data.table.league.Match;
-import com.loris.soccer.bean.data.table.league.Round;
+import com.loris.soccer.bean.data.table.Match;
+import com.loris.soccer.bean.data.table.Round;
 import com.loris.soccer.repository.SoccerManager;
 
 public class LeagueDataUtil

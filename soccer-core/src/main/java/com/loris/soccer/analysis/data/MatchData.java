@@ -7,11 +7,11 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.loris.soccer.analysis.element.MatchSynthElement;
 import com.loris.soccer.analysis.util.PerformanceUtil;
-import com.loris.soccer.bean.data.table.league.Match;
-import com.loris.soccer.bean.data.table.odds.Op;
-import com.loris.soccer.bean.data.table.odds.Yp;
-import com.loris.soccer.bean.element.MatchSynthElement;
+import com.loris.soccer.bean.data.table.Match;
+import com.loris.soccer.bean.data.table.Op;
+import com.loris.soccer.bean.data.table.Yp;
 import com.loris.soccer.bean.item.IssueMatch;
 import com.loris.soccer.bean.item.PerformItem;
 import com.loris.soccer.bean.type.MatchTeamType;

@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.loris.base.util.DateUtil;
 import com.loris.base.web.page.WebPage;
 import com.loris.soccer.bean.data.table.Logo;
-import com.loris.soccer.bean.data.table.league.Team;
+import com.loris.soccer.bean.data.table.Team;
 import com.loris.soccer.web.downloader.zgzcw.ZgzcwSoccerDownloader;
 
 /**

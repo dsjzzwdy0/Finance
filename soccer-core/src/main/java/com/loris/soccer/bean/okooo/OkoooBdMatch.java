@@ -1,7 +1,7 @@
 package com.loris.soccer.bean.okooo;
 
 import com.baomidou.mybatisplus.annotations.TableName;
-import com.loris.soccer.bean.data.table.lottery.BdMatch;
+import com.loris.soccer.bean.data.table.BdMatch;
 
 @TableName("soccer_okooo_lottery_bd")
 public class OkoooBdMatch extends BdMatch

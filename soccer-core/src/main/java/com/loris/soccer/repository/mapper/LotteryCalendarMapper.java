@@ -1,7 +1,7 @@
 package com.loris.soccer.repository.mapper;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
-import com.loris.soccer.bean.data.table.lottery.LotteryCalendar;
+import com.loris.soccer.bean.data.table.LotteryCalendar;
 
 public interface LotteryCalendarMapper extends BaseMapper<LotteryCalendar>
 {

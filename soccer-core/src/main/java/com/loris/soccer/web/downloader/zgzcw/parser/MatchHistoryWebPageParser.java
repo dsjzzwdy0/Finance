@@ -12,8 +12,8 @@ import org.jsoup.select.Elements;
 import com.loris.base.util.DateUtil;
 import com.loris.base.web.page.WebPage;
 import com.loris.base.web.parser.AbstractWebPageParser;
-import com.loris.soccer.bean.data.table.league.League;
-import com.loris.soccer.bean.data.table.league.Match;
+import com.loris.soccer.bean.data.table.League;
+import com.loris.soccer.bean.data.table.Match;
 import com.loris.soccer.repository.SoccerManager;
 
 public class MatchHistoryWebPageParser extends AbstractWebPageParser

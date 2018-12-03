@@ -10,8 +10,8 @@ import org.jsoup.select.Elements;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.loris.base.web.page.WebPage;
 import com.loris.base.web.parser.AbstractWebPageParser;
-import com.loris.soccer.bean.data.table.league.Match;
-import com.loris.soccer.bean.data.table.league.Team;
+import com.loris.soccer.bean.data.table.Match;
+import com.loris.soccer.bean.data.table.Team;
 import com.loris.soccer.web.downloader.zgzcw.page.RoundLeagueWebPage;
 
 public class RoundLeagueWebPageParser extends AbstractWebPageParser

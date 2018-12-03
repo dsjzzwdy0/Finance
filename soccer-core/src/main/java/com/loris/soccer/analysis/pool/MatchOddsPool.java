@@ -12,7 +12,7 @@ import com.loris.soccer.analysis.data.MatchOdds;
 import com.loris.soccer.analysis.util.IssueMatchUtil;
 import com.loris.soccer.analysis.util.OddsUtil;
 import com.loris.soccer.bean.SoccerConstants;
-import com.loris.soccer.bean.data.table.odds.Op;
+import com.loris.soccer.bean.data.table.Op;
 import com.loris.soccer.bean.item.IssueMatch;
 import com.loris.soccer.bean.item.MatchItem;
 import com.loris.soccer.repository.SoccerManager;

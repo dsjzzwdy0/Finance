@@ -6,7 +6,7 @@ import java.util.List;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.loris.base.util.DateUtil;
-import com.loris.soccer.bean.data.table.lottery.UserCorporate;
+import com.loris.soccer.bean.data.table.UserCorporate;
 
 /**
  * 赔率公司配置，这里主要是为各种分析提供基础数据，配置需要哪些公司提供的数据<br>
