@@ -153,7 +153,7 @@ public class CorporateStat
 				corpStat.computeStdErr();
 				CorpStatItem item = corpStat.createCorpStatItem();
 				
-				logger.info(i + ": " + item);
+				logger.info(i ++ + ": " + item);
 				//writer.write(i++ + ": " + item + "\r\n");
 				soccerManager.addOrUpdateCorpStatItem(item);
 			}

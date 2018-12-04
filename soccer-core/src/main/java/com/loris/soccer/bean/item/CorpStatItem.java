@@ -1,6 +1,7 @@
 package com.loris.soccer.bean.item;
 
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.loris.base.bean.entity.AutoIdEntity;
 import com.loris.soccer.analysis.stat.CorpOpVar;
 import com.loris.soccer.bean.data.table.Corporate;
@@ -10,79 +11,131 @@ public class CorpStatItem extends AutoIdEntity
 {
 	/***/
 	private static final long serialVersionUID = 1L;
-	protected String gid;					//博彩公司编号
-	protected String name;					//博彩公司名称
-	
-	//总数据量及偏离值
+	protected String gid; // 博彩公司编号
+	protected String name; // 博彩公司名称
+
+	// 总数据量及偏离值
+	@JsonIgnore
 	protected int num;
+	@JsonIgnore
 	protected float firstwindiff;
+	@JsonIgnore
 	protected float firstdrawdiff;
+	@JsonIgnore
 	protected float firstlosediff;
+	@JsonIgnore
 	protected float firstwinstd;
+	@JsonIgnore
 	protected float firstdrawstd;
+	@JsonIgnore
 	protected float firstlosestd;
+	@JsonIgnore
 	protected float windiff;
+	@JsonIgnore
 	protected float drawdiff;
+	@JsonIgnore
 	protected float losediff;
+	@JsonIgnore
 	protected float winstd;
+	@JsonIgnore
 	protected float drawstd;
+	@JsonIgnore
 	protected float losestd;
-	
-	//胜值的统计
+
+	// 胜值的统计
+	@JsonIgnore
 	protected int winnum;
+	@JsonIgnore
 	protected float winfirstwindiff;
+	@JsonIgnore
 	protected float winfirstdrawdiff;
+	@JsonIgnore
 	protected float winfirstlosediff;
+	@JsonIgnore
 	protected float winfirstwinstd;
+	@JsonIgnore
 	protected float winfirstdrawstd;
+	@JsonIgnore
 	protected float winfirstlosestd;
+	@JsonIgnore
 	protected float winwindiff;
+	@JsonIgnore
 	protected float windrawdiff;
+	@JsonIgnore
 	protected float winlosediff;
+	@JsonIgnore
 	protected float winwinstd;
+	@JsonIgnore
 	protected float windrawstd;
+	@JsonIgnore
 	protected float winlosestd;
-	
-	//平值的统计
+
+	// 平值的统计
+	@JsonIgnore
 	protected int drawnum;
+	@JsonIgnore
 	protected float drawfirstwindiff;
+	@JsonIgnore
 	protected float drawfirstdrawdiff;
+	@JsonIgnore
 	protected float drawfirstlosediff;
+	@JsonIgnore
 	protected float drawfirstwinstd;
+	@JsonIgnore
 	protected float drawfirstdrawstd;
+	@JsonIgnore
 	protected float drawfirstlosestd;
+	@JsonIgnore
 	protected float drawwindiff;
+	@JsonIgnore
 	protected float drawdrawdiff;
+	@JsonIgnore
 	protected float drawlosediff;
+	@JsonIgnore
 	protected float drawwinstd;
+	@JsonIgnore
 	protected float drawdrawstd;
+	@JsonIgnore
 	protected float drawlosestd;
-	
-	//负值的统计
+
+	// 负值的统计
+	@JsonIgnore
 	protected int losenum;
+	@JsonIgnore
 	protected float losefirstwindiff;
+	@JsonIgnore
 	protected float losefirstdrawdiff;
+	@JsonIgnore
 	protected float losefirstlosediff;
+	@JsonIgnore
 	protected float losefirstwinstd;
+	@JsonIgnore
 	protected float losefirstdrawstd;
+	@JsonIgnore
 	protected float losefirstlosestd;
+	@JsonIgnore
 	protected float losewindiff;
+	@JsonIgnore
 	protected float losedrawdiff;
+	@JsonIgnore
 	protected float loselosediff;
+	@JsonIgnore
 	protected float losewinstd;
+	@JsonIgnore
 	protected float losedrawstd;
+	@JsonIgnore
 	protected float loselosestd;
-	
+
 	public CorpStatItem()
-	{		
+	{
 	}
-	
+
 	public CorpStatItem(String gid, String name)
 	{
 		this.gid = gid;
 		this.name = name;
 	}
-	
+
 	public CorpStatItem(Corporate corporate)
 	{
 		this.gid = corporate.getGid();
@@ -628,7 +681,7 @@ public class CorpStatItem extends AutoIdEntity
 	{
 		this.loselosestd = loselosestd;
 	}
-	
+
 	public void setBaseOpVar(CorpOpVar var)
 	{
 		this.num = var.getNum();
@@ -636,8 +689,8 @@ public class CorpStatItem extends AutoIdEntity
 		this.firstdrawdiff = var.getFirstdrawdiff();
 		this.firstlosediff = var.getFirstlosediff();
 		this.firstwinstd = var.getFirstwinstd();
-		this.firstdrawstd = var.getFirstlosestd();
-		this.firstlosestd =var.getFirstlosestd();
+		this.firstdrawstd = var.getFirstdrawstd();
+		this.firstlosestd = var.getFirstlosestd();
 		this.windiff = var.getWindiff();
 		this.drawdiff = var.getDrawdiff();
 		this.losediff = var.getLosediff();
@@ -645,7 +698,7 @@ public class CorpStatItem extends AutoIdEntity
 		this.drawstd = var.getDrawstd();
 		this.losestd = var.getLosestd();
 	}
-	
+
 	public CorpOpVar getBaseOpVar()
 	{
 		float[] vars = new float[12];
@@ -663,7 +716,7 @@ public class CorpStatItem extends AutoIdEntity
 		vars[11] = this.losestd;
 		return new CorpOpVar(num, vars);
 	}
-	
+
 	public void setWinOpVar(CorpOpVar var)
 	{
 		this.winnum = var.getNum();
@@ -671,8 +724,8 @@ public class CorpStatItem extends AutoIdEntity
 		this.winfirstdrawdiff = var.getFirstdrawdiff();
 		this.winfirstlosediff = var.getFirstlosediff();
 		this.winfirstwinstd = var.getFirstwinstd();
-		this.winfirstdrawstd = var.getFirstlosestd();
-		this.winfirstlosestd =var.getFirstlosestd();
+		this.winfirstdrawstd = var.getFirstdrawstd();
+		this.winfirstlosestd = var.getFirstlosestd();
 		this.winwindiff = var.getWindiff();
 		this.windrawdiff = var.getDrawdiff();
 		this.winlosediff = var.getLosediff();
@@ -680,7 +733,7 @@ public class CorpStatItem extends AutoIdEntity
 		this.windrawstd = var.getDrawstd();
 		this.winlosestd = var.getLosestd();
 	}
-	
+
 	public CorpOpVar getWinOpVar()
 	{
 		float[] vars = new float[12];
@@ -698,7 +751,7 @@ public class CorpStatItem extends AutoIdEntity
 		vars[11] = this.winlosestd;
 		return new CorpOpVar(winnum, vars);
 	}
-	
+
 	public void setDrawOpVar(CorpOpVar var)
 	{
 		this.drawnum = var.getNum();
@@ -706,8 +759,8 @@ public class CorpStatItem extends AutoIdEntity
 		this.drawfirstdrawdiff = var.getFirstdrawdiff();
 		this.drawfirstlosediff = var.getFirstlosediff();
 		this.drawfirstwinstd = var.getFirstwinstd();
-		this.drawfirstdrawstd = var.getFirstlosestd();
-		this.drawfirstlosestd =var.getFirstlosestd();
+		this.drawfirstdrawstd = var.getFirstdrawstd();
+		this.drawfirstlosestd = var.getFirstlosestd();
 		this.drawwindiff = var.getWindiff();
 		this.drawdrawdiff = var.getDrawdiff();
 		this.drawlosediff = var.getLosediff();
@@ -715,7 +768,7 @@ public class CorpStatItem extends AutoIdEntity
 		this.drawdrawstd = var.getDrawstd();
 		this.drawlosestd = var.getLosestd();
 	}
-	
+
 	public CorpOpVar getDrawOpVar()
 	{
 		float[] vars = new float[12];
@@ -733,7 +786,7 @@ public class CorpStatItem extends AutoIdEntity
 		vars[11] = this.drawlosestd;
 		return new CorpOpVar(drawnum, vars);
 	}
-	
+
 	public void setLoseOpVar(CorpOpVar var)
 	{
 		this.losenum = var.getNum();
@@ -741,8 +794,8 @@ public class CorpStatItem extends AutoIdEntity
 		this.losefirstdrawdiff = var.getFirstdrawdiff();
 		this.losefirstlosediff = var.getFirstlosediff();
 		this.losefirstwinstd = var.getFirstwinstd();
-		this.losefirstdrawstd = var.getFirstlosestd();
-		this.losefirstlosestd =var.getFirstlosestd();
+		this.losefirstdrawstd = var.getFirstdrawstd();
+		this.losefirstlosestd = var.getFirstlosestd();
 		this.losewindiff = var.getWindiff();
 		this.losedrawdiff = var.getDrawdiff();
 		this.loselosediff = var.getLosediff();
@@ -750,7 +803,7 @@ public class CorpStatItem extends AutoIdEntity
 		this.losedrawstd = var.getDrawstd();
 		this.loselosestd = var.getLosestd();
 	}
-	
+
 	public CorpOpVar getLoseOpVar()
 	{
 		float[] vars = new float[12];
@@ -772,7 +825,7 @@ public class CorpStatItem extends AutoIdEntity
 	@Override
 	public String toString()
 	{
-		return "CorpStatItem [" + gid + ", " + name + ", BaseVar=" + getBaseOpVar() + ", WinVar="
-				+ getWinOpVar() + ", DrawVar=" + getDrawOpVar() + ", LoseVar=" + getLoseOpVar() + "]";
+		return "CorpStatItem [" + gid + ", " + name + ", BaseVar=" + getBaseOpVar() + ", WinVar=" + getWinOpVar()
+				+ ", DrawVar=" + getDrawOpVar() + ", LoseVar=" + getLoseOpVar() + "]";
 	}
 }

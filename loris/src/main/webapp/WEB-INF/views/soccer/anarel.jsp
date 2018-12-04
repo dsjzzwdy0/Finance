@@ -116,7 +116,7 @@ function createMatchOddsTable(conf)
 			}
 		},
 		complete: function(){
-			$('#gridTable tbody').on('click', '.relation', function(){
+			$('#gridTable tbody .relation').off('click').on('click', function(){
 				getRelatedMatch($(this));
 			});
 		}

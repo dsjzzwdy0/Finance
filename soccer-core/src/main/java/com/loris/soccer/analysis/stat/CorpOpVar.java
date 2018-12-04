@@ -1,5 +1,6 @@
 package com.loris.soccer.analysis.stat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.loris.base.util.NumberUtil;
 
 public class CorpOpVar
@@ -20,7 +21,6 @@ public class CorpOpVar
 		this.num = num;
 		this.vars = vars;
 	}
-	
 	public int getNum()
 	{
 		return num;
@@ -41,6 +41,7 @@ public class CorpOpVar
 	{
 		this.vars = vars;
 	}
+	@JsonIgnore
 	public float getFirstwindiff()
 	{
 		return vars[0];
@@ -50,7 +51,7 @@ public class CorpOpVar
 	{
 		this.vars[0] = firstwindiff;
 	}
-
+	@JsonIgnore
 	public float getFirstdrawdiff()
 	{
 		return vars[1];
@@ -60,7 +61,7 @@ public class CorpOpVar
 	{
 		this.vars[1] = firstdrawdiff;
 	}
-
+	@JsonIgnore
 	public float getFirstlosediff()
 	{
 		return vars[2];
@@ -70,7 +71,7 @@ public class CorpOpVar
 	{
 		this.vars[2] = firstlosediff;
 	}
-
+	@JsonIgnore
 	public float getFirstwinstd()
 	{
 		return vars[3];
@@ -80,7 +81,7 @@ public class CorpOpVar
 	{
 		this.vars[3] = firstwinstd;
 	}
-
+	@JsonIgnore
 	public float getFirstdrawstd()
 	{
 		return vars[4];
@@ -90,7 +91,7 @@ public class CorpOpVar
 	{
 		this.vars[4] = firstdrawstd;
 	}
-
+	@JsonIgnore
 	public float getFirstlosestd()
 	{
 		return vars[5];
@@ -100,7 +101,7 @@ public class CorpOpVar
 	{
 		this.vars[5] = firstlosestd;
 	}
-
+	@JsonIgnore
 	public float getWindiff()
 	{
 		return vars[6];
@@ -110,7 +111,7 @@ public class CorpOpVar
 	{
 		this.vars[6] = windiff;
 	}
-
+	@JsonIgnore
 	public float getDrawdiff()
 	{
 		return vars[7];
@@ -120,7 +121,7 @@ public class CorpOpVar
 	{
 		this.vars[7] = drawdiff;
 	}
-
+	@JsonIgnore
 	public float getLosediff()
 	{
 		return vars[8];
@@ -130,7 +131,7 @@ public class CorpOpVar
 	{
 		this.vars[8] = losediff;
 	}
-
+	@JsonIgnore
 	public float getWinstd()
 	{
 		return vars[9];
@@ -140,7 +141,7 @@ public class CorpOpVar
 	{
 		this.vars[9] = winstd;
 	}
-
+	@JsonIgnore
 	public float getDrawstd()
 	{
 		return vars[10];
@@ -150,7 +151,7 @@ public class CorpOpVar
 	{
 		this.vars[10] = drawstd;
 	}
-
+	@JsonIgnore
 	public float getLosestd()
 	{
 		return vars[11];

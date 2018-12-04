@@ -2381,6 +2381,28 @@ public class SoccerManager
 	}
 	
 	/**
+	 * 获得所有的数据统计值
+	 * @return
+	 */
+	public List<CorpStatItem> getCorpStatItems()
+	{
+		EntityWrapper<CorpStatItem> ew = new EntityWrapper<>();
+		return corpStatItemService.selectList(ew);
+	}
+	
+	/**
+	 * 获得公司的统计数据
+	 * @param gid
+	 * @return
+	 */
+	public CorpStatItem getCorpStatItem(String gid)
+	{
+		EntityWrapper<CorpStatItem> ew = new EntityWrapper<>();
+		ew.eq("gid", gid);
+		return corpStatItemService.selectOne(ew);
+	}
+	
+	/**
 	 * 选择页面数据
 	 * @param page
 	 * @param ew

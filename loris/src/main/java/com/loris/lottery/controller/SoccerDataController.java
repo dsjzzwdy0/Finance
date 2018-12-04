@@ -48,6 +48,7 @@ import com.loris.soccer.bean.data.table.UserCorporate;
 import com.loris.soccer.bean.data.view.MatchInfo;
 import com.loris.soccer.bean.data.view.RankInfo;
 import com.loris.soccer.bean.data.view.RoundInfo;
+import com.loris.soccer.bean.item.CorpStatItem;
 import com.loris.soccer.bean.setting.CorpSetting;
 import com.loris.soccer.bean.setting.Parameter;
 import com.loris.soccer.bean.setting.Setting;
@@ -1064,6 +1065,38 @@ public class SoccerDataController
 	public Rest getJcMatchBasicOddsData(String issue)
 	{
 		return Rest.ok();
+	}
+	
+	/**
+	 * 获得比赛的统计值
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/getCorpStatItems")
+	public Rest getCorpStatItems()
+	{
+		List<CorpStatItem> items = soccerManager.getCorpStatItems();
+		return Rest.okData(items);
+	}
+	
+	/**
+	 * 获得博彩公司的统计值
+	 * @param gid
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/getCorpStatItem")
+	public Rest getCorpStatItem(String gid)
+	{
+		CorpStatItem item = soccerManager.getCorpStatItem(gid);
+		if(item == null)
+		{
+			return Rest.failure("There are no CorpStatItem of " + gid);
+		}
+		else
+		{
+			return Rest.okData(item);
+		}
 	}
 	
 	/**
