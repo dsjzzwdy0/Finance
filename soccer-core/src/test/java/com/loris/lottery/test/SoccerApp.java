@@ -225,8 +225,8 @@ public class SoccerApp
 			
 			//testUploadDataSchecduler(context);
 			// testDownloadOkoooOpWebPage(context);
-			//testDownloadLiveJcWebPage(context);
-			testComputeCorpStat(context);
+			testDownloadLiveJcWebPage(context);
+			//testComputeCorpStat(context);
 			//testOkoooChileYpParser(context);
 
 			close();
@@ -251,7 +251,7 @@ public class SoccerApp
 	public static void testDownloadLiveJcWebPage(LorisContext context) throws Exception
 	{
 		ZgzcwDataDownloader.initialize(context);
-		Result result = ZgzcwDataDownloader.downloadLiveJcWebPage("2018-12-03");
+		Result result = ZgzcwDataDownloader.downloadLiveJcWebPage("2018-12-06");
 		
 		if(result == null)
 		{

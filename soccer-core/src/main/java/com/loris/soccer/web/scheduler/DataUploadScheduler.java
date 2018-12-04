@@ -197,9 +197,8 @@ public class DataUploadScheduler extends AbstractScheduler
 		{
 			start = DateUtil.getCurDayStr();
 		}
-		/*
 		List<Match> matchs = soccerManager.getMatches(start, end);
-		saveMatches(matchs);*/
+		saveMatches(matchs);
 
 		List<JcMatch> jcMatchs = soccerManager.getJcMatchesByDate(start, end);
 		String result = saveEntities(jcMatchs);
