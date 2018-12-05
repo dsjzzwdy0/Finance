@@ -45,11 +45,13 @@ import com.loris.soccer.analysis.util.OddsUtil;
 import com.loris.soccer.analysis.util.TeamHistoryCalculator;
 import com.loris.soccer.bean.SoccerConstants;
 import com.loris.soccer.bean.data.table.BdMatch;
+import com.loris.soccer.bean.data.table.CorpSetting;
 import com.loris.soccer.bean.data.table.CountryLogo;
 import com.loris.soccer.bean.data.table.JcMatch;
 import com.loris.soccer.bean.data.table.League;
 import com.loris.soccer.bean.data.table.Match;
 import com.loris.soccer.bean.data.table.Op;
+import com.loris.soccer.bean.data.table.CorpSettingParameter;
 import com.loris.soccer.bean.data.table.Rank;
 import com.loris.soccer.bean.data.table.Round;
 import com.loris.soccer.bean.data.table.Season;
@@ -61,6 +63,7 @@ import com.loris.soccer.bean.data.view.MatchInfo;
 import com.loris.soccer.bean.data.view.RankInfo;
 import com.loris.soccer.bean.item.IssueMatch;
 import com.loris.soccer.bean.item.MatchItem;
+import com.loris.soccer.bean.item.SettingItem;
 import com.loris.soccer.bean.item.YpValue;
 import com.loris.soccer.bean.model.IssueMatchMapping;
 import com.loris.soccer.bean.model.MatchList;
@@ -68,9 +71,6 @@ import com.loris.soccer.bean.okooo.OkoooBdMatch;
 import com.loris.soccer.bean.okooo.OkoooJcMatch;
 import com.loris.soccer.bean.okooo.OkoooOp;
 import com.loris.soccer.bean.okooo.OkoooYp;
-import com.loris.soccer.bean.setting.CorpSetting;
-import com.loris.soccer.bean.setting.Parameter;
-import com.loris.soccer.bean.setting.Setting;
 import com.loris.soccer.repository.RemoteSoccerManager;
 import com.loris.soccer.repository.SettingManager;
 import com.loris.soccer.repository.SoccerContext;
@@ -225,8 +225,8 @@ public class SoccerApp
 			
 			//testUploadDataSchecduler(context);
 			// testDownloadOkoooOpWebPage(context);
-			testDownloadLiveJcWebPage(context);
-			//testComputeCorpStat(context);
+			//testDownloadLiveJcWebPage(context);
+			testComputeCorpStat(context);
 			//testOkoooChileYpParser(context);
 
 			close();
@@ -898,8 +898,8 @@ public class SoccerApp
 	public static void testSetting(LorisContext context) throws Exception
 	{
 		context.getBean(SoccerManager.class);
-		List<Setting> settings = SettingManager.getSettingManager().getSettings();
-		for (Setting setting : settings)
+		List<SettingItem> settings = SettingManager.getSettingManager().getSettings();
+		for (SettingItem setting : settings)
 		{
 			logger.info(setting);
 		}
@@ -1212,10 +1212,10 @@ public class SoccerApp
 		context.getBean(SoccerManager.class);
 
 		CorpSetting configure = MatchDocLoader.getDefaultCorpSetting();
-		List<Parameter> corporates = configure.getParams();
+		List<CorpSettingParameter> corporates = configure.getParams();
 
 		int i = 1;
-		for (Parameter corp : corporates)
+		for (CorpSettingParameter corp : corporates)
 		{
 			logger.info(i++ + ": " + corp);
 		}
@@ -1223,8 +1223,8 @@ public class SoccerApp
 		List<String> mids = new ArrayList<>();
 		List<String> gids = new ArrayList<>();
 		mids.add("2342367");
-		List<Parameter> opCorps = configure.getCorporates("zgzcw", "op");
-		for (Parameter userCorporate : opCorps)
+		List<CorpSettingParameter> opCorps = configure.getCorporates("zgzcw", "op");
+		for (CorpSettingParameter userCorporate : opCorps)
 		{
 			gids.add(userCorporate.getValue1());
 		}

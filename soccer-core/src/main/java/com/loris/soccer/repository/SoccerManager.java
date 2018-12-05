@@ -15,12 +15,14 @@ import com.loris.base.util.ArraysUtil;
 import com.loris.base.util.DateUtil;
 import com.loris.soccer.bean.SoccerConstants;
 import com.loris.soccer.bean.data.table.BdMatch;
+import com.loris.soccer.bean.data.table.CorpSetting;
 import com.loris.soccer.bean.data.table.JcMatch;
 import com.loris.soccer.bean.data.table.League;
 import com.loris.soccer.bean.data.table.Logo;
 import com.loris.soccer.bean.data.table.LotteryCalendar;
 import com.loris.soccer.bean.data.table.Match;
 import com.loris.soccer.bean.data.table.Op;
+import com.loris.soccer.bean.data.table.CorpSettingParameter;
 import com.loris.soccer.bean.data.table.Rank;
 import com.loris.soccer.bean.data.table.Round;
 import com.loris.soccer.bean.data.table.Season;
@@ -39,8 +41,6 @@ import com.loris.soccer.bean.model.LeagueSeason;
 import com.loris.soccer.bean.okooo.OkoooBdMatch;
 import com.loris.soccer.bean.okooo.OkoooJcMatch;
 import com.loris.soccer.bean.okooo.OkoooYp;
-import com.loris.soccer.bean.setting.CorpSetting;
-import com.loris.soccer.bean.setting.Parameter;
 import com.loris.soccer.repository.service.BdMatchService;
 import com.loris.soccer.repository.service.CorpSettingService;
 import com.loris.soccer.repository.service.CorpStatItemService;
@@ -2185,9 +2185,9 @@ public class SoccerManager
 	 * @param pname 配置名称
 	 * @return 参数列表
 	 */
-	public List<Parameter> getParameters(String pname)
+	public List<CorpSettingParameter> getParameters(String pname)
 	{
-		EntityWrapper<Parameter> ew = new EntityWrapper<>();
+		EntityWrapper<CorpSettingParameter> ew = new EntityWrapper<>();
 		if(StringUtils.isNotEmpty(pname))
 		{
 			ew.eq("pname", pname).or().eq("pid", pname);			
@@ -2202,7 +2202,7 @@ public class SoccerManager
 	 * @param parameters
 	 * @return
 	 */
-	public boolean addOrUpdateParameters(List<Parameter> parameters)
+	public boolean addOrUpdateParameters(List<CorpSettingParameter> parameters)
 	{
 		if(parameters == null || parameters.size() == 0)
 		{
@@ -2210,9 +2210,9 @@ public class SoccerManager
 		}
 		
 		//先要删除那些已经存在的，然后再添加所有的到数据库中
-		EntityWrapper<Parameter> ew = new EntityWrapper<>();
+		EntityWrapper<CorpSettingParameter> ew = new EntityWrapper<>();
 		ew.andNew();
-		for (Parameter parameter : parameters)
+		for (CorpSettingParameter parameter : parameters)
 		{
 			if(StringUtils.isNotEmpty(parameter.getId()))
 			{
@@ -2270,10 +2270,10 @@ public class SoccerManager
 		
 		if(loadParams)
 		{
-			EntityWrapper<Parameter> ew = new EntityWrapper<>();
+			EntityWrapper<CorpSettingParameter> ew = new EntityWrapper<>();
 			ew.eq("pid", sid);
 			ew.orderBy("value+0");
-			List<Parameter> parameters = parameterService.selectList(ew);
+			List<CorpSettingParameter> parameters = parameterService.selectList(ew);
 			setting.addParams(parameters);
 		}
 		return setting;
@@ -2286,10 +2286,10 @@ public class SoccerManager
 	 */
 	public boolean loadCorpSettingParams(CorpSetting setting)
 	{
-		EntityWrapper<Parameter> ew = new EntityWrapper<>();
+		EntityWrapper<CorpSettingParameter> ew = new EntityWrapper<>();
 		ew.eq("pid", setting.getId());
 		ew.orderBy("value+0");
-		List<Parameter> parameters = parameterService.selectList(ew);
+		List<CorpSettingParameter> parameters = parameterService.selectList(ew);
 		setting.clearParams();
 		setting.addParams(parameters);
 		return parameters.size() > 0;
@@ -2315,7 +2315,7 @@ public class SoccerManager
 	{	
 		try
 		{
-			EntityWrapper<Parameter> ew0 = new EntityWrapper<>();
+			EntityWrapper<CorpSettingParameter> ew0 = new EntityWrapper<>();
 			ew0.eq("pid", sid);
 			parameterService.delete(ew0);
 		}
@@ -2339,7 +2339,7 @@ public class SoccerManager
 		if(StringUtils.isEmpty(setting.getId()))
 		{
 			setting.create();
-			List<Parameter> parameters = setting.getParams();
+			List<CorpSettingParameter> parameters = setting.getParams();
 			if(parameters.size() > 0)
 			{
 				parameterService.insertBatch(setting.getParams());
@@ -2349,11 +2349,11 @@ public class SoccerManager
 		else
 		{
 			
-			EntityWrapper<Parameter> ew = new EntityWrapper<>();
+			EntityWrapper<CorpSettingParameter> ew = new EntityWrapper<>();
 			ew.eq("pid", setting.getId());
 			parameterService.delete(ew);
 			
-			List<Parameter> parameters = setting.getParams();
+			List<CorpSettingParameter> parameters = setting.getParams();
 			if(parameters.size() > 0)
 			{
 				parameterService.insertBatch(setting.getParams());

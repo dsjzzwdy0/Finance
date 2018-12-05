@@ -8,7 +8,7 @@ import java.util.Map;
 
 import com.loris.soccer.analysis.data.MatchData;
 import com.loris.soccer.analysis.data.MatchDoc;
-import com.loris.soccer.bean.setting.CorpSetting;
+import com.loris.soccer.bean.data.table.CorpSetting;
 
 /**
  * 比赛数据池

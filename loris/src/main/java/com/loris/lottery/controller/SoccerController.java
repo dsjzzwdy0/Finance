@@ -24,6 +24,7 @@ import com.loris.base.util.DateUtil;
 import com.loris.lottery.util.WebConstants;
 import com.loris.soccer.analysis.element.RankElement;
 import com.loris.soccer.analysis.util.PerformanceUtil;
+import com.loris.soccer.bean.data.table.CorpSetting;
 import com.loris.soccer.bean.data.table.JcMatch;
 import com.loris.soccer.bean.data.table.League;
 import com.loris.soccer.bean.data.table.Logo;
@@ -34,7 +35,6 @@ import com.loris.soccer.bean.data.table.SeasonTeam;
 import com.loris.soccer.bean.data.table.Yp;
 import com.loris.soccer.bean.data.view.MatchInfo;
 import com.loris.soccer.bean.data.view.RankInfo;
-import com.loris.soccer.bean.setting.CorpSetting;
 import com.loris.soccer.repository.SoccerManager;
 
 @Controller

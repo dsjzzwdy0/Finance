@@ -41,17 +41,17 @@ import com.loris.soccer.analysis.util.IssueMatchUtil;
 import com.loris.soccer.analysis.util.MatchGraph;
 import com.loris.soccer.analysis.util.PossionUtil;
 import com.loris.soccer.bean.SoccerConstants;
+import com.loris.soccer.bean.data.table.CorpSetting;
 import com.loris.soccer.bean.data.table.Corporate;
 import com.loris.soccer.bean.data.table.JcMatch;
 import com.loris.soccer.bean.data.table.Op;
+import com.loris.soccer.bean.data.table.CorpSettingParameter;
 import com.loris.soccer.bean.data.table.UserCorporate;
 import com.loris.soccer.bean.data.view.MatchInfo;
 import com.loris.soccer.bean.data.view.RankInfo;
 import com.loris.soccer.bean.data.view.RoundInfo;
 import com.loris.soccer.bean.item.CorpStatItem;
-import com.loris.soccer.bean.setting.CorpSetting;
-import com.loris.soccer.bean.setting.Parameter;
-import com.loris.soccer.bean.setting.Setting;
+import com.loris.soccer.bean.item.SettingItem;
 import com.loris.soccer.repository.SoccerManager;
 import com.loris.soccer.repository.service.MatchInfoService;
 import com.loris.soccer.repository.service.RoundInfoService;
@@ -857,7 +857,7 @@ public class SoccerDataController
 	public Rest getCorpSettingData(String sid)
 	{
 		Map<String, Object> settings = new HashMap<>();
-		Setting setting = soccerManager.getCorpSetting(sid);
+		SettingItem setting = soccerManager.getCorpSetting(sid);
 		List<UserCorporate> corporates = soccerManager.getUserCorporates("", "zgzcw");
 		settings.put("setting", setting);
 		settings.put("corps", corporates);
@@ -873,7 +873,7 @@ public class SoccerDataController
 	@RequestMapping("/getCorpSetting")
 	public Rest getCorpSetting(String sid)
 	{
-		Setting setting = soccerManager.getCorpSetting(sid);
+		SettingItem setting = soccerManager.getCorpSetting(sid);
 		if(setting == null)
 		{
 			return Rest.failure("There are no Setting '" + sid + "' data in dabasebase.");
@@ -1201,7 +1201,7 @@ public class SoccerDataController
 			UserCorporate corp = ArraysUtil.getSameObject(corps, checker);
 			if(corp != null)
 			{
-				Parameter parameter = CorpSetting.createParameter(corp);
+				CorpSettingParameter parameter = CorpSetting.createParameter(corp);
 				setting.addParameter(parameter);
 			}
 		}

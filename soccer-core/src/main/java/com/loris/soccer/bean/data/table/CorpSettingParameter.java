@@ -1,4 +1,4 @@
-package com.loris.soccer.bean.setting;
+package com.loris.soccer.bean.data.table;
 
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
@@ -10,7 +10,7 @@ import com.loris.base.bean.entity.AutoIdEntity;
  *
  */
 @TableName("soccer_setting_parameters")
-public class Parameter extends AutoIdEntity
+public class CorpSettingParameter extends AutoIdEntity
 {
 	public static final String PARAM_TYPE_STRING = "string";
 	public static final String PARAM_TYPE_NUMBER = "number";

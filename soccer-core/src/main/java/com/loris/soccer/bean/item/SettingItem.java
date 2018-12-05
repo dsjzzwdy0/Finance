@@ -1,17 +1,18 @@
-package com.loris.soccer.bean.setting;
+package com.loris.soccer.bean.item;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.loris.base.bean.entity.UUIDEntity;
+import com.loris.soccer.bean.data.table.CorpSettingParameter;
 
 /**
  * 数据分析参数设置类
  * @author jiean
  *
  */
-public class Setting extends UUIDEntity
+public class SettingItem extends UUIDEntity
 {
 	/***/
 	private static final long serialVersionUID = 1L;
@@ -23,12 +24,12 @@ public class Setting extends UUIDEntity
 	protected String modifytime;			//最后修改时间
 	
 	@TableField(exist=false)
-	protected List<Parameter> params = new ArrayList<>();
+	protected List<CorpSettingParameter> params = new ArrayList<>();
 	
 	/**
 	 * Create a new instance of AnalysisSetting.
 	 */
-	public Setting()
+	public SettingItem()
 	{
 	}
 	
@@ -72,7 +73,7 @@ public class Setting extends UUIDEntity
 		this.modifytime = modifytime;
 	}
 
-	public void setParams(List<Parameter> params)
+	public void setParams(List<CorpSettingParameter> params)
 	{
 		this.params = params;
 	}
@@ -81,7 +82,7 @@ public class Setting extends UUIDEntity
 	 * Add the parameter.
 	 * @param param
 	 */
-	public void addParameter(Parameter param)
+	public void addParameter(CorpSettingParameter param)
 	{
 		param.setPid(this.id);
 		param.setPname(name);
@@ -98,7 +99,7 @@ public class Setting extends UUIDEntity
 		this.name = name;
 	}
 
-	public List<Parameter> getParams()
+	public List<CorpSettingParameter> getParams()
 	{
 		return params;
 	}
@@ -108,14 +109,14 @@ public class Setting extends UUIDEntity
 		this.params.clear();
 	}
 
-	public void addParams(List<Parameter> params)
+	public void addParams(List<CorpSettingParameter> params)
 	{
 		this.params.addAll(params);
 	}
 	
-	public Parameter getParameter(String name)
+	public CorpSettingParameter getParameter(String name)
 	{
-		for (Parameter parameter : params)
+		for (CorpSettingParameter parameter : params)
 		{
 			if(name.equals(parameter.getName()))
 			{

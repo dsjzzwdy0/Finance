@@ -3,9 +3,9 @@ package com.loris.soccer.repository;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.loris.soccer.bean.setting.CorpSetting;
-import com.loris.soccer.bean.setting.Parameter;
-import com.loris.soccer.bean.setting.Setting;
+import com.loris.soccer.bean.data.table.CorpSetting;
+import com.loris.soccer.bean.data.table.CorpSettingParameter;
+import com.loris.soccer.bean.item.SettingItem;
 
 /**
  * 配置管理器
@@ -31,7 +31,7 @@ public class SettingManager
 	}
 	
 	/** 设置列表 */
-	protected List<Setting> settings = new ArrayList<>();
+	protected List<SettingItem> settings = new ArrayList<>();
 	
 	/**
 	 * The SettingManager.
@@ -48,15 +48,15 @@ public class SettingManager
 	{
 		settings.clear();
 		SoccerManager soccerManager = SoccerManager.getInstance();
-		List<Parameter> parameters = soccerManager.getParameters(null);
+		List<CorpSettingParameter> parameters = soccerManager.getParameters(null);
 		
-		Setting setting;
-		for (Parameter parameter : parameters)
+		SettingItem setting;
+		for (CorpSettingParameter parameter : parameters)
 		{
 			setting = getSetting(parameter.getPid());
 			if(setting == null)
 			{
-				setting = new Setting();
+				setting = new SettingItem();
 				setting.setId(parameter.getPid());
 				setting.setName(parameter.getPname());
 				settings.add(setting);
@@ -70,9 +70,9 @@ public class SettingManager
 	 * @param id 根据ID值
 	 * @return Setting对象
 	 */
-	protected Setting getSetting(String id)
+	protected SettingItem getSetting(String id)
 	{
-		for (Setting setting : settings)
+		for (SettingItem setting : settings)
 		{
 			if(id.equals(setting.getId()))
 			{
@@ -88,7 +88,7 @@ public class SettingManager
 	 * @param init 是否初始化
 	 * @return 获得设置
 	 */
-	public Setting getSetting(String sid, boolean init)
+	public SettingItem getSetting(String sid, boolean init)
 	{
 		if(init)
 		{
@@ -111,7 +111,7 @@ public class SettingManager
 	 * Get All the Settings.
 	 * @return setting list.
 	 */
-	public List<Setting> getSettings()
+	public List<SettingItem> getSettings()
 	{
 		return settings;
 	}
@@ -120,29 +120,29 @@ public class SettingManager
 	 * 创建一个默认的博彩公司配置方案
 	 * @return setting对象
 	 */
-	public Setting createDefaultCorpSetting()
+	public SettingItem createDefaultCorpSetting()
 	{
 		String settingName = "默认方案";
-		Setting setting = new Setting();
+		SettingItem setting = new SettingItem();
 		setting.create();
 		setting.setName(settingName);
 		
-		Parameter parameter = new Parameter();
+		CorpSettingParameter parameter = new CorpSettingParameter();
 		parameter.setName("平均欧赔");
-		parameter.setType(Parameter.PARAM_TYPE_STRING);
+		parameter.setType(CorpSettingParameter.PARAM_TYPE_STRING);
 		parameter.setValue("0");
 		setting.addParameter(parameter);
 		
-		parameter = new Parameter();
+		parameter = new CorpSettingParameter();
 		parameter.setName("Interwetten");
-		parameter.setType(Parameter.PARAM_TYPE_STRING);
+		parameter.setType(CorpSettingParameter.PARAM_TYPE_STRING);
 		parameter.setValue("21");
 		setting.addParameter(parameter);
 		
 		return setting;
 	}
 	
-	public static boolean updateSetting(Setting setting)
+	public static boolean updateSetting(SettingItem setting)
 	{
 		SoccerManager soccerManager = SoccerManager.getInstance();
 		return soccerManager.addOrUpdateParameters(setting.getParams());

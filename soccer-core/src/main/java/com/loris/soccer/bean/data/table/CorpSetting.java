@@ -1,4 +1,4 @@
-package com.loris.soccer.bean.setting;
+package com.loris.soccer.bean.data.table;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.loris.base.util.DateUtil;
-import com.loris.soccer.bean.data.table.UserCorporate;
+import com.loris.soccer.bean.item.SettingItem;
 
 /**
  * 赔率公司配置，这里主要是为各种分析提供基础数据，配置需要哪些公司提供的数据<br>
@@ -17,7 +17,7 @@ import com.loris.soccer.bean.data.table.UserCorporate;
  *
  */
 @TableName("soccer_setting_corps")
-public class CorpSetting extends Setting
+public class CorpSetting extends SettingItem
 {
 	/***/
 	private static final long serialVersionUID = 1L;
@@ -42,7 +42,7 @@ public class CorpSetting extends Setting
 		this.createtime = date;
 		this.modifytime = date;
 		
-		for (Parameter parameter : params)
+		for (CorpSettingParameter parameter : params)
 		{
 			parameter.setPid(getId());
 		}
@@ -55,7 +55,7 @@ public class CorpSetting extends Setting
 	 */
 	public void addUserCorporate(UserCorporate corp)
 	{
-		Parameter parameter = createParameter(corp);		
+		CorpSettingParameter parameter = createParameter(corp);		
 		addParameter(parameter);
 	}
 	
@@ -65,13 +65,13 @@ public class CorpSetting extends Setting
 	 * @param type 公司赔率类型
 	 * @return 公司
 	 */
-	public List<Parameter> getCorporates(String source, String type)
+	public List<CorpSettingParameter> getCorporates(String source, String type)
 	{
-		List<Parameter> results = new ArrayList<>();
-		for (Parameter param : params)
+		List<CorpSettingParameter> results = new ArrayList<>();
+		for (CorpSettingParameter param : params)
 		{
 			//是博彩公司的类型
-			if(!Parameter.PARAM_TYPE_CORP.equals(param.getType()))
+			if(!CorpSettingParameter.PARAM_TYPE_CORP.equals(param.getType()))
 			{
 				continue;
 			}
@@ -92,9 +92,9 @@ public class CorpSetting extends Setting
 	public List<String> getCorporateIds(String source, String type)
 	{
 		List<String> gids = new ArrayList<>();
-		for (Parameter param : params)
+		for (CorpSettingParameter param : params)
 		{
-			if(!Parameter.PARAM_TYPE_CORP.equals(param.getType()))
+			if(!CorpSettingParameter.PARAM_TYPE_CORP.equals(param.getType()))
 			{
 				continue;
 			}
@@ -113,9 +113,9 @@ public class CorpSetting extends Setting
 	public List<String> getSources()
 	{
 		List<String> sources = new ArrayList<>();
-		for (Parameter param : params)
+		for (CorpSettingParameter param : params)
 		{
-			if(!Parameter.PARAM_TYPE_CORP.equals(param.getType()))
+			if(!CorpSettingParameter.PARAM_TYPE_CORP.equals(param.getType()))
 			{
 				continue;
 			}
@@ -164,9 +164,9 @@ public class CorpSetting extends Setting
 	 * @param parameter 参数
 	 * @return 博彩公司
 	 */
-	public static UserCorporate getUserCorporate(Parameter parameter)
+	public static UserCorporate getUserCorporate(CorpSettingParameter parameter)
 	{
-		if(!parameter.getType().equals(Parameter.PARAM_TYPE_CORP))
+		if(!parameter.getType().equals(CorpSettingParameter.PARAM_TYPE_CORP))
 		{
 			return null;
 		}
@@ -183,11 +183,11 @@ public class CorpSetting extends Setting
 	 * @param corp 博彩公司
 	 * @return 参数列表
 	 */
-	public static Parameter createParameter(UserCorporate corp)
+	public static CorpSettingParameter createParameter(UserCorporate corp)
 	{
-		Parameter parameter = new Parameter();
+		CorpSettingParameter parameter = new CorpSettingParameter();
 		parameter.setClassname(UserCorporate.class.getName());
-		parameter.setType(Parameter.PARAM_TYPE_CORP);		
+		parameter.setType(CorpSettingParameter.PARAM_TYPE_CORP);		
 		parameter.setName(corp.getName());
 		parameter.setValue(corp.getGid());
 		parameter.setValue1(corp.getSource());

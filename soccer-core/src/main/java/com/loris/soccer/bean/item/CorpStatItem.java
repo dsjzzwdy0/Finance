@@ -3,7 +3,7 @@ package com.loris.soccer.bean.item;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.loris.base.bean.entity.AutoIdEntity;
-import com.loris.soccer.analysis.stat.CorpOpVar;
+import com.loris.base.util.NumberUtil;
 import com.loris.soccer.bean.data.table.Corporate;
 
 @TableName("soccer_corp_distribution")
@@ -13,6 +13,9 @@ public class CorpStatItem extends AutoIdEntity
 	private static final long serialVersionUID = 1L;
 	protected String gid; // 博彩公司编号
 	protected String name; // 博彩公司名称
+	
+	protected float oddsmin;
+	protected float oddsmax;
 
 	// 总数据量及偏离值
 	@JsonIgnore
@@ -822,10 +825,32 @@ public class CorpStatItem extends AutoIdEntity
 		return new CorpOpVar(losenum, vars);
 	}
 
+	public float getOddsmin()
+	{
+		return oddsmin;
+	}
+
+	public void setOddsmin(float oddsmin)
+	{
+		this.oddsmin = oddsmin;
+	}
+
+	public float getOddsmax()
+	{
+		return oddsmax;
+	}
+
+	public void setOddsmax(float oddsmax)
+	{
+		this.oddsmax = oddsmax;
+	}
+
 	@Override
 	public String toString()
 	{
-		return "CorpStatItem [" + gid + ", " + name + ", BaseVar=" + getBaseOpVar() + ", WinVar=" + getWinOpVar()
+		return "CorpStatItem [" + gid + ", " + name + "(" + NumberUtil.formatDouble(2, oddsmin) 
+				+ ", " + NumberUtil.formatDouble(2, oddsmax) + ") "
+				+ ", BaseVar=" + getBaseOpVar() + ", WinVar=" + getWinOpVar()
 				+ ", DrawVar=" + getDrawOpVar() + ", LoseVar=" + getLoseOpVar() + "]";
 	}
 }

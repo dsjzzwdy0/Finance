@@ -20,6 +20,7 @@ import com.loris.soccer.analysis.element.MatchSynthElement;
 import com.loris.soccer.analysis.util.IssueMatchUtil;
 import com.loris.soccer.bean.SoccerConstants;
 import com.loris.soccer.bean.data.table.BdMatch;
+import com.loris.soccer.bean.data.table.CorpSetting;
 import com.loris.soccer.bean.data.table.Corporate;
 import com.loris.soccer.bean.data.table.JcMatch;
 import com.loris.soccer.bean.data.table.Match;
@@ -32,7 +33,6 @@ import com.loris.soccer.bean.item.IssueMatch;
 import com.loris.soccer.bean.model.IssueMatchMapping;
 import com.loris.soccer.bean.okooo.OkoooBdMatch;
 import com.loris.soccer.bean.okooo.OkoooYp;
-import com.loris.soccer.bean.setting.CorpSetting;
 import com.loris.soccer.repository.SoccerManager;
 
 /**
