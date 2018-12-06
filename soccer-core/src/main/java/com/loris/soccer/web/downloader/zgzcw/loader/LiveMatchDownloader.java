@@ -61,12 +61,13 @@ public class LiveMatchDownloader extends IssueMatchDownloader
 			
 			Keys keys = (Keys)result.get("issues");
 			String currentIssue = (String)result.get("current");
+			logger.info("Current JcMatch issue is : " + currentIssue);
 			if(keys != null && !keys.isEmpty())
 			{
 				for (String issue : keys)
 				{
 					//比当前期号小的不再下载
-					if(issue.compareTo(currentIssue) > 0)
+					if(issue.compareTo(currentIssue) <= 0)
 					{
 						continue;
 					}

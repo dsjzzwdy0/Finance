@@ -11,9 +11,8 @@ import java.util.Date;
  */
 public class AnalyzerFactory
 {
-	//private static Logger logger = Logger.getLogger(AnalyzerFactory.class);
-	
-	
+	// private static Logger logger = Logger.getLogger(AnalyzerFactory.class);
+
 	/**
 	 * 计算起始时间，这里将以yearToInterval年为单位，获得该年之前的起始日期
 	 * 
@@ -26,7 +25,7 @@ public class AnalyzerFactory
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(d);
 		calendar.add(Calendar.YEAR, -yearToInterval);
-		//calendar.set(calendar.get(Calendar.YEAR), 0, 1, 0, 0, 0);
+		// calendar.set(calendar.get(Calendar.YEAR), 0, 1, 0, 0, 0);
 		return calendar.getTime();
 	}
 }

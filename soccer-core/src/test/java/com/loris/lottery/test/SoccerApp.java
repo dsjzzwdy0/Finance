@@ -38,7 +38,7 @@ import com.loris.soccer.analysis.data.MatchDoc;
 import com.loris.soccer.analysis.data.MatchOdds;
 import com.loris.soccer.analysis.pool.MatchDocLoader;
 import com.loris.soccer.analysis.pool.MatchOddsPool;
-import com.loris.soccer.analysis.stat.CorporateStat;
+import com.loris.soccer.analysis.predict.CorporateStat;
 import com.loris.soccer.analysis.util.PossionUtil;
 import com.loris.soccer.analysis.util.LeagueDataUtil;
 import com.loris.soccer.analysis.util.OddsUtil;
