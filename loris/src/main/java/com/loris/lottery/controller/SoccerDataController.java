@@ -29,6 +29,7 @@ import com.loris.soccer.analysis.element.MatchCorpOddsElement;
 import com.loris.soccer.analysis.element.MatchOddsElement;
 import com.loris.soccer.analysis.element.MatchRankOddsElement;
 import com.loris.soccer.analysis.element.MatchSynthElement;
+import com.loris.soccer.analysis.element.OddsElement;
 import com.loris.soccer.analysis.checker.CorpChecker;
 import com.loris.soccer.analysis.data.LeagueMatchDoc;
 import com.loris.soccer.analysis.data.MatchData;
@@ -39,6 +40,7 @@ import com.loris.soccer.analysis.pool.MatchDocPool;
 import com.loris.soccer.analysis.pool.MatchOddsPool;
 import com.loris.soccer.analysis.util.IssueMatchUtil;
 import com.loris.soccer.analysis.util.MatchGraph;
+import com.loris.soccer.analysis.util.OddsUtil;
 import com.loris.soccer.analysis.util.PossionUtil;
 import com.loris.soccer.bean.SoccerConstants;
 import com.loris.soccer.bean.data.table.CorpSetting;
@@ -52,6 +54,7 @@ import com.loris.soccer.bean.data.view.RankInfo;
 import com.loris.soccer.bean.data.view.RoundInfo;
 import com.loris.soccer.bean.item.CorpStatItem;
 import com.loris.soccer.bean.item.SettingItem;
+import com.loris.soccer.bean.model.OpList;
 import com.loris.soccer.repository.SoccerManager;
 import com.loris.soccer.repository.service.MatchInfoService;
 import com.loris.soccer.repository.service.RoundInfoService;
@@ -1097,6 +1100,30 @@ public class SoccerDataController
 		{
 			return Rest.okData(item);
 		}
+	}
+	
+	/**
+	 * 欧赔数据列表
+	 * @param gid
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/getCorpOdds")
+	public Rest getCorpOdds(String gid, String start, String end)
+	{
+		List<Op> ops = soccerManager.getOpListByGid(gid, start, end);
+		//logger.info("There are " + ops.size() + " Op values.");
+		OpList opList = new OpList(OpList.OpListType.MidUnique);
+		opList.addAll(ops);
+		List<OddsElement> elements = new ArrayList<>();
+		for (Op op : opList)
+		{
+			elements.add(OddsUtil.createOpItem(op, 0));
+		}
+
+		return Rest.okData(elements);
 	}
 	
 	/**

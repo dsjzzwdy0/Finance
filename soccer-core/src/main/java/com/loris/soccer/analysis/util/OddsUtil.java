@@ -687,6 +687,7 @@ public class OddsUtil
 		item.setGid(op.getGid());
 		item.setSource(op.getSource());
 		item.setIndex(index);
+		item.setMid(op.getMid());
 		item.setFirsttime(op.getFirsttime());
 
 		long t = NumberUtil.parseLong(op.getLasttime());
@@ -727,6 +728,7 @@ public class OddsUtil
 		item.setGname(yp.getGname());
 		item.setSource(yp.getSource());
 		item.setIndex(index);
+		item.setMid(yp.getMid());
 		item.setFirsttime(yp.getFirsttime());
 		long t = NumberUtil.parseLong(yp.getLasttime());
 		if (t > 0)

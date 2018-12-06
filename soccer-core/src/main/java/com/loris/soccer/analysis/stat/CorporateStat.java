@@ -528,7 +528,7 @@ public class CorporateStat
 				continue;
 			}
 
-			OpList list = new OpList(ops);
+			OpList list = new OpList(OpList.OpListType.GidUnique, ops);
 			Op avgOp = list.getAvgOp();
 			if (avgOp == null)
 			{

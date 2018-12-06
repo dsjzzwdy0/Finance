@@ -15,6 +15,7 @@ public class OddsElement implements Serializable
 	String gid; 				// 公司编号
 	String gname; 				// 公司名称
 	String type;
+	String mid;
 	
 	float[] values;
 	String source;
@@ -123,5 +124,15 @@ public class OddsElement implements Serializable
 	public void setValue(int index, float value)
 	{
 		values[index] = value;
+	}
+
+	public String getMid()
+	{
+		return mid;
+	}
+
+	public void setMid(String mid)
+	{
+		this.mid = mid;
 	}
 }

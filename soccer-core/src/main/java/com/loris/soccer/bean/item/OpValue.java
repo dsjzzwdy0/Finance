@@ -8,15 +8,13 @@ public class OpValue
 	
 	public OpValue()
 	{
-	}
-	
+	}	
 	public OpValue(float winodds, float drawodds, float loseodds)
 	{
 		this.winodds = winodds;
 		this.drawodds = drawodds;
 		this.loseodds = loseodds;
-	}
-	
+	}	
 	public float getWinodds()
 	{
 		return winodds;
@@ -41,6 +39,4 @@ public class OpValue
 	{
 		this.loseodds = loseodds;
 	}
-	
-	
 }

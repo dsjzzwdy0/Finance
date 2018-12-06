@@ -84,7 +84,8 @@ public class SoccerController extends BaseController
 	};
 
 	public final static String[][] STAT_PAGE_TYPES = { 
-			{ "corp", "公司分析" } };
+			{ "corp", "公司分析" },
+			{ "graph", "点数据分布分析"}};
 
 	/** 数据管理器 */
 	@Autowired

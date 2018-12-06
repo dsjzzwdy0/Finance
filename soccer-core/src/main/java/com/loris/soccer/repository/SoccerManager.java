@@ -455,6 +455,30 @@ public class SoccerManager
 	}
 	
 	/**
+	 * 获得博彩公司的欧赔数据
+	 * @param gid
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	public List<Op> getOpListByGid(String gid, String start, String end)
+	{
+		String field = "firsttime";
+		EntityWrapper<Op> ew = new EntityWrapper<>();
+		ew.eq("gid", gid);
+		ew.and().isNotNull(field);
+		if(StringUtils.isNotEmpty(start))
+		{
+			ew.and().gt(field, start);
+		}
+		if(StringUtils.isNotEmpty(end))
+		{
+			ew.and().lt(field, end);
+		}
+		return opService.selectList(ew);
+	}
+	
+	/**
 	 * 获得该比赛的所有欧赔数据
 	 * 
 	 * @param mid 比赛编号

@@ -4,12 +4,12 @@
 	<comment></comment>
 	<projects>
 		<project>mybatis-plus</project>
-		<project>stock-core</project>
 		<project>loris-learning</project>
-		<project>htmlunit</project>
 		<project>encog</project>
-		<project>loris-base</project>
+		<project>htmlunit</project>
 		<project>soccer-core</project>
+		<project>stock-core</project>
+		<project>loris-base</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
