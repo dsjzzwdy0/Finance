@@ -1,7 +1,9 @@
-CREATE TABLE `NewTable` (
+CREATE TABLE `soccer_corp_distribution` (
 `id`  int(11) NOT NULL AUTO_INCREMENT ,
 `gid`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 `name`  varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`oddsmin`  float NULL DEFAULT NULL ,
+`oddsmax`  float NULL DEFAULT NULL ,
 `num`  int(11) NULL DEFAULT NULL ,
 `firstwindiff`  float NULL DEFAULT NULL ,
 `firstdrawdiff`  float NULL DEFAULT NULL ,
@@ -58,7 +60,6 @@ PRIMARY KEY (`id`)
 )
 ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
-AUTO_INCREMENT=745
+AUTO_INCREMENT=3081
 ROW_FORMAT=DYNAMIC
 ;
-
