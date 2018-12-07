@@ -3,7 +3,6 @@ package com.loris.soccer.bean.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 import com.loris.base.util.ArraysUtil;
 import com.loris.base.util.ArraysUtil.EqualChecker;
@@ -135,11 +134,12 @@ public class LeagueMap extends HashMap<String, League>
 	/**
 	 * KeySet value.
 	 * @return Key Set value.
-	 */
+	 
+	@Override
 	public Set<String> keySet()
 	{
-		return keySet();
-	}
+		return super.keySet();
+	}*/
 	
 	/**
 	 * 检测某一联赛是否有比赛

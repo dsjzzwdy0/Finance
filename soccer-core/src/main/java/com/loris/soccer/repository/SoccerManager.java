@@ -596,6 +596,18 @@ public class SoccerManager
 	}
 	
 	/**
+	 * 获得比赛的亚盘数据
+	 * @param mid
+	 * @return
+	 */
+	public List<Yp> getOddsYp(String mid)
+	{
+		EntityWrapper<Yp> ew = new EntityWrapper<>();
+		ew.eq("mid", mid);
+		return ypService.selectList(ew);
+	}
+	
+	/**
 	 * 获得欧赔数据表
 	 * 
 	 * @param mids 比赛编号表

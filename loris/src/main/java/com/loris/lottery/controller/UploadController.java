@@ -144,11 +144,6 @@ public class UploadController extends BaseController
 			}
 			
 			logger.info("Success to add " + entities.size() + " " + clazz + " records.");
-			
-			/*for (Entity entity : entities)
-			{
-				logger.info(entity);
-			}*/
 		}
 		catch(Exception e)
 		{

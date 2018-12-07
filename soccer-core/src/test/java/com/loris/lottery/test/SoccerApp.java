@@ -28,17 +28,20 @@ import com.loris.base.util.ArraysUtil;
 import com.loris.base.util.DateUtil;
 import com.loris.base.util.FileUtils;
 import com.loris.base.util.NumberUtil;
+import com.loris.base.web.http.UrlFetchException;
 import com.loris.base.web.http.UrlFetcher;
 import com.loris.base.web.http.WebClientFetcher;
 import com.loris.base.web.manager.Downloader;
 import com.loris.base.web.page.WebPage;
 import com.loris.soccer.analysis.data.MatchOpVariance;
+import com.loris.soccer.analysis.element.MatchResult;
 import com.loris.soccer.analysis.data.MatchData;
 import com.loris.soccer.analysis.data.MatchDoc;
 import com.loris.soccer.analysis.data.MatchOdds;
 import com.loris.soccer.analysis.pool.MatchDocLoader;
 import com.loris.soccer.analysis.pool.MatchOddsPool;
 import com.loris.soccer.analysis.predict.CorporateStat;
+import com.loris.soccer.analysis.predict.SoccerPredict;
 import com.loris.soccer.analysis.util.PossionUtil;
 import com.loris.soccer.analysis.util.LeagueDataUtil;
 import com.loris.soccer.analysis.util.OddsUtil;
@@ -67,6 +70,7 @@ import com.loris.soccer.bean.item.SettingItem;
 import com.loris.soccer.bean.item.YpValue;
 import com.loris.soccer.bean.model.IssueMatchMapping;
 import com.loris.soccer.bean.model.MatchList;
+import com.loris.soccer.bean.model.OpList;
 import com.loris.soccer.bean.okooo.OkoooBdMatch;
 import com.loris.soccer.bean.okooo.OkoooJcMatch;
 import com.loris.soccer.bean.okooo.OkoooOp;
@@ -75,6 +79,7 @@ import com.loris.soccer.repository.RemoteSoccerManager;
 import com.loris.soccer.repository.SettingManager;
 import com.loris.soccer.repository.SoccerContext;
 import com.loris.soccer.repository.SoccerManager;
+import com.loris.soccer.web.downloader.eastsoccer.EastSoccerDownloader;
 import com.loris.soccer.web.downloader.okooo.OkoooDataDownloader;
 import com.loris.soccer.web.downloader.okooo.OkoooPageCreator;
 import com.loris.soccer.web.downloader.okooo.loader.OkoooDailyDownloader;
@@ -226,7 +231,10 @@ public class SoccerApp
 			//testUploadDataSchecduler(context);
 			// testDownloadOkoooOpWebPage(context);
 			//testDownloadLiveJcWebPage(context);
-			testComputeCorpStat(context);
+			//testComputeCorpStat(context);
+			
+			testMatchPredict(context);
+			//testDownloadEastSoccer(context);
 			//testOkoooChileYpParser(context);
 
 			close();
@@ -236,6 +244,85 @@ public class SoccerApp
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	public static void testDownloadEastSoccer(LorisContext context) throws IOException, UrlFetchException
+	{
+		SoccerManager soccerManager = context.getBean(SoccerManager.class);
+		String start = "2018-12-01";
+		String end = "2018-12-07";
+		List<Match> matchs = soccerManager.getMatches(start, end);
+		
+		logger.info("Total match is " + matchs.size());
+		int i = 1;
+		for (Match match : matchs)
+		{
+			Result result = EastSoccerDownloader.downloadMatchOps(match.getMid());
+			OpList list = (OpList)result.get("ops");
+			if(list != null && !list.isEmpty())
+			{
+				soccerManager.addOpList(list);
+				logger.info(i +++ " Downloading " + match.getMid() + " " + list.size() + " ops.");
+			}
+		}
+		
+	}
+	
+	/**
+	 * 测试预测数据
+	 * @param context
+	 * @throws IOException
+	 */
+	public static void testMatchPredict(LorisContext context) throws IOException
+	{
+		SoccerManager soccerManager = context.getBean(SoccerManager.class);
+		SoccerPredict predict = new SoccerPredict();
+		predict.initialize(soccerManager);
+		
+		String start = "2018-12-01";
+		String end = "2018-12-07";
+		
+		List<Match> matchs = soccerManager.getMatches(start, end);
+		
+		logger.info("Total match is " + matchs.size());
+		int i = 1;
+		for (Match match : matchs)
+		{
+			MatchResult result = predict.predict(match);
+			if(result == null)
+				continue;
+			
+			String info = i +++ " Total: " + result.size() + ", win: " + result.getWinNum()
+			+ ", draw: " + result.getDrawNum() + ", lose: " + result.getLoseNum();
+			logger.info(match);
+			logger.info(info);
+		}
+		
+		/*String mid = "2412131";
+		List<Op> ops = soccerManager.getOddsOp(mid);
+		Op avgOp = null;
+		OpList list = new OpList(OpListType.GidUnique);
+		for (Op op : ops)
+		{
+			if("0".equals(op.getGid()))
+			{
+				avgOp = op;
+			}
+			else
+			{
+				list.add(op);
+			}			
+		}
+		MatchResult result = predict.predict(avgOp, list);
+		
+		int i = 1;
+		for (MatchCorpProb matchCorpProb : result)
+		{
+			logger.info(i +++ ": " + matchCorpProb);
+		}
+		String info = "Total: " + result.size() + ", win: " + result.getWinNum()
+			+ ", draw: " + result.getDrawNum() + ", lose: " + result.getLoseNum();
+		logger.info(info);*/
 	}
 	
 	public static void testComputeCorpStat(LorisContext context) throws IOException

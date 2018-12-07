@@ -38,6 +38,24 @@ public class CorpStatElement extends ArrayList<CorpRegionStatElement>
 	{
 		this.corp = corp;
 	}
+	
+	/**
+	 * 获得包含该值的所有统计数据
+	 * @param odds
+	 * @return
+	 */
+	public List<CorpRegionStatElement> getCorpRegionStatElement(float odds)
+	{
+		List<CorpRegionStatElement> elements = new ArrayList<>();
+		for (CorpRegionStatElement element : this)
+		{
+			if(element.contains(odds))
+			{
+				elements.add(element);
+			}
+		}
+		return elements;
+	}
 
 	/**
 	 * 加入博彩公司的统计元素

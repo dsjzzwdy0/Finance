@@ -46,9 +46,11 @@ import com.loris.soccer.bean.SoccerConstants;
 import com.loris.soccer.bean.data.table.CorpSetting;
 import com.loris.soccer.bean.data.table.Corporate;
 import com.loris.soccer.bean.data.table.JcMatch;
+import com.loris.soccer.bean.data.table.Match;
 import com.loris.soccer.bean.data.table.Op;
 import com.loris.soccer.bean.data.table.CorpSettingParameter;
 import com.loris.soccer.bean.data.table.UserCorporate;
+import com.loris.soccer.bean.data.table.Yp;
 import com.loris.soccer.bean.data.view.MatchInfo;
 import com.loris.soccer.bean.data.view.RankInfo;
 import com.loris.soccer.bean.data.view.RoundInfo;
@@ -249,6 +251,46 @@ public class SoccerDataController
 		matchOps.setOps(ops);
 		
 		return Rest.okData(matchOps);
+	}
+	
+	/**
+	 * 获得比赛的赔率数据
+	 * @param mid
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/getMatchOdds")
+	public Rest getMatchOdds(String mid)
+	{
+		MatchOdds matchOdds = new MatchOdds();
+		matchOdds.setMid(mid);
+		List<Op> ops = soccerManager.getOddsOp(mid);
+		List<Yp> yps = soccerManager.getOddsYp(mid);
+		matchOdds.setOps(ops);
+		matchOdds.setYps(yps);
+		if((ops == null || ops.isEmpty()) && (yps == null || yps.isEmpty()))
+		{
+			return Rest.failure("There are no odds of Match'" + mid + "'");
+		}
+		return Rest.okData(matchOdds);
+	}
+	
+	/**
+	 * 获得比赛的数据
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/getMatchesInfo")
+	public Rest getMatchesInfo(String start, String end)
+	{
+		List<Match> matchs = soccerManager.getMatches(start, end);
+		if(matchs == null || matchs.isEmpty())
+		{
+			return Rest.failure("There are no matches in database from '" + start + "' to '" + end + "'");
+		}
+		return Rest.okData(matchs);
 	}
 	
 	/**

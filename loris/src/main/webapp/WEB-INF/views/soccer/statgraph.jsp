@@ -15,7 +15,7 @@
 <div id="content" class="container_wrapper">
 	<%@include file="./analysis/toolbar.jsp"%>
 
-	<div id="main" class="main_wrapper">
+	<div id="main" class="main_wrapper" style="height: 800px; width: 1000px;">
 	</div>
 </div>
 
