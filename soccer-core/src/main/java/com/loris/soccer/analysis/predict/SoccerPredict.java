@@ -99,6 +99,11 @@ public class SoccerPredict
 		int weight = 0;
 		for (CorpRegionStatElement regionElement : element)
 		{
+			//不对全局进行验证
+			if(regionElement.getMin() < 0.5)
+			{
+				continue;
+			}
 			// Do something.
 			if (regionElement.contains(winodds))
 			{
