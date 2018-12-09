@@ -8,7 +8,6 @@
 		<project>encog</project>
 		<project>htmlunit</project>
 		<project>soccer-core</project>
-		<project>stock-core</project>
 		<project>loris-base</project>
 	</projects>
 	<buildSpec>

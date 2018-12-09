@@ -3,9 +3,9 @@ package com.loris.soccer.repository;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.loris.soccer.bean.data.table.CorpSetting;
-import com.loris.soccer.bean.data.table.CorpSettingParameter;
 import com.loris.soccer.bean.item.SettingItem;
+import com.loris.soccer.bean.table.CorpSetting;
+import com.loris.soccer.bean.table.CorpSettingParameter;
 
 /**
  * 配置管理器

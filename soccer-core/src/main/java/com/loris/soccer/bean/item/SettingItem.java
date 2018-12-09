@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.loris.base.bean.entity.UUIDEntity;
-import com.loris.soccer.bean.data.table.CorpSettingParameter;
+import com.loris.soccer.bean.table.CorpSettingParameter;
 
 /**
  * 数据分析参数设置类

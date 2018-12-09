@@ -2,8 +2,8 @@ package com.loris.soccer.analysis.element;
 
 import com.loris.soccer.analysis.data.MatchOdds;
 import com.loris.soccer.analysis.util.PossionUtil;
+import com.loris.soccer.bean.view.RankInfo;
 import com.loris.soccer.analysis.util.OddsUtil;
-import com.loris.soccer.bean.data.view.RankInfo;
 
 public class MatchRankOddsElement extends MatchOddsElement
 {

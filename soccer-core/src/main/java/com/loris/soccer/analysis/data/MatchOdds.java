@@ -3,10 +3,10 @@ package com.loris.soccer.analysis.data;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.loris.soccer.bean.data.table.Op;
-import com.loris.soccer.bean.data.table.Yp;
-import com.loris.soccer.bean.data.view.MatchInfo;
 import com.loris.soccer.bean.item.IssueMatch;
+import com.loris.soccer.bean.table.Op;
+import com.loris.soccer.bean.table.Yp;
+import com.loris.soccer.bean.view.MatchInfo;
 
 public class MatchOdds extends IssueMatch
 {

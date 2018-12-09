@@ -8,8 +8,8 @@ import com.loris.base.analysis.graph.GraphNode;
 import com.loris.base.util.DateUtil;
 import com.loris.soccer.analysis.data.LeagueMatchDoc;
 import com.loris.soccer.analysis.data.MatchData;
-import com.loris.soccer.bean.data.table.Op;
 import com.loris.soccer.bean.item.MatchInfoItem;
+import com.loris.soccer.bean.table.Op;
 
 
 /**

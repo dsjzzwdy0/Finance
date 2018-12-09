@@ -3,8 +3,8 @@ package com.loris.soccer.analysis.element;
 import java.io.Serializable;
 
 import com.loris.soccer.analysis.data.MatchOdds;
-import com.loris.soccer.bean.data.table.Match;
 import com.loris.soccer.bean.item.PerformItem;
+import com.loris.soccer.bean.table.Match;
 
 /**
  * 竞彩综合数据元素，包括有：<br/>

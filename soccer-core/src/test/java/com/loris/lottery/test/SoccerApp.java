@@ -1,6 +1,8 @@
 package com.loris.lottery.test;
 
 import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -13,6 +15,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
+import com.baomidou.mybatisplus.annotations.TableField;
+import com.baomidou.mybatisplus.annotations.TableName;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.ScriptResult;
@@ -28,6 +32,7 @@ import com.loris.base.util.ArraysUtil;
 import com.loris.base.util.DateUtil;
 import com.loris.base.util.FileUtils;
 import com.loris.base.util.NumberUtil;
+import com.loris.base.util.ReflectUtil;
 import com.loris.base.web.http.UrlFetchException;
 import com.loris.base.web.http.UrlFetcher;
 import com.loris.base.web.http.WebClientFetcher;
@@ -47,23 +52,6 @@ import com.loris.soccer.analysis.util.LeagueDataUtil;
 import com.loris.soccer.analysis.util.OddsUtil;
 import com.loris.soccer.analysis.util.TeamHistoryCalculator;
 import com.loris.soccer.bean.SoccerConstants;
-import com.loris.soccer.bean.data.table.BdMatch;
-import com.loris.soccer.bean.data.table.CorpSetting;
-import com.loris.soccer.bean.data.table.CountryLogo;
-import com.loris.soccer.bean.data.table.JcMatch;
-import com.loris.soccer.bean.data.table.League;
-import com.loris.soccer.bean.data.table.Match;
-import com.loris.soccer.bean.data.table.Op;
-import com.loris.soccer.bean.data.table.CorpSettingParameter;
-import com.loris.soccer.bean.data.table.Rank;
-import com.loris.soccer.bean.data.table.Round;
-import com.loris.soccer.bean.data.table.Season;
-import com.loris.soccer.bean.data.table.SeasonTeam;
-import com.loris.soccer.bean.data.table.Team;
-import com.loris.soccer.bean.data.table.Yp;
-import com.loris.soccer.bean.data.table.ZcMatch;
-import com.loris.soccer.bean.data.view.MatchInfo;
-import com.loris.soccer.bean.data.view.RankInfo;
 import com.loris.soccer.bean.item.IssueMatch;
 import com.loris.soccer.bean.item.MatchItem;
 import com.loris.soccer.bean.item.SettingItem;
@@ -75,6 +63,23 @@ import com.loris.soccer.bean.okooo.OkoooBdMatch;
 import com.loris.soccer.bean.okooo.OkoooJcMatch;
 import com.loris.soccer.bean.okooo.OkoooOp;
 import com.loris.soccer.bean.okooo.OkoooYp;
+import com.loris.soccer.bean.table.BdMatch;
+import com.loris.soccer.bean.table.CorpSetting;
+import com.loris.soccer.bean.table.CorpSettingParameter;
+import com.loris.soccer.bean.table.CountryLogo;
+import com.loris.soccer.bean.table.JcMatch;
+import com.loris.soccer.bean.table.League;
+import com.loris.soccer.bean.table.Match;
+import com.loris.soccer.bean.table.Op;
+import com.loris.soccer.bean.table.Rank;
+import com.loris.soccer.bean.table.Round;
+import com.loris.soccer.bean.table.Season;
+import com.loris.soccer.bean.table.SeasonTeam;
+import com.loris.soccer.bean.table.Team;
+import com.loris.soccer.bean.table.Yp;
+import com.loris.soccer.bean.table.ZcMatch;
+import com.loris.soccer.bean.view.MatchInfo;
+import com.loris.soccer.bean.view.RankInfo;
 import com.loris.soccer.repository.RemoteSoccerManager;
 import com.loris.soccer.repository.SettingManager;
 import com.loris.soccer.repository.SoccerContext;
@@ -231,11 +236,15 @@ public class SoccerApp
 			//testUploadDataSchecduler(context);
 			// testDownloadOkoooOpWebPage(context);
 			//testDownloadLiveJcWebPage(context);
-			//testComputeCorpStat(context);
+			testComputeCorpStat(context);
 			
-			testMatchPredict(context);
+			//testMatchPredict(context);
+			
+			// testCorpMatchStat(context);
 			//testDownloadEastSoccer(context);
 			//testOkoooChileYpParser(context);
+			
+			//testGetAnnotation(context);
 
 			close();
 			// context = null;
@@ -245,6 +254,31 @@ public class SoccerApp
 			e.printStackTrace();
 		}
 	}
+	
+
+	public static void testComputeCorpStat(LorisContext context) throws IOException
+	{
+		CorporateStat.initialize(context);
+		
+		String start = "2018-04-01";
+		String end = "2018-11-30";
+		String gid = "466";
+		CorporateStat.computeCorpStat(gid, start, end);
+		//CorporateStat.computeStat(start, end);
+	}
+	
+	public static void testCorpMatchStat(LorisContext context) throws IOException
+	{
+		SoccerManager soccerManager = context.getBean(SoccerManager.class);
+		String start = "2018-06-01";
+		String end = "2018-12-07";		
+		CorporateStat.initialize(soccerManager);		
+		List<Match> matchs = soccerManager.getMatches(start, end);		
+		logger.info("Total match is " + matchs.size());
+		
+		CorporateStat.computeCorpAccuracy(matchs);
+	}
+	
 	
 	public static void testDownloadEastSoccer(LorisContext context) throws IOException, UrlFetchException
 	{
@@ -264,6 +298,7 @@ public class SoccerApp
 				soccerManager.addOpList(list);
 				logger.info(i +++ " Downloading " + match.getMid() + " " + list.size() + " ops.");
 			}
+			
 		}
 		
 	}
@@ -276,26 +311,75 @@ public class SoccerApp
 	public static void testMatchPredict(LorisContext context) throws IOException
 	{
 		SoccerManager soccerManager = context.getBean(SoccerManager.class);
+		
 		SoccerPredict predict = new SoccerPredict();
 		predict.initialize(soccerManager);
 		
-		String start = "2018-12-01";
+		String start = "2018-06-01";
 		String end = "2018-12-07";
 		
 		List<Match> matchs = soccerManager.getMatches(start, end);
 		
 		logger.info("Total match is " + matchs.size());
-		int i = 1;
+		int i = 0;
 		for (Match match : matchs)
 		{
+			i ++;
+			
+			if(match.getScoreResult().getResult() < 0)
+			{
+				continue;
+			}
+			
 			MatchResult result = predict.predict(match);
 			if(result == null)
 				continue;
 			
-			String info = i +++ " Total: " + result.size() + ", win: " + result.getWinNum()
-			+ ", draw: " + result.getDrawNum() + ", lose: " + result.getLoseNum();
+			/*int j = 1;
+			for (MatchCorpProb prob : result)
+			{
+				logger.info(j +++ ": " + prob);
+			}*/
+			int[] nums = result.getStatNum();
+			double[] probs = result.getWeightStatProb();
+			double[] avgprobs = result.getAverageStatProb();
+			String info = i + " Total: " + result.size() + Arrays.toString(nums) + ", " + Arrays.toString(probs) 
+				+ ", " + Arrays.toString(avgprobs);
 			logger.info(match);
 			logger.info(info);
+			
+			long st = System.currentTimeMillis();
+			try
+			{
+				soccerManager.addMatchCorpProbs(result);
+			}
+			catch(Exception e)
+			{
+				logger.info("Error: " + e.toString());
+			}
+			long en = System.currentTimeMillis();
+			logger.info("Spend " + (en - st) + " ms to save " + result.size() + " results. ");
+			
+			/*long st = System.currentTimeMillis();
+			saveBatch(soccerManager, result, 80);
+			long en = System.currentTimeMillis();
+			logger.info("Spend " + (en - st) + " ms to save " + result.size() + " results. ");
+			
+			st = System.currentTimeMillis();
+			saveBatch(soccerManager, result, 50);
+			en = System.currentTimeMillis();
+			logger.info("Spend " + (en - st) + " ms to save " + result.size() + " results. ");
+			
+			st = System.currentTimeMillis();
+			saveBatch(soccerManager, result, 10);
+			en = System.currentTimeMillis();			
+			logger.info("Spend " + (en - st) + " ms to save " + result.size() + " results. ");
+			
+			st = System.currentTimeMillis();
+			soccerManager.addMatchCorpProbs(result);
+			en = System.currentTimeMillis();
+			
+			logger.info("Spend " + (en - st) + " ms to save " + result.size() + " results. ");*/
 		}
 		
 		/*String mid = "2412131";
@@ -323,16 +407,6 @@ public class SoccerApp
 		String info = "Total: " + result.size() + ", win: " + result.getWinNum()
 			+ ", draw: " + result.getDrawNum() + ", lose: " + result.getLoseNum();
 		logger.info(info);*/
-	}
-	
-	public static void testComputeCorpStat(LorisContext context) throws IOException
-	{
-		CorporateStat.initialize(context);
-		
-		String start = "2018-04-01";
-		String end = "2018-11-30";
-		
-		CorporateStat.computeStat(start, end);
 	}
 	
 	public static void testDownloadLiveJcWebPage(LorisContext context) throws Exception
@@ -2606,6 +2680,35 @@ public class SoccerApp
 		else
 		{
 			logger.info("Error when downloading page.");
+		}
+	}
+	public static void testGetAnnotation(LorisContext context) throws Exception
+	{
+		Class<?> clazz = Match.class;
+		Annotation[] annotations = clazz.getAnnotations();
+		int i = 1;
+		for (Annotation annotation : annotations)
+		{
+			logger.info(i +++ ": " + annotation.getClass().getName());
+		}
+		TableName tableName = clazz.getAnnotation(TableName.class);
+		logger.info("Match TableName is " + tableName.value());
+		List<Field> fields = ReflectUtil.getAllFields(WebPage.class, false);
+		for (Field field : fields)
+		{
+			annotations = field.getAnnotations();
+			
+			logger.info("Field: " + field.getName() + ", Modifier: " + field.getModifiers());
+			/*i = 1;
+			for (Annotation annotation : annotations)
+			{
+				logger.info(i +++ ": " + annotation.getClass().getName());
+			}*/
+			TableField tableField = field.getAnnotation(com.baomidou.mybatisplus.annotations.TableField.class);
+			if(tableField != null)
+			{
+				logger.info("TableField: " + tableField.exist());
+			}
 		}
 	}
 

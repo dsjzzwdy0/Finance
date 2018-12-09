@@ -1,7 +1,7 @@
 package com.loris.soccer.analysis.checker;
 
 import com.loris.base.util.ArraysUtil;
-import com.loris.soccer.bean.data.table.Corporate;
+import com.loris.soccer.bean.table.Corporate;
 
 public class CorpChecker<T extends Corporate> implements ArraysUtil.EqualChecker<T>
 {

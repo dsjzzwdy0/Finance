@@ -20,11 +20,11 @@ import com.loris.soccer.analysis.data.OpVariance;
 import com.loris.soccer.analysis.element.OddsElement;
 import com.loris.soccer.analysis.data.OddsVariance;
 import com.loris.soccer.bean.SoccerConstants;
-import com.loris.soccer.bean.data.table.Op;
-import com.loris.soccer.bean.data.table.Yp;
 import com.loris.soccer.bean.item.IssueMatch;
 import com.loris.soccer.bean.item.OddsItem;
 import com.loris.soccer.bean.item.YpValue;
+import com.loris.soccer.bean.table.Op;
+import com.loris.soccer.bean.table.Yp;
 import com.loris.soccer.bean.type.OddsValueType;
 
 /**

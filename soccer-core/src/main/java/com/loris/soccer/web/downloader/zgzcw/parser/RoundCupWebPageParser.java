@@ -9,8 +9,8 @@ import org.jsoup.select.Elements;
 
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.loris.base.web.page.WebPage;
-import com.loris.soccer.bean.data.table.Match;
-import com.loris.soccer.bean.data.table.Round;
+import com.loris.soccer.bean.table.Match;
+import com.loris.soccer.bean.table.Round;
 import com.loris.soccer.web.downloader.zgzcw.page.RoundCupWebPage;
 
 /**

@@ -9,7 +9,7 @@ import java.util.List;
 
 import com.loris.base.util.DateUtil;
 import com.loris.base.util.NumberUtil;
-import com.loris.soccer.bean.data.table.Season;
+import com.loris.soccer.bean.table.Season;
 
 /**
  * 赛事赛季数据管理类

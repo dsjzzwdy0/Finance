@@ -3,21 +3,23 @@ package com.loris.soccer.analysis.predict;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.loris.soccer.analysis.element.CorpRegionStatElement;
 import com.loris.soccer.analysis.element.CorpStatElement;
-import com.loris.soccer.analysis.element.MatchCorpProb;
 import com.loris.soccer.analysis.element.MatchResult;
-import com.loris.soccer.bean.data.table.Corporate;
-import com.loris.soccer.bean.data.table.Op;
-import com.loris.soccer.bean.item.CorpStatItem;
 import com.loris.soccer.bean.item.MatchItem;
 import com.loris.soccer.bean.model.OpList;
 import com.loris.soccer.bean.model.OpList.OpListType;
+import com.loris.soccer.bean.stat.CorpStatItem;
+import com.loris.soccer.bean.stat.MatchCorpProb;
+import com.loris.soccer.bean.table.Corporate;
+import com.loris.soccer.bean.table.Op;
 import com.loris.soccer.repository.SoccerManager;
 
 public class SoccerPredict
 {
-	//private static Logger logger = Logger.getLogger(SoccerPredict.class);
+	private static Logger logger = Logger.getLogger(SoccerPredict.class);
 
 	/** The SoccerManager. */
 	SoccerManager soccerManager;
@@ -26,7 +28,7 @@ public class SoccerPredict
 	List<CorpStatElement> elements = new ArrayList<>();
 
 	/** 最小的比赛数据 */
-	protected int minMatchNum = 200;
+	protected int minMatchNum = 50;
 	
 	/**
 	 * 预测数据
@@ -35,7 +37,7 @@ public class SoccerPredict
 	 */
 	public MatchResult predict(MatchItem matchItem)
 	{
-		List<Op> ops = soccerManager.getOddsOp(matchItem.getMid());		
+		List<Op> ops = soccerManager.getOddsOp(matchItem.getMid(), true);		
 		OpList list = new OpList(OpListType.GidUnique);
 		Op avgOp = null;
 		for (Op op : ops)
@@ -77,6 +79,10 @@ public class SoccerPredict
 
 			// 计算数据
 			prob = computeCorpProb(element, avgOp, op);
+			if(prob == null)
+			{
+				continue;
+			}
 			result.add(prob);
 		}
 		return result;
@@ -97,6 +103,7 @@ public class SoccerPredict
 		float[] diff = computeOpDiff(op, avgOp);
 		float winodds = op.getFirstwinodds();
 		int weight = 0;
+		int num = 0;
 		for (CorpRegionStatElement regionElement : element)
 		{
 			//不对全局进行验证
@@ -107,6 +114,8 @@ public class SoccerPredict
 			// Do something.
 			if (regionElement.contains(winodds))
 			{
+				num ++;
+				//logger.info(winodds + ", Compute Region: " + regionElement);
 				float[] winvars = regionElement.getWinVar().getVars();
 				float[] drawvars = regionElement.getDrawVar().getVars();
 				float[] losevars = regionElement.getLoseVar().getVars();
@@ -121,6 +130,15 @@ public class SoccerPredict
 				}
 			}
 		}
+		
+		if(num <= 0)
+		{
+			return null;
+		}		
+		winProb = normalize(winProb / num);
+		drawProb = normalize(drawProb / num);
+		loseProb = normalize(loseProb / num);
+		//logger.info("WinProb: " + winProb + ", DrawProb: " + drawProb + ", LoseProb: " + loseProb);
 		MatchCorpProb prob = new MatchCorpProb(op.getMid());
 		prob.setGid(op.getGid());
 		prob.setName(op.getGname());
@@ -128,7 +146,11 @@ public class SoccerPredict
 		prob.setWeight(weight);
 		return prob;
 		//logger.info(op);
-		//logger.info("WinProb: " + winProb + ", DrawProb: " + drawProb + ", LoseProb: " + loseProb);
+	}
+	
+	protected double normalize(double prob)
+	{
+		return 0.5 + prob * 0.5;
 	}
 
 	protected float[] computeOpDiff(Op op, Op avgOp)
@@ -156,10 +178,27 @@ public class SoccerPredict
 	protected double computeRelationValue(float[] diffVals, float[] vars)
 	{
 		double p = 0.0;
+		double std1 = 0.0;
+		double std2 = 0.0;
+		//logger.info("Diff: " + Arrays.toString(diffVals) + ", Vars: " + Arrays.toString(vars));
 		for (int i = 0; i < diffVals.length; i++)
 		{
 			int st = i < 3 ? 0 : 3;
 			p += diffVals[i] * vars[i + st];
+			std1 += diffVals[i] * diffVals[i];
+			std2 += vars[i + st] * vars[i + st];
+		}
+		if(std1 == 0 || std2 == 0)
+		{
+			p = 0.0;
+		}
+		else
+		{
+			p /= (Math.sqrt(std1) * Math.sqrt(std2));
+			if(p == Double.NaN)
+			{
+				p = 0.0;
+			}
 		}
 		return p;
 	}
@@ -193,9 +232,11 @@ public class SoccerPredict
 
 		// 清洗掉不需要的数据
 		shuffle();
+		
+		logger.info("There are " + elements.size() + " basic corporate.");
 	}
 
-	protected void shuffle()
+	public void shuffle()
 	{
 		int len = elements.size();
 		for (int i = len - 1; i >= 0; i--)

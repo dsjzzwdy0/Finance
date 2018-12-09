@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
@@ -14,26 +15,6 @@ import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.loris.base.util.ArraysUtil;
 import com.loris.base.util.DateUtil;
 import com.loris.soccer.bean.SoccerConstants;
-import com.loris.soccer.bean.data.table.BdMatch;
-import com.loris.soccer.bean.data.table.CorpSetting;
-import com.loris.soccer.bean.data.table.JcMatch;
-import com.loris.soccer.bean.data.table.League;
-import com.loris.soccer.bean.data.table.Logo;
-import com.loris.soccer.bean.data.table.LotteryCalendar;
-import com.loris.soccer.bean.data.table.Match;
-import com.loris.soccer.bean.data.table.Op;
-import com.loris.soccer.bean.data.table.CorpSettingParameter;
-import com.loris.soccer.bean.data.table.Rank;
-import com.loris.soccer.bean.data.table.Round;
-import com.loris.soccer.bean.data.table.Season;
-import com.loris.soccer.bean.data.table.SeasonTeam;
-import com.loris.soccer.bean.data.table.Team;
-import com.loris.soccer.bean.data.table.UserCorporate;
-import com.loris.soccer.bean.data.table.Yp;
-import com.loris.soccer.bean.data.table.ZcMatch;
-import com.loris.soccer.bean.data.view.MatchInfo;
-import com.loris.soccer.bean.data.view.RankInfo;
-import com.loris.soccer.bean.item.CorpStatItem;
 import com.loris.soccer.bean.item.IssueMatch;
 import com.loris.soccer.bean.item.MatchItem;
 import com.loris.soccer.bean.model.LeagueMap;
@@ -41,12 +22,36 @@ import com.loris.soccer.bean.model.LeagueSeason;
 import com.loris.soccer.bean.okooo.OkoooBdMatch;
 import com.loris.soccer.bean.okooo.OkoooJcMatch;
 import com.loris.soccer.bean.okooo.OkoooYp;
+import com.loris.soccer.bean.stat.CorpMatchResult;
+import com.loris.soccer.bean.stat.CorpStatItem;
+import com.loris.soccer.bean.stat.MatchCorpProb;
+import com.loris.soccer.bean.table.BdMatch;
+import com.loris.soccer.bean.table.CorpSetting;
+import com.loris.soccer.bean.table.CorpSettingParameter;
+import com.loris.soccer.bean.table.JcMatch;
+import com.loris.soccer.bean.table.League;
+import com.loris.soccer.bean.table.Logo;
+import com.loris.soccer.bean.table.LotteryCalendar;
+import com.loris.soccer.bean.table.Match;
+import com.loris.soccer.bean.table.Op;
+import com.loris.soccer.bean.table.Rank;
+import com.loris.soccer.bean.table.Round;
+import com.loris.soccer.bean.table.Season;
+import com.loris.soccer.bean.table.SeasonTeam;
+import com.loris.soccer.bean.table.Team;
+import com.loris.soccer.bean.table.UserCorporate;
+import com.loris.soccer.bean.table.Yp;
+import com.loris.soccer.bean.table.ZcMatch;
+import com.loris.soccer.bean.view.MatchInfo;
+import com.loris.soccer.bean.view.RankInfo;
 import com.loris.soccer.repository.service.BdMatchService;
+import com.loris.soccer.repository.service.CorpMatchResultService;
 import com.loris.soccer.repository.service.CorpSettingService;
 import com.loris.soccer.repository.service.CorpStatItemService;
 import com.loris.soccer.repository.service.JcMatchService;
 import com.loris.soccer.repository.service.LeagueService;
 import com.loris.soccer.repository.service.LotteryCalendarService;
+import com.loris.soccer.repository.service.MatchCorpProbService;
 import com.loris.soccer.repository.service.MatchInfoService;
 import com.loris.soccer.repository.service.MatchService;
 import com.loris.soccer.repository.service.OkoooBdMatchService;
@@ -143,6 +148,15 @@ public class SoccerManager
 	
 	@Autowired
 	private CorpStatItemService corpStatItemService;
+	
+	@Autowired
+	private MatchCorpProbService matchCorpProbService;
+	
+	@Autowired
+	private CorpMatchResultService corpMatchResultService;
+	
+	@Autowired
+	private JdbcTemplate template;
 	
 	/** 唯一实例 */
 	private static SoccerManager singleton = null;
@@ -486,8 +500,38 @@ public class SoccerManager
 	 */
 	public List<Op> getOddsOp(String mid)
 	{
+		return getOddsOp(mid, false);
+	}
+	
+	/**
+	 * 获得比赛的欧赔数据
+	 * @param mid
+	 * @param gids
+	 * @return
+	 */
+	public List<Op> getOddsOp(String mid, List<String> gids)
+	{
 		EntityWrapper<Op> ew = new EntityWrapper<>();
 		ew.eq("mid", mid);
+		ew.and().in("gid", gids);
+		ew.and().isNotNull("firsttime");
+		return opService.selectList(ew);
+	}
+	
+	/**
+	 * 获得该比赛的所有欧赔数据
+	 * 
+	 * @param mid 比赛编号
+	 * @return 欧赔数据列表
+	 */
+	public List<Op> getOddsOp(String mid, boolean hasFirst)
+	{
+		EntityWrapper<Op> ew = new EntityWrapper<>();
+		ew.eq("mid", mid);
+		if(hasFirst)
+		{
+			ew.isNotNull("firsttime");
+		}
 		return opService.selectList(ew);
 	}
 	
@@ -2427,6 +2471,18 @@ public class SoccerManager
 	}
 	
 	/**
+	 * 获得所有的统计值
+	 * @param gid
+	 * @return
+	 */
+	public List<CorpStatItem> getCorpStatItems(String gid)
+	{
+		EntityWrapper<CorpStatItem> ew = new EntityWrapper<>();
+		ew.eq("gid", gid);
+		return corpStatItemService.selectList(ew);
+	}
+	
+	/**
 	 * 获得公司的统计数据
 	 * @param gid
 	 * @return
@@ -2436,6 +2492,81 @@ public class SoccerManager
 		EntityWrapper<CorpStatItem> ew = new EntityWrapper<>();
 		ew.eq("gid", gid);
 		return corpStatItemService.selectOne(ew);
+	}
+	
+	/**
+	 * 
+	 * @param probs
+	 * @return
+	 
+	public boolean addMatchCorpProbs(List<MatchCorpProb> probs)
+	{
+		return matchCorpProbService.insertBatch(probs);
+	}*/
+	
+	/**
+	 * 测试Template
+	 */
+	public void addMatchCorpProbs(List<MatchCorpProb> probs)
+	{
+		String sql = "insert into soccer_corp_match_prob "
+				+ "(mid, gid, name, type, weight, winprob, drawprob, loseprob) "
+				+ "values "; //(?, ?, ?, ?, ?, ?, ?, ?)
+		int size = probs.size();
+		//List<Object[]> batchArgs = new ArrayList<Object[]>();
+		for (int i = 0; i < size; i ++)
+		{
+			MatchCorpProb prob = probs.get(i);
+			if(i != 0)
+			{
+				sql += ", ";
+			}
+			sql += "('" + prob.getMid() + "', '" + prob.getGid() + "', '" + prob.getName() + "', " 
+					+ prob.getType() + ", " + prob.getWeight() + ", " + prob.getWinprob() + ", "
+					+ prob.getDrawprob() + ", " + prob.getLoseprob() + ")";
+			
+			//batchArgs.add(new Object[]{prob.getMid(), prob.getGid(), prob.getName(),
+			//		prob.getType(), prob.getWeight(), prob.getWinprob(), prob.getDrawprob(),
+			//		prob.getLoseprob()});
+		}
+		template.execute(sql);
+		
+		//template.batchUpdate(sql, batchArgs);
+		//System.out.println(template);
+	}
+	
+	/**
+	 * 获得比赛数据的概率
+	 * @param gid
+	 * @return
+	 */
+	public List<MatchCorpProb> getMatchCorpProbsByCorp(String gid)
+	{
+		EntityWrapper<MatchCorpProb> ew = new EntityWrapper<>();
+		ew.eq("gid", gid);
+		return matchCorpProbService.selectList(ew);
+	}
+	
+	/**
+	 * 获得比赛数据的概率
+	 * @param mid
+	 * @return
+	 */
+	public List<MatchCorpProb> getMatchCorpProbsByMid(String mid)
+	{
+		EntityWrapper<MatchCorpProb> ew = new EntityWrapper<>();
+		ew.eq("mid", mid);
+		return matchCorpProbService.selectList(ew);
+	}
+	
+	public boolean addCorpMatchResults(List<CorpMatchResult> results)
+	{
+		return corpMatchResultService.insertBatch(results);
+	}
+	
+	public boolean addCorpMatchResult(CorpMatchResult result)
+	{
+		return corpMatchResultService.insert(result);
 	}
 	
 	/**

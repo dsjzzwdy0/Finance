@@ -10,10 +10,10 @@ import org.jsoup.select.Elements;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.loris.base.web.page.WebPage;
 import com.loris.base.web.parser.AbstractWebPageParser;
-import com.loris.soccer.bean.data.table.Round;
-import com.loris.soccer.bean.data.table.Season;
-import com.loris.soccer.bean.data.table.SeasonTeam;
-import com.loris.soccer.bean.data.table.Team;
+import com.loris.soccer.bean.table.Round;
+import com.loris.soccer.bean.table.Season;
+import com.loris.soccer.bean.table.SeasonTeam;
+import com.loris.soccer.bean.table.Team;
 import com.loris.soccer.web.downloader.zgzcw.page.SeasonWebPage;
 
 /**

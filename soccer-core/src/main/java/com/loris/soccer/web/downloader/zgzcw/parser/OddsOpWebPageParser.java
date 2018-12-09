@@ -12,8 +12,8 @@ import com.loris.base.web.page.WebPage;
 import com.loris.base.web.parser.AbstractWebPageParser;
 import com.loris.base.web.util.URLParser;
 import com.loris.soccer.bean.SoccerConstants;
-import com.loris.soccer.bean.data.table.Corporate;
-import com.loris.soccer.bean.data.table.Op;
+import com.loris.soccer.bean.table.Corporate;
+import com.loris.soccer.bean.table.Op;
 import com.loris.soccer.web.downloader.zgzcw.ZgzcwSoccerDownloader;
 import com.loris.soccer.web.downloader.zgzcw.page.OddsOpWebPage;
 

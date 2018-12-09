@@ -3,7 +3,7 @@ package com.loris.soccer.repository.service.impl;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.loris.soccer.bean.data.view.RankInfo;
+import com.loris.soccer.bean.view.RankInfo;
 import com.loris.soccer.repository.mapper.RankInfoMapper;
 import com.loris.soccer.repository.service.RankInfoService;
 

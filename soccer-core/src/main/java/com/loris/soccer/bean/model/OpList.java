@@ -5,16 +5,17 @@ import java.util.Collection;
 import java.util.List;
 
 import com.loris.base.util.NumberUtil;
-import com.loris.soccer.bean.data.table.Op;
+import com.loris.soccer.bean.table.Op;
 
 public class OpList extends ArrayList<Op>
 {
-	public static enum OpListType{
-		General,			//通用的类型
-		GidUnique,			//Gid唯一类型，就是家公司的只能有一个值
-		MidUnique			//Mid唯一类型，就是一场比赛的只能有一个值
+	public static enum OpListType
+	{
+		General, // 通用的类型
+		GidUnique, // Gid唯一类型，就是家公司的只能有一个值
+		MidUnique // Mid唯一类型，就是一场比赛的只能有一个值
 	}
-	
+
 	/***/
 	private static final long serialVersionUID = 1L;
 
@@ -49,20 +50,28 @@ public class OpList extends ArrayList<Op>
 	@Override
 	public boolean addAll(Collection<? extends Op> ops)
 	{
-		if(type == OpListType.GidUnique)
+		if(type == OpListType.General)
+		{
+			return super.addAll(ops);
+		}
+		for (Op op : ops)
+		{
+			add(op);
+		}
+		/*if (type == OpListType.GidUnique)
 		{
 			for (Op op : ops)
 			{
 				Op op1 = getOpByGid(op.getGid());
 				if (op1 == null)
 				{
-					add(op);
+					super.add(op);
 				}
 				else
 				{
 					long t1 = NumberUtil.parseLong(op1.getLasttime());
 					long t2 = NumberUtil.parseLong(op.getLasttime());
-	
+
 					if (t1 < t2)
 					{
 						this.remove(op1);
@@ -71,7 +80,7 @@ public class OpList extends ArrayList<Op>
 				}
 			}
 		}
-		else if(type == OpListType.MidUnique)
+		else if (type == OpListType.MidUnique)
 		{
 			for (Op op : ops)
 			{
@@ -84,7 +93,7 @@ public class OpList extends ArrayList<Op>
 				{
 					long t1 = NumberUtil.parseLong(op1.getLasttime());
 					long t2 = NumberUtil.parseLong(op.getLasttime());
-	
+
 					if (t1 < t2)
 					{
 						this.remove(op1);
@@ -99,6 +108,55 @@ public class OpList extends ArrayList<Op>
 			{
 				this.add(op);
 			}
+		}*/
+		return true;
+	}
+
+	@Override
+	public boolean add(Op op)
+	{
+		if (type == OpListType.GidUnique)
+		{
+			Op op1 = getOpByGid(op.getGid());
+			if (op1 == null)
+			{
+				super.add(op);
+			}
+			else
+			{
+				long t1 = NumberUtil.parseLong(op1.getLasttime());
+				long t2 = NumberUtil.parseLong(op.getLasttime());
+
+				if (t1 < t2)
+				{
+					this.remove(op1);
+					super.add(op);
+				}
+			}
+		}
+		else if (type == OpListType.MidUnique)
+		{
+			Op op1 = getOpByMid(op.getGid());
+			if (op1 == null)
+			{
+				super.add(op);
+			}
+			else
+			{
+				long t1 = NumberUtil.parseLong(op1.getLasttime());
+				long t2 = NumberUtil.parseLong(op.getLasttime());
+
+				if (t1 < t2)
+				{
+					this.remove(op1);
+					super.add(op);
+				}
+			}
+
+		}
+		else
+		{
+			return super.add(op);
 		}
 		return true;
 	}
@@ -120,9 +178,10 @@ public class OpList extends ArrayList<Op>
 		}
 		return null;
 	}
-	
+
 	/**
 	 * 查找某一个
+	 * 
 	 * @param mid
 	 * @return
 	 */

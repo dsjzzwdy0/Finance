@@ -1,8 +1,8 @@
 package com.loris.soccer.analysis.data;
 
-import com.loris.soccer.bean.data.view.MatchInfo;
-import com.loris.soccer.bean.data.view.RankInfo;
 import com.loris.soccer.bean.item.IssueMatch;
+import com.loris.soccer.bean.view.MatchInfo;
+import com.loris.soccer.bean.view.RankInfo;
 
 public class MatchRank extends IssueMatch
 {

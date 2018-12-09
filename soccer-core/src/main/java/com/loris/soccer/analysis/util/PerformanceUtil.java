@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.baomidou.mybatisplus.toolkit.StringUtils;
-import com.loris.soccer.bean.data.table.JcMatch;
-import com.loris.soccer.bean.data.table.Match;
-import com.loris.soccer.bean.data.table.Rank;
-import com.loris.soccer.bean.data.table.Round;
 import com.loris.soccer.bean.item.PerformItem;
 import com.loris.soccer.bean.item.ScoreItem;
+import com.loris.soccer.bean.table.JcMatch;
+import com.loris.soccer.bean.table.Match;
+import com.loris.soccer.bean.table.Rank;
+import com.loris.soccer.bean.table.Round;
 import com.loris.soccer.bean.type.MatchTeamType;
 
 /**

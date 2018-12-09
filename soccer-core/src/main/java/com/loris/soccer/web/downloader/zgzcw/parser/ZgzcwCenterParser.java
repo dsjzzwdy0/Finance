@@ -9,7 +9,7 @@ import org.jsoup.select.Elements;
 
 import com.loris.base.web.page.WebPage;
 import com.loris.base.web.parser.AbstractWebPageParser;
-import com.loris.soccer.bean.data.table.League;
+import com.loris.soccer.bean.table.League;
 
 public class ZgzcwCenterParser extends AbstractWebPageParser
 {

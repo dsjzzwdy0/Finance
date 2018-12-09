@@ -7,7 +7,7 @@ import java.util.List;
 import com.loris.base.util.ArraysUtil;
 import com.loris.base.util.ArraysUtil.EqualChecker;
 import com.loris.soccer.bean.SoccerConstants;
-import com.loris.soccer.bean.data.table.League;
+import com.loris.soccer.bean.table.League;
 
 /**
  * 联赛数据类

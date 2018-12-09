@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.loris.base.data.Region;
-import com.loris.soccer.bean.data.table.Corporate;
-import com.loris.soccer.bean.data.table.Op;
-import com.loris.soccer.bean.item.CorpStatItem;
 import com.loris.soccer.bean.item.ScoreItem;
+import com.loris.soccer.bean.stat.CorpStatItem;
+import com.loris.soccer.bean.table.Corporate;
+import com.loris.soccer.bean.table.Op;
 
 public class CorpStatElement extends ArrayList<CorpRegionStatElement>
 {

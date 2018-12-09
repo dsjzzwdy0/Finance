@@ -11,11 +11,18 @@
     String gid = request.getParameter("gid");
 %>
 
-
+<<style>
+<!--
+.main_wrapper{
+	width: 100%;
+	height: 800px;
+}
+-->
+</style>
 <div id="content" class="container_wrapper">
 	<%@include file="./analysis/toolbar.jsp"%>
 
-	<div id="main" class="main_wrapper" style="height: 800px; width: 1000px;">
+	<div id="main" class="main_wrapper">
 	</div>
 </div>
 
@@ -45,7 +52,7 @@ function initData()
 			data: params,
 			context: document.body, 
 			success: function(json){
-				layer.msg("下载数据成功", {time: 2000}) 
+				layer.msg("下载数据成功： " + json.data.length, {time: 2000}) 
 				initGraph(json.data);
 			},
 		});
@@ -110,7 +117,7 @@ function initGraph(items)
 		series : [
 		        {
 		            name:'胜',
-		            type:'bar',
+		            type:'scatter',
 		            data: data1
 		        },
 		        {

@@ -1,7 +1,7 @@
 package com.loris.soccer.bean.okooo;
 
 import com.baomidou.mybatisplus.annotations.TableName;
-import com.loris.soccer.bean.data.table.JcMatch;
+import com.loris.soccer.bean.table.JcMatch;
 
 @TableName("soccer_okooo_lottery_jc")
 public class OkoooJcMatch extends JcMatch

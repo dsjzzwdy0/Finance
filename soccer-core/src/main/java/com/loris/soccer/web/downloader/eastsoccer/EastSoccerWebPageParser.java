@@ -7,8 +7,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.loris.base.bean.wrapper.Result;
 import com.loris.base.web.page.WebPage;
-import com.loris.soccer.bean.data.table.Op;
 import com.loris.soccer.bean.model.OpList;
+import com.loris.soccer.bean.table.Op;
 
 public class EastSoccerWebPageParser
 {

@@ -1,11 +1,11 @@
 package com.loris.soccer.analysis.element;
 
 import com.loris.base.data.Region;
-import com.loris.soccer.bean.data.table.Corporate;
-import com.loris.soccer.bean.data.table.Op;
 import com.loris.soccer.bean.item.CorpOpVar;
-import com.loris.soccer.bean.item.CorpStatItem;
 import com.loris.soccer.bean.item.ScoreItem;
+import com.loris.soccer.bean.stat.CorpStatItem;
+import com.loris.soccer.bean.table.Corporate;
+import com.loris.soccer.bean.table.Op;
 
 /**
  * CorpStatElement.
@@ -275,5 +275,11 @@ public class CorpRegionStatElement
 	public void setLoseVar(CorpOpVar loseVar)
 	{
 		this.loseVar = loseVar;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "CorpRegionStatElement [corp=" + corp + ", matchNum=" + matchNum + ", min=" + min + ", max=" + max + "]";
 	}
 }

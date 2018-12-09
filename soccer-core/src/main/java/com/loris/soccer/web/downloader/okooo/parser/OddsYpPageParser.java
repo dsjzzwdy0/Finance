@@ -15,8 +15,8 @@ import com.loris.base.util.NumberUtil;
 import com.loris.base.web.page.WebPage;
 import com.loris.base.web.parser.AbstractWebPageParser;
 import com.loris.soccer.bean.SoccerConstants;
-import com.loris.soccer.bean.data.table.Corporate;
 import com.loris.soccer.bean.okooo.OkoooYp;
+import com.loris.soccer.bean.table.Corporate;
 import com.loris.soccer.web.downloader.okooo.OkoooPageCreator;
 import com.loris.soccer.web.downloader.okooo.page.OkoooWebPage;
 

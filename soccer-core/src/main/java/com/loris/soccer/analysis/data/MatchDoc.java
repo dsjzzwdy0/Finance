@@ -8,11 +8,11 @@ import java.util.Map;
 import java.util.Set;
 
 import com.loris.soccer.bean.SoccerConstants;
-import com.loris.soccer.bean.data.table.Match;
-import com.loris.soccer.bean.data.table.Op;
-import com.loris.soccer.bean.data.table.Yp;
 import com.loris.soccer.bean.item.IssueMatch;
 import com.loris.soccer.bean.model.IssueMatchMapping;
+import com.loris.soccer.bean.table.Match;
+import com.loris.soccer.bean.table.Op;
+import com.loris.soccer.bean.table.Yp;
 
 
 /**

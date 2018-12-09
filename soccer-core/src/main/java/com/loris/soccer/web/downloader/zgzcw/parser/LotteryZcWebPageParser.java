@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.loris.base.web.page.WebPage;
 import com.loris.base.web.parser.WebPageParser;
 import com.loris.soccer.bean.SoccerConstants;
-import com.loris.soccer.bean.data.table.ZcMatch;
+import com.loris.soccer.bean.table.ZcMatch;
 import com.loris.soccer.web.downloader.zgzcw.page.LotteryWebPage;
 
 /**

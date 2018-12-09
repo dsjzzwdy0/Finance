@@ -3,7 +3,7 @@ package com.loris.soccer.analysis.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.loris.soccer.bean.data.view.MatchInfo;
+import com.loris.soccer.bean.view.MatchInfo;
 
 public class TeamHistoryCalculator
 {

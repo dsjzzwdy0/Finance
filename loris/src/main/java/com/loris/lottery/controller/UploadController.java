@@ -25,11 +25,11 @@ import com.loris.base.bean.wrapper.TableRecordList;
 import com.loris.base.util.DateUtil;
 import com.loris.base.util.NumberUtil;
 import com.loris.base.util.ReflectUtil;
-import com.loris.soccer.bean.data.table.BdMatch;
-import com.loris.soccer.bean.data.table.JcMatch;
-import com.loris.soccer.bean.data.table.Match;
-import com.loris.soccer.bean.data.table.Op;
-import com.loris.soccer.bean.data.table.Yp;
+import com.loris.soccer.bean.table.BdMatch;
+import com.loris.soccer.bean.table.JcMatch;
+import com.loris.soccer.bean.table.Match;
+import com.loris.soccer.bean.table.Op;
+import com.loris.soccer.bean.table.Yp;
 import com.loris.soccer.repository.SoccerManager;
 
 /**

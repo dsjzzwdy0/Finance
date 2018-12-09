@@ -1,8 +1,8 @@
 package com.loris.soccer.analysis.element;
 
 import com.loris.soccer.bean.SoccerConstants;
-import com.loris.soccer.bean.data.view.RankInfo;
 import com.loris.soccer.bean.item.MatchItem;
+import com.loris.soccer.bean.view.RankInfo;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,7 +1,7 @@
 package com.loris.soccer.web.downloader;
 
 import com.loris.base.web.page.WebPage;
-import com.loris.soccer.bean.data.table.Team;
+import com.loris.soccer.bean.table.Team;
 import com.loris.soccer.web.downloader.zgzcw.page.LotteryCalendarWebPage;
 import com.loris.soccer.web.downloader.zgzcw.page.LotteryWebPage;
 import com.loris.soccer.web.downloader.zgzcw.page.OddsOpWebPage;

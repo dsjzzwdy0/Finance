@@ -3,10 +3,10 @@ package com.loris.soccer.analysis.element;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.loris.soccer.bean.data.table.Corporate;
 import com.loris.soccer.bean.item.MatchInfoItem;
 import com.loris.soccer.bean.item.OpItem;
 import com.loris.soccer.bean.item.YpItem;
+import com.loris.soccer.bean.table.Corporate;
 
 /**
  * 一场比赛同一公司开出的欧赔与亚盘数据记录，该

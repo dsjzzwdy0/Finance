@@ -24,17 +24,17 @@ import com.loris.base.util.DateUtil;
 import com.loris.lottery.util.WebConstants;
 import com.loris.soccer.analysis.element.RankElement;
 import com.loris.soccer.analysis.util.PerformanceUtil;
-import com.loris.soccer.bean.data.table.CorpSetting;
-import com.loris.soccer.bean.data.table.JcMatch;
-import com.loris.soccer.bean.data.table.League;
-import com.loris.soccer.bean.data.table.Logo;
-import com.loris.soccer.bean.data.table.Op;
-import com.loris.soccer.bean.data.table.Round;
-import com.loris.soccer.bean.data.table.Season;
-import com.loris.soccer.bean.data.table.SeasonTeam;
-import com.loris.soccer.bean.data.table.Yp;
-import com.loris.soccer.bean.data.view.MatchInfo;
-import com.loris.soccer.bean.data.view.RankInfo;
+import com.loris.soccer.bean.table.CorpSetting;
+import com.loris.soccer.bean.table.JcMatch;
+import com.loris.soccer.bean.table.League;
+import com.loris.soccer.bean.table.Logo;
+import com.loris.soccer.bean.table.Op;
+import com.loris.soccer.bean.table.Round;
+import com.loris.soccer.bean.table.Season;
+import com.loris.soccer.bean.table.SeasonTeam;
+import com.loris.soccer.bean.table.Yp;
+import com.loris.soccer.bean.view.MatchInfo;
+import com.loris.soccer.bean.view.RankInfo;
 import com.loris.soccer.repository.SoccerManager;
 
 @Controller
