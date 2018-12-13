@@ -26,7 +26,6 @@ import java.util.zip.GZIPInputStream;
  */
 public class App
 {
-
 	/**
 	 * Example of how to use directly the algorithms of the framework in order to
 	 * perform classification. A similar approach can be used to perform clustering,
