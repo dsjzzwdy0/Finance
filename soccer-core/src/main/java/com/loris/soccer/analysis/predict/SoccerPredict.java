@@ -29,34 +29,34 @@ public class SoccerPredict
 
 	/** 最小的比赛数据 */
 	protected int minMatchNum = 50;
-	
+
 	/**
 	 * 预测数据
+	 * 
 	 * @param matchItem
 	 * @return
 	 */
 	public MatchResult predict(MatchItem matchItem)
 	{
-		List<Op> ops = soccerManager.getOddsOp(matchItem.getMid(), true);		
+		List<Op> ops = soccerManager.getOddsOp(matchItem.getMid(), true);
 		OpList list = new OpList(OpListType.GidUnique);
 		Op avgOp = null;
 		for (Op op : ops)
 		{
-			if("0".equals(op.getGid()))
+			if ("0".equals(op.getGid()))
 			{
 				avgOp = op;
-			}
-			else
+			} else
 			{
 				list.add(op);
-			}			
+			}
 		}
-		
-		if(avgOp == null || list.isEmpty())
+
+		if (avgOp == null || list.isEmpty())
 		{
 			return null;
 		}
-		
+
 		return predict(avgOp, list);
 	}
 
@@ -79,7 +79,7 @@ public class SoccerPredict
 
 			// 计算数据
 			prob = computeCorpProb(element, avgOp, op);
-			if(prob == null)
+			if (prob == null)
 			{
 				continue;
 			}
@@ -106,16 +106,16 @@ public class SoccerPredict
 		int num = 0;
 		for (CorpRegionStatElement regionElement : element)
 		{
-			//不对全局进行验证
-			if(regionElement.getMin() < 0.5)
+			// 不对全局进行验证
+			if (regionElement.getMin() < 0.5)
 			{
 				continue;
 			}
 			// Do something.
 			if (regionElement.contains(winodds))
 			{
-				num ++;
-				//logger.info(winodds + ", Compute Region: " + regionElement);
+				num++;
+				// logger.info(winodds + ", Compute Region: " + regionElement);
 				float[] winvars = regionElement.getWinVar().getVars();
 				float[] drawvars = regionElement.getDrawVar().getVars();
 				float[] losevars = regionElement.getLoseVar().getVars();
@@ -123,31 +123,32 @@ public class SoccerPredict
 				winProb += computeRelationValue(diff, winvars);
 				drawProb += computeRelationValue(diff, drawvars);
 				loseProb += computeRelationValue(diff, losevars);
-				
-				if(weight < regionElement.getMatchNum())
+
+				if (weight < regionElement.getMatchNum())
 				{
 					weight = regionElement.getMatchNum();
 				}
 			}
 		}
-		
-		if(num <= 0)
+
+		if (num <= 0)
 		{
 			return null;
-		}		
+		}
 		winProb = normalize(winProb / num);
 		drawProb = normalize(drawProb / num);
 		loseProb = normalize(loseProb / num);
-		//logger.info("WinProb: " + winProb + ", DrawProb: " + drawProb + ", LoseProb: " + loseProb);
+		// logger.info("WinProb: " + winProb + ", DrawProb: " + drawProb + ", LoseProb:
+		// " + loseProb);
 		MatchCorpProb prob = new MatchCorpProb(op.getMid());
 		prob.setGid(op.getGid());
 		prob.setName(op.getGname());
-		prob.setProb(winProb,  drawProb,  loseProb);
+		prob.setProb(winProb, drawProb, loseProb);
 		prob.setWeight(weight);
 		return prob;
-		//logger.info(op);
+		// logger.info(op);
 	}
-	
+
 	protected double normalize(double prob)
 	{
 		return 0.5 + prob * 0.5;
@@ -169,10 +170,8 @@ public class SoccerPredict
 	/**
 	 * 计算相关系数
 	 * 
-	 * @param diffVals
-	 *            与平均数的差值，这里是一个6位长度的数组
-	 * @param vars
-	 *            预先计算的方差值，这里是一个12位长度的数组
+	 * @param diffVals 与平均数的差值，这里是一个6位长度的数组
+	 * @param vars     预先计算的方差值，这里是一个12位长度的数组
 	 * @return
 	 */
 	protected double computeRelationValue(float[] diffVals, float[] vars)
@@ -180,7 +179,8 @@ public class SoccerPredict
 		double p = 0.0;
 		double std1 = 0.0;
 		double std2 = 0.0;
-		//logger.info("Diff: " + Arrays.toString(diffVals) + ", Vars: " + Arrays.toString(vars));
+		// logger.info("Diff: " + Arrays.toString(diffVals) + ", Vars: " +
+		// Arrays.toString(vars));
 		for (int i = 0; i < diffVals.length; i++)
 		{
 			int st = i < 3 ? 0 : 3;
@@ -188,14 +188,13 @@ public class SoccerPredict
 			std1 += diffVals[i] * diffVals[i];
 			std2 += vars[i + st] * vars[i + st];
 		}
-		if(std1 == 0 || std2 == 0)
+		if (std1 == 0 || std2 == 0)
 		{
 			p = 0.0;
-		}
-		else
+		} else
 		{
 			p /= (Math.sqrt(std1) * Math.sqrt(std2));
-			if(p == Double.NaN)
+			if (p == Double.NaN)
 			{
 				p = 0.0;
 			}
@@ -232,7 +231,7 @@ public class SoccerPredict
 
 		// 清洗掉不需要的数据
 		shuffle();
-		
+
 		logger.info("There are " + elements.size() + " basic corporate.");
 	}
 
