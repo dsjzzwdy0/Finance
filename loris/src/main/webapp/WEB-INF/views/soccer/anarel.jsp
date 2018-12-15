@@ -105,12 +105,12 @@ function createMatchOddsTable(conf)
 		error: null,
 		presuccess: function(json, soccerTable)
 		{
-			if ($.isNotNullOrEmpty(json.data.setting)) {
+			if ($.isNotNullOrEmpty(json.data) && $.isNotNullOrEmpty(json.data.setting)) {
 				var corpSetting = new CorpSetting(json.data.setting);
 				soccerTable.options.setting = corpSetting;
 				soccerTable.options.columns = new SoccerTableColumns().createCorpSettingColumns(corpSetting);
 			}
-			if ($.isNotNullOrEmpty(json.data.matches)) {
+			if ($.isNotNullOrEmpty(json.data) && $.isNotNullOrEmpty(json.data.matches)) {
 				soccerTable.options.rows = json.data.matches;
 				initLeaguePanel(json.data.matches);
 			}

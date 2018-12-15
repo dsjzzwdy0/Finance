@@ -2549,6 +2549,18 @@ public class SoccerManager
 	
 	/**
 	 * 获得比赛数据的概率
+	 * @param gid
+	 * @return
+	 */
+	public List<MatchCorpProb> getMatchCorpProbsByCorp(List<String> gids)
+	{
+		EntityWrapper<MatchCorpProb> ew = new EntityWrapper<>();
+		ew.in("gid", gids);
+		return matchCorpProbService.selectList(ew);
+	}
+	
+	/**
+	 * 获得比赛数据的概率
 	 * @param mid
 	 * @return
 	 */

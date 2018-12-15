@@ -419,9 +419,9 @@ function SoccerTableColumns()
 				param: opcorp,
 				indexValue: j,
 				type: 'odds',
-				formatter: function(value, row, index, first){
+				formatter: function(value, row, index, oddsIndex, first){
 					var c = this.param;
-					var j = index;//this.indexValue;
+					var j = oddsIndex;//this.indexValue;
 					var odds = MatchDoc.getOpOdds(row, c.gid);
 					if($.isNullOrEmpty(odds) || $.isNullOrEmpty(odds.values)) return '无';
 					else if($.isNotNullOrEmpty(table.options.relator))
@@ -455,9 +455,9 @@ function SoccerTableColumns()
 				param: ypcorp,
 				indexValue: j,
 				type: 'odds',
-				formatter: function(value, row, index, first){
+				formatter: function(value, row, index, oddsIndex, first){
 					var c = this.param;
-					var j = index;
+					var j = oddsIndex;
 					var odds = MatchDoc.getYpOdds(row, c.gid);
 					if($.isNullOrEmpty(odds)) return '无';
 					else
@@ -944,10 +944,14 @@ function SoccerTable(options)
 					+ 'style="align: center;">');
 			
 			html.push('<div class="th-wrap">');			
-			if ($.isNullOrEmpty(column.name)) {
-				html.push(column.field);
-			} else {
+			if ($.isNotNullOrEmpty(column.name)) {
 				html.push(column.name);
+			}
+			else if ($.isNotNullOrEmpty(column.title)) {
+				html.push(column.title);
+			}
+			else{
+				html.push(column.field);
 			}
 
 			if ((!$.isNullOrEmpty(column.sortable)) && column.sortable) {
@@ -1165,7 +1169,7 @@ function SoccerTable(options)
 		for(var i = 0; i < len; i ++)
 		{
 			var format = formats[i];
-			html.push(this.formatColumnValue(format, row, i, this.options.first));	
+			html.push(this.formatColumnValue(format, row, index, i, this.options.first));	
 		}
 		html.push('</tr>');
 		return html.join('');
@@ -1174,7 +1178,7 @@ function SoccerTable(options)
 	/**
 	 * 格式化字段数据
 	 */
-	this.formatColumnValue = function(format, row, index, first, rowspan)
+	this.formatColumnValue = function(format, row, index, rowIndex, first, rowspan)
 	{
 		var key = format.field;
 		var html = [];
@@ -1198,7 +1202,7 @@ function SoccerTable(options)
 		}
 		else
 		{
-			html.push(format.formatter(row[key], row, format.indexValue, first));
+			html.push(format.formatter(row[key], row, index, format.indexValue, first));
 		}
 		html.push('</td>')
 		return html.join(''); 

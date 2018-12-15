@@ -1,11 +1,14 @@
 package com.loris.ml;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 
 import com.datumbox.framework.common.Configuration;
+import com.datumbox.framework.common.dataobjects.AssociativeArray;
 import com.datumbox.framework.core.common.dataobjects.Dataframe;
 import com.datumbox.framework.core.common.dataobjects.Record;
 import com.datumbox.framework.core.machinelearning.MLBuilder;
@@ -13,10 +16,19 @@ import com.datumbox.framework.core.machinelearning.classification.SoftMaxRegress
 import com.datumbox.framework.core.machinelearning.featureselection.PCA;
 import com.datumbox.framework.core.machinelearning.modelselection.metrics.ClassificationMetrics;
 import com.datumbox.framework.core.machinelearning.preprocessing.MinMaxScaler;
+import com.loris.soccer.bean.item.ScoreItem;
+import com.loris.soccer.bean.stat.MatchCorpProb;
+import com.loris.soccer.bean.table.Match;
+import com.loris.soccer.repository.SoccerManager;
 
 public class SoccerPredict
 {
 	private static Logger logger = Logger.getLogger(SoccerPredict.class);
+	
+	private SoccerManager soccerManager = null;
+	private List<String> gids = new ArrayList<>();
+	private Configuration conf = Configuration.getConfiguration();
+	
 	
 	public static void main(String[] args)
 	{
@@ -28,6 +40,41 @@ public class SoccerPredict
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * 
+	 * @throws IOException
+	 */
+	public Dataframe getDatasets(String start, String end) throws IOException
+	{
+		Dataframe trainingData = new Dataframe(conf);
+		List<Match> matches = soccerManager.getMatches(start, end);
+		List<MatchCorpProb> probs = soccerManager.getMatchCorpProbsByCorp(gids);
+		
+		for (Match match : matches)
+		{
+			ScoreItem item = match.getScoreResult();
+			if(item.getResult() < 0)
+			{
+				continue;
+			}
+ 
+			AssociativeArray xData1 = new AssociativeArray();
+			for (MatchCorpProb prob : probs)
+			{
+				String gid = prob.getGid();
+				double win = prob.getWinprob();
+				double draw = prob.getDrawprob();
+				double lose = prob.getLoseprob();
+				
+				xData1.put(gid + "win", win);
+				xData1.put(gid + "draw", draw);
+				xData1.put(gid + "lose", lose);
+				trainingData.add(new Record(xData1, item.getResult()));
+			}
+		}
+		return trainingData;
 	}
 
 	/**
