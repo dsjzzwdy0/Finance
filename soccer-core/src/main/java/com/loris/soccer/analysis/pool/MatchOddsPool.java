@@ -214,7 +214,8 @@ public class MatchOddsPool
 			MatchOpVariance item = OddsUtil.computeIssueMatchOpVariance(match, ops2.getOps());			
 			variances.add(item);
 		}
-		
+		matches.clear();
+		matches = null;
 		return variances;
 	}
 	

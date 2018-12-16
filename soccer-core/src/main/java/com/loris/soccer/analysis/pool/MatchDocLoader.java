@@ -353,6 +353,8 @@ public class MatchDocLoader
 			list.add(m);
 		}
 		loadMatchOdds(list, mids, gids, oddsType);
+		matchs.clear();
+		matchs = null;
 		return list;
 	}
 
@@ -431,7 +433,9 @@ public class MatchDocLoader
 		loadMatchOdds(list, mids, gids, SoccerConstants.ODDS_TYPE_OP);
 		gids = setting.getCorporateIds(SoccerConstants.DATA_SOURCE_ZGZCW, SoccerConstants.ODDS_TYPE_YP);
 		loadMatchOdds(list, mids, gids, SoccerConstants.ODDS_TYPE_YP);
-
+		
+		matchs.clear();
+		matchs = null;
 		return list;
 	}
 
@@ -493,6 +497,8 @@ public class MatchDocLoader
 		gids = setting.getCorporateIds(SoccerConstants.DATA_SOURCE_ZGZCW, SoccerConstants.ODDS_TYPE_YP);
 		loadMatchOdds(list, mids, gids, SoccerConstants.ODDS_TYPE_YP);
 
+		matchs.clear(); 
+		matchs = null;
 		return list;
 	}
 
@@ -517,6 +523,8 @@ public class MatchDocLoader
 		loadMatchOdds(list, mids, gids, SoccerConstants.ODDS_TYPE_OP);
 		gids = setting.getCorporateIds(SoccerConstants.DATA_SOURCE_ZGZCW, SoccerConstants.ODDS_TYPE_YP);
 		loadMatchOdds(list, mids, gids, SoccerConstants.ODDS_TYPE_YP);
+		matchs.clear();
+		matchs = null;
 		return list;
 	}
 
