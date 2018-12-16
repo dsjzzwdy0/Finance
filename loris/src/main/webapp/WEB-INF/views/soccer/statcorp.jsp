@@ -5,21 +5,6 @@
 <%@page import="com.baomidou.mybatisplus.toolkit.StringUtils" %>
 
 <link rel="stylesheet" type="text/css" href="../content/css/soccer/datacenter.css" />
-<%
-    String issue = request.getParameter("issue");
-	String type = request.getParameter("type");
-	
-	if(StringUtils.isEmpty(issue))
-	{
-		issue = IssueMatchUtil.getCurrentIssue();
-	}
-	if(StringUtils.isEmpty(type))
-	{
-		type = "bd";
-	}
-%>
-
-<link rel="stylesheet" type="text/css" href="../content/css/soccer/datacenter.css" />
 <link rel="stylesheet" type="text/css" href="../content/scripts/soccer/soccer-table.css" />
 <script type="text/javascript" src="../content/scripts/soccer/soccer-table.js"></script>
 
@@ -41,6 +26,96 @@
 var url = "../soccerdata/getCorpStatItems"
 
 
+function CorpStatItemsSorter(field, asc, fieldName)
+{
+	this.field = field;
+	this.asc = asc;
+	this.element = null;
+	this.fieldName = fieldName;
+
+	this.setSorter = function(field, asc, element)
+	{
+		this.field = field;
+		this.asc = asc;
+		this.element = element;
+		if($.isNotNullOrEmpty(element))
+			this.fieldName = element.parent().text();
+	}
+	
+	this.compare = function(a, b)
+	{
+		var aValue = this.getFieldValue(a);
+		var bValue = this.getFieldValue(b);
+		
+		var r =0;
+		if($.isNullOrEmpty(bValue))
+		{
+			r = 1;
+		}
+		else if($.isNullOrEmpty(aValue))
+		{
+			r = -1;
+		}
+		else
+		{
+			r = (aValue > bValue) ? 1 : (aValue < bValue) ? -1 : 0;
+		}
+		return this.asc ? r : -r;
+	}
+
+	this.getFieldValue = function(rec)
+	{
+		var opVar = null;
+		switch(this.field)
+		{
+		case 'baseOpVar':
+			opVar = rec.baseOpVar;
+			break;
+		case 'winOpVar':
+			opVar = rec.winOpVar;
+			break;
+	    case 'drawOpVar':
+			opVar = rec.drawOpVar;
+			break;
+		case 'loseOpVar':
+			opVar = rec.loseOpVar;
+			break;
+		default:
+			break;
+		}
+		if($.isNullOrEmpty(opVar))
+		{
+			return rec;
+		}
+		var v;
+		switch(this.fieldName){
+		case '数场':
+			v = opVar.num;
+			break;
+		case '胜差':
+			v = opVar.vars[0];
+			break;
+		case '平差':
+			v = opVar.vars[1];
+			break;
+		case '负差':
+			v = opVar.vars[2];
+			break;
+		case '胜方差':
+			v = opVar.vars[3];
+			break;
+		case '平方差':
+			v = opVar.vars[4];
+			break;
+		case '负方差':
+			v = opVar.vars[5];
+			break;
+		}
+		return v;
+	}
+}
+
+//数据列表
 var columns = [
 	[{
        	field: 'name',
@@ -330,7 +405,7 @@ var columns = [
 
 var options = { 
 	refresh: false,	
-	sorter: null,
+	sorter: new CorpStatItemsSorter('baseOpVar', true, null),
 	relator: null,
 	rows: null,
 	results: null,
@@ -384,327 +459,6 @@ function createStatCorpTables()
 	options.source = source;
 	table = new SoccerTable(options);
 	$('#gridTable').soccerTable(table);
-}
-
-function getCorpStatItems(request)
-{
-	$.ajax({
-		type: "GET",
-		url: url,
-		contentType : "application/json;charset=utf-8",
-		dataType : "json",
-        success : function (msg)
-        {
-			var corps = msg.data;
-			request.success({
-                row : corps
-            });
-            $('#gridTable').bootstrapTable('load', corps);
-        },
-		error:function(){
-			layer.msg("错误");
-		}
-    });
-}
-
-function initTable() 
-{
-	//先销毁表格  
-	$('#gridTable').bootstrapTable('destroy');
-	$("#gridTable").bootstrapTable({ 
-		ajax: getCorpStatItems,
-		striped: false, //表格显示条纹 
-		pagination: false, //启动分页 
-		search: false, //是否启用查询 
-		showColumns: false, //显示下拉框勾选要显示的列 
-		showRefresh: false, //显示刷新按钮 
-		sidePagination: "server", //表示服务端请求 
-		//toolbar: "#toolbar",
-		//设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder 
-		//设置为limit可以获取limit, offset, search, sort, order 
-		queryParamsType : "undefined",		
-		columns: [
-		[{
-	       	field: 'name',
-	       	title: '序号',
-	       	sortable: true,
-	       	rowspan: 2,
-	       	formatter: function(value, row, index)
-     		{
-     			return index + 1;
-     		}
-	    },
-		{
-        	field: 'name',
-         	title: '公司名称',
-         	sortable: true,
-         	rowspan: 2,
-     	},
-     	{
-        	field: 'baseOpVar',
-        	sortable: true,
-        	title: '全部比赛',
-        	colspan: 6,
-        	formatter: function(value, row, index)
-     		{
-     			return value.num;
-     		}
-    	},
-     	{
-     		field: 'winOpVar',
-     		sortable: true,
-        	title: '胜比赛',
-        	colspan: 6,
-        	formatter: function(value, row, index)
-     		{
-     			return value.num;
-     		}
-     	},
-     	{
-     		field: 'drawOpVar',
-     		sortable: true,
-        	title: '平比赛',
-        	colspan: 6,
-        	formatter: function(value, row, index)
-     		{
-     			return value.num;
-     		}
-     	},
-     	{
-     		field: 'loseOpVar',
-     		sortable: true,
-        	title: '负比赛',
-        	colspan: 6,
-        	formatter: function(value, row, index)
-     		{
-     			return value.num;
-     		}
-     	}],
-     	[{
-     		field: 'baseOpVar',
-            sortable: true,
-            title: '胜差',
-            formatter: function(value, row, index)
-         	{
-            	return formatVars(value.vars, 0);
-         	}
-     	},
-     	{
-     		field: 'baseOpVar',
-            sortable: true,
-            title: '平差',
-            formatter: function(value, row, index)
-         	{
-            	return formatVars(value.vars, 1);
-         	}
-     	},
-     	{
-     		field: 'baseOpVar',
-            sortable: true,
-            title: '负差',
-            formatter: function(value, row, index)
-         	{
-            	return formatVars(value.vars, 2);
-         	}
-     	},
-     	{
-     		field: 'baseOpVar',
-            sortable: true,
-            title: '胜方差',
-            formatter: function(value, row, index)
-         	{
-            	return formatVars(value.vars, 3);
-         	}
-     	},
-     	{
-     		field: 'baseOpVar',
-            sortable: true,
-            title: '平方差',
-            formatter: function(value, row, index)
-         	{
-            	return formatVars(value.vars, 4);
-         	}
-     	},
-     	{
-     		field: 'baseOpVar',
-            sortable: true,
-            title: '负方差',
-            formatter: function(value, row, index)
-         	{
-            	return formatVars(value.vars, 5);
-         	}
-     	},
-     	{
-     		field: 'winOpVar',
-            sortable: true,
-            title: '胜差',
-            formatter: function(value, row, index)
-         	{
-            	return formatVars(value.vars, 0);
-         	}
-     	},
-     	{
-     		field: 'winOpVar',
-            sortable: true,
-            title: '平差',
-            formatter: function(value, row, index)
-         	{
-            	return formatVars(value.vars, 1);
-         	}
-     	},
-     	{
-     		field: 'winOpVar',
-            sortable: true,
-            title: '负差',
-            formatter: function(value, row, index)
-         	{
-            	return formatVars(value.vars, 2);
-         	}
-     	},
-     	{
-     		field: 'winOpVar',
-            sortable: true,
-            title: '胜方差',
-            formatter: function(value, row, index)
-         	{
-            	return formatVars(value.vars, 3);
-         	}
-     	},
-     	{
-     		field: 'winOpVar',
-            sortable: true,
-            title: '平方差',
-            formatter: function(value, row, index)
-         	{
-            	return formatVars(value.vars, 4);
-         	}
-     	},
-     	{
-     		field: 'winOpVar',
-            sortable: true,
-            title: '负方差',
-            formatter: function(value, row, index)
-         	{
-            	return formatVars(value.vars, 5);
-         	}
-     	},
-     	{
-     		field: 'drawOpVar',
-            sortable: true,
-            title: '胜差',
-            formatter: function(value, row, index)
-         	{
-            	return formatVars(value.vars, 0);
-         	}
-     	},
-     	{
-     		field: 'drawOpVar',
-            sortable: true,
-            title: '平差',
-            formatter: function(value, row, index)
-         	{
-            	return formatVars(value.vars, 1);
-         	}
-     	},
-     	{
-     		field: 'drawOpVar',
-            sortable: true,
-            title: '负差',
-            formatter: function(value, row, index)
-         	{
-            	return formatVars(value.vars, 2);
-         	}
-     	},
-     	{
-     		field: 'drawOpVar',
-            sortable: true,
-            title: '胜方差',
-            formatter: function(value, row, index)
-         	{
-            	return formatVars(value.vars, 3);
-         	}
-     	},
-     	{
-     		field: 'drawOpVar',
-            sortable: true,
-            title: '平方差',
-            formatter: function(value, row, index)
-         	{
-            	return formatVars(value.vars, 4);
-         	}
-     	},
-     	{
-     		field: 'drawOpVar',
-            sortable: true,
-            title: '负方差',
-            formatter: function(value, row, index)
-         	{
-            	return formatVars(value.vars, 5);
-         	}
-     	},
-     	{
-     		field: 'loseOpVar',
-            sortable: true,
-            title: '胜差',
-            formatter: function(value, row, index)
-         	{
-            	return formatVars(value.vars, 0);
-         	}
-     	},
-     	{
-     		field: 'loseOpVar',
-            sortable: true,
-            title: '平差',
-            formatter: function(value, row, index)
-         	{
-            	return formatVars(value.vars, 1);
-         	}
-     	},
-     	{
-     		field: 'loseOpVar',
-            sortable: true,
-            title: '负差',
-            formatter: function(value, row, index)
-         	{
-         		return formatVars(value.vars, 2);
-         	}
-     	},
-     	{
-     		field: 'loseOpVar',
-            sortable: true,
-            title: '胜方差',
-            formatter: function(value, row, index)
-         	{
-            	return formatVars(value.vars, 3);
-         	}
-     	},
-     	{
-     		field: 'loseOpVar',
-            sortable: true,
-            title: '平方差',
-            formatter: function(value, row, index)
-         	{
-            	return formatVars(value.vars, 4);
-         	}
-     	},
-     	{
-     		field: 'loseOpVar',
-            sortable: true,
-            title: '负方差',
-            formatter: function(value, row, index)
-         	{
-         		return formatVars(value.vars, 5);
-         	}
-     	}]
-		],
-		onLoadSuccess: function(){ //加载成功时执行 
-		    layer.msg("加载成功");
-			//$("#cusTable").TabStyle();
-		}, 
-		onLoadError: function(){ //加载失败时执行 
-			layer.msg("加载数据失败", {time : 1500, icon : 2}); 
-		} 
-	});	
 }
 
 function formatVars(vars, index)

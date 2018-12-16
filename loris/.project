@@ -10,6 +10,7 @@
 		<project>soccer-core</project>
 		<project>loris-base</project>
 		<project>loris-soccer</project>
+		<project>loris-ml</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

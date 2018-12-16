@@ -253,19 +253,21 @@ function FieldSorter(fields, asc)
 }
 
 //排序器
-function MatchOddsFieldSorter(field, asc)
+function MatchOddsFieldSorter(field, asc, element)
 {
 	this.field = field;
 	this.asc = asc;
+	this.element = element;
 	
 	this.setField = function(value)
 	{
 		this.field = value;
 	}
-	this.setSorter = function(field, asc)
+	this.setSorter = function(field, asc, element)
 	{
 		this.field = field;
 		this.asc = asc;
+		this.element = element;
 	}
 	this.compare = function(a, b)
 	{
@@ -1005,7 +1007,7 @@ function SoccerTable(options)
 	this.resortDataList = function()
 	{
 		var sorter = this.getSorter();
-		this.options.sorter.setSorter(sorter.field, sorter.asc);
+		this.options.sorter.setSorter(sorter.field, sorter.asc, sorter.element);
 		this.formatColumns(this.$body);
 		//layer.msg('重新排序, Field: ' + sorter.field + ', Asc: ' + sorter.asc);
 	}
@@ -1016,6 +1018,7 @@ function SoccerTable(options)
 	this.getSorter = function()
 	{
 		var sorter = {
+			element: null,
 			field: '',
 			asc: false
 		};
@@ -1024,11 +1027,13 @@ function SoccerTable(options)
 			{
 				sorter.field = $(this).attr('data-field');
 				sorter.asc = false;
+				sorter.element = $(this).parent();
 			}
 			else if($(this).hasClass('sorting-up'))
 			{
 				sorter.field = $(this).attr('data-field');
 				sorter.asc = true;
+				sorter.element = $(this).parent();
 			}
 		});
 		return sorter;

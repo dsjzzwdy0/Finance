@@ -129,14 +129,22 @@ public class SoccerDataController
 	 */
 	@ResponseBody
 	@RequestMapping("/getMatchesOpVar")
-	public Rest getMatchesOpVariance(String issue)
+	public Rest getMatchesOpVariance(String issue, String type)
 	{
 		if(StringUtils.isEmpty(issue))
 		{
 			return Rest.failure("The date has not been initialized, please set the date value.");
 		}
 		
-		List<MatchOpVariance> variances = MatchOddsPool.computeBdMatchsOpVariance(issue);
+		List<MatchOpVariance> variances = null;
+		if("jc".equalsIgnoreCase(type))
+		{
+			variances = MatchOddsPool.computeJcMatchsOpVariance(issue);
+		}
+		else
+		{
+			variances = MatchOddsPool.computeBdMatchsOpVariance(issue);
+		}
 		if(variances != null && variances.size() >= 0)
 		{
 			return Rest.okData(variances);
