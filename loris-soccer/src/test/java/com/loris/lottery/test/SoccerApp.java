@@ -236,7 +236,7 @@ public class SoccerApp
 			//testUploadDataSchecduler(context);
 			// testDownloadOkoooOpWebPage(context);
 			//testDownloadLiveJcWebPage(context);
-			testComputeCorpStat(context);
+			//testComputeCorpStat(context);
 			
 			//testMatchPredict(context);
 			
@@ -244,7 +244,7 @@ public class SoccerApp
 			//testDownloadEastSoccer(context);
 			//testOkoooChileYpParser(context);
 			
-			//testGetAnnotation(context);
+			testGetAnnotation(context);
 
 			close();
 			// context = null;
