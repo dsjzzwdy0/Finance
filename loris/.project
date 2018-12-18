@@ -9,8 +9,8 @@
 		<project>htmlunit</project>
 		<project>soccer-core</project>
 		<project>loris-base</project>
-		<project>loris-soccer</project>
 		<project>loris-ml</project>
+		<project>loris-soccer</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
