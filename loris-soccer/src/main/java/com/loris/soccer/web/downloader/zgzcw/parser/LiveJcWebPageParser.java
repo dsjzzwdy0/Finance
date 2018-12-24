@@ -87,7 +87,6 @@ public class LiveJcWebPageParser extends AbstractWebPageParser
 		String matchtime;
 		//String score;
 		//String halfscore;
-
 		
 		Elements es = element.children();
 		
