@@ -1147,12 +1147,12 @@ function SoccerTable(options)
 			
 			if(format.type == 'odds')
 			{
-				row1.push(this.formatColumnValue(format, row, index, true));
-				row2.push(this.formatColumnValue(format, row, index, false));
+				row1.push(this.formatColumnValue(format, row, index, index, true));
+				row2.push(this.formatColumnValue(format, row, index, index, false));
 			}
 			else
 			{
-				row1.push(this.formatColumnValue(format, row, index, false, 2));
+				row1.push(this.formatColumnValue(format, row, index, index, false, 2));
 			}
 		}
 		row1.push('</tr>');
