@@ -2,9 +2,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.gargoylesoftware.htmlunit</groupId>
-	<artifactId>htmlunit</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<groupId>com.loris</groupId>
+	<artifactId>loris-htmlunit</artifactId>
+	<version>${loris.version}</version>
 	<packaging>jar</packaging>
 
 	<name>htmlunit</name>
@@ -14,6 +14,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.out>d:/workspace/finance/</project.out>
 		<!-- As a property, as it is included in Checkstyle build -->
+		<loris.version>1.0.0</loris.version>
         <checkstyle.version>8.8</checkstyle.version>
         <jetty.version>9.4.9.v20180320</jetty.version>
         <selenium.version>3.11.0</selenium.version>

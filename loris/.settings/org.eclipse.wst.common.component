@@ -5,16 +5,16 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/webapp"/>
-        <dependent-module archiveName="loris-soccer.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/loris-soccer/loris-soccer">
+        <dependent-module archiveName="loris-base-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/loris-base/loris-base">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="htmlunit.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/htmlunit/htmlunit">
+        <dependent-module archiveName="loris-htmlunit-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/loris-htmlunit/loris-htmlunit">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="loris-ml.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/loris-ml/loris-ml">
+        <dependent-module archiveName="loris-soccer-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/loris-soccer/loris-soccer">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="loris-base.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/loris-base/loris-base">
+        <dependent-module archiveName="loris-ml-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/loris-ml/loris-ml">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="context-root" value="loris"/>

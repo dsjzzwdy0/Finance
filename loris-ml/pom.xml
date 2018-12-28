@@ -3,9 +3,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>loris-ml</groupId>
+	<groupId>com.loris</groupId>
 	<artifactId>loris-ml</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>${loris.version}</version>
 	<packaging>jar</packaging>
 
 	<name>loris-ml</name>
@@ -16,6 +16,7 @@
 		<!-- Code Dependencies -->
         <datumbox-framework-lib-version>0.8.1</datumbox-framework-lib-version>
         <logback-classic-version>1.2.3</logback-classic-version>
+        <loris.version>1.0.0</loris.version>
 	</properties>
 
 	<dependencies>
@@ -25,13 +26,7 @@
 			<artifactId>datumbox-framework-lib</artifactId>
 			<version>${datumbox-framework-lib-version}</version>
 		</dependency>
-		
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>${logback-classic-version}</version>
-		</dependency>
-		
+				
 		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-csv -->
 		<dependency>
 		    <groupId>org.apache.commons</groupId>
