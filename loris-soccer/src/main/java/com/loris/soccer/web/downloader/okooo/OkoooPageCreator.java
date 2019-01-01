@@ -20,6 +20,7 @@ public class OkoooPageCreator
 		"http://www.okooo.com/soccer/match/",
 		"http://www.okooo.com/soccer/match/", //1023935/ah/ajax/?page=2&trnum=60&companytype=BaijiaBooks
 		"http://www.okooo.com/danchang/",
+		"http://www.okooo.com/soccer/league/",
 	};
 	
 	public static final String[] PAGE_TYPES = {
@@ -29,7 +30,8 @@ public class OkoooPageCreator
 		"opchange",
 		"ypchange",
 		"yppage",
-		"bd"
+		"bd",
+		"curround"
 	};
 	
 	
@@ -59,6 +61,7 @@ public class OkoooPageCreator
 		return page;
 	}
 	
+	
 	/**
 	 * 创建主页面
 	 * 
@@ -83,6 +86,8 @@ public class OkoooPageCreator
 
 		return page;
 	}
+	
+	
 	
 	/**
 	 * 创建亚盘数据下载页面
@@ -206,6 +211,21 @@ public class OkoooPageCreator
 		page.addHeader(OKOOO_HEADER_REFERER, baseURL);				
 		return page;
 		//ajax/?page=1&trnum=30&companytype=BaijiaBooks&type=1
+	}
+	
+	/**
+	 * 创建基础数据页面
+	 * @param lid
+	 * @return
+	 */
+	public static OkoooWebPage createLeaguePage(String lid)
+	{
+		int typeIndex = 7;
+		OkoooWebPage page = new OkoooWebPage();
+		setBasicParams(page, typeIndex);
+		page.setMid(lid);
+		page.setUrl(PAGE_URLS[typeIndex] + lid + "/");
+		return page;
 	}
 	
 	

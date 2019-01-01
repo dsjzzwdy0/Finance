@@ -145,6 +145,13 @@
 		        <description>从澳客网上下载当天竞彩、北单足球亚盘动态数据</description>
 		    </webpagesetting>
 		    
+		    <webpagesetting id="okdata" encoding="UTF-8">
+		        <name>澳客实时数据</name>
+		        <interval>5500</interval>
+		        <clazz>com.loris.soccer.web.downloader.okooo.loader.OkoooMatchDownloaer</clazz>
+		        <description>从澳客网上下载最近的竞彩、北单足球欧赔、亚盘数据</description>
+		    </webpagesetting>
+		    
 	        <webpagesetting id="zcround" encoding="UTF-8">
 		        <name>比赛结果数据</name>
 		        <interval>4500</interval>

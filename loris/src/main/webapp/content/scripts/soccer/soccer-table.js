@@ -379,7 +379,7 @@ function SoccerTableColumns()
 			rowspan: rowspan,
 			type: 'base',
 			formatter: function(value, row, index){
-				return '<a href="analeague?type=leaguerel&mid=' + row.mid + '" class="leagueInfo">' + value + '</a>';
+				return '<a href="javascript:void(0);" onclick="openLeagueRel(\'' + row.mid + '\', \'' + row.source + '\')" class="leagueInfo">' + value + '</a>';
 			},
 		}
 		var col2 = {
@@ -1046,6 +1046,7 @@ function SoccerTable(options)
 	{
 		if($.isNullOrEmpty(this.options.rows))
 		{
+			$(tbody).html('没有数据，请检查系统或联系管理员。');
 			return;
 		}
 		else

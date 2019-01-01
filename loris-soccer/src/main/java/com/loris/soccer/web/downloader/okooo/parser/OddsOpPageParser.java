@@ -14,6 +14,7 @@ import com.loris.base.util.NumberUtil;
 import com.loris.base.web.page.WebPage;
 import com.loris.base.web.parser.AbstractWebPageParser;
 import com.loris.soccer.bean.SoccerConstants;
+import com.loris.soccer.bean.item.MatchItem;
 import com.loris.soccer.bean.okooo.OkoooOp;
 import com.loris.soccer.bean.table.Match;
 import com.loris.soccer.web.downloader.okooo.page.OkoooWebPage;
@@ -30,7 +31,7 @@ public class OddsOpPageParser extends AbstractWebPageParser
 	List<OkoooOp> ops = new ArrayList<>();
 	
 	/** 比赛信息  */
-	Match match;
+	MatchItem match;
 	
 	/** 比赛编号 */
 	String mid;
@@ -51,14 +52,15 @@ public class OddsOpPageParser extends AbstractWebPageParser
 		this.ops = ops;
 	}
 
-	public Match getMatch()
+	public MatchItem getMatch()
 	{
 		return match;
 	}
 
-	public void setMatch(Match match)
+	public void setMatch(MatchItem match)
 	{
 		this.match = match;
+		this.matchTime = DateUtil.tryToParseDate(match.getMatchtime());
 	}
 
 	public String getMid()
@@ -125,18 +127,23 @@ public class OddsOpPageParser extends AbstractWebPageParser
 		}
 		
 		//解析比赛信息
-		Element matchEl = doc.selectFirst(".container_wrapper .qbox");
+		Element matchEl = doc.selectFirst(".matchnavboxbg .qbox");
 		if(matchEl == null)
 		{
 			return false;
 		}		
-		parseMatchInfo(matchEl);
+		//parseMatchInfo(matchEl);
 		
 		//解析百家欧赔数据
 		Elements oddsEls = doc.select("#data_main_content table tbody tr");
 		for (Element element : oddsEls)
 		{
-			parseOddsOp(element);
+			try
+			{
+				parseOddsOp(element);
+			}
+			catch (Exception e) {
+			}
 		}
 		
 		//解析一共有多少家公司
@@ -184,13 +191,13 @@ public class OddsOpPageParser extends AbstractWebPageParser
 		op.setGid(gid);
 		op.setGname(gname);
 		//op.setIsfirst(true);
-		op.setIsend(false);
+		//op.setIsend(false);
 		op.setFirstwinodds(firstwinodds);
 		op.setFirstdrawodds(firstdrawodds);
 		op.setFirstloseodds(firstloseodds);
 		
 		Date d = DateUtil.add(matchTime, - ((long) firsttime) * 1000);
-		op.setFirsttime(DateUtil.DATE_TIME_FORMAT.format(d));		
+		op.setFirsttime(DateUtil.DATE_TIME_FORMAT.format(d));
 		//ops.add(op);
 		
 		//以下为最新赔率值
@@ -242,8 +249,8 @@ public class OddsOpPageParser extends AbstractWebPageParser
 		op.setDrawkelly(drawkelly);
 		op.setLosekelly(losekelly);
 		op.setLossratio(lossratio);
-		op.setIsend(false);
-		op.setIsfirst(false);
+		//op.setIsend(false);
+		//op.setIsfirst(false);
 		op.setOddstype("op");
 		op.setSource(SoccerConstants.DATA_SOURCE_OKOOO);
 				
@@ -261,10 +268,10 @@ public class OddsOpPageParser extends AbstractWebPageParser
 		String round;
 		//String leaguename;
 		String lid;
-		String season;
+		//String season;
 		//String seasonName;
 		String matchtime;
-		String score;
+		//String score;
 		
 		Elements elements = element.children();
 		if(elements.size() < 2)
@@ -285,7 +292,7 @@ public class OddsOpPageParser extends AbstractWebPageParser
 		//leaguename = els2.get(0).text();
 		lid = getLastNumberValue(els2.get(0).attr("href"));
 		//seasonName = els2.get(1).text();
-		season = getLastNumberValue(els2.get(1).attr("href"));
+		//season = getLastNumberValue(els2.get(1).attr("href"));
 		
 		round = els.get(1).text();
 		if(StringUtils.isNotEmpty(round))
@@ -316,14 +323,14 @@ public class OddsOpPageParser extends AbstractWebPageParser
 		
 		Element e2 = e1.selectFirst(".vs");
 		els = e2.select("span");
-		if(els == null || els.size() < 2)
+		/*if(els == null || els.size() < 2)
 		{
 			score = "";
 		}
 		else
 		{
 			score = els.get(0).text() + ":" + els.get(1).text();
-		}
+		}*/
 		
 		
 		if(match == null)
@@ -333,9 +340,9 @@ public class OddsOpPageParser extends AbstractWebPageParser
 		match.setMid(mid);
 		match.setLid(lid);
 		match.setMatchtime(matchtime);
-		match.setSeason(season);
-		match.setRound(round);
-		match.setScore(score);
+		//match.setSeason(season);
+		//match.setRound(round);
+		//match.setScore(score);
 	}
 	
 	/**

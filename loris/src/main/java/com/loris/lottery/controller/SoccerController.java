@@ -24,10 +24,12 @@ import com.loris.base.util.DateUtil;
 import com.loris.lottery.util.WebConstants;
 import com.loris.soccer.analysis.element.RankElement;
 import com.loris.soccer.analysis.util.PerformanceUtil;
+import com.loris.soccer.bean.SoccerConstants;
 import com.loris.soccer.bean.table.CorpSetting;
 import com.loris.soccer.bean.table.JcMatch;
 import com.loris.soccer.bean.table.League;
 import com.loris.soccer.bean.table.Logo;
+import com.loris.soccer.bean.table.Match;
 import com.loris.soccer.bean.table.Op;
 import com.loris.soccer.bean.table.Round;
 import com.loris.soccer.bean.table.Season;
@@ -35,6 +37,7 @@ import com.loris.soccer.bean.table.SeasonTeam;
 import com.loris.soccer.bean.table.Yp;
 import com.loris.soccer.bean.view.MatchInfo;
 import com.loris.soccer.bean.view.RankInfo;
+import com.loris.soccer.repository.OkoooSqlHelper;
 import com.loris.soccer.repository.SoccerManager;
 
 @Controller
@@ -90,6 +93,9 @@ public class SoccerController extends BaseController
 	/** 数据管理器 */
 	@Autowired
 	private SoccerManager soccerManager;
+	
+	@Autowired
+	private OkoooSqlHelper sqlHelper;
 
 	/**
 	 * Create a new instance of SoccerManager.
@@ -194,13 +200,21 @@ public class SoccerController extends BaseController
 	 * @return
 	 */
 	@RequestMapping("/analeague")
-	public ModelAndView getLeagueAnalysisPage(String type, String mid, Round round)
+	public ModelAndView getLeagueAnalysisPage(String type, String mid, Round round, String source)
 	{
 		String info = "";
 		int index = getLeaguePageIndex(type);
 		if (StringUtils.isNotEmpty(mid))
 		{
-			MatchInfo m = soccerManager.getMatchInfo(mid);
+			Match m = null;			
+			if(SoccerConstants.DATA_SOURCE_OKOOO.equalsIgnoreCase(source))
+			{
+				m = sqlHelper.getOkoooMatch(mid);
+			}
+			else
+			{
+				m = soccerManager.getMatch(mid);
+			}
 			if (m == null)
 			{
 				info = "There is no match in database of mid value '" + mid + "'";

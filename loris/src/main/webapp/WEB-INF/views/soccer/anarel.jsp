@@ -82,6 +82,12 @@ var options = {
 	}
 };
 
+function openLeagueRel(mid, source)
+{
+	var sid = $('#settingSel').val();
+	window.open('analeague?type=leaguerel&mid=' + mid + '&source=' + source + '&sid=' + sid);
+}
+
 //用于获得配置数据
 function createMatchOddsTable(conf)
 {
@@ -113,7 +119,7 @@ function createMatchOddsTable(conf)
 			if ($.isNotNullOrEmpty(json.data) && $.isNotNullOrEmpty(json.data.matches)) {
 				soccerTable.options.rows = json.data.matches;
 				initLeaguePanel(json.data.matches);
-			}
+			}			
 		},
 		complete: function(){
 			$('#gridTable tbody .relation').off('click').on('click', function(){

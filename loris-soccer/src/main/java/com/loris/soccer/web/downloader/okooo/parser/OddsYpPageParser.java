@@ -64,7 +64,7 @@ public class OddsYpPageParser extends AbstractWebPageParser
 		
 		if(!(OkoooPageCreator.PAGE_TYPES[2].equalsIgnoreCase(page.getType())))
 		{
-			logger.info("The page " + page.toString() + " is not the '" + OkoooPageCreator.PAGE_TYPES[4] + "'");
+			logger.info("The page " + page.toString() + " is not the '" + OkoooPageCreator.PAGE_TYPES[2] + "'");
 			return false;
 		}
 		

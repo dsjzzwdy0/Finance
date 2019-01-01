@@ -8,6 +8,7 @@
 <%
 	League league = (League)request.getAttribute("league");
 	Round round = (Round)request.getAttribute("round");
+	String source = request.getParameter("source");
 
 	String sid = request.getParameter("sid");		//配置编号
 	String lid = (league == null) ? "" : league.getLid();
@@ -46,6 +47,7 @@ var sid = '<%=sid%>';
 var lid = '<%=lid%>';
 var season = '<%=season%>'
 var round = '<%=rid%>';
+var source = '<%=source%>';
 
 //基础数据
 var table = null;

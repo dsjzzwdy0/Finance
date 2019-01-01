@@ -71,7 +71,7 @@ function queryParams(params) { //设置查询参数
 	return param;     
 }
 
-function containsCorp(gid)
+function containsCorp(row)
 {
 	if($.isNullOrEmpty(setting) || $.isNullOrEmpty(setting.params))
 	{
@@ -79,10 +79,12 @@ function containsCorp(gid)
 	}
 	var params = setting.params;
 	var len = params.length;
+	var gid = row.gid;
+	var source = row.source;
 	for(var i = 0; i < len; i ++)
 	{
 		var p = params[i];
-		if(gid == p.value)
+		if(gid == p.value && source == p.value1)
 		{
 			return true;
 		}
@@ -244,7 +246,7 @@ function formaterCheck(value, row, index)
 {
 	var gid = value;
 	var html = '<input value="' + value + '" type="checkbox" ';
-	if(containsCorp(gid)) html += ' checked';
+	if(containsCorp(row)) html += ' checked';
 	html += ' />'
 	return html;
 }

@@ -126,6 +126,7 @@ public class SingleTaskSchedulerThread extends Thread
 
 			try
 			{
+				logger.info("Waiting " + this.milliseconds + " ms to download next data.");
 				SingleTaskSchedulerThread.sleep(this.milliseconds + RandomUtil.getRandom(maxRand));
 			}
 			catch (InterruptedException ex)

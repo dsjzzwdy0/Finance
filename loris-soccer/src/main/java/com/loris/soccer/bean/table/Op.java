@@ -18,7 +18,7 @@ public class Op extends OpItem
 	private boolean ismain; // 是否主流公司
 	private String ordinary; // 公司序号
 	private String oddstype; // 赔率类型
-	private String firsttime; // 赔率时间
+	private String firsttime; // 初赔率时间
 	private float firstwinodds; // 初盘获胜
 	private float firstdrawodds; // 初盘平率
 	private float firstloseodds; // 初盘负赔率

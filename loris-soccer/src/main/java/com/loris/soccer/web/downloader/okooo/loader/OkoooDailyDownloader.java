@@ -310,7 +310,7 @@ public class OkoooDailyDownloader extends OkoooDownloader
 			}
 			OddsYpChildParser parser = new OddsYpChildParser();
 			parser.setMid(match.getMid());			
-			parser.setCurrentTime(DateUtil.tryToParseDate(morePage.getLoadtime()));
+			parser.setMatchTime(DateUtil.tryToParseDate(morePage.getLoadtime()));
 			
 			//解析数据
 			if(parser.parseWebPage(morePage))

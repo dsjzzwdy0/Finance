@@ -61,6 +61,7 @@ import com.loris.soccer.bean.model.MatchList;
 import com.loris.soccer.bean.model.OpList;
 import com.loris.soccer.bean.okooo.OkoooBdMatch;
 import com.loris.soccer.bean.okooo.OkoooJcMatch;
+import com.loris.soccer.bean.okooo.OkoooMatch;
 import com.loris.soccer.bean.okooo.OkoooOp;
 import com.loris.soccer.bean.okooo.OkoooYp;
 import com.loris.soccer.bean.table.BdMatch;
@@ -244,7 +245,8 @@ public class SoccerApp
 			//testDownloadEastSoccer(context);
 			//testOkoooChileYpParser(context);
 			
-			testGetAnnotation(context);
+			//testGetAnnotation(context);
+			testOkooooWebDownloader(context);
 
 			close();
 			// context = null;
@@ -254,6 +256,111 @@ public class SoccerApp
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * 下载澳客网的数据
+	 * @param context
+	 * @throws Exception
+	 */
+	public static void testOkooooWebDownloader(LorisContext context) throws Exception
+	{
+		OkoooDataDownloader.initialize(context);
+		List<OkoooBdMatch> bdMatchs = OkoooDataDownloader.downloadBaseBdMatchPage();
+		
+		if(bdMatchs == null)
+		{
+			logger.info("Error, there are no BeiDan matchs in the database.");
+			return;
+		}
+		
+		OkoooBdMatch match = null;
+		int i = 1;
+		for (OkoooBdMatch okoooBdMatch : bdMatchs)
+		{
+			logger.info(i +++ ": " + okoooBdMatch);
+			
+			if(i == 10)
+			{
+				match = okoooBdMatch;
+			}
+			
+			/*if(i == 20)
+			{
+				ypMatch = okoooBdMatch;
+			}*/
+		}
+		
+		Thread.sleep(4000);
+		
+		WebClientFetcher fetcher = OkoooDataDownloader.getWebClientFetcher();
+		if(fetcher == null)
+		{
+			return;
+		}
+		
+		String lid = "24";
+		List<OkoooMatch> matchs = OkoooDataDownloader.downloadLeagueCurrentRound(lid);
+		if(matchs != null)
+		{
+			i = 1;
+			for (OkoooMatch okoooMatch : matchs)
+			{
+				logger.info(i +++ ": " + okoooMatch);
+			}
+		}
+		
+		if(match != null)
+		{
+			logger.info("Start to download ops: " + match);
+			Thread.sleep(4000);
+			try
+			{
+				List<OkoooOp> ops = OkoooDataDownloader.downloadMatchMainOp(fetcher, match);
+				if(ops != null)
+				{
+					i = 1;
+					for (OkoooOp okoooOp : ops)
+					{	
+						logger.info(i +++ ": " + okoooOp);
+					}
+				}
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+		
+		for (OkoooMatch okoooMatch : matchs)
+		{
+			logger.info("Start to download yps: " + okoooMatch);
+			Thread.sleep(4000);
+			List<OkoooYp> yps = OkoooDataDownloader.downloadMatchMainYp(fetcher, okoooMatch);
+			if(yps != null)
+			{
+				i = 1;
+				for (OkoooYp okoooOp : yps)
+				{	
+					logger.info(i +++ ": " + okoooOp);
+				}
+			}
+		}
+		
+		/*
+		List<OkoooJcMatch> jcMatchs = OkoooDataDownloader.downloadJcMainPage(fetcher);
+		if(jcMatchs == null)
+		{
+			logger.info("Error, there are no Jc matchs in the database.");
+			return;
+		}
+		
+		i = 1;
+		for (OkoooJcMatch okoooJcMatch : jcMatchs)
+		{
+			logger.info(i +++ ": " + okoooJcMatch);
+		}*/
+	}
+	
 	
 
 	public static void testComputeCorpStat(LorisContext context) throws IOException
@@ -549,7 +656,7 @@ public class SoccerApp
 		page.setCompleted(true);
 		
 		OddsYpChildParser parser = new OddsYpChildParser();
-		parser.setCurrentTime(new Date());
+		parser.setMatchTime(new Date());
 		if(parser.parseWebPage(page))
 		{
 			logger.info("Success to parse the WebPage: " + page);
@@ -1493,7 +1600,7 @@ public class SoccerApp
 					}
 					OddsYpChildParser parser3 = new OddsYpChildParser();
 					parser3.setMid(match.getMid());
-					parser3.setCurrentTime(DateUtil.tryToParseDate(morePage.getLoadtime()));
+					parser3.setMatchTime(DateUtil.tryToParseDate(morePage.getLoadtime()));
 
 					if (parser3.parseWebPage(morePage))
 					{
@@ -2016,7 +2123,7 @@ public class SoccerApp
 		if (parser.parseWebPage(page))
 		{
 			logger.info("Parse success");
-			Match match = parser.getMatch();
+			MatchItem match = parser.getMatch();
 			logger.info("Match: " + match);
 			logger.info("HomeName: " + parser.getHomename() + " ClientName: " + parser.getClientname());
 
