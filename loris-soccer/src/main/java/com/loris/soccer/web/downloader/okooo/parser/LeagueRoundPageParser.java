@@ -42,7 +42,7 @@ public class LeagueRoundPageParser extends AbstractWebPageParser
 			throw new IllegalArgumentException("The Okooo JcPageParser is not completed or Content is null. ");
 		}
 		
-		if(!"league".equals(page.getType()))
+		if(!"curround".equals(page.getType()))
 		{
 			return false;
 		}

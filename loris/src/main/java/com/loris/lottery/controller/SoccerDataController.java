@@ -475,11 +475,11 @@ public class SoccerDataController
 	 */
 	@ResponseBody
 	@RequestMapping("/getRoundMatchesOdds")
-	public Rest getRoundMatchesOdds(String sid, String lid, String season, String round)
+	public Rest getRoundMatchesOdds(String sid, String lid, String season, String round, String source)
 	{
 		String info;
 		CorpSetting setting = soccerManager.getCorpSetting(sid);
-		List<MatchOdds> ops = MatchDocLoader.loadRoundMatchOdds(lid, season, round, setting);
+		List<MatchOdds> ops = MatchDocLoader.loadRoundMatchOdds(lid, season, round, setting, source);
 		if(ops == null)
 		{
 			info = "There are no match ops in the database. ";
@@ -531,7 +531,7 @@ public class SoccerDataController
 		setting.addUserCorporate(corporate);
 	
 		
-		List<MatchOdds> ops = MatchDocLoader.loadRoundMatchOdds(lid, season, round, setting);
+		List<MatchOdds> ops = MatchDocLoader.loadRoundMatchOdds(lid, season, round, setting, setting.getSource());
 		List<MatchRankOddsElement> elements = new ArrayList<>();
 		
 		List<RankInfo> ranks = soccerManager.getLatestRanks(lid, SoccerConstants.RANK_TOTAL);		

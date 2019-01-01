@@ -11,7 +11,7 @@
 	String source = request.getParameter("source");
 
 	String sid = request.getParameter("sid");		//配置编号
-	String lid = (league == null) ? "" : league.getLid();
+	String lid = (league != null) ? league.getLid() : (round != null ? round.getLid() : "");
 	String season = round.getSeason();
 	String rid = round.getRid();
 
@@ -47,7 +47,7 @@ var sid = '<%=sid%>';
 var lid = '<%=lid%>';
 var season = '<%=season%>'
 var round = '<%=rid%>';
-var source = '<%=source%>';
+var src = '<%=source%>';
 
 //基础数据
 var table = null;
@@ -84,6 +84,7 @@ function createLeagueMatchOddsTable(conf)
 			"lid": lid,
 			"season": season,
 			"round": round,
+			"source": src
 		},
 		jsonp:'callback',
 		success: null,

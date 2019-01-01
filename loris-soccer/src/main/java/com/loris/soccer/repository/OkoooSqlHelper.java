@@ -414,4 +414,14 @@ public class OkoooSqlHelper
 		ew.eq("mid", mid);
 		return okoooMatchService.selectOne(ew);
 	}
+	
+	public List<OkoooMatch> getOkoooMatchs(String lid, String season, String round)
+	{
+		EntityWrapper<OkoooMatch> ew = new EntityWrapper<>();
+		ew.eq("lid", lid);
+		ew.eq("season", season);
+		ew.eq("round", round);
+		
+		return okoooMatchService.selectList(ew);
+	}
 }
