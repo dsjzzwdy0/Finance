@@ -23,17 +23,20 @@ import com.loris.lottery.util.WebConstants;
 @Component
 public class PermissionAspect extends BaseAspect
 {
-	//private static Logger logger = Logger.getLogger(PermissionAspect.class);
+	// private static Logger logger = Logger.getLogger(PermissionAspect.class);
 
 	private User user;
 
 	Keys methods = new Keys();
+
+	Keys clazzes = new Keys();
 
 	public PermissionAspect()
 	{
 		methods.add("com.loris.lottery.controller.SoccerDataController.saveCorpSetting");
 		methods.add("com.loris.lottery.controller.SoccerController.getSettings");
 
+		clazzes.add("com.loris.lottery.controller.DownloadController");
 	}
 
 	/**
@@ -54,7 +57,8 @@ public class PermissionAspect extends BaseAspect
 		HttpServletRequest request = getHttpServletRequest();
 
 		startTimeMillis = System.currentTimeMillis(); // 记录方法开始执行的时间
-		//logger.info("Permission: " + targetClass + " " + methodName + " " + startTimeMillis);
+		// logger.info("Permission: " + targetClass + " " + methodName + " " +
+		// startTimeMillis);
 		if (contains(targetClass, methodName))
 		{
 			user = (User) request.getSession().getAttribute(WebConstants.CURRENT_USER);
@@ -75,6 +79,15 @@ public class PermissionAspect extends BaseAspect
 	 */
 	protected boolean contains(String targetClass, String methodName)
 	{
+		for (String clazz : clazzes)
+		{
+			if (clazz.equals(targetClass))
+			{
+				return true;
+			}
+		}
+		
+
 		for (String method : methods)
 		{
 			if (method.equals(targetClass + "." + methodName))

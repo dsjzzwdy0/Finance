@@ -198,6 +198,7 @@ $(document).ready(function() {
 	$('#issueSel').hide();
 	$('#typeSel').hide();
 	$('#sameLeague').attr('checked', false);
+	$('.top-chosse #settingSel').attr('disabled', 'disabled');
 	
 	if($.isNotNullOrEmpty(sid))
 	{

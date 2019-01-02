@@ -22,7 +22,7 @@ import com.loris.soccer.bean.SoccerConstants;
 import com.loris.soccer.bean.item.IssueMatch;
 import com.loris.soccer.bean.model.IssueMatchMapping;
 import com.loris.soccer.bean.okooo.OkoooBdMatch;
-import com.loris.soccer.bean.okooo.OkoooMatch;
+import com.loris.soccer.bean.okooo.OkoooMatchInfo;
 import com.loris.soccer.bean.okooo.OkoooOp;
 import com.loris.soccer.bean.okooo.OkoooYp;
 import com.loris.soccer.bean.table.BdMatch;
@@ -448,7 +448,7 @@ public class MatchDocLoader
 	public static List<MatchOdds> loadRoundMatchOddsFromOkooo(String lid, String season, String round, CorpSetting setting)
 	{
 		OkoooSqlHelper sqlHelper = OkoooSqlHelper.getInstance();
-		List<OkoooMatch> matchs = sqlHelper.getOkoooMatchs(lid, season, round);
+		List<OkoooMatchInfo> matchs = sqlHelper.getOkoooMatchInfos(lid, season, round);
 		if (matchs == null || matchs.size() == 0)
 		{
 			return null;
@@ -457,15 +457,15 @@ public class MatchDocLoader
 		List<MatchOdds> list = new ArrayList<>();
 		List<String> mids = new ArrayList<>();
 		int i = 1;
-		for (OkoooMatch match : matchs)
+		for (OkoooMatchInfo match : matchs)
 		{
 			mids.add(match.getMid());
 			
-			MatchInfo matchInfo = new MatchInfo();
+			/*MatchInfo matchInfo = new MatchInfo();
 			matchInfo.setMatchItem(match);
 			matchInfo.setHomename(match.getHomeid());
-			matchInfo.setClientname(match.getClientid());
-			MatchOdds m = new MatchOdds(matchInfo);
+			matchInfo.setClientname(match.getClientid());*/
+			MatchOdds m = new MatchOdds(match);
 			m.setOrdinary(Integer.toString(i++));
 			list.add(m);
 		}
@@ -662,6 +662,26 @@ public class MatchDocLoader
 		matchs = null;
 		return list;
 	}
+	
+	public static List<MatchOdds> loadMatchesOddsFromOkooo(List<String> mids, CorpSetting setting)
+	{
+		OkoooSqlHelper sqlHelper = OkoooSqlHelper.getInstance();
+		List<OkoooBdMatch> matchs = sqlHelper.getOkoooBdMatches(mids);
+		List<MatchOdds> list = new ArrayList<>();
+		for (BdMatch match : matchs)
+		{
+			MatchOdds m = new MatchOdds(match);
+			list.add(m);
+		}
+		// 加载欧赔与亚盘数据
+		List<String> gids = setting.getCorporateIds(SoccerConstants.DATA_SOURCE_OKOOO, SoccerConstants.ODDS_TYPE_OP);
+		loadMatchOddsFromOkooo(list, mids, gids, SoccerConstants.ODDS_TYPE_OP);
+		gids = setting.getCorporateIds(SoccerConstants.DATA_SOURCE_OKOOO, SoccerConstants.ODDS_TYPE_YP);
+		loadMatchOddsFromOkooo(list, mids, gids, SoccerConstants.ODDS_TYPE_YP);
+		matchs.clear();
+		matchs = null;
+		return list;
+	}
 
 	/**
 	 * 加载所有的比赛数据
@@ -670,8 +690,13 @@ public class MatchDocLoader
 	 * @param setting
 	 * @return
 	 */
-	public static List<MatchOdds> loadMatchesOdds(List<String> mids, CorpSetting setting)
+	public static List<MatchOdds> loadMatchesOdds(List<String> mids, CorpSetting setting, String source)
 	{
+		if(SoccerConstants.DATA_SOURCE_OKOOO.equalsIgnoreCase(source))
+		{
+			return loadMatchesOddsFromOkooo(mids, setting);
+		}
+		
 		SoccerManager manager = SoccerManager.getInstance();
 		List<BdMatch> matchs = manager.getBdMatches(mids);
 		List<MatchOdds> list = new ArrayList<>();

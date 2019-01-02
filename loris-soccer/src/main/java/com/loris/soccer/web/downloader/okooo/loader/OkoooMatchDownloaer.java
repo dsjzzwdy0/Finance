@@ -121,12 +121,11 @@ public class OkoooMatchDownloaer extends OkoooDownloader
 				}
 			}
 			
-			/*
 			for (MatchItem m : ms)
 			{
 				addPage(OkoooPageCreator.createOpWebPage(m.getMid()));
 				addPage(OkoooPageCreator.createYpWebPage(m.getMid()));
-			}*/
+			}
 			
 			List<String> lids = ArraysUtil.getObjectFieldValue(ms, OkoooBdMatch.class, "lid");
 			for (String lid : lids)

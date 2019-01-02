@@ -79,14 +79,11 @@ var options = {
 		}
 		$('#matchNumAll').text(total);
 		$('#matchNumHide').text(total - shownum);
+		$('#gridTable tbody .relation').off('click').on('click', function(){
+			getRelatedMatch($(this));
+		});
 	}
 };
-
-function openLeagueRel(mid, source)
-{
-	var sid = $('#settingSel').val();
-	window.open('analeague?type=leaguerel&mid=' + mid + '&source=' + source + '&sid=' + sid);
-}
 
 //用于获得配置数据
 function createMatchOddsTable(conf)
@@ -122,9 +119,9 @@ function createMatchOddsTable(conf)
 			}			
 		},
 		complete: function(){
-			$('#gridTable tbody .relation').off('click').on('click', function(){
+			/*$('#gridTable tbody .relation').off('click').on('click', function(){
 				getRelatedMatch($(this));
-			});
+			});*/
 		}
 	}	
 	options.source = source;
@@ -132,6 +129,12 @@ function createMatchOddsTable(conf)
 	options.sorter = sorter;
 	table = new SoccerTable(options);
 	$('#gridTable').soccerTable(table);
+}
+
+function openLeagueRel(mid, source)
+{
+	var sid = $('#settingSel').val();
+	window.open('analeague?type=leaguerel&mid=' + mid + '&source=' + source + '&sid=' + sid);
 }
 
 //获得比赛的数据
@@ -160,13 +163,13 @@ function getRelatedMatch(element)
 				var idx = $(div[i]).attr('index');
 				if(idx == index)
 					mids.push(mid);
-			}
-			
+			}			
 		}	
 	});
 	
+	var sid = $('#settingSel').val();
 	//layer.msg(mid + ': ' + gid + ', ' + val + ': ' + mids.join(';'));
-	window.open('../soccer/matchrel?mids=' + mids.join(','));
+	window.open('../soccer/matchrel?sid=' + sid + '&mids=' + mids.join(','));
 }
 
 function stateChange(state, source, conf)
@@ -205,6 +208,7 @@ function stateChange(state, source, conf)
 $(document).ready(function() {
 	showNewToolBar();
 	showSettingSel();
+	showOddsType();
 	
 	if($.isNotNullOrEmpty(sid))
 	{

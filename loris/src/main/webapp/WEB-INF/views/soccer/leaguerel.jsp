@@ -65,6 +65,12 @@ var options = {
 		this.columns = null;
 		this.rows = null;
 		this.setting = null;
+	},
+	postshow: function()
+	{
+		$('#gridTable tbody .relation').off('click').on('click', function(){
+			getRelatedMatch($(this));
+		});
 	}
 };
 
@@ -128,6 +134,41 @@ function stateChange(state, source, conf)
 	}
 }
 
+//获得比赛的数据
+function getRelatedMatch(element)
+{
+	var mid = $(element).attr('mid');
+	var gid = $(element).attr('gid');
+	var index = $(element).attr('index');
+	var val = $(element).text();
+	
+	var mids = [];
+	mids.push(mid);
+	$(element).parent().parent().siblings().each(function()
+	{
+		var div = $(this).find('div[gid="' + gid + '"]');
+		if($.isNullOrEmpty(div))
+		{
+			return;
+		}
+		if(div.length > 0)
+		{
+			var len = div.length;
+			for(var i = 0; i < len; i ++)
+			{
+				var mid = $(div[i]).attr('mid');
+				var idx = $(div[i]).attr('index');
+				if(idx == index)
+					mids.push(mid);
+			}			
+		}	
+	});
+	
+	var sid = $('#settingSel').val();
+	//layer.msg(mid + ': ' + gid + ', ' + val + ': ' + mids.join(';'));
+	window.open('../soccer/matchrel?sid=' + sid + '&mids=' + mids.join(','));
+}
+
 $(document).ready(function() {
 	showNewToolBar();
 	showSettingSel();
@@ -136,6 +177,7 @@ $(document).ready(function() {
 	{
 		$('#settingSel').val(sid);
 	}
+	$('.top-chosse #settingSel').attr('disabled', 'disabled');
 	var conf = getConfValue();
 	createLeagueMatchOddsTable(conf);	
 	stateListeners.add(stateChange);

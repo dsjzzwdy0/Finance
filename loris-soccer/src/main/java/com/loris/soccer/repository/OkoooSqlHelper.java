@@ -11,11 +11,13 @@ import com.loris.base.util.ArraysUtil;
 import com.loris.soccer.bean.okooo.OkoooBdMatch;
 import com.loris.soccer.bean.okooo.OkoooJcMatch;
 import com.loris.soccer.bean.okooo.OkoooMatch;
+import com.loris.soccer.bean.okooo.OkoooMatchInfo;
 import com.loris.soccer.bean.okooo.OkoooOp;
 import com.loris.soccer.bean.okooo.OkoooYp;
 import com.loris.soccer.bean.table.Yp;
 import com.loris.soccer.repository.service.OkoooBdMatchService;
 import com.loris.soccer.repository.service.OkoooJcMatchService;
+import com.loris.soccer.repository.service.OkoooMatchInfoService;
 import com.loris.soccer.repository.service.OkoooMatchService;
 import com.loris.soccer.repository.service.OkoooOpService;
 import com.loris.soccer.repository.service.OkoooYpService;
@@ -37,6 +39,10 @@ public class OkoooSqlHelper
 	
 	@Autowired
 	private OkoooMatchService okoooMatchService;
+	
+	@Autowired
+	private OkoooMatchInfoService okoooMatchInfoService;
+	
 	
 	private static OkoooSqlHelper singleton;
 	
@@ -423,5 +429,39 @@ public class OkoooSqlHelper
 		ew.eq("round", round);
 		
 		return okoooMatchService.selectList(ew);
+	}
+	
+	public List<OkoooMatchInfo> getOkoooMatchInfos(String lid, String season, String round)
+	{
+		EntityWrapper<OkoooMatchInfo> ew = new EntityWrapper<>();
+		ew.eq("lid", lid);
+		ew.eq("season", season);
+		ew.eq("round", round);
+		
+		return okoooMatchInfoService.selectList(ew);
+	}
+	
+	/**
+	 * 
+	 * @param mid
+	 * @return
+	 */
+	public OkoooMatchInfo getOkoooMatchInfo(String mid)
+	{
+		EntityWrapper<OkoooMatchInfo> ew = new EntityWrapper<>();
+		ew.eq("mid", mid);
+		return okoooMatchInfoService.selectOne(ew);
+	}
+	
+	/**
+	 * 获得北单数据
+	 * @param mids
+	 * @return
+	 */
+	public List<OkoooBdMatch> getOkoooBdMatches(List<String> mids)
+	{
+		EntityWrapper<OkoooBdMatch> ew = new EntityWrapper<>();
+		ew.in("mid", mids);
+		return okoooBdMatchService.selectList(ew);
 	}
 }

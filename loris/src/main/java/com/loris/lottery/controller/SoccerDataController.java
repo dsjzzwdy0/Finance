@@ -196,7 +196,7 @@ public class SoccerDataController
 		}
 		
 		long st = System.currentTimeMillis();		
-		List<MatchOdds> ops = MatchDocLoader.loadMatchesOdds(midlist, setting);
+		List<MatchOdds> ops = MatchDocLoader.loadMatchesOdds(midlist, setting, setting.getSource());
 		long en = System.currentTimeMillis();
 		if(ops == null)
 		{
