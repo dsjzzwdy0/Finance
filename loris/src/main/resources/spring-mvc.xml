@@ -99,6 +99,22 @@
         <property name="suffix" value=".jsp"/>            
         <property name="order" value="2"/>      
     </bean>
+    
+    <bean name="beetlConfig" class="org.beetl.ext.spring.BeetlGroupUtilConfiguration" init-method="init">
+    	<property name="configFileResource" value="classpath:beetl.properties" />
+    </bean>
+    
+    <bean name="viewResovler" class="org.beetl.ext.spring.BeetlSpringViewResolver">
+    	<property name="config" ref="beetlConfig" />
+    	<property name="contentType" value="text/html;charset=UTF-8" />
+    	<property name="order" value="3" />
+    	<property name="viewNames">
+    		<list>
+    			<value>/user/**</value>
+    			<value>/admin/**</value>
+    		</list>
+    	</property>
+    </bean>
           
     <!-- 配置freeMarker的模板路径 -->      
     <!-- freemaker配置 -->
@@ -136,5 +152,25 @@
 		<!-- 内存中的最大值 -->
 		<property name="maxInMemorySize" value="40960" />
 	</bean>
+	
+	<bean id="captchaProducer" class="com.google.code.kaptcha.impl.DefaultKaptcha">
+        <property name="config">
+            <bean class="com.google.code.kaptcha.util.Config">
+                <constructor-arg>
+                    <props>
+                        <prop key="kaptcha.border">yes</prop>
+                        <prop key="kaptcha.border.color">105,179,90</prop>
+                        <prop key="kaptcha.textproducer.font.color">blue</prop>
+                        <prop key="kaptcha.image.width">125</prop>
+                        <prop key="kaptcha.image.height">45</prop>
+                        <prop key="kaptcha.textproducer.font.size">45</prop>
+                        <prop key="kaptcha.session.key">code</prop>
+                        <prop key="kaptcha.textproducer.char.length">4</prop>
+                        <prop key="kaptcha.textproducer.font.names">宋体,楷体,微软雅黑</prop>
+                    </props>
+                </constructor-arg>
+            </bean>
+        </property>
+    </bean>
 
 </beans>

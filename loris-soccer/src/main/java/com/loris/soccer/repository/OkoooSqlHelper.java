@@ -272,8 +272,7 @@ public class OkoooSqlHelper
 				newOps.add(op);
 			}
 		}
-		
-		
+
 		if(newOps.size() > 0)
 		{
 			return okoooOpService.insertBatch(newOps);
@@ -301,11 +300,11 @@ public class OkoooSqlHelper
 	 * @param op 待比较的欧赔数据
 	 * @return 是否相等的标志
 	 */
-	public boolean existOkoooOpValue(List<OkoooOp> existYps, OkoooOp yp)
+	public boolean existOkoooOpValue(List<OkoooOp> existOps, OkoooOp op)
 	{
-		for (OkoooOp existYp : existYps)
+		for (OkoooOp existOp : existOps)
 		{
-			if(yp.equals(existYp))
+			if(op.equals(existOp))
 			{
 				return true;
 			}

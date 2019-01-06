@@ -21,6 +21,7 @@
 		<jetty.version>9.4.9.v20180320</jetty.version>
         <selenium.version>3.11.0</selenium.version>
         <aspectj.version>1.9.1</aspectj.version>
+        <beetl.version>2.7.15</beetl.version>
 	</properties>
 
 	<dependencies>
@@ -31,6 +32,19 @@
 		    <version>3.1</version>
 		</dependency>
 		
+		<!-- https://mvnrepository.com/artifact/com.google.code.kaptcha/kaptcha -->
+		<dependency>
+		    <groupId>com.google.code.kaptcha</groupId>
+		    <artifactId>kaptcha</artifactId>
+		    <version>2.3</version>
+		</dependency>
+
+		<dependency>
+            <groupId>com.ibeetl</groupId>
+            <artifactId>beetl</artifactId>
+            <version>${beetl.version}</version>
+        </dependency>
+        
 		<!-- spring核心包 -->
 		<dependency>
 			<groupId>org.springframework</groupId>
