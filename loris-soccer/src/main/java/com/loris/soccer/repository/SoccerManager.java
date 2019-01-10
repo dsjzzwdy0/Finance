@@ -418,7 +418,7 @@ public class SoccerManager
 		}
 		else
 		{
-			ew.eq("source", "zgzcw");
+			//ew.eq("source", "zgzcw");
 		}
 		ew.orderBy("gid+0");
 		return userCorporateService.selectList(ew);
@@ -2579,6 +2579,13 @@ public class SoccerManager
 	public boolean addCorpMatchResult(CorpMatchResult result)
 	{
 		return corpMatchResultService.insert(result);
+	}
+	
+	public Match getMatch(String mid)
+	{
+		EntityWrapper<Match> ew = new EntityWrapper<>();
+		ew.eq("mid", mid);
+		return matchService.selectOne(ew);
 	}
 	
 	/**

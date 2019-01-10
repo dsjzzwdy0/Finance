@@ -32,6 +32,9 @@ public class OddsOpChildParser extends AbstractWebPageParser
 	/** 比赛编号 */
 	protected String mid;
 	
+	/** 比赛时间 */
+	protected Date matchTime;
+	
 	/** 赔率类型 */
 	private String oddstype;
 	
@@ -107,7 +110,13 @@ public class OddsOpChildParser extends AbstractWebPageParser
 		{
 			if(object instanceof JSONObject)
 			{
-				parseOddsOp((JSONObject)object);
+				try
+				{
+					parseOddsOp((JSONObject)object);
+				}
+				catch(Exception e)
+				{
+				}
 			}
 		}
 	}
@@ -118,57 +127,67 @@ public class OddsOpChildParser extends AbstractWebPageParser
 	 */
 	protected void parseOddsOp(JSONObject object)
 	{
-		OkoooOp yp = new OkoooOp();
-		yp.setOddstype(oddstype);
-		yp.setMid(mid);
+		OkoooOp op = new OkoooOp();
+		op.setOddstype(oddstype);
+		op.setMid(mid);
+		op.setSource(SoccerConstants.DATA_SOURCE_OKOOO);
 		
 		for (String key : object.keySet())
 		{
 			Object value = object.get(key);
 			if("Start".equalsIgnoreCase(key))
 			{
-				parseFirstOdds(yp, (JSONObject)value);
+				parseFirstOdds(op, (JSONObject)value);
 			}
 			else if("CompanyName".equalsIgnoreCase(key))
 			{
-				yp.setGname(value.toString());
+				op.setGname(value.toString());
 			}
 			else if("MakerID".equalsIgnoreCase(key))
 			{
-				yp.setGid(value.toString());
+				op.setGid(value.toString());
 			}
 			else if("End".equalsIgnoreCase(key))
 			{
-				parseLastOdds(yp, (JSONObject)value);
+				parseLastOdds(op, (JSONObject)value);
+			}
+			else if("startUpdatetime".equalsIgnoreCase(key))
+			{
+				int l =((Integer)value).intValue();
+				if(matchTime != null)
+				{
+					Date d = DateUtil.add(matchTime, -l * 1000);
+					op.setFirsttime(DateUtil.DATE_TIME_FORMAT.format(d));
+				}
 			}
 			else if("Updatetime".equalsIgnoreCase(key))
 			{
 				int l = ((Integer)value).intValue();
-				if(currentTime != null)
+				if(matchTime != null)
 				{
-					Date d = DateUtil.add(currentTime, l);
-					yp.setLasttime(DateUtil.DATE_TIME_FORMAT.format(d));
+					Date d = DateUtil.add(matchTime, l * 1000);
+					op.setLasttime(DateUtil.DATE_TIME_FORMAT.format(d));
 				}
 			}
 			else if("Createtime".equalsIgnoreCase(key))
 			{
 				long l = NumberUtil.parseLong(value.toString()) * 1000;
-				yp.setFirsttime(DateUtil.formatDate(l));
+				op.setFirsttime(DateUtil.formatDate(l));
 			}
 			else if("Kelly".equalsIgnoreCase(key))
 			{
-				parseKelly(yp, (JSONObject)value);
+				parseKelly(op, (JSONObject)value);
 			}
 			else if("Radio".equalsIgnoreCase(key))
 			{
-				parseProb(yp, (JSONObject)value);
+				parseProb(op, (JSONObject)value);
 			}
 			else if("Payoff".equalsIgnoreCase(key))
 			{
-				yp.setLossratio(NumberUtil.parseFloat(value.toString()));
+				op.setLossratio(NumberUtil.parseFloat(value.toString()));
 			}
 		}
-		ops.add(yp);
+		ops.add(op);
 	}
 	
 	/**
@@ -309,6 +328,16 @@ public class OddsOpChildParser extends AbstractWebPageParser
 	public List<OkoooOp> getOps()
 	{
 		return ops;
+	}
+
+	public Date getMatchTime()
+	{
+		return matchTime;
+	}
+
+	public void setMatchTime(Date matchTime)
+	{
+		this.matchTime = matchTime;
 	}
 
 	public int getCorpNum()

@@ -31,7 +31,7 @@ public class OddsYpChildParser extends AbstractWebPageParser
 	protected List<OkoooYp> yps = new ArrayList<>();
 	
 	/** 比赛时间 */
-	protected Date currentTime;
+	protected Date matchTime;
 	
 	/** 比赛编号 */
 	protected String mid;
@@ -143,9 +143,9 @@ public class OddsYpChildParser extends AbstractWebPageParser
 			else if("Updatetime".equalsIgnoreCase(key))
 			{
 				int l = ((Integer)value).intValue();
-				if(currentTime != null)
+				if(matchTime != null)
 				{
-					Date d = DateUtil.add(currentTime, l);
+					Date d = DateUtil.add(matchTime, l);
 					yp.setLasttime(DateUtil.DATE_TIME_FORMAT.format(d));
 				}
 			}
@@ -303,14 +303,16 @@ public class OddsYpChildParser extends AbstractWebPageParser
 		this.yps = yps;
 	}
 
-	public Date getCurrentTime()
+
+
+	public Date getMatchTime()
 	{
-		return currentTime;
+		return matchTime;
 	}
 
-	public void setCurrentTime(Date currentTime)
+	public void setMatchTime(Date matchTime)
 	{
-		this.currentTime = currentTime;
+		this.matchTime = matchTime;
 	}
 
 	public String getMid()

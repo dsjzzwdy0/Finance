@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>系统登录</title>
+    <link rel="stylesheet" href="content/css/login/login.css">
+</head>
+<body>
+<div>这里是Beetl实验</div>
+</body>
+</html>

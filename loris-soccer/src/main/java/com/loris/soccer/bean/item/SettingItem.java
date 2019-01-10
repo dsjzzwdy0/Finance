@@ -22,6 +22,7 @@ public class SettingItem extends UUIDEntity
 	protected String user;					//创建用户
 	protected String createtime;			//创建时间
 	protected String modifytime;			//最后修改时间
+	protected String source; 				//数据来源
 	
 	@TableField(exist=false)
 	protected List<CorpSettingParameter> params = new ArrayList<>();
@@ -124,6 +125,16 @@ public class SettingItem extends UUIDEntity
 			}
 		}
 		return null;
+	}
+
+	public String getSource()
+	{
+		return source;
+	}
+
+	public void setSource(String source)
+	{
+		this.source = source;
 	}
 
 	@Override

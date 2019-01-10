@@ -57,6 +57,7 @@ import com.loris.soccer.bean.table.Yp;
 import com.loris.soccer.bean.view.MatchInfo;
 import com.loris.soccer.bean.view.RankInfo;
 import com.loris.soccer.bean.view.RoundInfo;
+import com.loris.soccer.repository.OkoooSqlHelper;
 import com.loris.soccer.repository.SoccerManager;
 import com.loris.soccer.repository.service.MatchInfoService;
 import com.loris.soccer.repository.service.RoundInfoService;
@@ -98,6 +99,9 @@ public class SoccerDataController
 
 	@Autowired
 	private SoccerManager soccerManager;
+	
+	@Autowired
+	OkoooSqlHelper okoooSqlHelper;
 
 	@Autowired
 	private MatchInfoService matchInfoService;
@@ -192,7 +196,7 @@ public class SoccerDataController
 		}
 		
 		long st = System.currentTimeMillis();		
-		List<MatchOdds> ops = MatchDocLoader.loadMatchesOdds(midlist, setting);
+		List<MatchOdds> ops = MatchDocLoader.loadMatchesOdds(midlist, setting, setting.getSource());
 		long en = System.currentTimeMillis();
 		if(ops == null)
 		{
@@ -471,11 +475,11 @@ public class SoccerDataController
 	 */
 	@ResponseBody
 	@RequestMapping("/getRoundMatchesOdds")
-	public Rest getRoundMatchesOdds(String sid, String lid, String season, String round)
+	public Rest getRoundMatchesOdds(String sid, String lid, String season, String round, String source)
 	{
 		String info;
 		CorpSetting setting = soccerManager.getCorpSetting(sid);
-		List<MatchOdds> ops = MatchDocLoader.loadRoundMatchOdds(lid, season, round, setting);
+		List<MatchOdds> ops = MatchDocLoader.loadRoundMatchOdds(lid, season, round, setting, source);
 		if(ops == null)
 		{
 			info = "There are no match ops in the database. ";
@@ -527,7 +531,7 @@ public class SoccerDataController
 		setting.addUserCorporate(corporate);
 	
 		
-		List<MatchOdds> ops = MatchDocLoader.loadRoundMatchOdds(lid, season, round, setting);
+		List<MatchOdds> ops = MatchDocLoader.loadRoundMatchOdds(lid, season, round, setting, setting.getSource());
 		List<MatchRankOddsElement> elements = new ArrayList<>();
 		
 		List<RankInfo> ranks = soccerManager.getLatestRanks(lid, SoccerConstants.RANK_TOTAL);		
@@ -580,6 +584,12 @@ public class SoccerDataController
 			return Rest.failure("The CorpSetting '" + sid + "' is not set correctly.");
 		}
 		
+		String source = setting.getSource();
+		if(StringUtils.isEmpty(source))
+		{
+			source = SoccerConstants.DATA_SOURCE_OKOOO;
+		}
+		
 		List<String> lids = null;
 		if(StringUtils.isNotEmpty(lid))
 		{
@@ -588,7 +598,7 @@ public class SoccerDataController
 		}
 		
 		long st = System.currentTimeMillis();		
-		List<MatchOdds> ops = MatchDocLoader.loadMatchOdds(issue, type, lids, setting);
+		List<MatchOdds> ops = MatchDocLoader.loadMatchOdds(issue, type, lids, setting, source);
 		long en = System.currentTimeMillis();
 		if(ops == null)
 		{
@@ -911,7 +921,7 @@ public class SoccerDataController
 	{
 		Map<String, Object> settings = new HashMap<>();
 		SettingItem setting = soccerManager.getCorpSetting(sid);
-		List<UserCorporate> corporates = soccerManager.getUserCorporates("", "zgzcw");
+		List<UserCorporate> corporates = soccerManager.getUserCorporates("", "");
 		settings.put("setting", setting);
 		settings.put("corps", corporates);
 		return Rest.okData(settings);

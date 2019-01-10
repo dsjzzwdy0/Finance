@@ -1,5 +1,7 @@
 package com.loris.soccer.bean.item;
 
+import com.loris.soccer.bean.SoccerConstants;
+
 public class IssueMatch extends MatchInfoItem
 {
 	/***/
@@ -20,6 +22,12 @@ public class IssueMatch extends MatchInfoItem
 	protected String drawodds;     	//平赔率
 	protected String loseodds;     	//负赔率
 	protected boolean isopen;      	//是否开售
+	protected String source;
+	
+	public IssueMatch()
+	{
+		this.source = SoccerConstants.DATA_SOURCE_ZGZCW;
+	}
 	
 	public String getIssue()
 	{
@@ -155,8 +163,17 @@ public class IssueMatch extends MatchInfoItem
 		clientrank = match.clientrank;
 		closetime = match.closetime;
 		closed = match.closed;
+		source = match.source;
 	}
 	
+	public String getSource()
+	{
+		return source;
+	}
+	public void setSource(String source)
+	{
+		this.source = source;
+	}
 	/**
 	 * 检测是否同一期比赛
 	 * @param is 期号

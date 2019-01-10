@@ -124,6 +124,8 @@ public class OkoooBdPageParser extends AbstractWebPageParser
 		String matchtime;
 		String closetime;
 		
+		mid = element.attr("matchid");
+		
 		//联赛信息
 		Element el = elements.get(0);
 		ordinary = el.selectFirst("span i").text();
@@ -156,8 +158,8 @@ public class OkoooBdPageParser extends AbstractWebPageParser
 		Element oddsEl = el.selectFirst(".frqBetObj");
 		parseOdds(oddsEl, match);*/
 
-		el = elements.get(7);
-		mid = getMatchId(el.selectFirst("a").attr("href"));
+		//el = elements.get(7);
+		//mid = getMatchId(el.selectFirst("a").attr("href"));
 		
 		//设置比赛的信息
 		match.setMid(mid);
@@ -277,7 +279,7 @@ public class OkoooBdPageParser extends AbstractWebPageParser
 	 * @param matchtrends
 	 * @return
 	 */
-	private String getMatchId(String matchtrends)
+	protected String getMatchId(String matchtrends)
 	{
 		String[] values = matchtrends.split(RITHG_SLASH.pattern());
 		int size = values.length;

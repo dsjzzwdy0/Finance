@@ -1,24 +1,31 @@
 package com.loris.soccer.web.downloader.okooo;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
 import com.loris.base.context.LorisContext;
-import com.loris.base.util.DateUtil;
 import com.loris.base.web.http.UrlFetchException;
 import com.loris.base.web.http.WebClientFetcher;
 import com.loris.base.web.page.WebPage;
 import com.loris.soccer.bean.item.MatchItem;
+import com.loris.soccer.bean.okooo.OkoooBdMatch;
+import com.loris.soccer.bean.okooo.OkoooJcMatch;
+import com.loris.soccer.bean.okooo.OkoooMatch;
 import com.loris.soccer.bean.okooo.OkoooOp;
 import com.loris.soccer.bean.okooo.OkoooYp;
 import com.loris.soccer.web.downloader.okooo.page.OkoooRequestHeaderWebPage;
 import com.loris.soccer.web.downloader.okooo.page.OkoooWebPage;
+import com.loris.soccer.web.downloader.okooo.parser.LeagueRoundPageParser;
 import com.loris.soccer.web.downloader.okooo.parser.OddsOpChildParser;
 import com.loris.soccer.web.downloader.okooo.parser.OddsOpPageParser;
 import com.loris.soccer.web.downloader.okooo.parser.OddsYpChildParser;
 import com.loris.soccer.web.downloader.okooo.parser.OddsYpPageParser;
+import com.loris.soccer.web.downloader.okooo.parser.OkoooBdPageParser;
+import com.loris.soccer.web.downloader.okooo.parser.OkoooJcPageParser;
 import com.loris.soccer.web.repository.SoccerWebPageManager;
 
 public class OkoooDataDownloader
@@ -27,6 +34,9 @@ public class OkoooDataDownloader
 	
 	/** The SoccerWebPageManager. */
 	private static SoccerWebPageManager soccerWebPageManager;
+	
+	/** The WebClientFetcher. */
+	private static WebClientFetcher fetcher = null;
 	
 	/**
 	 * 系统初始化设置
@@ -37,6 +47,139 @@ public class OkoooDataDownloader
 	{
 		soccerWebPageManager = context.getBean(SoccerWebPageManager.class);
 		return false;
+	}
+	
+	/**
+	 * 下载基础数据
+	 * @return
+	 * @throws UrlFetchException
+	 * @throws Exception
+	 */
+	public static List<OkoooBdMatch> downloadBaseBdMatchPage() throws UrlFetchException, Exception
+	{
+		OkoooWebPage basePage = OkoooPageCreator.createBaseWebPage();
+		fetcher = WebClientFetcher.createFetcher(basePage);
+		fetcher.waitForBackgroundJavaScript(10000);
+		
+		if(!basePage.isCompleted())
+		{
+			logger.info("Error loading the base page '" + basePage.getFullURL() + ", the prepare process is not success, exit.");
+			//logger.info(basePage.getContent());
+			return null;
+		}
+		
+		saveOkoooWebPage(basePage);
+		OkoooBdPageParser parser = new OkoooBdPageParser();
+		if(parser.parseWebPage(basePage))
+		{
+			Map<String, List<OkoooBdMatch>> pairs = parser.getMatchMap();
+			
+			List<OkoooBdMatch> matchList = new ArrayList<>();
+			for (String key : pairs.keySet())
+			{
+				List<OkoooBdMatch> list = pairs.get(key);
+				if(list != null && list.size() > 0)
+				{
+					matchList.addAll(list);
+				}
+			}
+			return matchList;
+		}
+		else
+		{
+			logger.info("Error occured when parsing the base page '" + basePage.getFullURL() + ".");
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * 下载当当前的竞彩主页页面
+	 * @param fetcher
+	 * @return
+	 */
+	public static List<OkoooJcMatch> downloadJcMainPage(WebClientFetcher fetcher)
+	{
+		OkoooWebPage page = OkoooPageCreator.createJcWebPage();
+		if(fetcher.fetch(page))
+		{
+			OkoooJcPageParser parser = new OkoooJcPageParser();
+			if(parser.parseWebPage(page))
+			{
+				saveOkoooWebPage(page);
+				
+				return parser.getJcMatches();
+			}
+			else
+			{
+				logger.info("Error when parse : " + page);
+			}
+		}
+		logger.info("Error when fetch: " + page);
+		return null;
+	}
+	
+	/**
+	 * 下载当前页面
+	 * @param lid
+	 */
+	public static List<OkoooMatch> downloadLeagueCurrentRound(String lid) 
+	{
+		OkoooWebPage page = OkoooPageCreator.createLeaguePage(lid);
+		if(fetcher.fetch(page))
+		{
+			LeagueRoundPageParser parser = new LeagueRoundPageParser();
+			if(parser.parseWebPage(page))
+			{
+				return parser.getMatches();
+			}
+			else
+			{
+				logger.info("Error when parse : " + page);
+				return null;
+			}
+		}
+		else
+		{
+			logger.info("Error when fetch: " + page);
+		}
+		return null;
+	}
+	
+	/**
+	 * 下载北单数据页面
+	 * @param fetcher
+	 * @return
+	 */
+	public static List<OkoooBdMatch> downloadBdMainPage(WebClientFetcher fetcher)
+	{
+		OkoooWebPage page = OkoooPageCreator.createBdWebPage();
+		if(fetcher.fetch(page))
+		{
+			OkoooBdPageParser parser = new OkoooBdPageParser();
+			if(parser.parseWebPage(page))
+			{
+				Map<String, List<OkoooBdMatch>> pairs = parser.getMatchMap();
+				
+				List<OkoooBdMatch> matchList = new ArrayList<>();
+				for (String key : pairs.keySet())
+				{
+					List<OkoooBdMatch> list = pairs.get(key);
+					if(list != null && list.size() > 0)
+					{
+						matchList.addAll(list);
+					}
+				}
+				return matchList;
+			}
+			else
+			{
+				logger.info("Error occured when parsing the base page '" + page.getFullURL() + ".");
+				return null;
+			}
+		}
+		logger.info("Error when fetch: " + page);
+		return null;
 	}
 	
 	/**
@@ -51,6 +194,7 @@ public class OkoooDataDownloader
 		{
 			OddsOpPageParser parser = new OddsOpPageParser();
 			parser.setMid(match.getMid());
+			parser.setMatch(match);
 			if(parser.parseWebPage(webPage))
 			{
 				List<OkoooOp> ops = parser.getOps();
@@ -61,7 +205,7 @@ public class OkoooDataDownloader
 				}*/
 				
 				saveOkoooWebPage(webPage);				
-				downloadMoreOpPage(fetcher, match.getMid(), ops, 1, 30);
+				downloadMoreOpPage(fetcher, match, ops, 1, 30);
 				
 				//logger.info("There are total " + parser.getCorpNum() + " corprates.");
 				return ops;
@@ -71,7 +215,8 @@ public class OkoooDataDownloader
 				logger.info("Error when parse : " + webPage);
 			}
 		}
-		logger.info("Error when fetch: " + webPage);
+		else
+			logger.info("Error when fetch: " + webPage);
 		return null;
 	}
 	
@@ -87,18 +232,12 @@ public class OkoooDataDownloader
 		{
 			OddsYpPageParser parser = new OddsYpPageParser();
 			parser.setMid(match.getMid());
-			parser.setMatchtime(DateUtil.parseDate(match.getMatchtime()));
+			parser.setMatchtime(match.getMatchDate());
 			if(parser.parseWebPage(webPage))
 			{
 				List<OkoooYp> yps= parser.getYps();
-				
-				/*int i = 0;
-				for (OkoooYp okoooOp : yps)s
-				{
-					logger.info(i +++ ": " + okoooOp);
-				}*/
 				saveOkoooWebPage(webPage);
-				downloadMoreYpPage(fetcher, match.getMid(), yps, 1, 30);
+				downloadMoreYpPage(fetcher, match, yps, 1, 30);
 				
 				//logger.info("There are total " + parser.getCorpNum() + " corprates.");
 				return yps;
@@ -108,7 +247,8 @@ public class OkoooDataDownloader
 				logger.info("Error when parse : " + webPage);
 			}
 		}
-		logger.info("Error when fetch: " + webPage);
+		else
+			logger.info("Error when fetch: " + webPage);
 		return null;
 	}
 	
@@ -120,25 +260,24 @@ public class OkoooDataDownloader
 	 * @param startIndex
 	 * @param perPageNum
 	 */
-	protected static void downloadMoreYpPage(WebClientFetcher fetcher, String mid, List<OkoooYp> yps,
+	protected static void downloadMoreYpPage(WebClientFetcher fetcher, MatchItem match, List<OkoooYp> yps,
 			int startIndex, int perPageNum)
 	{
 		int pageIndex = startIndex;
-		Date currentTime = new Date();
 		int corpNum = -1;
 		//int i = 0;
 		while((corpNum <= 0) || (pageIndex * perPageNum < corpNum))
 		{
-			OkoooRequestHeaderWebPage morePage = OkoooPageCreator.createYpPageWebPage(mid, pageIndex, perPageNum);
-			logger.info("Downloading '" + mid + "' page " + pageIndex);
+			OkoooRequestHeaderWebPage morePage = OkoooPageCreator.createYpPageWebPage(match.getMid(), pageIndex, perPageNum);
+			logger.info("Downloading '" + match.getMid() + "' page " + pageIndex);
 			
 			try
 			{
 				if(download(fetcher, morePage))
 				{
 					OddsYpChildParser parser = new OddsYpChildParser();
-					parser.setCurrentTime(currentTime);
-					parser.setMid(mid);
+					parser.setMatchTime(match.getMatchDate());
+					parser.setMid(match.getMid());
 					
 					if(parser.parseWebPage(morePage))
 					{
@@ -147,14 +286,10 @@ public class OkoooDataDownloader
 						{
 							yps.addAll(childOps);
 						}
-						/*for (OkoooOp okoooOp : childOps)
-						{
-							logger.info(i +++ ": " + okoooOp);
-						}*/
 						
 						if(childOps.size() < perPageNum)
 						{
-							logger.info("The op number is all.");
+							logger.info("The yp number is all.");
 							break;
 						}
 					}
@@ -197,7 +332,7 @@ public class OkoooDataDownloader
 	 * @param startIndex
 	 * @param perPageNum
 	 */
-	protected static void downloadMoreOpPage(WebClientFetcher fetcher, String mid, List<OkoooOp> ops,
+	protected static void downloadMoreOpPage(WebClientFetcher fetcher, MatchItem match, List<OkoooOp> ops,
 			int startIndex, int perPageNum)
 	{
 		int pageIndex = startIndex;
@@ -206,8 +341,8 @@ public class OkoooDataDownloader
 		//int i = 0;
 		while((corpNum <= 0) || (pageIndex * perPageNum < corpNum))
 		{
-			OkoooRequestHeaderWebPage morePage = OkoooPageCreator.createOpPageWebPage(mid, pageIndex, perPageNum);
-			logger.info("Downloading '" + mid + "' page " + pageIndex);
+			OkoooRequestHeaderWebPage morePage = OkoooPageCreator.createOpPageWebPage(match.getMid(), pageIndex, perPageNum);
+			logger.info("Downloading '" + match.getMid() + "' page " + pageIndex);
 			
 			try
 			{
@@ -215,8 +350,8 @@ public class OkoooDataDownloader
 				{
 					OddsOpChildParser parser = new OddsOpChildParser();
 					parser.setCurrentTime(currentTime);
-					parser.setMid(mid);
-					
+					parser.setMid(match.getMid());
+					parser.setMatchTime(match.getMatchDate());
 					if(parser.parseWebPage(morePage))
 					{
 						List<OkoooOp> childOps = parser.getOps();
@@ -297,5 +432,18 @@ public class OkoooDataDownloader
 		catch (Exception e) {
 			logger.info("Error when save OkoooWebPage: " + page);
 		}
+	}
+	
+	/**
+	 * 获得数据下载器
+	 * @return
+	 */
+	public static WebClientFetcher getWebClientFetcher()
+	{
+		if(fetcher == null)
+		{
+			logger.info("Please run downloadBaseBdMatchPage() first.");
+		}
+		return fetcher;
 	}
 }

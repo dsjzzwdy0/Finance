@@ -22,6 +22,8 @@ import com.loris.soccer.bean.SoccerConstants;
 import com.loris.soccer.bean.item.IssueMatch;
 import com.loris.soccer.bean.model.IssueMatchMapping;
 import com.loris.soccer.bean.okooo.OkoooBdMatch;
+import com.loris.soccer.bean.okooo.OkoooMatchInfo;
+import com.loris.soccer.bean.okooo.OkoooOp;
 import com.loris.soccer.bean.okooo.OkoooYp;
 import com.loris.soccer.bean.table.BdMatch;
 import com.loris.soccer.bean.table.CorpSetting;
@@ -33,6 +35,7 @@ import com.loris.soccer.bean.table.UserCorporate;
 import com.loris.soccer.bean.table.Yp;
 import com.loris.soccer.bean.view.MatchInfo;
 import com.loris.soccer.bean.view.RankInfo;
+import com.loris.soccer.repository.OkoooSqlHelper;
 import com.loris.soccer.repository.SoccerManager;
 
 /**
@@ -74,13 +77,13 @@ public class MatchDocLoader
 	/**
 	 * 获得赔率公司配置信息
 	 * 
-	 * @param corpType
-	 *            赔率公司类型
+	 * @param corpType 赔率公司类型
 	 * @return 赔率公司配置
 	 */
 	public static CorpSetting getCorpConfigure(String corpType)
 	{
-		switch (corpType) {
+		switch (corpType)
+		{
 		case CORP_ODDS_DEFAULT:
 			return getDefaultCorpSetting();
 		default:
@@ -103,8 +106,7 @@ public class MatchDocLoader
 	/**
 	 * 获得比赛数据元素列表
 	 * 
-	 * @param dataVector
-	 *            数据容器
+	 * @param dataVector 数据容器
 	 * @return 数据元素列表
 	 */
 	public static List<MatchSynthElement> getDefaultMatchSynthElement(MatchDoc dataVector)
@@ -139,8 +141,7 @@ public class MatchDocLoader
 	/**
 	 * 获得比赛数据元素列表
 	 * 
-	 * @param dataVector
-	 *            数据容器
+	 * @param dataVector 数据容器
 	 * @return 数据元素列表
 	 */
 	public static List<MatchSynthElement> getJcMatchSynthElement(MatchDoc dataVector, String issue)
@@ -167,16 +168,11 @@ public class MatchDocLoader
 	/**
 	 * 获得某一场比赛欧赔数据与亚盘数据的比较值
 	 * 
-	 * @param mid
-	 *            比赛编号
-	 * @param opgid
-	 *            欧赔公司编号
-	 * @param opsource
-	 *            欧赔公司来源
-	 * @param ypgid
-	 *            亚盘公司编号
-	 * @param ypsource
-	 *            亚盘公司来源
+	 * @param mid      比赛编号
+	 * @param opgid    欧赔公司编号
+	 * @param opsource 欧赔公司来源
+	 * @param ypgid    亚盘公司编号
+	 * @param ypsource 亚盘公司来源
 	 * @return 数据详细列表
 	 */
 	public static MatchCorpOddsElement getMatchCorpOddsElement(String mid, String opgid, String opsource, String ypgid,
@@ -214,12 +210,9 @@ public class MatchDocLoader
 	/**
 	 * 加载某一个场比赛的欧赔数据与亚盘数据，用于对比分析
 	 * 
-	 * @param element
-	 *            比赛信息
-	 * @param opcorp
-	 *            欧赔公司
-	 * @param ypcorp
-	 *            亚盘公司
+	 * @param element 比赛信息
+	 * @param opcorp  欧赔公司
+	 * @param ypcorp  亚盘公司
 	 */
 	public static void getMatchCorpOdds(MatchCorpOddsElement element, Corporate opcorp, Corporate ypcorp)
 	{
@@ -397,7 +390,7 @@ public class MatchDocLoader
 
 		return matchRanks;
 	}
-
+	
 	/**
 	 * 加载联赛某一轮次的比赛数据
 	 * 
@@ -407,8 +400,12 @@ public class MatchDocLoader
 	 * @param setting
 	 * @return
 	 */
-	public static List<MatchOdds> loadRoundMatchOdds(String lid, String season, String round, CorpSetting setting)
+	public static List<MatchOdds> loadRoundMatchOdds(String lid, String season, String round, CorpSetting setting, String source)
 	{
+		if(SoccerConstants.DATA_SOURCE_OKOOO.equalsIgnoreCase(source))
+		{
+			return loadRoundMatchOddsFromOkooo(lid, season, round, setting);
+		}
 		SoccerManager manager = SoccerManager.getInstance();
 		List<MatchInfo> matchs = manager.getMatchInfos(lid, season, round);
 		if (matchs == null || matchs.size() == 0)
@@ -433,10 +430,169 @@ public class MatchDocLoader
 		loadMatchOdds(list, mids, gids, SoccerConstants.ODDS_TYPE_OP);
 		gids = setting.getCorporateIds(SoccerConstants.DATA_SOURCE_ZGZCW, SoccerConstants.ODDS_TYPE_YP);
 		loadMatchOdds(list, mids, gids, SoccerConstants.ODDS_TYPE_YP);
-		
+
 		matchs.clear();
 		matchs = null;
 		return list;
+	}
+
+	/**
+	 * 加载联赛某一轮次的比赛数据
+	 * 
+	 * @param lid
+	 * @param season
+	 * @param round
+	 * @param setting
+	 * @return
+	 */
+	public static List<MatchOdds> loadRoundMatchOddsFromOkooo(String lid, String season, String round, CorpSetting setting)
+	{
+		OkoooSqlHelper sqlHelper = OkoooSqlHelper.getInstance();
+		List<OkoooMatchInfo> matchs = sqlHelper.getOkoooMatchInfos(lid, season, round);
+		if (matchs == null || matchs.size() == 0)
+		{
+			return null;
+		}
+
+		List<MatchOdds> list = new ArrayList<>();
+		List<String> mids = new ArrayList<>();
+		int i = 1;
+		for (OkoooMatchInfo match : matchs)
+		{
+			mids.add(match.getMid());
+			
+			/*MatchInfo matchInfo = new MatchInfo();
+			matchInfo.setMatchItem(match);
+			matchInfo.setHomename(match.getHomeid());
+			matchInfo.setClientname(match.getClientid());*/
+			MatchOdds m = new MatchOdds(match);
+			m.setOrdinary(Integer.toString(i++));
+			list.add(m);
+		}
+
+		// 加载欧赔与亚盘数据
+		List<String> gids = setting.getCorporateIds(SoccerConstants.DATA_SOURCE_OKOOO, SoccerConstants.ODDS_TYPE_OP);
+		loadMatchOddsFromOkooo(list, mids, gids, SoccerConstants.ODDS_TYPE_OP);
+		gids = setting.getCorporateIds(SoccerConstants.DATA_SOURCE_OKOOO, SoccerConstants.ODDS_TYPE_YP);
+		loadMatchOddsFromOkooo(list, mids, gids, SoccerConstants.ODDS_TYPE_YP);
+
+		matchs.clear();
+		matchs = null;
+		return list;
+	}
+
+	/**
+	 * 加载数据
+	 * 
+	 * @param issue
+	 * @param type
+	 * @param lids
+	 * @param setting
+	 * @return
+	 */
+	public static List<MatchOdds> loadMatchOddsFromOkooo(String issue, String type, List<String> lids,
+			CorpSetting setting)
+	{
+		OkoooSqlHelper sqlHelper = OkoooSqlHelper.getInstance();
+
+		List<? extends IssueMatch> matchs = null;
+		if (SoccerConstants.LOTTERY_JC.equalsIgnoreCase(type))
+		{
+			matchs = sqlHelper.getJcMatches(issue);
+		}
+		else
+		{
+			matchs = sqlHelper.getBdMatches(issue);
+		}
+
+		if (matchs == null || matchs.size() == 0)
+		{
+			return null;
+		}
+
+		List<String> mids = new ArrayList<>();
+
+		List<MatchOdds> list = new ArrayList<>();
+		for (IssueMatch match : matchs)
+		{
+			// 过滤联赛类型
+			if (lids != null && lids.size() > 0)
+			{
+				boolean inLeagues = false;
+				for (String lid : lids)
+				{
+					if (lid.equals(match.getLid()))
+					{
+						inLeagues = true;
+						break;
+					}
+				}
+				if (!inLeagues)
+				{
+					continue;
+				}
+			}
+			MatchOdds m = new MatchOdds(match);
+			mids.add(match.getMid());
+			list.add(m);
+		}
+
+		// 加载欧赔与亚盘数据
+		List<String> gids = setting.getCorporateIds(SoccerConstants.DATA_SOURCE_OKOOO, SoccerConstants.ODDS_TYPE_OP);
+		loadMatchOddsFromOkooo(list, mids, gids, SoccerConstants.ODDS_TYPE_OP);
+		gids = setting.getCorporateIds(SoccerConstants.DATA_SOURCE_OKOOO, SoccerConstants.ODDS_TYPE_YP);
+		loadMatchOddsFromOkooo(list, mids, gids, SoccerConstants.ODDS_TYPE_YP);
+
+		matchs.clear();
+		matchs = null;
+		return list;
+	}
+	
+	/**
+	 * 
+	 * @param matchOdds
+	 * @param mids
+	 * @param gids
+	 * @param type
+	 */
+	public static void loadMatchOddsFromOkooo(List<MatchOdds> matchOdds, List<String> mids, List<String> gids, String type)
+	{
+		if (mids == null || mids.size() == 0 || gids == null || gids.size() == 0)
+		{
+			return;
+		}
+		OkoooSqlHelper sqlHelper = OkoooSqlHelper.getInstance();
+
+		if (SoccerConstants.ODDS_TYPE_OP.equalsIgnoreCase(type))
+		{
+			List<OkoooOp> ops = sqlHelper.getOddsOp(mids, gids, true);
+			for (Op op : ops)
+			{
+				for (MatchOdds m : matchOdds)
+				{
+					if (op.getMid().equals(m.getMid()))
+					{
+						m.addOp(op);
+						continue;
+					}
+				}
+			}
+		}
+		else if (SoccerConstants.ODDS_TYPE_YP.equalsIgnoreCase(type))
+		{
+			List<OkoooYp> yps = sqlHelper.getOddsYp(mids, gids, true);
+			for (Yp yp : yps)
+			{
+				for (MatchOdds m : matchOdds)
+				{
+					if (yp.getMid().equals(m.getMid()))
+					{
+						m.addYp(yp);
+						continue;
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -446,8 +602,13 @@ public class MatchDocLoader
 	 * @param type
 	 * @return
 	 */
-	public static List<MatchOdds> loadMatchOdds(String issue, String type, List<String> lids, CorpSetting setting)
+	public static List<MatchOdds> loadMatchOdds(String issue, String type, List<String> lids, CorpSetting setting,
+			String source)
 	{
+		if ("okooo".equalsIgnoreCase(source))
+		{
+			return loadMatchOddsFromOkooo(issue, type, lids, setting);
+		}
 		SoccerManager manager = SoccerManager.getInstance();
 		List<? extends IssueMatch> matchs = null;
 		if (SoccerConstants.LOTTERY_JC.equalsIgnoreCase(type))
@@ -497,19 +658,45 @@ public class MatchDocLoader
 		gids = setting.getCorporateIds(SoccerConstants.DATA_SOURCE_ZGZCW, SoccerConstants.ODDS_TYPE_YP);
 		loadMatchOdds(list, mids, gids, SoccerConstants.ODDS_TYPE_YP);
 
-		matchs.clear(); 
+		matchs.clear();
+		matchs = null;
+		return list;
+	}
+	
+	public static List<MatchOdds> loadMatchesOddsFromOkooo(List<String> mids, CorpSetting setting)
+	{
+		OkoooSqlHelper sqlHelper = OkoooSqlHelper.getInstance();
+		List<OkoooBdMatch> matchs = sqlHelper.getOkoooBdMatches(mids);
+		List<MatchOdds> list = new ArrayList<>();
+		for (BdMatch match : matchs)
+		{
+			MatchOdds m = new MatchOdds(match);
+			list.add(m);
+		}
+		// 加载欧赔与亚盘数据
+		List<String> gids = setting.getCorporateIds(SoccerConstants.DATA_SOURCE_OKOOO, SoccerConstants.ODDS_TYPE_OP);
+		loadMatchOddsFromOkooo(list, mids, gids, SoccerConstants.ODDS_TYPE_OP);
+		gids = setting.getCorporateIds(SoccerConstants.DATA_SOURCE_OKOOO, SoccerConstants.ODDS_TYPE_YP);
+		loadMatchOddsFromOkooo(list, mids, gids, SoccerConstants.ODDS_TYPE_YP);
+		matchs.clear();
 		matchs = null;
 		return list;
 	}
 
 	/**
 	 * 加载所有的比赛数据
+	 * 
 	 * @param mids
 	 * @param setting
 	 * @return
 	 */
-	public static List<MatchOdds> loadMatchesOdds(List<String> mids, CorpSetting setting)
+	public static List<MatchOdds> loadMatchesOdds(List<String> mids, CorpSetting setting, String source)
 	{
+		if(SoccerConstants.DATA_SOURCE_OKOOO.equalsIgnoreCase(source))
+		{
+			return loadMatchesOddsFromOkooo(mids, setting);
+		}
+		
 		SoccerManager manager = SoccerManager.getInstance();
 		List<BdMatch> matchs = manager.getBdMatches(mids);
 		List<MatchOdds> list = new ArrayList<>();
@@ -531,8 +718,7 @@ public class MatchDocLoader
 	/**
 	 * 获取竞彩期号的比赛数据
 	 * 
-	 * @param issue
-	 *            期号
+	 * @param issue 期号
 	 * @return 比赛数据
 	 */
 	public static MatchDoc getMatchDoc(String issue, CorpSetting configure)
@@ -544,12 +730,9 @@ public class MatchDocLoader
 	/**
 	 * 从数据库加载竞彩比赛相关数据
 	 * 
-	 * @param soccerManager
-	 *            数据管理类
-	 * @param issue
-	 *            比赛期号
-	 * @param configure
-	 *            博彩公司配置
+	 * @param soccerManager 数据管理类
+	 * @param issue         比赛期号
+	 * @param configure     博彩公司配置
 	 * @return 是否加载成功的标志
 	 */
 	protected static MatchDoc loadIssueMatchDataFromDatabase(SoccerManager soccerManager, String issue,
@@ -563,10 +746,8 @@ public class MatchDocLoader
 		List<? extends IssueMatch> matches = soccerManager.getBdMatches(issue);
 		if (matches == null || matches.size() <= 0)
 		{
-			logger.info(
-					"Error, load JcMatch '" + issue
-							+ "' is empty, check the database and ensure the JcMatch data exist in database."
-			);
+			logger.info("Error, load JcMatch '" + issue
+					+ "' is empty, check the database and ensure the JcMatch data exist in database.");
 			return null;
 		}
 
@@ -597,10 +778,8 @@ public class MatchDocLoader
 	/**
 	 * 加载与之关联的历史比赛数据
 	 * 
-	 * @param soccerManager
-	 *            数据仓库
-	 * @param dataVector
-	 *            数据数组
+	 * @param soccerManager 数据仓库
+	 * @param dataVector    数据数组
 	 */
 	protected static void loadHistoryMatchFromDatabase(SoccerManager soccerManager, MatchDoc dataVector)
 	{
@@ -620,12 +799,9 @@ public class MatchDocLoader
 	/**
 	 * 从数据库中加载赔率数据
 	 * 
-	 * @param soccerManager
-	 *            数据管理器
-	 * @param dataVector
-	 *            比赛数组
-	 * @param configure
-	 *            公司配置
+	 * @param soccerManager 数据管理器
+	 * @param dataVector    比赛数组
+	 * @param configure     公司配置
 	 */
 	protected static void loadOddsDataFromDatabase(SoccerManager soccerManager, String issue, MatchDoc dataVector,
 			CorpSetting configure)
@@ -651,10 +827,8 @@ public class MatchDocLoader
 			}
 			else if (SoccerConstants.DATA_SOURCE_OKOOO.equalsIgnoreCase(source))
 			{
-				IssueMatchMapping mapping = getMatchMapping(
-						issue, SoccerConstants.DATA_SOURCE_OKOOO, SoccerConstants.DATA_SOURCE_ZGZCW,
-						dataVector.getMatches()
-				);
+				IssueMatchMapping mapping = getMatchMapping(issue, SoccerConstants.DATA_SOURCE_OKOOO,
+						SoccerConstants.DATA_SOURCE_ZGZCW, dataVector.getMatches());
 				dataVector.addIssueMatchMapping(SoccerConstants.DATA_SOURCE_OKOOO, mapping);
 
 				List<String> mids = mapping.getDestMatchIds();
@@ -671,10 +845,8 @@ public class MatchDocLoader
 	/**
 	 * 获得数据映射表
 	 * 
-	 * @param dest
-	 *            目标数据源
-	 * @param issue
-	 *            比赛期号
+	 * @param dest          目标数据源
+	 * @param issue         比赛期号
 	 * @param source
 	 * @param sourceMatches
 	 * @return
@@ -687,9 +859,8 @@ public class MatchDocLoader
 		if (SoccerConstants.DATA_SOURCE_OKOOO.equalsIgnoreCase(dest))
 		{
 			List<OkoooBdMatch> okoooJcMatchs = manager.getOkoooBdMatches(issue);
-			IssueMatchMapping mapping = mappingJcMatchIds(
-					issue, source, sourceMatches, SoccerConstants.DATA_SOURCE_OKOOO, okoooJcMatchs
-			);
+			IssueMatchMapping mapping = mappingJcMatchIds(issue, source, sourceMatches,
+					SoccerConstants.DATA_SOURCE_OKOOO, okoooJcMatchs);
 			return mapping;
 		}
 		return null;
@@ -698,16 +869,11 @@ public class MatchDocLoader
 	/**
 	 * 从两个不同的数据源来的比赛，对ID值进行映射匹配
 	 * 
-	 * @param issue
-	 *            比赛期号
-	 * @param source
-	 *            数据来源
-	 * @param matchs
-	 *            来源数据列表
-	 * @param dest
-	 *            目标
-	 * @param matchs2
-	 *            目标数据列表
+	 * @param issue   比赛期号
+	 * @param source  数据来源
+	 * @param matchs  来源数据列表
+	 * @param dest    目标
+	 * @param matchs2 目标数据列表
 	 * @return 映射表
 	 */
 	public static IssueMatchMapping mappingJcMatchIds(String issue, String source, List<? extends IssueMatch> matchs,
@@ -743,16 +909,11 @@ public class MatchDocLoader
 	/**
 	 * 从两个不同的数据源来的比赛，对ID值进行映射匹配
 	 * 
-	 * @param issue
-	 *            比赛期号
-	 * @param source
-	 *            数据来源
-	 * @param matchs
-	 *            来源的比赛数据列表
-	 * @param dest
-	 *            数据来源
-	 * @param okoooJcMatchs
-	 *            数据目标的比赛列表
+	 * @param issue         比赛期号
+	 * @param source        数据来源
+	 * @param matchs        来源的比赛数据列表
+	 * @param dest          数据来源
+	 * @param okoooJcMatchs 数据目标的比赛列表
 	 * @return 映射表
 	 */
 	public static IssueMatchMapping mappingMatchIdsBySimilarity(String issue, String source, List<IssueMatch> matchs,
@@ -960,10 +1121,8 @@ public class MatchDocLoader
 	/**
 	 * 获得博彩公司，如果source为空时，则默认的为zgzcw
 	 * 
-	 * @param key
-	 *            公司编号、公司名称等
-	 * @param source
-	 *            数据来源
+	 * @param key    公司编号、公司名称等
+	 * @param source 数据来源
 	 * @return 博彩公司
 	 */
 	public static Corporate getCorporate(String key, String type, String source)
@@ -999,10 +1158,8 @@ public class MatchDocLoader
 	/**
 	 * 某一轮次的某一联赛的比赛数据
 	 * 
-	 * @param issue
-	 *            期号
-	 * @param lid
-	 *            联赛编号
+	 * @param issue 期号
+	 * @param lid   联赛编号
 	 * @return
 	 */
 	public static List<MatchInfo> getMatchInfos(String issue, String lid)
