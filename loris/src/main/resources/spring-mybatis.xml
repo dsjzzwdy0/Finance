@@ -38,6 +38,14 @@
 		<property name="maxIdle" value="${maxIdle}"></property>	 <!-- 连接池最大空闲 -->
 		<property name="minIdle" value="${minIdle}"></property>  <!-- 连接池最小空闲 -->
 		<property name="maxWait" value="${maxWait}"></property>  <!-- 获取连接最大等待时间 -->
+		<property name="validationQuery" value="SELECT 1"></property>
+		<property name="testWhileIdle" value="true"></property>
+		<property name="testOnBorrow" value="true"></property>
+		<property name="timeBetweenEvictionRunsMillis" value="3600000"></property>
+		<property name="numTestsPerEvictionRun" value="50"></property>
+		<property name="minEvictableIdleTimeMillis" value="120000"></property>
+		<property name="removeAbandoned" value="true"/>
+		<property name="removeAbandonedTimeout" value="6000000"/>
 	</bean>
 	
 	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
