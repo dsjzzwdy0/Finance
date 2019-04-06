@@ -13,9 +13,6 @@
         <dependent-module archiveName="loris-soccer-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/loris-soccer/loris-soccer">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="loris-ml-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/loris-ml/loris-ml">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <property name="context-root" value="loris"/>
         <property name="java-output-path" value="/loris/target/classes"/>
     </wb-module>

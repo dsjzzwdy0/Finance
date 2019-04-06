@@ -71,7 +71,14 @@ public class LiveJcWebPageParser extends AbstractWebPageParser
 		Elements elements = element.select("tr");
 		for (Element element2 : elements)
 		{
-			parseMatch(element2);
+			try
+			{
+				parseMatch(element2);
+			}
+			catch(Exception e)
+			{
+				logger.info(e.getMessage());
+			}
 		}
 	}
 	
