@@ -20,7 +20,6 @@ import com.loris.base.bean.wrapper.Rest;
 import com.loris.base.repository.BasicManager;
 import com.loris.base.util.NumberUtil;
 import com.loris.base.web.WebCrawler;
-import com.loris.base.web.config.ConfigParser;
 import com.loris.base.web.config.setting.DownSetting;
 import com.loris.base.web.manager.DownloaderStatus;
 import com.loris.base.web.manager.Downloader;
@@ -31,6 +30,7 @@ import com.loris.base.web.page.WebPage;
 import com.loris.base.web.repository.WebPageManager;
 import com.loris.base.web.util.Monitor;
 import com.loris.lottery.context.ApplicationContextHelper;
+import com.loris.lottery.task.WebPageRunnable;
 
 @Controller
 @RequestMapping("/download")
@@ -50,14 +50,14 @@ public class DownloadController extends BaseController implements WebPageStatusL
 	public DownloadController()
 	{
 		crawler = WebCrawler.getInstance();
-		try
+		/*try
 		{
 			ConfigParser.parseWebPageSettings(DownloadController.class.getResourceAsStream("/web-downloaders.xml"));
 		}
 		catch(Exception e)
 		{
 			logger.info(e.toString());
-		}
+		}*/
 	}
 	
 	/**
@@ -435,21 +435,5 @@ public class DownloadController extends BaseController implements WebPageStatusL
 			crawler.addWebPageDownloader(downloader);
 		}
 		return downloader;
-	}
-}
-
-/**
- * 用于启动线程
- * 
- * @author jiean
- *
- */
-abstract class WebPageRunnable implements Runnable
-{
-	Downloader downloader;
-
-	public WebPageRunnable(Downloader downloader)
-	{
-		this.downloader = downloader;
 	}
 }
