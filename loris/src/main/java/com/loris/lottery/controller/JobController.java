@@ -56,7 +56,7 @@ public class JobController
 			// 启动调度器
 			scheduler.start();
 	        
-	        addAndStart(QuartzTestJob.class.getName(), JOB_GROUP_NAME, "0 39 21 * * ?");
+	        addAndStart(QuartzTestJob.class.getName(), JOB_GROUP_NAME, "0 39 12 * * ?");
 		}
 		catch(SchedulerException e)
 		{
