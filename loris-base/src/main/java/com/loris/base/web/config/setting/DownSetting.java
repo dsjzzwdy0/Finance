@@ -307,30 +307,37 @@ public class DownSetting extends UUIDEntity implements Cloneable
 	 * @return
 	 * @throws CloneNotSupportedException
 	 */
-	public DownSetting cloneAndSetDownSetting(DownSetting setting) throws CloneNotSupportedException
+	public DownSetting cloneAndSetDownSetting(DownSetting setting)
 	{
-		DownSetting setting2 = (DownSetting)this.clone();
-		if("gb2312".equalsIgnoreCase(setting.getEncoding()) || "utf-8".equalsIgnoreCase(setting.getEncoding()))
+		try
 		{
-			setting2.setEncoding(setting.getEncoding());
+			DownSetting setting2 = (DownSetting)this.clone();
+			
+			if("gb2312".equalsIgnoreCase(setting.getEncoding()) || "utf-8".equalsIgnoreCase(setting.getEncoding()))
+			{
+				setting2.setEncoding(setting.getEncoding());
+			}
+			if(StringUtils.isNotEmpty(setting.getDays()))
+			{
+				setting2.setDays(setting.getDays());
+			}
+			if(setting.getInterval() > 0)
+			{
+				setting2.setInterval(setting.getInterval());
+			}
+			if(StringUtils.isNotEmpty(setting.start))
+			{
+				setting2.setStart(setting.start);
+			}
+			if(StringUtils.isNotEmpty(setting.end))
+			{
+				setting2.setEnd(setting.end);
+			}	
+			return setting2;
 		}
-		if(StringUtils.isNotEmpty(setting.getDays()))
-		{
-			setting2.setDays(setting.getDays());
+		catch (Exception e) {
+			return null;
 		}
-		if(setting.getInterval() > 0)
-		{
-			setting2.setInterval(setting.getInterval());
-		}
-		if(StringUtils.isNotEmpty(setting.start))
-		{
-			setting2.setStart(setting.start);
-		}
-		if(StringUtils.isNotEmpty(setting.end))
-		{
-			setting2.setEnd(setting.end);
-		}
-		return setting2;
 	}
 	
 	@Override

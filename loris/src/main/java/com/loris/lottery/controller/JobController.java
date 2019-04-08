@@ -26,7 +26,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.loris.lottery.job.BaseJob;
-import com.loris.lottery.job.QuartzTestJob;
+import com.loris.lottery.job.IssueDataDownloadJob;
+import com.loris.lottery.job.LiveDataDownloadJob;
 
 /**
  * @ClassName: JobController
@@ -56,7 +57,8 @@ public class JobController
 			// 启动调度器
 			scheduler.start();
 	        
-	        addAndStart(QuartzTestJob.class.getName(), JOB_GROUP_NAME, "0 39 12 * * ?");
+	        addAndStart(IssueDataDownloadJob.class.getName(), JOB_GROUP_NAME, "0 10 12 * * ?");
+	        addAndStart(LiveDataDownloadJob.class.getName(), JOB_GROUP_NAME, "0 50 17 * * ?");
 		}
 		catch(SchedulerException e)
 		{
@@ -86,6 +88,8 @@ public class JobController
 		// 按新的cronExpression表达式构建一个新的trigger
 		CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(jobClassName, jobGroupName)
 				.withSchedule(scheduleBuilder).build();
+		
+		logger.info("Add job: " + jobClassName + " to Group: " + jobGroupName + ", cron: " + cronExpression);
 		try
 		{
 			scheduler.scheduleJob(jobDetail, trigger);
