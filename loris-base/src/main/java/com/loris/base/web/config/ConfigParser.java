@@ -66,6 +66,8 @@ public class ConfigParser
 		{
 			InputStream input = ConfigParser.class.getResourceAsStream("crawlerConfig.xml");
 			crawlerSettings = parseConfiguration(input);
+			
+			parseWebDownloaders();
 			// -- Compile regexpes to improve performance.
 			compileUrlPatterns();
 		}
@@ -77,6 +79,9 @@ public class ConfigParser
 		{
 			ex.printStackTrace();
 		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 		
 	/**
@@ -87,7 +92,7 @@ public class ConfigParser
 	 */
 	public static void parseWebDownloaders() throws IOException, SAXException, JDOMException
 	{
-		parseWebPageSettings(ConfigParser.class.getResourceAsStream("/web-downloads.xml"));
+		parseWebPageSettings(ConfigParser.class.getResourceAsStream("/web-downloaders.xml"));
 	}
 	
 	/**

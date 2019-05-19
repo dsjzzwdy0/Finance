@@ -77,12 +77,12 @@
 		</div>
 		
 		<div id="newToolbar" class="newToolBar" style="display: none; float: right; margin-right: 10px;">
-			<label for="sameLeague" class="check_same_league"><input class="sel_list" id="sameLeague" style="margin-right: 4px;" type="checkbox" checked="true" />同联赛内比较</label>
-			<select id="oddsType" class="sel_list" style="width:70px;">
+			<label for="sameLeague" class="check_same_league"><input class="sel_list" id="sameLeague" style="margin-right: 4px; display:none;" type="checkbox" checked="true" />同联赛内比较</label>
+			<select id="oddsType" class="sel_list" style="width:70px; display:none;">
 				<option value="start" selected>初盘</option>
 				<option value="now">即时</option>
 			</select>
-			<select id="sort" class="sel_list" style="width: 70px;">
+			<select id="sort" class="sel_list" style="width: 70px; display:none;">
 				<option value="asc" selected>升序</option>
 				<option value="desc">降序</option>
 			</select>
@@ -107,6 +107,12 @@ function showNewToolBar()
 	$('.top-chosse #newToolbar').show();
 }
 
+function showOddsType()
+{
+	$('.top-chosse #oddsType').show();
+	$('.top-chosse #sameLeague').show();
+	$('.top-chosse #sameLeague').attr("checked", 'checked');;
+}
 function showSettingSel()
 {
 	$('.top-chosse #settingSel').show();

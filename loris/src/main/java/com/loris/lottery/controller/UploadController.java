@@ -1,7 +1,7 @@
 package com.loris.lottery.controller;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -22,11 +22,14 @@ import com.loris.base.bean.ClientInfo;
 import com.loris.base.bean.entity.Entity;
 import com.loris.base.bean.wrapper.Rest;
 import com.loris.base.bean.wrapper.TableRecordList;
+import com.loris.base.util.DateUtil;
+import com.loris.base.util.NumberUtil;
 import com.loris.base.util.ReflectUtil;
-import com.loris.soccer.bean.data.table.lottery.BdMatch;
-import com.loris.soccer.bean.data.table.lottery.JcMatch;
-import com.loris.soccer.bean.data.table.odds.Op;
-import com.loris.soccer.bean.data.table.odds.Yp;
+import com.loris.soccer.bean.table.BdMatch;
+import com.loris.soccer.bean.table.JcMatch;
+import com.loris.soccer.bean.table.Match;
+import com.loris.soccer.bean.table.Op;
+import com.loris.soccer.bean.table.Yp;
 import com.loris.soccer.repository.SoccerManager;
 
 /**
@@ -101,20 +104,28 @@ public class UploadController extends BaseController
 				logger.info(error);
 				return Rest.failure(error);
 			}
-			List<Entity> entities = list.getRecords();
+			List<? extends Entity> entities = list.getRecords();
 			String clazz = list.getClazzname();
 			
 			if(Op.class.getName().equals(clazz))
 			{
 				List<Op> ops = transformRecords(entities);
 				String mid = ops.get(0).getMid();
-				soccerManager.addOrUpdateMatchOps(mid, ops);
+				logger.info("First Op Value: " + ops.get(0));
+				synchronized(soccerManager)
+				{
+					soccerManager.addOrUpdateMatchOps(mid, ops);
+				}
 			}
 			else if(Yp.class.getName().equals(clazz))
 			{
 				List<Yp> yps = transformRecords(entities);
 				String mid = yps.get(0).getMid();
-				soccerManager.addOrUpdateMatchYps(mid, yps);
+				logger.info("First Yp Value: " + yps.get(0));
+				synchronized(soccerManager)
+				{
+					soccerManager.addOrUpdateMatchYps(mid, yps);
+				}
 			}
 			else if(JcMatch.class.getName().equals(clazz))
 			{
@@ -126,16 +137,17 @@ public class UploadController extends BaseController
 				List<BdMatch> bdMatchs = transformRecords(entities);
 				soccerManager.addOrUpdateBdMatches(bdMatchs);
 			}
+			else if(Match.class.getName().equals(clazz))
+			{
+				List<Match> matchs =transformRecords(entities);
+				soccerManager.addOrUpdateMatches(matchs);
+			}
 			
 			logger.info("Success to add " + entities.size() + " " + clazz + " records.");
-			
-			/*for (Entity entity : entities)
-			{
-				logger.info(entity);
-			}*/
 		}
 		catch(Exception e)
 		{
+			e.printStackTrace();
 			String error = "Error: " + e.toString();
 			logger.info(error);
 			return Rest.failure(error);
@@ -149,7 +161,7 @@ public class UploadController extends BaseController
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	protected static<T extends Entity> List<T> transformRecords(List<Entity> entities)
+	protected static<T extends Entity> List<T> transformRecords(List<? extends Entity> entities)
 	{
 		List<T> records = new ArrayList<>();
 		for (Entity entity : entities)
@@ -209,25 +221,112 @@ public class UploadController extends BaseController
 		List<Entity> entities = new ArrayList<>();
 		Class<?> clazz = Class.forName(clazzname);
 		
-		List<Method> methods = ReflectUtil.getAllMethods(clazz, false);		
+		List<Field> fields = ReflectUtil.getAllFields(clazz, false);
+		for (Field field : fields)
+		{
+			field.setAccessible(true);
+		}
 		for (Object rec : array)
 		{
 			Entity entity = (Entity) clazz.newInstance();
-			entities.add(entity);
-			
+
 			JSONObject obj = (JSONObject)rec;
 			for (String key : obj.keySet())
 			{
 				Object value = obj.get(key);
-				for (Method method : methods)
+				for (Field field : fields)
 				{
+					if(key.equals(field.getName()))
+					{
+						String type = field.getType().getName();
+						if(type.equals("java.lang.String")){  
+							field.set(entity, (String)value);  
+		                }  
+		                else if(type.equals("java.util.Date"))
+		                {
+		                	Date date = DateUtil.tryToParseDate(value.toString());
+		                	field.set(entity, date);  
+		                }  
+		                else if(type.equals("java.lang.Integer") || type.equals("int"))
+		                {
+		                	int t = NumberUtil.parseInt(value);
+		                	field.set(entity, t);
+		                }
+		                else if(type.equals("java.lang.Float") || type.equals("float"))
+		                {
+		                	float f = NumberUtil.parseFloat(value);
+		                	field.set(entity, f);
+		                }
+		                else if(type.equals("java.lang.Double") || type.equals("double"))
+		                {
+		                	double d = NumberUtil.parseDouble(value);
+		                	field.set(entity, d);
+		                }
+		                else 
+		                {
+		                	try
+							{
+		                		field.set(entity, value);
+							}
+							catch(Exception e)
+							{
+								logger.info("MethodName: " + field.getName() + ", Argument Type: " +  type);
+								e.printStackTrace();
+							}
+		                }
+					}
+					/*
+					//不是Bean的方法，带有多个参数
+					if(method.getParameterCount() < 1 || method.getParameterCount() > 1)
+					{
+						continue;
+					}
 					String methodName = method.getName();
 					if(methodName.equals("set" + key.substring(0, 1).toUpperCase() + key.substring(1)))
 					{
-						method.invoke(entity, value);
-					}
+						String type = method.getParameterTypes()[0].getName();
+						if(type.equals("java.lang.String")){  
+		                    method.invoke(entity, (String)value);  
+		                }  
+		                else if(type.equals("java.util.Date"))
+		                {
+		                	Date date = DateUtil.tryToParseDate(value.toString());
+		                    method.invoke(entity, date);  
+		                }  
+		                else if(type.equals("java.lang.Integer") || type.equals("int"))
+		                {
+		                	int t = NumberUtil.parseInt(object);
+		                	method.invoke(entity, t);
+		                }
+		                else if(type.equals("java.lang.Float") || type.equals("float"))
+		                {
+		                	float f = NumberUtil.parseFloat(object);
+		                	method.invoke(entity, f);
+		                }
+		                else if(type.equals("java.lang.Double") || type.equals("double"))
+		                {
+		                	double d = NumberUtil.parseDouble(object);
+		                	method.invoke(entity, d);
+		                }
+		                else 
+		                {
+		                	try
+							{
+								method.invoke(entity, value);
+							}
+							catch(Exception e)
+							{
+								logger.info("MethodName: " + methodName + ", Argument Type: " +  type);
+								e.printStackTrace();
+							}
+		                }
+
+					}*/
 				}
 			}
+			
+			//logger.info(entity);
+			entities.add(entity);
 		}
 		
 		return new TableRecordList(clazzname, entities);

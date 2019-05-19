@@ -2,13 +2,12 @@ package com.loris.base.web.manager;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.baomidou.mybatisplus.toolkit.StringUtils;
-import com.loris.base.util.ClassUtil;
 import com.loris.base.util.DateUtil;
+import com.loris.base.util.ReflectUtil;
 import com.loris.base.web.config.setting.DownSetting;
 import com.loris.base.web.manager.event.WebPageStatusListener;
 
@@ -35,6 +34,8 @@ public interface DownloaderCreator
 			Class<?> clazz = Class.forName(className);
 			Downloader downloader = (Downloader)clazz.newInstance();
 			
+			setDownloader(downloader, webPageSetting);
+			/*
 			List<Method> methods = new ArrayList<Method>();
 			ClassUtil.getAllMethods(methods, clazz);
 			Field[] infoFields = webPageSetting.getClass().getDeclaredFields();
@@ -57,7 +58,9 @@ public interface DownloaderCreator
 						method.invoke(downloader, value);
 					}
 				}
-			}
+			}*/
+			
+			
 			//Downloader downloader = (Downloader) obj;
 			downloader.setWebPageSetting(webPageSetting);
 			downloader.addWebPageStatusListener(listener);
@@ -82,8 +85,7 @@ public interface DownloaderCreator
 	{
 		try
 		{
-			List<Method> methods = new ArrayList<Method>();
-			ClassUtil.getAllMethods(methods, downloader.getClass());
+			List<Method> methods = ReflectUtil.getAllMethods(downloader.getClass(), false);
 			Field[] infoFields = webPageSetting.getClass().getDeclaredFields();
 			
 			String name;

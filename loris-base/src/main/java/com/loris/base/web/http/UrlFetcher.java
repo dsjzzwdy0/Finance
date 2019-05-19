@@ -44,7 +44,22 @@ import com.loris.base.web.util.DashBoard;
  */
 public class UrlFetcher
 {
-
+	public static final String Charset = "utf-8";
+	
+	//Inner class for UTF-8 support     
+	public static class UTF8PostMethod extends PostMethod
+	{     
+	    public UTF8PostMethod(String url){     
+	    	super(url);     
+	    }
+	    
+	    @Override     
+	    public String getRequestCharSet() {     
+	        //return super.getRequestCharSet();
+	        return Charset;     
+	    }  
+	}  
+	
 	private static Logger log = Logger.getLogger(UrlFetcher.class);
 	// Used in parse() for the initial capacity of a set
 	// private static final int AVERAGE_NUM_OF_LINKS = 100;
@@ -193,7 +208,7 @@ public class UrlFetcher
 		PostMethod httpost = null;
 		try
 		{
-			httpost = new PostMethod(urlString);
+			httpost = new UTF8PostMethod(urlString);
 		}
 		catch (IllegalArgumentException ex1)
 		{
@@ -589,7 +604,7 @@ public class UrlFetcher
 		PostMethod httppost = null;
 		try
 		{
-			httppost = new PostMethod(page.getFullURL());
+			httppost = new UTF8PostMethod(page.getFullURL());
 		}
 		catch (IllegalArgumentException ex1)
 		{
@@ -783,5 +798,4 @@ public class UrlFetcher
 	 * 
 	 *       return anchors; }
 	 */
-
 }

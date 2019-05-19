@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@page import="com.loris.soccer.bean.data.table.league.League"%>
+<%@page import="com.loris.soccer.bean.table.League"%>
 <%@page import="com.loris.soccer.analysis.util.IssueMatchUtil" %>
 <%@page import="com.baomidou.mybatisplus.toolkit.StringUtils" %>
 <%
@@ -79,6 +79,9 @@ var options = {
 		}
 		$('#matchNumAll').text(total);
 		$('#matchNumHide').text(total - shownum);
+		$('#gridTable tbody .relation').off('click').on('click', function(){
+			getRelatedMatch($(this));
+		});
 	}
 };
 
@@ -105,20 +108,20 @@ function createMatchOddsTable(conf)
 		error: null,
 		presuccess: function(json, soccerTable)
 		{
-			if ($.isNotNullOrEmpty(json.data.setting)) {
+			if ($.isNotNullOrEmpty(json.data) && $.isNotNullOrEmpty(json.data.setting)) {
 				var corpSetting = new CorpSetting(json.data.setting);
 				soccerTable.options.setting = corpSetting;
 				soccerTable.options.columns = new SoccerTableColumns().createCorpSettingColumns(corpSetting);
 			}
-			if ($.isNotNullOrEmpty(json.data.matches)) {
+			if ($.isNotNullOrEmpty(json.data) && $.isNotNullOrEmpty(json.data.matches)) {
 				soccerTable.options.rows = json.data.matches;
 				initLeaguePanel(json.data.matches);
-			}
+			}			
 		},
 		complete: function(){
-			$('#gridTable tbody').on('click', '.relation', function(){
+			/*$('#gridTable tbody .relation').off('click').on('click', function(){
 				getRelatedMatch($(this));
-			});
+			});*/
 		}
 	}	
 	options.source = source;
@@ -126,6 +129,12 @@ function createMatchOddsTable(conf)
 	options.sorter = sorter;
 	table = new SoccerTable(options);
 	$('#gridTable').soccerTable(table);
+}
+
+function openLeagueRel(mid, source)
+{
+	var sid = $('#settingSel').val();
+	window.open('analeague?type=leaguerel&mid=' + mid + '&source=' + source + '&sid=' + sid);
 }
 
 //获得比赛的数据
@@ -154,13 +163,13 @@ function getRelatedMatch(element)
 				var idx = $(div[i]).attr('index');
 				if(idx == index)
 					mids.push(mid);
-			}
-			
+			}			
 		}	
 	});
 	
+	var sid = $('#settingSel').val();
 	//layer.msg(mid + ': ' + gid + ', ' + val + ': ' + mids.join(';'));
-	window.open('../soccer/matchrel?mids=' + mids.join(','));
+	window.open('../soccer/matchrel?sid=' + sid + '&mids=' + mids.join(','));
 }
 
 function stateChange(state, source, conf)
@@ -199,6 +208,7 @@ function stateChange(state, source, conf)
 $(document).ready(function() {
 	showNewToolBar();
 	showSettingSel();
+	showOddsType();
 	
 	if($.isNotNullOrEmpty(sid))
 	{

@@ -1,16 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@page import="com.loris.soccer.bean.data.table.league.League"%>
-<%@page import="com.loris.soccer.bean.data.table.league.Round"%>
+<%@page import="com.loris.soccer.bean.table.League"%>
+<%@page import="com.loris.soccer.bean.table.Round"%>
 <%@page import="com.loris.soccer.analysis.util.IssueMatchUtil" %>
 <%@page import="com.baomidou.mybatisplus.toolkit.StringUtils" %>
 <%
 	League league = (League)request.getAttribute("league");
 	Round round = (Round)request.getAttribute("round");
+	String source = request.getParameter("source");
 
 	String sid = request.getParameter("sid");		//配置编号
-	String lid = (league == null) ? "" : league.getLid();
+	String lid = (league != null) ? league.getLid() : (round != null ? round.getLid() : "");
 	String season = round.getSeason();
 	String rid = round.getRid();
 
@@ -46,6 +47,7 @@ var sid = '<%=sid%>';
 var lid = '<%=lid%>';
 var season = '<%=season%>'
 var round = '<%=rid%>';
+var src = '<%=source%>';
 
 //基础数据
 var table = null;
@@ -63,6 +65,12 @@ var options = {
 		this.columns = null;
 		this.rows = null;
 		this.setting = null;
+	},
+	postshow: function()
+	{
+		$('#gridTable tbody .relation').off('click').on('click', function(){
+			getRelatedMatch($(this));
+		});
 	}
 };
 
@@ -82,6 +90,7 @@ function createLeagueMatchOddsTable(conf)
 			"lid": lid,
 			"season": season,
 			"round": round,
+			"source": src
 		},
 		jsonp:'callback',
 		success: null,
@@ -125,6 +134,41 @@ function stateChange(state, source, conf)
 	}
 }
 
+//获得比赛的数据
+function getRelatedMatch(element)
+{
+	var mid = $(element).attr('mid');
+	var gid = $(element).attr('gid');
+	var index = $(element).attr('index');
+	var val = $(element).text();
+	
+	var mids = [];
+	mids.push(mid);
+	$(element).parent().parent().siblings().each(function()
+	{
+		var div = $(this).find('div[gid="' + gid + '"]');
+		if($.isNullOrEmpty(div))
+		{
+			return;
+		}
+		if(div.length > 0)
+		{
+			var len = div.length;
+			for(var i = 0; i < len; i ++)
+			{
+				var mid = $(div[i]).attr('mid');
+				var idx = $(div[i]).attr('index');
+				if(idx == index)
+					mids.push(mid);
+			}			
+		}	
+	});
+	
+	var sid = $('#settingSel').val();
+	//layer.msg(mid + ': ' + gid + ', ' + val + ': ' + mids.join(';'));
+	window.open('../soccer/matchrel?sid=' + sid + '&mids=' + mids.join(','));
+}
+
 $(document).ready(function() {
 	showNewToolBar();
 	showSettingSel();
@@ -133,6 +177,7 @@ $(document).ready(function() {
 	{
 		$('#settingSel').val(sid);
 	}
+	$('.top-chosse #settingSel').attr('disabled', 'disabled');
 	var conf = getConfValue();
 	createLeagueMatchOddsTable(conf);	
 	stateListeners.add(stateChange);

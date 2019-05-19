@@ -535,6 +535,17 @@ public abstract class AbstractDownloader implements Downloader
 	{
 		this.taskMode = taskMode;
 	}
+	
+	public void sleep(long millis)
+	{
+		try
+		{
+			Thread.sleep(millis);
+		}
+		catch(Exception e)
+		{
+		}
+	}
 
 	@Override
 	public String toString()

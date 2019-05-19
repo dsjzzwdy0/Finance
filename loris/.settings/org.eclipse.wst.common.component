@@ -2,18 +2,15 @@
     <wb-module deploy-name="loris">
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
-        <dependent-module archiveName="htmlunit.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/htmlunit/htmlunit">
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <dependent-module archiveName="loris-base-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/loris-base/loris-base">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="soccer-core.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/soccer-core/soccer-core">
+        <dependent-module archiveName="loris-htmlunit-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/loris-htmlunit/loris-htmlunit">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="stock-core.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/stock-core/stock-core">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="loris-base.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/loris-base/loris-base">
+        <dependent-module archiveName="loris-soccer-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/loris-soccer/loris-soccer">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="context-root" value="loris"/>

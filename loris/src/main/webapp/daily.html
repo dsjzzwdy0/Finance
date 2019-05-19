@@ -1,234 +1,224 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta content="text/html" charset="UTF-8">
-	<title>股票日交易数据</title>
-	<link rel="stylesheet" type="text/css" href="content/scripts/bootstrap/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="content/scripts/bootstrap/bootstrap-table.css">
-	<link rel="stylesheet" type="text/css" href="content/check/css/basic.css">
-	<link rel="stylesheet" type="text/css" href="content/scripts/plugins/layui/css/layui.css">	
-	<script type="text/javascript" src="content/scripts/jquery/jquery.min.js"></script>
-	<script type="text/javascript" src="content/scripts/bootstrap/bootstrap.min.js"></script>
-	<script type="text/javascript" src="content/scripts/bootstrap/bootstrap-table.js"></script>
-	<script type="text/javascript" src="content/scripts/layer/layer.js"></script>
-	<script type="text/javascript" src="content/scripts/bootstrap/locale/bootstrap-table-zh-CN.js"></script>
-<style type="text/css">
-.percentRed {
-    color: #ff0033;
-}
-.percentGreen {
-    color: #1fa51f;
-}
-</style>	
+    <meta content="text/html" charset="UTF-8">
+    <title>股票日交易数据</title>
+    <link rel="stylesheet" type="text/css" href="content/scripts/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="content/scripts/bootstrap/bootstrap-table.css">
+    <link rel="stylesheet" type="text/css" href="content/check/css/basic.css">
+    <link rel="stylesheet" type="text/css" href="content/scripts/plugins/layui/css/layui.css">
+    <script type="text/javascript" src="content/scripts/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="content/scripts/bootstrap/bootstrap.min.js"></script>
+    <script type="text/javascript" src="content/scripts/bootstrap/bootstrap-table.js"></script>
+    <script type="text/javascript" src="content/scripts/layer/layer.js"></script>
+    <script type="text/javascript" src="content/scripts/bootstrap/locale/bootstrap-table-zh-CN.js"></script>
+    <style type="text/css">
+        .percentRed {
+            color: #ff0033;
+        }
+
+        .percentGreen {
+            color: #1fa51f;
+        }
+    </style>
 </head>
 <body>
-	<table class="table table-hover" id="cusTable" 
-		data-pagination="true"
-		data-show-refresh="true" 
-		data-show-toggle="true"
-		data-showColumns="true">
-	</table>
+<table class="table table-hover" id="cusTable"
+       data-pagination="true"
+       data-show-refresh="true"
+       data-show-toggle="true"
+       data-showColumns="true">
+</table>
 
-<script type="text/javascript" >
+<script type="text/javascript">
 
-/** 
- * 判断是否null 
- * @param data 
- */
-function isNull(data) {
-    return (data == "" || data == undefined || data == null);
-}
-
-function initTable() {
-    //先销毁表格  
-    $('#cusTable').bootstrapTable('destroy');
-    $("#cusTable").bootstrapTable({
-        method: "get",
-        //使用get请求到服务器获取数据 
-        url: "stockdata/dailyrecs",
-        //获取数据的Servlet地址 
-        striped: true,
-        //表格显示条纹 
-        pagination: true,
-        //启动分页 
-        pageSize: 10,
-        //每页显示的记录数 
-        pageNumber: 1,
-        //当前第几页 
-        sortName: "symbol",
-        sortOrder: "desc",
-        //排序方式 
-        pageList: [10, 15, 20, 30, 40],
-        //记录数可选列表 
-        search: false,
-        //是否启用查询 
-        showColumns: true,
-        //显示下拉框勾选要显示的列 
-        showRefresh: true,
-        //显示刷新按钮 
-        sidePagination: "server",
-        //表示服务端请求 
-        //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder 
-        //设置为limit可以获取limit, offset, search, sort, order 
-        queryParamsType: "undefined",
-        queryParams: queryParams,
-        columns: [{
-            field: 'operate',
-            title: '序号',
-            formatter: function(value, row, index) {
-                return index + 1;
-            }
-        },
-        {
-            field: 'day',
-            title: '交易日期',
-            sortable: true,
-        },
-        {
-            field: 'symbol',
-            title: '股票代码',
-            sortable: true,
-        },
-        {
-            field: 'name',
-            title: '股票名称'
-        },
-        {
-            field: 'trade',
-            title: '最新价',
-            align: 'right',
-            sortable: true,
-            formatter : priceFormatter
-        },
-        {
-            field: 'pricechange',
-            title: '涨跌额',
-            sortable: true,
-            align: 'right',
-            formatter : priceChangeFormatter
-        },
-        {
-            field: 'changepercent',
-            title: '涨跌幅度',
-            sortable: true,
-            align: 'right',
-            formatter : changePercentFormatter
-        },
-        {
-            field: 'settlement',
-            title: '昨收',
-        },
-        {
-            field: 'open',
-            title: '开盘价',
-            sortable: true,
-        },
-        {
-            field: 'high',
-            title: '最高价',
-            sortable: true,
-        },
-        {
-            field: 'low',
-            title: '最低价',
-            sortable: true,
-        },
-        {
-            field: 'volume',
-            title: '成交金额',
-            sortable: true,
-        },
-        {
-            field: 'amount',
-            title: '成交量'
-        }],
-        onLoadSuccess: function() { //加载成功时执行 
-            layer.msg("加载成功");
-        },
-        onLoadError: function() { //加载失败时执行 
-            layer.msg("加载数据失败", {
-                time: 1500,
-                icon: 2
-            });
-        }
-    });
-}
-
-/**
- * 涨跌格式化
- */
-function priceFormatter(value, row, index)
-{
-	if(isNull(value))
-	{
-		return '';
-	}
-	if(row.pricechange < 0)
-	{
-		return '<span class="percentGreen">' + value.toFixed(2) + '</span>';
-	}
-	else if(row.pricechange > 0)
-	{
-		return '<span class="percentRed">' + value.toFixed(2) + '</span>';
-	}
-}
-
-/**
- * 涨跌格式化
- */
-function priceChangeFormatter(value, row, index)
-{
-	if(isNull(value))
-	{
-		return '';
-	}
-	if(value < 0)
-	{
-		return '<span class="percentGreen">' + value.toFixed(2) + '</span>';
-	}
-	else if(value > 0)
-	{
-		return '<span class="percentRed">' + value.toFixed(2) + '</span>';
-	}
-}
-
-function changePercentFormatter(value, row, index)
-{
-	if(value < 0)
-	{
-		return '<span class="percentGreen">' + value.toFixed(2) + '%</span>';
-	}
-	else if(value > 0)
-	{
-		return '<span class="percentRed">' + value.toFixed(2) + '%</span>';
-	}
-}
-
-function queryParams(params) { //设置查询参数 
-    var orderType = params.sortOrder;
-    var orderDesc = '';
-    var orderAsc = '';
-    if (!isNull(orderType) && 'desc' == orderType) {
-        orderDesc = params.sortName;
-    } else {
-        orderAsc = params.sortName;
+    /**
+     * 判断是否null
+     * @param data
+     */
+    function isNull(data) {
+        return (data == "" || data == undefined || data == null);
     }
 
-    var param = {
-        current: params.pageNumber,
-        size: params.pageSize,
-        descs: orderDesc,
-        ascs: orderAsc
-    };
-    return param;
-};
+    function initTable() {
+        //先销毁表格
+        $('#cusTable').bootstrapTable('destroy');
+        $("#cusTable").bootstrapTable({
+            method: "get",
+            //使用get请求到服务器获取数据
+            url: "stockdata/dailyrecs",
+            //获取数据的Servlet地址
+            striped: true,
+            //表格显示条纹
+            pagination: true,
+            //启动分页
+            pageSize: 10,
+            //每页显示的记录数
+            pageNumber: 1,
+            //当前第几页
+            sortName: "symbol",
+            sortOrder: "desc",
+            //排序方式
+            pageList: [10, 15, 20, 30, 40],
+            //记录数可选列表
+            search: false,
+            //是否启用查询
+            showColumns: true,
+            //显示下拉框勾选要显示的列
+            showRefresh: true,
+            //显示刷新按钮
+            sidePagination: "server",
+            //表示服务端请求
+            //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
+            //设置为limit可以获取limit, offset, search, sort, order
+            queryParamsType: "undefined",
+            queryParams: queryParams,
+            columns: [{
+                field: 'operate',
+                title: '序号',
+                formatter: function (value, row, index) {
+                    return index + 1;
+                }
+            },
+                {
+                    field: 'day',
+                    title: '交易日期',
+                    sortable: true,
+                },
+                {
+                    field: 'symbol',
+                    title: '股票代码',
+                    sortable: true,
+                },
+                {
+                    field: 'name',
+                    title: '股票名称'
+                },
+                {
+                    field: 'trade',
+                    title: '最新价',
+                    align: 'right',
+                    sortable: true,
+                    formatter: priceFormatter
+                },
+                {
+                    field: 'pricechange',
+                    title: '涨跌额',
+                    sortable: true,
+                    align: 'right',
+                    formatter: priceChangeFormatter
+                },
+                {
+                    field: 'changepercent',
+                    title: '涨跌幅度',
+                    sortable: true,
+                    align: 'right',
+                    formatter: changePercentFormatter
+                },
+                {
+                    field: 'settlement',
+                    title: '昨收',
+                },
+                {
+                    field: 'open',
+                    title: '开盘价',
+                    sortable: true,
+                },
+                {
+                    field: 'high',
+                    title: '最高价',
+                    sortable: true,
+                },
+                {
+                    field: 'low',
+                    title: '最低价',
+                    sortable: true,
+                },
+                {
+                    field: 'volume',
+                    title: '成交金额',
+                    sortable: true,
+                },
+                {
+                    field: 'amount',
+                    title: '成交量'
+                }],
+            onLoadSuccess: function () { //加载成功时执行
+                layer.msg("加载成功");
+            },
+            onLoadError: function () { //加载失败时执行
+                layer.msg("加载数据失败", {
+                    time: 1500,
+                    icon: 2
+                });
+            }
+        });
+    }
 
-$(document).ready(function() {
-    //调用函数，初始化表格  
-    initTable();
-    //当点击查询按钮的时候执行  
-    $("#search").bind("click", initTable);
-}); 
+    /**
+     * 涨跌格式化
+     */
+    function priceFormatter(value, row, index) {
+        if (isNull(value)) {
+            return '';
+        }
+        if (row.pricechange < 0) {
+            return '<span class="percentGreen">' + value.toFixed(2) + '</span>';
+        }
+        else if (row.pricechange > 0) {
+            return '<span class="percentRed">' + value.toFixed(2) + '</span>';
+        }
+    }
+
+    /**
+     * 涨跌格式化
+     */
+    function priceChangeFormatter(value, row, index) {
+        if (isNull(value)) {
+            return '';
+        }
+        if (value < 0) {
+            return '<span class="percentGreen">' + value.toFixed(2) + '</span>';
+        }
+        else if (value > 0) {
+            return '<span class="percentRed">' + value.toFixed(2) + '</span>';
+        }
+    }
+
+    function changePercentFormatter(value, row, index) {
+        if (value < 0) {
+            return '<span class="percentGreen">' + value.toFixed(2) + '%</span>';
+        }
+        else if (value > 0) {
+            return '<span class="percentRed">' + value.toFixed(2) + '%</span>';
+        }
+    }
+
+    function queryParams(params) { //设置查询参数
+        var orderType = params.sortOrder;
+        var orderDesc = '';
+        var orderAsc = '';
+        if (!isNull(orderType) && 'desc' == orderType) {
+            orderDesc = params.sortName;
+        } else {
+            orderAsc = params.sortName;
+        }
+
+        var param = {
+            current: params.pageNumber,
+            size: params.pageSize,
+            descs: orderDesc,
+            ascs: orderAsc
+        };
+        return param;
+    };
+
+    $(document).ready(function () {
+        //调用函数，初始化表格
+        initTable();
+        //当点击查询按钮的时候执行
+        $("#search").bind("click", initTable);
+    });
 </script>
 </body>
 </html>

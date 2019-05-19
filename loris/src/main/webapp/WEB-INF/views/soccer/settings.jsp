@@ -114,6 +114,11 @@ function initTable()
        		title: '设置用户'
      	},
      	{
+     		field: 'source',
+     		sortable: true,
+     		title: '数据来源'
+     	},
+     	{
      		field: 'createtime',
      		title: '创建时间',
      	},

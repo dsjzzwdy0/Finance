@@ -20,7 +20,6 @@ import com.loris.base.bean.wrapper.Rest;
 import com.loris.base.repository.BasicManager;
 import com.loris.base.util.NumberUtil;
 import com.loris.base.web.WebCrawler;
-import com.loris.base.web.config.ConfigParser;
 import com.loris.base.web.config.setting.DownSetting;
 import com.loris.base.web.manager.DownloaderStatus;
 import com.loris.base.web.manager.Downloader;
@@ -31,6 +30,7 @@ import com.loris.base.web.page.WebPage;
 import com.loris.base.web.repository.WebPageManager;
 import com.loris.base.web.util.Monitor;
 import com.loris.lottery.context.ApplicationContextHelper;
+import com.loris.lottery.task.WebPageRunnable;
 
 @Controller
 @RequestMapping("/download")
@@ -50,14 +50,14 @@ public class DownloadController extends BaseController implements WebPageStatusL
 	public DownloadController()
 	{
 		crawler = WebCrawler.getInstance();
-		try
+		/*try
 		{
 			ConfigParser.parseWebPageSettings(DownloadController.class.getResourceAsStream("/web-downloaders.xml"));
 		}
 		catch(Exception e)
 		{
 			logger.info(e.toString());
-		}
+		}*/
 	}
 	
 	/**
@@ -243,7 +243,33 @@ public class DownloadController extends BaseController implements WebPageStatusL
 	public Rest downloadData(DownSetting setting)
 	{
 		logger.info("Start Download Thread: " + setting);
-
+		
+		DownSetting defaulSetting = crawler.getDefaultDownSetting(setting.getWid());
+		if(defaulSetting == null)
+		{
+			String info = "Error, downloader " + setting.getWid() + " is not exit.";
+			logger.info(info);
+			return Rest.failure(info);
+		}
+		
+		try
+		{
+			defaulSetting = defaulSetting.cloneAndSetDownSetting(setting);
+		}
+		catch(Exception e)
+		{
+			String info = "Error, downloader " + setting.getWid() + " is not exit.";
+			logger.info(info);
+			return Rest.failure(info);
+		}
+		
+		if(defaulSetting == null)
+		{
+			String info = "Error, Can't create DownSetting.";
+			logger.info(info);
+			return Rest.failure(info);
+		}
+		setting = defaulSetting;
 		Downloader downloader = getOrCreateWebPageDownloader(setting);
 		if (downloader == null)
 		{
@@ -388,51 +414,26 @@ public class DownloadController extends BaseController implements WebPageStatusL
 	protected Downloader getOrCreateWebPageDownloader(DownSetting setting)
 	{
 		Downloader downloader = null;
-		if (StringUtils.isEmpty(setting.getId()))
-		{
-			basicManager.addOrUpdateDownSettingById(setting);
-			downloader = DownloaderCreator.createDownloader(setting, this);
-		}
-		else
+		if (StringUtils.isNotEmpty(setting.getId()))
 		{
 			downloader = crawler.getWebPageDownloaderByID(setting.getId());
-			if(downloader == null)
-			{
-				downloader = DownloaderCreator.createDownloader(setting, this);
-			}
-			else
-			{
-				//设置下载管理器信息
-				DownloaderCreator.setDownloader(downloader, setting);
-			}
-			
 			//如果是已经停止，则需要重新启动
-			if(downloader.isStopped())
+			if(downloader != null && downloader.isStopped())
 			{
 				downloader.restartDownloader();
 			}
 		}
+		if(downloader == null)
+		{
+			basicManager.addOrUpdateDownSettingById(setting);
+			downloader = DownloaderCreator.createDownloader(setting, this);
+		}
+		
 		if (downloader != null)
 		{			
 			downloader.setLorisContext(ApplicationContextHelper.getLorisContext());
 			crawler.addWebPageDownloader(downloader);
 		}
 		return downloader;
-	}
-}
-
-/**
- * 用于启动线程
- * 
- * @author jiean
- *
- */
-abstract class WebPageRunnable implements Runnable
-{
-	Downloader downloader;
-
-	public WebPageRunnable(Downloader downloader)
-	{
-		this.downloader = downloader;
 	}
 }

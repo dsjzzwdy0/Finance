@@ -11,7 +11,7 @@ import com.loris.base.bean.entity.UUIDEntity;
 
 
 @TableName("loris_downloader")
-public class DownSetting extends UUIDEntity
+public class DownSetting extends UUIDEntity implements Cloneable
 {
 	/** UUID. */
 	private static final long serialVersionUID = 1L;
@@ -298,6 +298,45 @@ public class DownSetting extends UUIDEntity
 		}
 		catch(Exception e)
 		{			
+		}
+	}
+	
+	/**
+	 * 克隆并设置数据
+	 * @param setting
+	 * @return
+	 * @throws CloneNotSupportedException
+	 */
+	public DownSetting cloneAndSetDownSetting(DownSetting setting)
+	{
+		try
+		{
+			DownSetting setting2 = (DownSetting)this.clone();
+			
+			if("gb2312".equalsIgnoreCase(setting.getEncoding()) || "utf-8".equalsIgnoreCase(setting.getEncoding()))
+			{
+				setting2.setEncoding(setting.getEncoding());
+			}
+			if(StringUtils.isNotEmpty(setting.getDays()))
+			{
+				setting2.setDays(setting.getDays());
+			}
+			if(setting.getInterval() > 0)
+			{
+				setting2.setInterval(setting.getInterval());
+			}
+			if(StringUtils.isNotEmpty(setting.start))
+			{
+				setting2.setStart(setting.start);
+			}
+			if(StringUtils.isNotEmpty(setting.end))
+			{
+				setting2.setEnd(setting.end);
+			}	
+			return setting2;
+		}
+		catch (Exception e) {
+			return null;
 		}
 	}
 	

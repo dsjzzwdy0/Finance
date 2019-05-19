@@ -25,6 +25,11 @@ import com.loris.base.util.ArraysUtil;
 import com.loris.base.util.DateUtil;
 import com.loris.base.util.NumberUtil;
 import com.loris.soccer.analysis.data.MatchOpVariance;
+import com.loris.soccer.analysis.element.MatchCorpOddsElement;
+import com.loris.soccer.analysis.element.MatchOddsElement;
+import com.loris.soccer.analysis.element.MatchRankOddsElement;
+import com.loris.soccer.analysis.element.MatchSynthElement;
+import com.loris.soccer.analysis.element.OddsElement;
 import com.loris.soccer.analysis.checker.CorpChecker;
 import com.loris.soccer.analysis.data.LeagueMatchDoc;
 import com.loris.soccer.analysis.data.MatchData;
@@ -35,22 +40,24 @@ import com.loris.soccer.analysis.pool.MatchDocPool;
 import com.loris.soccer.analysis.pool.MatchOddsPool;
 import com.loris.soccer.analysis.util.IssueMatchUtil;
 import com.loris.soccer.analysis.util.MatchGraph;
+import com.loris.soccer.analysis.util.OddsUtil;
 import com.loris.soccer.analysis.util.PossionUtil;
 import com.loris.soccer.bean.SoccerConstants;
-import com.loris.soccer.bean.data.table.lottery.Corporate;
-import com.loris.soccer.bean.data.table.lottery.JcMatch;
-import com.loris.soccer.bean.data.table.lottery.UserCorporate;
-import com.loris.soccer.bean.data.table.odds.Op;
-import com.loris.soccer.bean.data.view.MatchInfo;
-import com.loris.soccer.bean.data.view.RankInfo;
-import com.loris.soccer.bean.data.view.RoundInfo;
-import com.loris.soccer.bean.element.MatchCorpOddsElement;
-import com.loris.soccer.bean.element.MatchOddsElement;
-import com.loris.soccer.bean.element.MatchRankOddsElement;
-import com.loris.soccer.bean.element.MatchSynthElement;
-import com.loris.soccer.bean.setting.CorpSetting;
-import com.loris.soccer.bean.setting.Parameter;
-import com.loris.soccer.bean.setting.Setting;
+import com.loris.soccer.bean.item.SettingItem;
+import com.loris.soccer.bean.model.OpList;
+import com.loris.soccer.bean.stat.CorpStatItem;
+import com.loris.soccer.bean.table.CorpSetting;
+import com.loris.soccer.bean.table.CorpSettingParameter;
+import com.loris.soccer.bean.table.Corporate;
+import com.loris.soccer.bean.table.JcMatch;
+import com.loris.soccer.bean.table.Match;
+import com.loris.soccer.bean.table.Op;
+import com.loris.soccer.bean.table.UserCorporate;
+import com.loris.soccer.bean.table.Yp;
+import com.loris.soccer.bean.view.MatchInfo;
+import com.loris.soccer.bean.view.RankInfo;
+import com.loris.soccer.bean.view.RoundInfo;
+import com.loris.soccer.repository.OkoooSqlHelper;
 import com.loris.soccer.repository.SoccerManager;
 import com.loris.soccer.repository.service.MatchInfoService;
 import com.loris.soccer.repository.service.RoundInfoService;
@@ -92,6 +99,9 @@ public class SoccerDataController
 
 	@Autowired
 	private SoccerManager soccerManager;
+	
+	@Autowired
+	OkoooSqlHelper okoooSqlHelper;
 
 	@Autowired
 	private MatchInfoService matchInfoService;
@@ -123,14 +133,22 @@ public class SoccerDataController
 	 */
 	@ResponseBody
 	@RequestMapping("/getMatchesOpVar")
-	public Rest getMatchesOpVariance(String issue)
+	public Rest getMatchesOpVariance(String issue, String type)
 	{
 		if(StringUtils.isEmpty(issue))
 		{
 			return Rest.failure("The date has not been initialized, please set the date value.");
 		}
 		
-		List<MatchOpVariance> variances = MatchOddsPool.computeBdMatchsOpVariance(issue);
+		List<MatchOpVariance> variances = null;
+		if("jc".equalsIgnoreCase(type))
+		{
+			variances = MatchOddsPool.computeJcMatchsOpVariance(issue);
+		}
+		else
+		{
+			variances = MatchOddsPool.computeBdMatchsOpVariance(issue);
+		}
 		if(variances != null && variances.size() >= 0)
 		{
 			return Rest.okData(variances);
@@ -178,7 +196,7 @@ public class SoccerDataController
 		}
 		
 		long st = System.currentTimeMillis();		
-		List<MatchOdds> ops = MatchDocLoader.loadMatchesOdds(midlist, setting);
+		List<MatchOdds> ops = MatchDocLoader.loadMatchesOdds(midlist, setting, setting.getSource());
 		long en = System.currentTimeMillis();
 		if(ops == null)
 		{
@@ -245,6 +263,46 @@ public class SoccerDataController
 		matchOps.setOps(ops);
 		
 		return Rest.okData(matchOps);
+	}
+	
+	/**
+	 * 获得比赛的赔率数据
+	 * @param mid
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/getMatchOdds")
+	public Rest getMatchOdds(String mid)
+	{
+		MatchOdds matchOdds = new MatchOdds();
+		matchOdds.setMid(mid);
+		List<Op> ops = soccerManager.getOddsOp(mid);
+		List<Yp> yps = soccerManager.getOddsYp(mid);
+		matchOdds.setOps(ops);
+		matchOdds.setYps(yps);
+		if((ops == null || ops.isEmpty()) && (yps == null || yps.isEmpty()))
+		{
+			return Rest.failure("There are no odds of Match'" + mid + "'");
+		}
+		return Rest.okData(matchOdds);
+	}
+	
+	/**
+	 * 获得比赛的数据
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/getMatchesInfo")
+	public Rest getMatchesInfo(String start, String end)
+	{
+		List<Match> matchs = soccerManager.getMatches(start, end);
+		if(matchs == null || matchs.isEmpty())
+		{
+			return Rest.failure("There are no matches in database from '" + start + "' to '" + end + "'");
+		}
+		return Rest.okData(matchs);
 	}
 	
 	/**
@@ -417,11 +475,11 @@ public class SoccerDataController
 	 */
 	@ResponseBody
 	@RequestMapping("/getRoundMatchesOdds")
-	public Rest getRoundMatchesOdds(String sid, String lid, String season, String round)
+	public Rest getRoundMatchesOdds(String sid, String lid, String season, String round, String source)
 	{
 		String info;
 		CorpSetting setting = soccerManager.getCorpSetting(sid);
-		List<MatchOdds> ops = MatchDocLoader.loadRoundMatchOdds(lid, season, round, setting);
+		List<MatchOdds> ops = MatchDocLoader.loadRoundMatchOdds(lid, season, round, setting, source);
 		if(ops == null)
 		{
 			info = "There are no match ops in the database. ";
@@ -473,7 +531,7 @@ public class SoccerDataController
 		setting.addUserCorporate(corporate);
 	
 		
-		List<MatchOdds> ops = MatchDocLoader.loadRoundMatchOdds(lid, season, round, setting);
+		List<MatchOdds> ops = MatchDocLoader.loadRoundMatchOdds(lid, season, round, setting, setting.getSource());
 		List<MatchRankOddsElement> elements = new ArrayList<>();
 		
 		List<RankInfo> ranks = soccerManager.getLatestRanks(lid, SoccerConstants.RANK_TOTAL);		
@@ -526,6 +584,12 @@ public class SoccerDataController
 			return Rest.failure("The CorpSetting '" + sid + "' is not set correctly.");
 		}
 		
+		String source = setting.getSource();
+		if(StringUtils.isEmpty(source))
+		{
+			source = SoccerConstants.DATA_SOURCE_OKOOO;
+		}
+		
 		List<String> lids = null;
 		if(StringUtils.isNotEmpty(lid))
 		{
@@ -534,7 +598,7 @@ public class SoccerDataController
 		}
 		
 		long st = System.currentTimeMillis();		
-		List<MatchOdds> ops = MatchDocLoader.loadMatchOdds(issue, type, lids, setting);
+		List<MatchOdds> ops = MatchDocLoader.loadMatchOdds(issue, type, lids, setting, source);
 		long en = System.currentTimeMillis();
 		if(ops == null)
 		{
@@ -856,8 +920,8 @@ public class SoccerDataController
 	public Rest getCorpSettingData(String sid)
 	{
 		Map<String, Object> settings = new HashMap<>();
-		Setting setting = soccerManager.getCorpSetting(sid);
-		List<UserCorporate> corporates = soccerManager.getUserCorporates("", "zgzcw");
+		SettingItem setting = soccerManager.getCorpSetting(sid);
+		List<UserCorporate> corporates = soccerManager.getUserCorporates("", "");
 		settings.put("setting", setting);
 		settings.put("corps", corporates);
 		return Rest.okData(settings);
@@ -872,7 +936,7 @@ public class SoccerDataController
 	@RequestMapping("/getCorpSetting")
 	public Rest getCorpSetting(String sid)
 	{
-		Setting setting = soccerManager.getCorpSetting(sid);
+		SettingItem setting = soccerManager.getCorpSetting(sid);
 		if(setting == null)
 		{
 			return Rest.failure("There are no Setting '" + sid + "' data in dabasebase.");
@@ -1067,6 +1131,62 @@ public class SoccerDataController
 	}
 	
 	/**
+	 * 获得比赛的统计值
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/getCorpStatItems")
+	public Rest getCorpStatItems()
+	{
+		List<CorpStatItem> items = soccerManager.getCorpStatItems();
+		return Rest.okData(items);
+	}
+	
+	/**
+	 * 获得博彩公司的统计值
+	 * @param gid
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/getCorpStatItem")
+	public Rest getCorpStatItem(String gid)
+	{
+		CorpStatItem item = soccerManager.getCorpStatItem(gid);
+		if(item == null)
+		{
+			return Rest.failure("There are no CorpStatItem of " + gid);
+		}
+		else
+		{
+			return Rest.okData(item);
+		}
+	}
+	
+	/**
+	 * 欧赔数据列表
+	 * @param gid
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/getCorpOdds")
+	public Rest getCorpOdds(String gid, String start, String end)
+	{
+		List<Op> ops = soccerManager.getOpListByGid(gid, start, end);
+		logger.info("There are " + ops.size() + " Op values.");
+		OpList opList = new OpList(OpList.OpListType.MidUnique);
+		opList.addAll(ops);
+		List<OddsElement> elements = new ArrayList<>();
+		for (Op op : opList)
+		{
+			elements.add(OddsUtil.createOpItem(op, 0));
+		}
+
+		return Rest.okData(elements);
+	}
+	
+	/**
 	 * 根据数据计算欧赔的值
 	 * @param homevalue
 	 * @param clientvalue
@@ -1168,7 +1288,7 @@ public class SoccerDataController
 			UserCorporate corp = ArraysUtil.getSameObject(corps, checker);
 			if(corp != null)
 			{
-				Parameter parameter = CorpSetting.createParameter(corp);
+				CorpSettingParameter parameter = CorpSetting.createParameter(corp);
 				setting.addParameter(parameter);
 			}
 		}

@@ -49,8 +49,6 @@ public class WebPageTask extends AbstractTask
 	{
 	}
 
-	
-
 	/**
 	 * Create the instance of WebPageTask.
 	 * @param type

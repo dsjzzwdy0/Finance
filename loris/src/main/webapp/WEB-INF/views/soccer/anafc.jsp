@@ -4,7 +4,6 @@
 <%@page import="com.loris.soccer.analysis.util.IssueMatchUtil" %>
 <%@page import="com.baomidou.mybatisplus.toolkit.StringUtils" %>
 
-<link rel="stylesheet" type="text/css" href="../content/css/soccer/datacenter.css" />
 <%
     String issue = request.getParameter("issue");
 	String type = request.getParameter("type");
@@ -19,477 +18,429 @@
 	}
 %>
 
-<style>
-.main_wrapper .gridTable th
-{
-	background-color: #008B8B;
-	font-weight: 700;
-	color: #fff;
-	white-space: nowrap;
-}
-
-thead th .asc {
-    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAZ0lEQVQ4y2NgGLKgquEuFxBPAGI2ahhWCsS/gDibUoO0gPgxEP8H4ttArEyuQYxAPBdqEAxPBImTY5gjEL9DM+wTENuQahAvEO9DMwiGdwAxOymGJQLxTyD+jgWDxCMZRsEoGAVoAADeemwtPcZI2wAAAABJRU5ErkJggg==');
-}
-
-thead th .desc {
-    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAZUlEQVQ4y2NgGAWjYBSggaqGu5FA/BOIv2PBIPFEUgxjB+IdQPwfC94HxLykus4GiD+hGfQOiB3J8SojEE9EM2wuSJzcsFMG4ttQgx4DsRalkZENxL+AuJQaMcsGxBOAmGvopk8AVz1sLZgg0bsAAAAASUVORK5CYII= ');
-}
-
-thead th .both {
-    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAQAAADYWf5HAAAAkElEQVQoz7X QMQ5AQBCF4dWQSJxC5wwax1Cq1e7BAdxD5SL+Tq/QCM1oNiJidwox0355mXnG/DrEtIQ6azioNZQxI0ykPhTQIwhCR+BmBYtlK7kLJYwWCcJA9M4qdrZrd8pPjZWPtOqdRQy320YSV17OatFC4euts6z39GYMKRPCTKY9UnPQ6P+GtMRfGtPnBCiqhAeJPmkqAAAAAElFTkSuQmCC');
-}
-
-thead th .sortable {
-    cursor: pointer;
-    background-position: right;
-    background-repeat: no-repeat;
-    padding-right: 10px;
-}
-
-.gridTable .red
-{
-	color: red;
-}
-
-.gridTable tr:hover .red
-{
-	color: yellow;
-}
-
-.gridTable tr:hover .green
-{
-	color: blue;
-}
-
-.gridTable .green
-{
-	color: green;
-}
-
-</style>
+<link rel="stylesheet" type="text/css" href="../content/css/soccer/datacenter.css" />
+<link rel="stylesheet" type="text/css" href="../content/scripts/soccer/soccer-table.css" />
+<script type="text/javascript" src="../content/scripts/soccer/soccer-table.js"></script>
 
 <div id="content" class="container_wrapper">
 	<%@include file="./analysis/anatoolbar.jsp"%>
-
-	<div id="main" class="main_wrapper">		
+	
+	<div id="main" class="main_wrapper">
 		<table id="gridTable" class="gridTable table-hover"
-			data-pagination="true"
-			data-show-refresh="true">
-			<thead>
-				<tr>
-					<th rowspan="2" class="baseinfo">编号</th>
-					<th rowspan="2" class="baseinfo">联赛</th>
-					<th rowspan="2" class="matchname">比赛</th>
-					<th rowspan="2" class="baseinfo">时间</th>
-					<th colspan="9">平均值</th>
-					<th colspan="9">方差值</th>
-					<th rowspan="2">备注</th>
-				</tr>
-				<tr>
-					<th data-field="firstwin" class="oddsvalue"><div class="sortable both">初胜</div></th>
-					<th data-field="firstdraw" class="oddsvalue"><div class="sortable both">初平</div></th>
-					<th data-field="firstlose" class="oddsvalue"><div class="sortable both">初负</div></th>
-					<th data-field="win" class="oddsvalue"><div class="sortable both">胜</div></th>
-					<th data-field="draw" class="oddsvalue"><div class="sortable both">平</div></th>
-					<th data-field="lose" class="oddsvalue"><div class="sortable both">负</div></th>
-					<th data-field="windiff" class="oddsvalue"><div class="sortable both">胜差</div></th>
-					<th data-field="drawdiff" class="oddsvalue"><div class="sortable both">平差</div></th>
-					<th data-field="losediff" class="oddsvalue"><div class="sortable both">负差</div></th>
-					<th data-field="fwinstd" class="oddsvalue"><div class="sortable both">初胜</div></th>
-					<th data-field="fdrawstd" class="oddsvalue"><div class="sortable both">初平</div></th>
-					<th data-field="flosestd" class="oddsvalue"><div class="sortable both">初负</div></th>
-					<th data-field="winstd" class="oddsvalue"><div class="sortable both">胜</div></th>
-					<th data-field="drawstd" class="oddsvalue"><div class="sortable both">平</div></th>
-					<th data-field="losestd" class="oddsvalue"><div class="sortable both">负</div></th>
-					<th data-field="winstddiff" class="oddsvalue"><div class="sortable both">胜差</div></th>
-					<th data-field="drawstddiff" class="oddsvalue"><div class="sortable both">平差</div></th>
-					<th data-field="losestddiff" class="oddsvalue"><div class="sortable both">负差</div></th>
-				</tr>
+			data-pagination="true" data-show-refresh="true">
+			<thead id="tableHeader">
 			</thead>
-			<tbody></tbody>
+			<tbody id="tableContent">
+			</tbody>
 		</table>
 	</div>
 </div>
 
 <script type="text/javascript">
-var url = "../soccerdata/getMatchesOpVar";
-
-//系统参数
+var url = '../soccerdata/getMatchesOpVar';
 var issue = '<%=issue%>';
-var lid = '<%=lid%>';
-var type = '';
+var type = '<%=type%>';
 
-//比赛数据
-var matchDoc = null;
-
-function getMatchFieldValue(match, field)
+function OpStandardErrorSorter(field, asc, fieldName)
 {
-	var v = 'undefined';
-	switch(field){
-	case 'firstwin':
-		v = match.vars[0].win.avg;
-		break;
-	case 'firstdraw':
-		v = match.vars[0].draw.avg;
-		break;
-	case 'firstlose':
-		v = match.vars[0].lose.avg;
-		break;
-	case 'win':
-		v = match.vars[1].win.avg;
-		break;
-	case 'draw':
-		v = match.vars[1].draw.avg;
-		break;
-	case 'lose':
-		v = match.vars[1].lose.avg;
-		break;
-	case 'windiff':
-		v = match.vars[1].win.avg - match.vars[0].win.avg;
-		break;
-	case 'drawdiff':
-		v = match.vars[1].draw.avg - match.vars[0].draw.avg;
-		break;
-	case 'losediff':
-		v = match.vars[1].lose.avg - match.vars[0].lose.avg;
-		break;
-	case 'fwinstd':
-		v = match.vars[0].win.stderr;
-		break;
-	case 'fdrawstd':
-		v = match.vars[0].draw.stderr;
-		break;
-	case 'flosestd':
-		v = match.vars[0].lose.stderr;
-		break;
-	case 'winstd':
-		v = match.vars[1].win.stderr;
-		break;
-	case 'drawstd':
-		v = match.vars[1].draw.stderr;
-		break;
-	case 'losestd':
-		v = match.vars[1].lose.stderr;
-		break;
-	case 'winstddiff':
-		v = match.vars[1].win.stderr - match.vars[0].win.stderr;
-		break;
-	case 'drawstddiff':
-		v = match.vars[1].draw.stderr - match.vars[0].draw.stderr;
-		break;
-	case 'losestddiff':
-		v = match.vars[1].lose.stderr - match.vars[0].lose.stderr;
-		break;
-	default:
-		break;
-	}
-	return v;
-}
+	this.field = field;
+	this.asc = asc;
+	this.element = null;
+	this.fieldName = fieldName;
 
-function MatchDoc(list)
-{
-	this.list = list;
-	this.size = list.length;
-	
-	this.sortList = function(field, asc)
+	this.setSorter = function(field, asc, element)
 	{
-		if($.isNullOrEmpty(field))
+		this.field = field;
+		this.asc = asc;
+		this.element = element;
+		if($.isNotNullOrEmpty(element))
+			this.fieldName = element.parent().text();
+	}
+	
+	this.compare = function(a, b)
+	{
+		if(this.field == 'vars')
 		{
-			return this.list;
+			return this.compareVars(a, b);
 		}
-		if($.isNullOrEmpty(asc))
+		else
 		{
-			asc = true;
-		}
+			r = a > b ? 1 : a < b ? -1 : 0;
+			return this.asc ? r : -r;
+		}		
+	}
+	
+	this.compareVars = function(a, b)
+	{
+		var aValue = this.getFieldValue(a);
+		var bValue = this.getFieldValue(b);
 		
-		var matches = [];
-		matches = matches.concat(this.list);
-		matches.sort(function(a, b){
-			var var1 = getMatchFieldValue(a, field);
-			var var2 = getMatchFieldValue(b, field);
-			var r = 0;
-			if($.isNullOrEmpty(var1) || var1 == 'undefined')
-			{
-				r = -1;
-			}
-			if($.isNullOrEmpty(var2) || var2 == 'undefined')
-			{
-				r = 1;
-			}
-			if(r === 0)
-			{
-				r = var1 - var2;				
-			}
-			return asc ? r : -r;
-		});
-		return matches;
+		var r =0;
+		if($.isNullOrEmpty(bValue))
+		{
+			r = 1;
+		}
+		else if($.isNullOrEmpty(aValue))
+		{
+			r = -1;
+		}
+		else
+		{
+			r = (aValue > bValue) ? 1 : (aValue < bValue) ? -1 : 0;
+		}
+		return this.asc ? r : -r;
+	}
+	
+	this.getFieldValue = function(rec)
+	{
+		var vars = rec.vars;
+		if($.isNullOrEmpty(vars))
+		{
+			return null;
+		}
+		var v;
+		switch(this.fieldName){
+		case '初胜':
+			v = vars[0].win.avg;
+			break;
+		case '初平':
+			v = vars[0].draw.avg;
+			break;
+		case '初负':
+			v = vars[0].lose.avg;
+			break;
+		case '胜':
+			v = vars[1].lose.avg;
+			break;
+		case '平':
+			v = vars[1].draw.avg;
+			break;
+		case '负':
+			v = vars[1].lose.avg;
+			break;
+		case '胜差':
+			v = vars[1].win.avg - vars[0].win.avg;
+			break;
+		case '平差':
+			v = vars[1].draw.avg - vars[0].draw.avg;
+			break;
+		case '负差':
+			v = vars[1].lose.avg - vars[0].lose.avg;
+			break;
+		case '初胜差':
+			v = vars[0].win.stderr;
+			break;
+		case '初平差':
+			v = vars[0].draw.stderr;
+			break;
+		case '初负差':
+			v = vars[0].lose.stderr;
+			break;
+		case '胜差':
+			v = vars[1].lose.stderr;
+			break;
+		case '平差':
+			v = vars[1].draw.stderr;
+			break;
+		case '负差':
+			v = vars[1].lose.stderr;
+			break;
+		case '胜差差':
+			v = vars[1].win.stderr - vars[0].win.stderr;
+			break;
+		case '平差差':
+			v = vars[1].draw.stderr - vars[0].draw.stderr;
+			break;
+		case '负差差':
+			v = vars[1].lose.stderr - vars[0].lose.stderr;
+			break;
+		}
+		return v;
 	}
 }
 
-//获得比赛的方差数据
-function getIssueMatchVars()
-{	
-	type = $('#typeSel').val();
-	if($.isNullOrEmpty(issue)) issue = $('#issueSel').val();
-	else $('#issueSel').val(issue);
+var options = { 
+	refresh: false,	
+	sorter: new OpStandardErrorSorter('ordinary', true, null),
+	relator: null,
+	rows: null,
+	results: null,
+	columns: null,
+	setting: null,
+	first: true,
+	filter: null,
+	clear: function()
+	{
+		this.columns = null;
+		this.rows = null;
+		this.setting = null;
+	},
+	postshow: function()
+	{
+		var total = 0;
+		var shownum = 0;
+		if($.isNotNullOrEmpty(this.rows))
+		{
+			total = this.rows.length;
+		}
+		if($.isNotNullOrEmpty(this.results))
+		{
+			shownum = this.results.length;
+		}
+		$('#matchNumAll').text(total);
+		$('#matchNumHide').text(total - shownum);
+	}
+};
+
+function createColumns()
+{
+	var soccerTableColumns = new SoccerTableColumns();
+	var columns = [];
+	var columns1 = soccerTableColumns.createBasicMatchColumns(2);
+	columns1.push({
+	   title: '欧赔平均值',
+	   colspan: 9
+	});
+	columns1.push({
+		title: '欧赔方差值',
+		colspan: 9
+	});
+	columns1.push(soccerTableColumns.createOperatorColumns(2));
 	
-	var params = {
-		"issue": issue,
-	};
+	var columns2 = [{
+    	field: 'vars',
+    	sortable: true,
+    	title: '初胜',
+    	formatter: function(value, row, index)
+ 		{
+ 			return formatValue(value[0].win.avg);
+ 		}
+	},
+	{
+    	field: 'vars',
+    	sortable: true,
+    	title: '初平',
+    	formatter: function(value, row, index)
+ 		{
+ 			return formatValue(value[0].draw.avg);
+ 		}
+	},{
+    	field: 'vars',
+    	sortable: true,
+    	title: '初负',
+    	formatter: function(value, row, index)
+ 		{
+ 			return formatValue(value[0].lose.avg);
+ 		}
+	},{
+    	field: 'vars',
+    	sortable: true,
+    	title: '胜',
+    	formatter: function(value, row, index)
+ 		{
+ 			return formatValue(value[1].win.avg);
+ 		}
+	},{
+    	field: 'vars',
+    	sortable: true,
+    	title: '平',
+    	formatter: function(value, row, index)
+ 		{
+ 			return formatValue(value[1].draw.avg);
+ 		}
+	},{
+    	field: 'vars',
+    	sortable: true,
+    	title: '负',
+    	formatter: function(value, row, index)
+ 		{
+ 			return formatValue(value[1].lose.avg);
+ 		}
+	},{
+    	field: 'vars',
+    	sortable: true,
+    	title: '胜差',
+    	formatter: function(value, row, index)
+ 		{
+ 			return formatValue(value[1].win.avg - value[0].win.avg, true);
+ 		}
+	},
+	{
+    	field: 'vars',
+    	sortable: true,
+    	title: '平差',
+    	formatter: function(value, row, index)
+ 		{
+ 			return formatValue(value[1].draw.avg - value[0].draw.avg, true);
+ 		}
+	},{
+    	field: 'vars',
+    	sortable: true,
+    	title: '负差',
+    	formatter: function(value, row, index)
+ 		{
+ 			return formatValue(value[1].lose.avg - value[0].lose.avg, true);
+ 		}
+	},{
+    	field: 'vars',
+    	sortable: true,
+    	title: '初胜差',
+    	formatter: function(value, row, index)
+ 		{
+ 			return formatValue(value[0].win.stderr);
+ 		}
+	},
+	{
+    	field: 'vars',
+    	sortable: true,
+    	title: '初平差',
+    	formatter: function(value, row, index)
+ 		{
+ 			return formatValue(value[0].draw.stderr);
+ 		}
+	},{
+    	field: 'vars',
+    	sortable: true,
+    	title: '初负差',
+    	formatter: function(value, row, index)
+ 		{
+ 			return formatValue(value[0].lose.stderr);
+ 		}
+	},{
+    	field: 'vars',
+    	sortable: true,
+    	title: '胜差',
+    	formatter: function(value, row, index)
+ 		{
+ 			return formatValue(value[1].win.stderr);
+ 		}
+	},{
+    	field: 'vars',
+    	sortable: true,
+    	title: '平差',
+    	formatter: function(value, row, index)
+ 		{
+ 			return formatValue(value[1].draw.stderr);
+ 		}
+	},{
+    	field: 'vars',
+    	sortable: true,
+    	title: '负差',
+    	formatter: function(value, row, index)
+ 		{
+ 			return formatValue(value[1].lose.stderr);
+ 		}
+	},{
+    	field: 'vars',
+    	sortable: true,
+    	title: '胜差差',
+    	formatter: function(value, row, index)
+ 		{
+ 			return formatValue(value[1].win.stderr - value[0].win.stderr, true);
+ 		}
+	},{
+    	field: 'vars',
+    	sortable: true,
+    	title: '平差差',
+    	formatter: function(value, row, index)
+ 		{
+ 			return formatValue(value[1].draw.stderr - value[0].draw.stderr, true);
+ 		}
+	},{
+    	field: 'vars',
+    	sortable: true,
+    	title: '负差差',
+    	formatter: function(value, row, index)
+ 		{
+ 			return formatValue(value[1].lose.stderr - value[0].lose.stderr, true);
+ 		}
+	}
+	];
 	
-	$.ajax({
+	columns.push(columns1);
+	columns.push(columns2);
+	return columns;
+}
+
+//数据格式化
+function formatValue(value, flag)
+{
+	return '<div class="oddsvalue ' + (flag ? (value > 0 ? 'green' : value < 0 ? 'red' : 'blue') : '')
+		+ '">' + value.toFixed(2) + '</div>';
+}
+
+//用于获得配置数据
+function createMatchOddsTable(conf)
+{
+	issue = conf.issue;
+	type = conf.type;
+	var source = {
 		type: "GET",
 		url: url,
 		contentType : "application/json;charset=utf-8",
 		dataType : "json",
 		data : {
 			"issue": issue,
-			"lid": lid
+			"type": type,
 		},
 		jsonp:'callback',
-        success : function (msg)
-        {
-        	if(msg.status == '200')
-        	{
-        		matchDoc = new MatchDoc(msg.data);
-        		initLeaguePanel(matchDoc.list);
-        		showMatchData();
-        	}
-        	else
-        	{
-        		layer.msg("获取数据时出现错误,请重新试用");
-        	}
-        },
-        error:function(){
-			layer.msg("错误");
-		}
-    });
-}
-
-//数据格式化
-function formatValue(value)
-{
-	return value.toFixed(2);
-}
-
-function showMatchData()
-{
-	var conf = getConfValue();
-	//var list = matchDoc.sortList('lid', conf.sortField, conf.asc);	
-	var list = filterDataList(matchDoc.sortList(conf.sortField, conf.asc));
-	var len = list.length;
-	
-	var total = matchDoc.size;
-	var shownum = list.length;
-	
-	$('#matchNumAll').text(total);
-	$('#matchNumHide').text(total - shownum);
-	
-	var text = [];
-	for(var i = 0; i < len; i ++)
-	{
-		var match = list[i];
-		text.push('<tr>');
-		text.push('<td>' + match.ordinary + '</td>');
-		text.push('<td>' + formatLeagueInfo(match) + '</td>');
-		text.push('<td>' + formatMatchTeamInfo(match) + '</td>');
-		
-		var t = formatDate(match.matchtime, 'hh:mm');
-		var title = '比赛时间：' + match.matchtime + ', 投注结束时间：' + match.closetime;
-		text.push('<td title="' + title + '">' + t + '</td>');
-		
-		var var0 = match.vars[0];
-		var var1 = match.vars[1];
-		text.push('<td title="初赔胜平均">' + formatValue(var0.win.avg) + '</td>');
-		text.push('<td title="初赔平平均">' + formatValue(var0.draw.avg) + '</td>');
-		text.push('<td title="初赔负平均">' + formatValue(var0.lose.avg) + '</td>');
-		
-		var clazzname = getValueClassName(var0.win.avg , var1.win.avg);
-		text.push('<td title="胜平均" class="'+ clazzname  + '">' + formatValue(var1.win.avg) + '</td>');
-		clazzname = getValueClassName(var0.draw.avg , var1.draw.avg);
-		text.push('<td title="平平均" class="'+ clazzname  + '">' + formatValue(var1.draw.avg) + '</td>');
-		clazzname = getValueClassName(var0.lose.avg , var1.lose.avg);
-		text.push('<td title="负平均"class="'+ clazzname  + '">' + formatValue(var1.lose.avg) + '</td>');
-		
-		clazzname = getValueClassName(var0.win.avg , var1.win.avg);
-		text.push('<td title="胜差" class="'+ clazzname  + '">' + formatValue(var1.win.avg - var0.win.avg) + '</td>');
-		clazzname = getValueClassName(var0.draw.avg , var1.draw.avg);
-		text.push('<td title="平差" class="'+ clazzname  + '">' + formatValue(var1.draw.avg - var0.draw.avg) + '</td>');
-		clazzname = getValueClassName(var0.lose.avg , var1.lose.avg);
-		text.push('<td title="负差"class="'+ clazzname  + '">' + formatValue(var1.lose.avg - var0.lose.avg) + '</td>');
-		
-		text.push('<td title="初赔胜平均">' + formatValue(var0.win.stderr) + '</td>');
-		text.push('<td title="初赔平平均">' + formatValue(var0.draw.stderr) + '</td>');
-		text.push('<td title="初赔负平均">' + formatValue(var0.lose.stderr) + '</td>');
-		
-		var clazzname = getValueClassName(var0.win.stderr , var1.win.stderr);
-		text.push('<td title="胜平均" class="'+ clazzname  + '">' + formatValue(var1.win.stderr) + '</td>');
-		clazzname = getValueClassName(var0.draw.avg , var1.draw.avg);
-		text.push('<td title="平平均" class="'+ clazzname  + '">' + formatValue(var1.draw.stderr) + '</td>');
-		clazzname = getValueClassName(var0.lose.avg , var1.lose.avg);
-		text.push('<td title="负平均"class="'+ clazzname  + '">' + formatValue(var1.lose.stderr) + '</td>');
-		
-		clazzname = getValueClassName(var0.win.stderr , var1.win.stderr);
-		text.push('<td title="胜差" class="'+ clazzname  + '">' + formatValue(var1.win.stderr - var0.win.stderr) + '</td>');
-		clazzname = getValueClassName(var0.draw.stderr , var1.draw.stderr);
-		text.push('<td title="平差" class="'+ clazzname  + '">' + formatValue(var1.draw.stderr - var0.draw.stderr) + '</td>');
-		clazzname = getValueClassName(var0.lose.stderr , var1.lose.stderr);
-		text.push('<td title="负差"class="'+ clazzname  + '">' + formatValue(var1.lose.stderr - var0.lose.stderr) + '</td>');
-		text.push('<td></td>')
-		text.push('</tr>');
-	}
-	$('#gridTable tbody').html(text.join(''));
-}
-
-function getValueClassName(first, last)
-{
-	var clazzname = withinErrorMargin(first, last) ? '' : 
-		(first > last) ? 'red' : 'green';
-	return clazzname;
-}
-
-//页面的配置内容
-function getConfValue()
-{
-	var sortField = '';
-	var asc = false;
-	
-	$("#gridTable thead .sortable").each(function(){
-		if($(this).hasClass('desc'))
+		success: null,
+		error: null,
+		presuccess: function(json, soccerTable)
 		{
-			asc = false;
-			sortField = $(this).parent().attr('data-field');
-		}
-		else if($(this).hasClass('asc'))
-		{
-			asc = true;
-			sortField = $(this).parent().attr('data-field');
-		}
-	});
-	
-	return {
-		sortField: sortField,
-		asc: asc
-	}
-}
-
-//过滤数据
-function filterDataList(dataList)
-{
-	var oLeagueList = $('#leagueList input');
-	var lids = [];
-	oLeagueList.each(function(){
-        if($(this).prop("checked"))
-        {
-        	lids.push($(this).val());
-        }
-    });
-	
-
-	var list = [];
-	if(lids.length == 0)
-	{
-		return list;
-	}
-	var lidsize = lids.length;
-	var len = dataList.length;
-	for(var i = 0; i < len; i ++)
-	{
-		var lid = dataList[i].lid;
-		for(var j = 0; j < lidsize; j ++)
-		{
-			if(lid == lids[j])
-			{
-				list.push(dataList[i]);
-				break;
+			if ($.isNotNullOrEmpty(json.data)) {
+				soccerTable.options.rows = json.data;
+				initLeaguePanel(json.data);
 			}
+		},
+		complete: function(){
+			/*$('#gridTable tbody .relation').off('click').on('click', function(){
+				getRelatedMatch($(this));
+			});*/
 		}
 	}
-	return list;
+	options.columns = createColumns();
+	options.source = source;
+	table = new SoccerTable(options);
+	$('#gridTable').soccerTable(table);
+}
+function stateChange(state, source, conf)
+{
+	var sourceId = $(source).attr('id');
+	if(sourceId == 'settingSel' ||
+		sourceId == 'typeSel' ||
+		sourceId == 'issueSel')
+	{
+		options.clear();
+		createMatchOddsTable(conf);
+	}
+	else
+	{
+		var filter = options.filter;
+		if($.isNullOrEmpty(filter))
+		{
+			filter = new FieldFilter('lid', [], true);
+			options.filter = filter;
+		}
+		filter.clear();
+		if($.isNotNullOrEmpty(conf.lids))
+		{
+			filter.setValues(conf.lids);
+		}
+		table.update();
+	}
 }
 
 //页面初始化
 $(document).ready(function()
-{	
-	getIssueMatchVars();
-	$(document).on('click','.game_select',function(){
-		$(this).children('.pl-wind-ss').show();
-		$(this).find('ul').show();
-	}).on('mouseleave','.game_select',function(){
-		$(this).children('.pl-wind-ss').hide();
-		$(this).find('ul').hide();
-	});
-	
-	$('#btnRefresh').click(function(){
-		var conf = getConfValue();
-		layer.msg('Field: ' + conf.sortField + ', Asc: ' + conf.asc);
-	});
-	$('#leagueList').on("click", "input", function(){
-		showMatchData();
-    });	
-	$(".sx_form_b input").bind("click", function(){
-        var oMatchList = $("#leagueList input");
-        switch($(this).val()){
-            case "全选":
-                oMatchList.prop("checked", true);
-                break;
-            case "反选":
-                oMatchList.each(function(){
-                    $(this).prop("checked") ?  $(this).prop("checked", false) : $(this).prop("checked", true);
-                })
-                break;
-            case "全不选":
-                oMatchList.prop("checked", false);
-                break;
-            default: ;
-        }
-        showMatchData();
-    })
-	$('.gridTable thead').on('click', '.sortable', function(){
-		$(this).parent().siblings().find('.sortable').each(function(){
-			$(this).removeClass('desc asc');
-			$(this).addClass('both');
-		})
-		if($(this).hasClass('both') || $(this).hasClass('desc'))
-		{
-			$(this).removeClass('both desc');
-			$(this).addClass('asc');
-		}
-		else
-		{
-			$(this).removeClass('asc');
-			$(this).addClass('desc');
-		}
-		
-		showMatchData();
-	});
-	$('#hideChosen').bind('click', function(){
-		 var oLeagueList = $("#leagueList input");
-		 oLeagueList.each(function(){
-			 $(this).prop('checked', true);
-		 });
-		 showMatchData();
-	});	
+{
+	if($.isNotNullOrEmpty(issue))
+	{
+		$('#issueSel').val(issue);
+	}
+	var conf = getConfValue();
+	createMatchOddsTable(conf);
+	stateListeners.add(stateChange);
 });
 
-/*初始化表格头部信息
-function initHeader()
-{
-	$('#gridTable thead').html('');
-	var header = [];
-	header.push('<tr>')
-	header.push('<th rowspan="2" class="baseinfo">编号</th>');
-	header.push('<th rowspan="2" class="baseinfo">联赛</th>');
-	header.push('<th rowspan="3" class="matchname">比赛</th>');
-	header.push('<th rowspan="3" class="baseinfo">时间</th>');
-	header.push('<th class="oddsvalue"><div class="sortable both">初胜</div></th>');
-	header.push('<th class="oddsvalue"><div class="sortable both">初平</div></th>');
-	header.push('<th class="oddsvalue"><div class="sortable both">初负</div></th>');
-	header.push('<th class="oddsvalue"><div class="sortable both">胜</div></th>');
-	header.push('<th class="oddsvalue"><div class="sortable both">平</div></th>');
-	header.push('<th class="oddsvalue"><div class="sortable both">负</div></th>');
-	header.push('</tr>');
-	$('#gridTable thead').html(header.join(''));
-}*/
 </script>

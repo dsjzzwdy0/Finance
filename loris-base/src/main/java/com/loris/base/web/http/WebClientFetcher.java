@@ -98,13 +98,16 @@ public class WebClientFetcher implements AutoCloseable
 	{
 		try
 		{
-			HtmlPage page2 = client.getPage(page.getFullURL());
-			page.setContent(page2.asXml());
-			page.setCompleted(true);
-			page.setLoadtime(DateUtil.getCurTimeStr());
-			int status = page2.getWebResponse().getStatusCode();
-			page.setHttpstatus(status);	
-			return status;
+			synchronized (client)
+			{
+				HtmlPage page2 = client.getPage(page.getFullURL());
+				page.setContent(page2.asXml());
+				page.setCompleted(true);
+				page.setLoadtime(DateUtil.getCurTimeStr());
+				int status = page2.getWebResponse().getStatusCode();
+				page.setHttpstatus(status);	
+				return status;
+			}
 		}
 		catch(com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException e)
 		{
@@ -120,6 +123,27 @@ public class WebClientFetcher implements AutoCloseable
 	}
 	
 	/**
+	 * 加入数据头部请求参数
+	 * @param headers
+	 * @param client
+	 */
+	protected static void addHeaders(Map<String, String> headers, WebClient client)
+	{
+		//添加网络请求头数据支持项
+		if(headers != null)
+		{
+			if(headers != null)
+			{
+				for (String key : headers.keySet())
+				{
+					String value = headers.get(key);
+					client.addRequestHeader(key, value);
+				}
+			}				
+		}
+	}
+	
+	/**
 	 * Post the data.
 	 * @param page Page Object.
 	 * @param client WebClient
@@ -128,34 +152,37 @@ public class WebClientFetcher implements AutoCloseable
 	 */
 	protected static int post(WebPage page, WebClient client) throws IOException
 	{
-		String url = page.getFullURL();
-		WebRequest request = new WebRequest(new URL(url));
-		request.setHttpMethod(HttpMethod.POST);
-		
-		Map<String, String> params = page.getParams();		
-		List<NameValuePair> requestParameters = new ArrayList<>();
-        if (params != null && params.size() > 0)
-        {  
-            for (Entry<String, String> param : params.entrySet())
-            {  
-                requestParameters.add(new NameValuePair(param.getKey(), param.getValue()));  
-            }  
-        }         
-        request.setRequestParameters(requestParameters);
-        
-        Page p = client.getPage(request);
-        WebResponse webResponse = p.getWebResponse();  
-        int status = webResponse.getStatusCode();
-        if(p.isHtmlPage())
-        {
-        	 //client.waitForBackgroundJavaScript(100000);  
-             page.setContent(((HtmlPage) p).asXml());
-             page.setCompleted(true);
-             page.setLoadtime(DateUtil.getCurTimeStr());
-             page.setHttpstatus(status);
-        }
-        
-		return status;
+		synchronized(client)
+		{			
+			String url = page.getFullURL();
+			WebRequest request = new WebRequest(new URL(url));
+			request.setHttpMethod(HttpMethod.POST);
+			
+			Map<String, String> params = page.getParams();		
+			List<NameValuePair> requestParameters = new ArrayList<>();
+	        if (params != null && params.size() > 0)
+	        {  
+	            for (Entry<String, String> param : params.entrySet())
+	            {  
+	                requestParameters.add(new NameValuePair(param.getKey(), param.getValue()));  
+	            }  
+	        }         
+	        request.setRequestParameters(requestParameters);
+	        
+	        Page p = client.getPage(request);
+	        WebResponse webResponse = p.getWebResponse();  
+	        int status = webResponse.getStatusCode();
+	        if(p.isHtmlPage())
+	        {
+	        	 //client.waitForBackgroundJavaScript(100000);  
+	             page.setContent(((HtmlPage) p).asXml());
+	             page.setCompleted(true);
+	             page.setLoadtime(DateUtil.getCurTimeStr());
+	             page.setHttpstatus(status);
+	        }
+	        
+			return status;
+		}
 	}
 	
 	/**
@@ -186,12 +213,10 @@ public class WebClientFetcher implements AutoCloseable
 	 */
 	public boolean fetch(WebPage page)
 	{
-		//添加网络请求头数据支持项
 		if(page.isHasMoreHeader())
 		{
-			addHeaders(page.getHeaders());
+			addHeaders(page.getHeaders(), client);
 		}
-
 		logger.info("Fetching: " + page.getFullURL());
 		try
 		{

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@page import="com.loris.soccer.bean.data.table.league.League"%>
+<%@page import="com.loris.soccer.bean.table.League"%>
 <%@page import="com.loris.soccer.analysis.util.IssueMatchUtil" %>
 <%@page import="com.baomidou.mybatisplus.toolkit.StringUtils" %>
 <%
@@ -198,6 +198,7 @@ $(document).ready(function() {
 	$('#issueSel').hide();
 	$('#typeSel').hide();
 	$('#sameLeague').attr('checked', false);
+	$('.top-chosse #settingSel').attr('disabled', 'disabled');
 	
 	if($.isNotNullOrEmpty(sid))
 	{

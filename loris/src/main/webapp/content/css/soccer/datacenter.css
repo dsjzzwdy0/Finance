@@ -12,6 +12,27 @@
 	white-space: nowrap;
 }
 
+.gridTable > tbody > tr .green{
+	color: #008000;
+}
+
+.gridTable > tbody > tr .red{
+    color: #ff0000;
+}
+
+.gridTable > tbody > tr .blue{
+    color: #0000ff;
+}
+
+.gridTable:hover > tbody > tr:hover .red{
+    color: #f9ff19;
+}
+
+.gridTable:hover > tbody > tr:hover .green{
+    color: #16ff7f;
+}
+
+
 .container_wrapper .gridTable td
 {
 	inline-height: 19px;

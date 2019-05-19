@@ -10,6 +10,11 @@
 			<host protocol="http" port="80" method="get">saishi.zgzcw.com</host>
 			<storage enable="true" basedir="d:/index/data"></storage>
 		</page>
+		<page type="live" classname="com.loris.soccer.web.downloader.zgzcw.page.LiveWebPage">
+			<encoding>utf-8</encoding>
+			<host protocol="http" port="80" method="get">live.zgzcw.com</host>
+			<storage enable="true" basedir="d:/index/data"></storage>
+		</page>
 		<page type="center" classname="com.loris.soccer.web.downloader.zgzcw.page.ZgzcwCenterPage">
 			<encoding>utf-8</encoding>
 			<host protocol="http" port="80" method="get">saishi.zgzcw.com</host>
@@ -114,14 +119,21 @@
 	    <category name="足彩数据下载" id="2">
 	    	<webpagesetting id="issue" encoding="UTF-8">
 		        <name>当日足彩数据</name>
-		        <interval>4500</interval>
+		        <interval>6000</interval>
 		        <clazz>com.loris.soccer.web.downloader.zgzcw.loader.IssueMatchDownloader</clazz>
 		        <description>从中国足彩网上下载当天北单、竞彩足球的欧、亚盘数据</description>
 		    </webpagesetting>
 		    
+		    <webpagesetting id="live" encoding="UTF-8">
+		        <name>实时足彩数据</name>
+		        <interval>6000</interval>
+		        <clazz>com.loris.soccer.web.downloader.zgzcw.loader.LiveMatchDownloader</clazz>
+		        <description>从中国足彩网上下载实时北单、竞彩足球的欧、亚盘数据</description>
+		    </webpagesetting>
+		    
 	        <webpagesetting id="jcdata" encoding="UTF-8">
 		        <name>当日足彩详情</name>
-		        <interval>4500</interval>
+		        <interval>6000</interval>
 		        <clazz>com.loris.soccer.web.downloader.zgzcw.loader.MatchDataDownloader</clazz>
 		        <description>从中国足彩网上下载当天足彩的欧赔、亚盘及详细数据和球队历史比赛数据</description>
 		    </webpagesetting>
@@ -131,6 +143,13 @@
 		        <interval>5500</interval>
 		        <clazz>com.loris.soccer.web.downloader.okooo.loader.OkoooDailyDownloader</clazz>
 		        <description>从澳客网上下载当天竞彩、北单足球亚盘动态数据</description>
+		    </webpagesetting>
+		    
+		    <webpagesetting id="okdata" encoding="UTF-8">
+		        <name>澳客实时数据</name>
+		        <interval>5500</interval>
+		        <clazz>com.loris.soccer.web.downloader.okooo.loader.OkoooMatchDownloaer</clazz>
+		        <description>从澳客网上下载最近的竞彩、北单足球欧赔、亚盘数据</description>
 		    </webpagesetting>
 		    
 	        <webpagesetting id="zcround" encoding="UTF-8">

@@ -176,7 +176,8 @@ public class ArraysUtil
 			try
 			{
 				Object t = method.invoke(p);
-				dest.add((T)t);
+				if(!dest.contains(t))
+					dest.add((T)t);
 			}
 			catch(Exception e)
 			{

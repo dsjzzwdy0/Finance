@@ -1,10 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-
-  	<groupId>loris-base</groupId>
+  	<modelVersion>4.0.0</modelVersion>
+  	<groupId>com.loris</groupId>
   	<artifactId>loris-base</artifactId>
-   	<version>0.0.1-SNAPSHOT</version>
+   	<version>${loris.version}</version>
    	<packaging>jar</packaging>
 
 	<name>loris-base</name>
@@ -12,13 +11,13 @@
 	
    	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<!-- spring版本号 -->
+		<project.out>d:/workspace/finance/</project.out>
+		<loris.version>1.0.0</loris.version>
 		<spring.version>4.3.9.RELEASE</spring.version>
 		<log4j.version>1.2.17</log4j.version>
 		<jackson.version>2.6.3</jackson.version>
 		<fastjson-version>1.2.47</fastjson-version>
 		<mybatis.plus.verion>2.1.9</mybatis.plus.verion>
-		<project.out>d:/workspace/finance/</project.out>
 		<checkstyle.version>8.8</checkstyle.version>
         <jetty.version>9.4.9.v20180320</jetty.version>
         <selenium.version>3.11.0</selenium.version>
@@ -172,6 +171,14 @@
 			<version>${mybatis.plus.verion}</version>
 		</dependency>
 		
+		<!-- https://mvnrepository.com/artifact/com.auxilii.msgparser/msgparser -->
+		<dependency>
+		    <groupId>com.auxilii.msgparser</groupId>
+		    <artifactId>msgparser</artifactId>
+		    <version>1.1.15</version>
+		</dependency>
+		
+		
 		<dependency>  
 		    <groupId>joda-time</groupId>  
 		    <artifactId>joda-time</artifactId>  
@@ -238,6 +245,18 @@
 			<artifactId>junit</artifactId>
 			<version>3.8.1</version>
 			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.loris</groupId>
+			<artifactId>loris-htmlunit</artifactId>
+			<version>${loris.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.servlet.jsp</groupId>
+					<artifactId>jsp-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 	
