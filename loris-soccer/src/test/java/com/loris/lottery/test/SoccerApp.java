@@ -248,12 +248,16 @@ public class SoccerApp
 			//testGetAnnotation(context);
 			testOkooooWebDownloader(context);
 
-			close();
-			// context = null;
+			
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
+		}
+		finally
+		{
+			close();
+			// context = null;
 		}
 	}
 	

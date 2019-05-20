@@ -45,7 +45,7 @@ public class IssueMatchDownloader extends ZgzcwSoccerDownloader
 	private static Logger logger = Logger.getLogger(IssueMatchDownloader.class);
 	
 	/** 竞彩比赛列表 */
-	private List<IssueMatch> issueMatchs = new ArrayList<>();
+	protected List<IssueMatch> issueMatchs = new ArrayList<>();
 	
 	/** 历史比赛数据 */
 	private List<Match> historyMatches = new ArrayList<>();
@@ -54,7 +54,7 @@ public class IssueMatchDownloader extends ZgzcwSoccerDownloader
 	//private List<Match> historyMatches = new ArrayList<>();
 		
 	/** 竞彩比赛的期号 */
-	private String date;
+	protected String date;
 	
 	/** 是否检测数据库中的现存数据  */
 	protected boolean checkexist = true;
@@ -171,7 +171,7 @@ public class IssueMatchDownloader extends ZgzcwSoccerDownloader
 			
 			List<OddsOpWebPage> downOpPages = soccerWebPageManager.getDownloadedOddsOpWebPages(mids);
 			List<OddsYpWebPage> downYpPages = soccerWebPageManager.getDownloadedOddsYpWebPages(mids);
-			List<MatchHistoryWebPage> historyWebPages = soccerWebPageManager.getDownloadedMatchHistoryPages(mids);
+			//List<MatchHistoryWebPage> historyWebPages = soccerWebPageManager.getDownloadedMatchHistoryPages(mids);
 			opChecker.setTime(System.currentTimeMillis());
 			ypChecker.setTime(opChecker.getTime());
 			
@@ -196,7 +196,7 @@ public class IssueMatchDownloader extends ZgzcwSoccerDownloader
 				} 
 				
 				//该数据只需要下载一次
-				if(!ArraysUtil.hasSameObject(historyWebPages, historyChecker))
+				//if(!ArraysUtil.hasSameObject(historyWebPages, historyChecker))
 				{
 					//历史数据不再下载
 					//MatchHistoryWebPage historyWebPage = creator.createMatchHistoryWebPage(mid);
@@ -249,7 +249,8 @@ public class IssueMatchDownloader extends ZgzcwSoccerDownloader
 			}
 			//afterDownload(page, true);
 		}
-		catch (Exception e) {
+		catch (Exception e) 
+		{
 			e.printStackTrace();
 			logger.info(e.toString());
 		}
