@@ -167,7 +167,7 @@ public class IssueMatchDownloader extends ZgzcwSoccerDownloader
 		if(issueMatchs != null && issueMatchs.size() >0)
 		{
 			List<String> mids = new ArrayList<>();
-			ArraysUtil.getObjectFieldValue(issueMatchs, mids, BdMatch.class, "mid");
+			ArraysUtil.getObjectFieldValue(issueMatchs, mids, IssueMatch.class, "mid");
 			
 			List<OddsOpWebPage> downOpPages = soccerWebPageManager.getDownloadedOddsOpWebPages(mids);
 			List<OddsYpWebPage> downYpPages = soccerWebPageManager.getDownloadedOddsYpWebPages(mids);
