@@ -249,7 +249,8 @@ public class IssueMatchDownloader extends ZgzcwSoccerDownloader
 			}
 			//afterDownload(page, true);
 		}
-		catch (Exception e) {
+		catch (Exception e) 
+		{
 			e.printStackTrace();
 			logger.info(e.toString());
 		}
