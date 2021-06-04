@@ -27,7 +27,7 @@
 		<spring.version>4.3.22.RELEASE</spring.version>
 		<tiles.version>3.0.8</tiles.version>
 		<servlet.version>3.1.0</servlet.version>
-		<validator.version>6.0.2.Final</validator.version>
+		<validator.version>6.0.20.Final</validator.version>
 		<slf4j.version>1.7.25</slf4j.version>
 		<log4j.version>1.2.17</log4j.version>
 		<mybatisplus.version>2.1.9</mybatisplus.version>
