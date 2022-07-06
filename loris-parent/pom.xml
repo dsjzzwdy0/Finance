@@ -17,7 +17,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<loris.version>1.0.0-RELEASE</loris.version>
 		<java.version>1.8</java.version>
-		<shiro.version>1.4.0</shiro.version>
+		<shiro.version>1.9.1</shiro.version>
 		<kaptcha.version>2.3</kaptcha.version>
 		<ehcache.version>2.10.6</ehcache.version>
 		<beetl.version>2.9.3</beetl.version>
